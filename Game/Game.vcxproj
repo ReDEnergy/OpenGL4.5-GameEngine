@@ -54,7 +54,6 @@
     <Import Project="Property Sheets\x86\Debug\pugixml.x86.props" />
     <Import Project="Property Sheets\x86\Debug\glew.x86.debug.props" />
     <Import Project="Property Sheets\x86\Debug\glfw.x86.debug.props" />
-    <Import Project="Property Sheets\Kinect.props" />
     <Import Project="Property Sheets\x86\Debug\Engine.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -63,7 +62,6 @@
     <Import Project="Property Sheets\x86\Release\glew.x86.props" />
     <Import Project="Property Sheets\x86\Release\glfw.x86.props" />
     <Import Project="Property Sheets\x86\Release\Engine.props" />
-    <Import Project="Property Sheets\Kinect.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
