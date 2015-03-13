@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<resolution>840 480</resolution>
+	<position>700 350</position>
+	<fullscreen>true</fullscreen>
+	<resource>Resources.xml</resource>
+	<shaders>Shaders.xml</shaders>
+	<scene>Scene.xml</scene>
+	<menu>Menu.xml</menu>
+</config>

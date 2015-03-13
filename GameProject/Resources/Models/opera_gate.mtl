@@ -1,0 +1,35 @@
+# Blender3D MTL File: porte.blend
+# Material Count: 3
+newmtl Material
+Ns 127.450980
+Ka 0.000000 0.000000 0.000000
+Kd 0.266637 0.266637 0.266637
+Ks 1.413563 1.413563 1.413563
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd opera_door_N.tga
+
+
+newmtl Material_opera_door_d.tga
+Ns 127.450980
+Ka 0.000000 0.000000 0.000000
+Kd 0.266637 0.266637 0.266637
+Ks 1.413563 1.413563 1.413563
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd opera_door_d.tga
+
+
+newmtl Material_porte_d.tga.001
+Ns 127.450980
+Ka 0.000000 0.000000 0.000000
+Kd 0.266637 0.266637 0.266637
+Ks 1.413563 1.413563 1.413563
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd opera_door_d.tga
+
+

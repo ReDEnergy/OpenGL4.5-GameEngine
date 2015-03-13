@@ -1,0 +1,1202 @@
+<?xml version="1.0" encoding="ascii"?>
+<hktagfile version="1" sdkversion="hk_2013.1.0-r1">
+  <class name="hkRootLevelContainer" version="0">
+    <member name="namedVariants" type="struct" array="true" class="hkRootLevelContainerNamedVariant"/>
+  </class>
+  <class name="hkRootLevelContainerNamedVariant" version="1">
+    <member name="name" type="string"/>
+    <member name="className" type="string"/>
+    <member name="variant" type="ref" class="hkReferencedObject"/>
+  </class>
+  <class name="hkBaseObject" version="0">
+  </class>
+  <class name="hkReferencedObject" version="0" parent="hkBaseObject">
+    <member name="memSizeAndFlags" type="void"/>
+    <member name="referenceCount" type="void"/>
+  </class>
+  <class name="hkxScene" version="2" parent="hkReferencedObject">
+    <member name="modeller" type="string"/>
+    <member name="asset" type="string"/>
+    <member name="sceneLength" type="real"/>
+    <member name="numFrames" type="int"/>
+    <member name="rootNode" type="ref" class="hkxNode"/>
+    <member name="selectionSets" type="ref" array="true" class="hkxNodeSelectionSet"/>
+    <member name="cameras" type="ref" array="true" class="hkxCamera"/>
+    <member name="lights" type="ref" array="true" class="hkxLight"/>
+    <member name="meshes" type="ref" array="true" class="hkxMesh"/>
+    <member name="materials" type="ref" array="true" class="hkxMaterial"/>
+    <member name="inplaceTextures" type="ref" array="true" class="hkxTextureInplace"/>
+    <member name="externalTextures" type="ref" array="true" class="hkxTextureFile"/>
+    <member name="skinBindings" type="ref" array="true" class="hkxSkinBinding"/>
+    <member name="splines" type="ref" array="true" class="hkxSpline"/>
+    <member name="appliedTransform" type="vec12"/>
+  </class>
+  <class name="hkxAttributeHolder" version="2" parent="hkReferencedObject">
+    <member name="attributeGroups" type="struct" array="true" class="hkxAttributeGroup"/>
+  </class>
+  <class name="hkxAttributeGroup" version="0">
+    <member name="name" type="string"/>
+    <member name="attributes" type="struct" array="true" class="hkxAttribute"/>
+  </class>
+  <class name="hkxAttribute" version="1">
+    <member name="name" type="string"/>
+    <member name="value" type="ref" class="hkReferencedObject"/>
+  </class>
+  <class name="hkxNode" version="4" parent="hkxAttributeHolder">
+    <member name="name" type="string"/>
+    <member name="object" type="ref" class="hkReferencedObject"/>
+    <member name="keyFrames" type="vec16" array="true"/>
+    <member name="children" type="ref" array="true" class="hkxNode"/>
+    <member name="annotations" type="struct" array="true" class="hkxNodeAnnotationData"/>
+    <member name="linearKeyFrameHints" type="real" array="true"/>
+    <member name="userProperties" type="string"/>
+    <member name="selected" type="byte"/>
+    <member name="bone" type="byte"/>
+  </class>
+  <class name="hkxNodeAnnotationData" version="0">
+    <member name="time" type="real"/>
+    <member name="description" type="string"/>
+  </class>
+  <class name="hkxNodeSelectionSet" version="0" parent="hkxAttributeHolder">
+    <member name="selectedNodes" type="ref" array="true" class="hkxNode"/>
+    <member name="name" type="string"/>
+  </class>
+  <class name="hkxCamera" version="1" parent="hkReferencedObject">
+    <member name="from" type="vec4"/>
+    <member name="focus" type="vec4"/>
+    <member name="up" type="vec4"/>
+    <member name="fov" type="real"/>
+    <member name="far" type="real"/>
+    <member name="near" type="real"/>
+    <member name="leftHanded" type="byte"/>
+  </class>
+  <class name="hkxLight" version="3" parent="hkReferencedObject">
+    <member name="type" type="int"/>
+    <member name="position" type="vec4"/>
+    <member name="direction" type="vec4"/>
+    <member name="color" type="int"/>
+    <member name="angle" type="real"/>
+    <member name="range" type="real"/>
+    <member name="fadeStart" type="real"/>
+    <member name="fadeEnd" type="real"/>
+    <member name="decayRate" type="int"/>
+    <member name="intensity" type="real"/>
+    <member name="shadowCaster" type="byte"/>
+  </class>
+  <class name="hkxMesh" version="1" parent="hkReferencedObject">
+    <member name="sections" type="ref" array="true" class="hkxMeshSection"/>
+    <member name="userChannelInfos" type="ref" array="true" class="hkxMeshUserChannelInfo"/>
+  </class>
+  <class name="hkxMeshSection" version="4" parent="hkReferencedObject">
+    <member name="vertexBuffer" type="ref" class="hkxVertexBuffer"/>
+    <member name="indexBuffers" type="ref" array="true" class="hkxIndexBuffer"/>
+    <member name="material" type="ref" class="hkxMaterial"/>
+    <member name="userChannels" type="ref" array="true" class="hkReferencedObject"/>
+    <member name="vertexAnimations" type="ref" array="true" class="hkxVertexAnimation"/>
+    <member name="linearKeyFrameHints" type="real" array="true"/>
+  </class>
+  <class name="hkxVertexBuffer" version="1" parent="hkReferencedObject">
+    <member name="data" type="struct" class="hkxVertexBufferVertexData"/>
+    <member name="desc" type="struct" class="hkxVertexDescription"/>
+  </class>
+  <class name="hkxVertexBufferVertexData" version="1">
+    <member name="vectorData" type="real" array="true"/>
+    <member name="floatData" type="real" array="true"/>
+    <member name="uint32Data" type="int" array="true"/>
+    <member name="uint16Data" type="int" array="true"/>
+    <member name="uint8Data" type="byte" array="true"/>
+    <member name="numVerts" type="int"/>
+    <member name="vectorStride" type="int"/>
+    <member name="floatStride" type="int"/>
+    <member name="uint32Stride" type="int"/>
+    <member name="uint16Stride" type="int"/>
+    <member name="uint8Stride" type="int"/>
+  </class>
+  <class name="hkxVertexDescription" version="1">
+    <member name="decls" type="struct" array="true" class="hkxVertexDescriptionElementDecl"/>
+  </class>
+  <class name="hkxVertexDescriptionElementDecl" version="3">
+    <member name="byteOffset" type="int"/>
+    <member name="type" type="int"/>
+    <member name="usage" type="int"/>
+    <member name="byteStride" type="int"/>
+    <member name="numElements" type="byte"/>
+    <member name="hint" type="int"/>
+  </class>
+  <class name="hkxIndexBuffer" version="1" parent="hkReferencedObject">
+    <member name="indexType" type="int"/>
+    <member name="indices16" type="int" array="true"/>
+    <member name="indices32" type="int" array="true"/>
+    <member name="vertexBaseOffset" type="int"/>
+    <member name="length" type="int"/>
+  </class>
+  <class name="hkxMaterial" version="4" parent="hkxAttributeHolder">
+    <member name="name" type="string"/>
+    <member name="stages" type="struct" array="true" class="hkxMaterialTextureStage"/>
+    <member name="diffuseColor" type="vec4"/>
+    <member name="ambientColor" type="vec4"/>
+    <member name="specularColor" type="vec4"/>
+    <member name="emissiveColor" type="vec4"/>
+    <member name="subMaterials" type="ref" array="true" class="hkxMaterial"/>
+    <member name="extraData" type="ref" class="hkReferencedObject"/>
+    <member name="uvMapScale" type="real" count="2"/>
+    <member name="uvMapOffset" type="real" count="2"/>
+    <member name="uvMapRotation" type="real"/>
+    <member name="uvMapAlgorithm" type="int"/>
+    <member name="specularMultiplier" type="real"/>
+    <member name="specularExponent" type="real"/>
+    <member name="transparency" type="byte"/>
+    <member name="properties" type="struct" array="true" class="hkxMaterialProperty"/>
+  </class>
+  <class name="hkxMaterialTextureStage" version="1">
+    <member name="texture" type="ref" class="hkReferencedObject"/>
+    <member name="usageHint" type="int"/>
+    <member name="tcoordChannel" type="int"/>
+  </class>
+  <class name="hkxMaterialProperty" version="0">
+    <member name="key" type="int"/>
+    <member name="value" type="int"/>
+  </class>
+  <class name="hkxVertexAnimation" version="0" parent="hkReferencedObject">
+    <member name="time" type="real"/>
+    <member name="vertData" type="struct" class="hkxVertexBuffer"/>
+    <member name="vertexIndexMap" type="int" array="true"/>
+    <member name="componentMap" type="struct" array="true" class="hkxVertexAnimationUsageMap"/>
+  </class>
+  <class name="hkxVertexAnimationUsageMap" version="0">
+    <member name="use" type="int"/>
+    <member name="useIndexOrig" type="byte"/>
+    <member name="useIndexLocal" type="byte"/>
+  </class>
+  <class name="hkxMeshUserChannelInfo" version="0" parent="hkxAttributeHolder">
+    <member name="name" type="string"/>
+    <member name="className" type="string"/>
+  </class>
+  <class name="hkxTextureInplace" version="1" parent="hkReferencedObject">
+    <member name="fileType" type="byte" count="4"/>
+    <member name="data" type="byte" array="true"/>
+    <member name="name" type="string"/>
+    <member name="originalFilename" type="string"/>
+  </class>
+  <class name="hkxTextureFile" version="1" parent="hkReferencedObject">
+    <member name="filename" type="string"/>
+    <member name="name" type="string"/>
+    <member name="originalFilename" type="string"/>
+  </class>
+  <class name="hkxSkinBinding" version="2" parent="hkReferencedObject">
+    <member name="mesh" type="ref" class="hkxMesh"/>
+    <member name="nodeNames" type="string" array="true"/>
+    <member name="bindPose" type="vec16" array="true"/>
+    <member name="initSkinTransform" type="vec16"/>
+  </class>
+  <class name="hkxSpline" version="0" parent="hkReferencedObject">
+    <member name="controlPoints" type="struct" array="true" class="hkxSplineControlPoint"/>
+    <member name="isClosed" type="byte"/>
+  </class>
+  <class name="hkxSplineControlPoint" version="0">
+    <member name="position" type="vec4"/>
+    <member name="tangentIn" type="vec4"/>
+    <member name="tangentOut" type="vec4"/>
+    <member name="inType" type="byte"/>
+    <member name="outType" type="byte"/>
+  </class>
+  <class name="hkxAnimatedFloat" version="1" parent="hkReferencedObject">
+    <member name="floats" type="real" array="true"/>
+    <member name="hint" type="byte"/>
+  </class>
+  <class name="hkxSparselyAnimatedString" version="2" parent="hkReferencedObject">
+    <member name="strings" type="string" array="true"/>
+    <member name="times" type="real" array="true"/>
+  </class>
+  <class name="hkxSparselyAnimatedBool" version="1" parent="hkReferencedObject">
+    <member name="bools" type="byte" array="true"/>
+    <member name="times" type="real" array="true"/>
+  </class>
+  <class name="hkxEdgeSelectionChannel" version="1" parent="hkReferencedObject">
+    <member name="selectedEdges" type="int" array="true"/>
+  </class>
+  <class name="hkxVertexIntDataChannel" version="1" parent="hkReferencedObject">
+    <member name="perVertexInts" type="int" array="true"/>
+  </class>
+  <class name="hkResourceBase" version="0" parent="hkReferencedObject">
+  </class>
+  <class name="hkResourceContainer" version="0" parent="hkResourceBase">
+  </class>
+  <class name="hkMemoryResourceContainer" version="1" parent="hkResourceContainer">
+    <member name="name" type="string"/>
+    <member name="parent" type="void"/>
+    <member name="resourceHandles" type="ref" array="true" class="hkMemoryResourceHandle"/>
+    <member name="children" type="ref" array="true" class="hkMemoryResourceContainer"/>
+  </class>
+  <class name="hkResourceHandle" version="0" parent="hkResourceBase">
+  </class>
+  <class name="hkMemoryResourceHandle" version="3" parent="hkResourceHandle">
+    <member name="variant" type="ref" class="hkReferencedObject"/>
+    <member name="name" type="string"/>
+    <member name="references" type="struct" array="true" class="hkMemoryResourceHandleExternalLink"/>
+  </class>
+  <class name="hkMemoryResourceHandleExternalLink" version="1">
+    <member name="memberName" type="string"/>
+    <member name="externalId" type="string"/>
+  </class>
+  <class name="hkpWorldObject" version="0" parent="hkReferencedObject">
+    <member name="world" type="void"/>
+    <member name="userData" type="int"/>
+    <member name="collidable" type="struct" class="hkpLinkedCollidable"/>
+    <member name="multiThreadCheck" type="struct" class="hkMultiThreadCheck"/>
+    <member name="name" type="string"/>
+    <member name="properties" type="struct" array="true" class="hkSimpleProperty"/>
+  </class>
+  <class name="hkpCdBody" version="1">
+    <member name="shape" type="ref" class="hkpShape"/>
+    <member name="shapeKey" type="int"/>
+    <member name="motion" type="void"/>
+    <member name="parent" type="void"/>
+  </class>
+  <class name="hkcdShape" version="0" parent="hkReferencedObject">
+    <member name="type" type="void"/>
+    <member name="dispatchType" type="byte"/>
+    <member name="bitsPerKey" type="byte"/>
+    <member name="shapeInfoCodecType" type="byte"/>
+  </class>
+  <class name="hkpShapeBase" version="0" parent="hkcdShape">
+  </class>
+  <class name="hkpShape" version="1" parent="hkpShapeBase">
+    <member name="userData" type="int"/>
+  </class>
+  <class name="hkpCollidable" version="0" parent="hkpCdBody">
+    <member name="ownerOffset" type="void"/>
+    <member name="forceCollideOntoPpu" type="byte"/>
+    <member name="shapeSizeOnSpu" type="void"/>
+    <member name="broadPhaseHandle" type="struct" class="hkpTypedBroadPhaseHandle"/>
+    <member name="boundingVolumeData" type="void"/>
+    <member name="allowedPenetrationDepth" type="real"/>
+  </class>
+  <class name="hkpBroadPhaseHandle" version="0">
+    <member name="id" type="void"/>
+  </class>
+  <class name="hkpTypedBroadPhaseHandle" version="0" parent="hkpBroadPhaseHandle">
+    <member name="type" type="int"/>
+    <member name="ownerOffset" type="void"/>
+    <member name="objectQualityType" type="int"/>
+    <member name="collisionFilterInfo" type="int"/>
+  </class>
+  <class name="hkpLinkedCollidable" version="0" parent="hkpCollidable">
+    <member name="collisionEntries" type="void"/>
+  </class>
+  <class name="hkMultiThreadCheck" version="0">
+    <member name="threadId" type="void"/>
+    <member name="stackTraceId" type="void"/>
+    <member name="markCount" type="void"/>
+    <member name="markBitStack" type="void"/>
+  </class>
+  <class name="hkSimpleProperty" version="2">
+    <member name="key" type="int"/>
+    <member name="alignmentPadding" type="void"/>
+    <member name="value" type="struct" class="hkSimplePropertyValue"/>
+  </class>
+  <class name="hkSimplePropertyValue" version="1">
+    <member name="data" type="int"/>
+  </class>
+  <class name="hkpEntity" version="3" parent="hkpWorldObject">
+    <member name="material" type="struct" class="hkpMaterial"/>
+    <member name="limitContactImpulseUtilAndFlag" type="void"/>
+    <member name="damageMultiplier" type="real"/>
+    <member name="breakableBody" type="void"/>
+    <member name="solverData" type="void"/>
+    <member name="storageIndex" type="int"/>
+    <member name="contactPointCallbackDelay" type="int"/>
+    <member name="constraintsMaster" type="void"/>
+    <member name="constraintsSlave" type="void"/>
+    <member name="constraintRuntime" type="void"/>
+    <member name="simulationIsland" type="void"/>
+    <member name="autoRemoveLevel" type="int"/>
+    <member name="numShapeKeysInContactPointProperties" type="byte"/>
+    <member name="responseModifierFlags" type="byte"/>
+    <member name="uid" type="int"/>
+    <member name="spuCollisionCallback" type="struct" class="hkpEntitySpuCollisionCallback"/>
+    <member name="motion" type="struct" class="hkpMotion"/>
+    <member name="contactListeners" type="void"/>
+    <member name="actions" type="void"/>
+    <member name="localFrame" type="ref" class="hkLocalFrame"/>
+    <member name="extendedListeners" type="void"/>
+    <member name="npData" type="int"/>
+  </class>
+  <class name="hkpMaterial" version="2">
+    <member name="responseType" type="int"/>
+    <member name="rollingFrictionMultiplier" type="real"/>
+    <member name="friction" type="real"/>
+    <member name="restitution" type="real"/>
+  </class>
+  <class name="hkpEntitySpuCollisionCallback" version="0">
+    <member name="util" type="void"/>
+    <member name="capacity" type="void"/>
+    <member name="eventFilter" type="byte"/>
+    <member name="userFilter" type="byte"/>
+  </class>
+  <class name="hkpMotion" version="3" parent="hkReferencedObject">
+    <member name="type" type="byte"/>
+    <member name="deactivationIntegrateCounter" type="byte"/>
+    <member name="deactivationNumInactiveFrames" type="int" count="2"/>
+    <member name="motionState" type="struct" class="hkMotionState"/>
+    <member name="inertiaAndMassInv" type="vec4"/>
+    <member name="linearVelocity" type="vec4"/>
+    <member name="angularVelocity" type="vec4"/>
+    <member name="deactivationRefPosition" type="vec4" count="2"/>
+    <member name="deactivationRefOrientation" type="int" count="2"/>
+    <member name="savedMotion" type="ref" class="hkpMotion"/>
+    <member name="savedQualityTypeIndex" type="int"/>
+    <member name="gravityFactor" type="real"/>
+  </class>
+  <class name="hkMotionState" version="2">
+    <member name="transform" type="vec16"/>
+    <member name="sweptTransform" type="struct" class="hkSweptTransformf"/>
+    <member name="deltaAngle" type="vec4"/>
+    <member name="objectRadius" type="real"/>
+    <member name="linearDamping" type="real"/>
+    <member name="angularDamping" type="real"/>
+    <member name="timeFactor" type="real"/>
+    <member name="maxLinearVelocity" type="struct" class="hkUFloat8"/>
+    <member name="maxAngularVelocity" type="struct" class="hkUFloat8"/>
+    <member name="deactivationClass" type="byte"/>
+  </class>
+  <class name="hkSweptTransformf" version="0">
+    <member name="centerOfMass0" type="vec4"/>
+    <member name="centerOfMass1" type="vec4"/>
+    <member name="rotation0" type="vec4"/>
+    <member name="rotation1" type="vec4"/>
+    <member name="centerOfMassLocal" type="vec4"/>
+  </class>
+  <class name="hkUFloat8" version="0">
+    <member name="value" type="byte"/>
+  </class>
+  <class name="hkLocalFrame" version="0" parent="hkReferencedObject">
+  </class>
+  <class name="hkpRigidBody" version="0" parent="hkpEntity">
+  </class>
+  <class name="hkpBvTreeShape" version="1" parent="hkpShape">
+    <member name="bvTreeType" type="byte"/>
+  </class>
+  <class name="hkpBvCompressedMeshShape" version="2" parent="hkpBvTreeShape">
+    <member name="convexRadius" type="real"/>
+    <member name="weldingType" type="byte"/>
+    <member name="hasPerPrimitiveCollisionFilterInfo" type="byte"/>
+    <member name="hasPerPrimitiveUserData" type="byte"/>
+    <member name="collisionFilterInfoPalette" type="int" array="true"/>
+    <member name="userDataPalette" type="int" array="true"/>
+    <member name="userStringPalette" type="string" array="true"/>
+    <member name="tree" type="struct" class="hkpBvCompressedMeshShapeTree"/>
+  </class>
+  <class name="hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis5" version="0">
+    <member name="nodes" type="struct" array="true" class="hkcdStaticTreeCodec3Axis5"/>
+  </class>
+  <class name="hkcdStaticTreeCodec3Axis" version="0">
+    <member name="xyz" type="byte" count="3"/>
+  </class>
+  <class name="hkcdStaticTreeCodec3Axis5" version="0" parent="hkcdStaticTreeCodec3Axis">
+    <member name="hiData" type="byte"/>
+    <member name="loData" type="byte"/>
+  </class>
+  <class name="hkcdStaticTreeDynamicStorage5" version="0" parent="hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis5">
+  </class>
+  <class name="hkcdStaticTreeTreehkcdStaticTreeDynamicStorage5" version="0" parent="hkcdStaticTreeDynamicStorage5">
+    <member name="domain" type="struct" class="hkAabb"/>
+  </class>
+  <class name="hkAabb" version="0">
+    <member name="min" type="vec4"/>
+    <member name="max" type="vec4"/>
+  </class>
+  <class name="hkcdStaticMeshTreeBase" version="0" parent="hkcdStaticTreeTreehkcdStaticTreeDynamicStorage5">
+    <member name="numPrimitiveKeys" type="int"/>
+    <member name="bitsPerKey" type="int"/>
+    <member name="maxKeyValue" type="int"/>
+    <member name="sections" type="struct" array="true" class="hkcdStaticMeshTreeBaseSection"/>
+    <member name="primitives" type="struct" array="true" class="hkcdStaticMeshTreeBasePrimitive"/>
+    <member name="sharedVerticesIndex" type="int" array="true"/>
+  </class>
+  <class name="hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4" version="0">
+    <member name="nodes" type="struct" array="true" class="hkcdStaticTreeCodec3Axis4"/>
+  </class>
+  <class name="hkcdStaticTreeCodec3Axis4" version="0" parent="hkcdStaticTreeCodec3Axis">
+    <member name="data" type="byte"/>
+  </class>
+  <class name="hkcdStaticTreeDynamicStorage4" version="0" parent="hkcdStaticTreeDynamicStoragehkcdStaticTreeCodec3Axis4">
+  </class>
+  <class name="hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4" version="0" parent="hkcdStaticTreeDynamicStorage4">
+    <member name="domain" type="struct" class="hkAabb"/>
+  </class>
+  <class name="hkcdStaticMeshTreeBaseSection" version="3" parent="hkcdStaticTreeTreehkcdStaticTreeDynamicStorage4">
+    <member name="codecParms" type="real" count="6"/>
+    <member name="firstPackedVertex" type="int"/>
+    <member name="sharedVertices" type="struct" class="hkcdStaticMeshTreeBaseSectionSharedVertices"/>
+    <member name="primitives" type="struct" class="hkcdStaticMeshTreeBaseSectionPrimitives"/>
+    <member name="dataRuns" type="struct" class="hkcdStaticMeshTreeBaseSectionDataRuns"/>
+    <member name="numPackedVertices" type="byte"/>
+    <member name="numSharedIndices" type="byte"/>
+    <member name="leafIndex" type="int"/>
+    <member name="page" type="byte"/>
+    <member name="flags" type="byte"/>
+    <member name="layerData" type="byte"/>
+    <member name="unusedData" type="byte"/>
+  </class>
+  <class name="hkcdStaticMeshTreeBaseSectionSharedVertices" version="0">
+    <member name="data" type="int"/>
+  </class>
+  <class name="hkcdStaticMeshTreeBaseSectionPrimitives" version="0">
+    <member name="data" type="int"/>
+  </class>
+  <class name="hkcdStaticMeshTreeBaseSectionDataRuns" version="0">
+    <member name="data" type="int"/>
+  </class>
+  <class name="hkcdStaticMeshTreeBasePrimitive" version="0">
+    <member name="indices" type="byte" count="4"/>
+  </class>
+  <class name="hkcdStaticMeshTreehkcdStaticMeshTreeCommonConfigunsignedintunsignedlonglong1121hkpBvCompressedMeshShapeTreeDataRun" version="0" parent="hkcdStaticMeshTreeBase">
+    <member name="packedVertices" type="int" array="true"/>
+    <member name="sharedVertices" type="int" array="true"/>
+    <member name="primitiveDataRuns" type="struct" array="true" class="hkpBvCompressedMeshShapeTreeDataRun"/>
+  </class>
+  <class name="hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedint" version="0">
+    <member name="value" type="int"/>
+    <member name="index" type="byte"/>
+    <member name="count" type="byte"/>
+  </class>
+  <class name="hkpBvCompressedMeshShapeTreeDataRun" version="0" parent="hkcdStaticMeshTreeBasePrimitiveDataRunBaseunsignedint">
+  </class>
+  <class name="hkpBvCompressedMeshShapeTree" version="0" parent="hkcdStaticMeshTreehkcdStaticMeshTreeCommonConfigunsignedintunsignedlonglong1121hkpBvCompressedMeshShapeTreeDataRun">
+  </class>
+  <class name="hkpShapeInfo" version="0" parent="hkReferencedObject">
+    <member name="shape" type="ref" class="hkpShape"/>
+    <member name="isHierarchicalCompound" type="byte"/>
+    <member name="hkdShapesCollected" type="byte"/>
+    <member name="childShapeNames" type="string" array="true"/>
+    <member name="childTransforms" type="vec16" array="true"/>
+    <member name="transform" type="vec16"/>
+  </class>
+  <class name="hkpPhysicsData" version="0" parent="hkReferencedObject">
+    <member name="worldCinfo" type="ref" class="hkpWorldCinfo"/>
+    <member name="systems" type="ref" array="true" class="hkpPhysicsSystem"/>
+  </class>
+  <class name="hkpWorldCinfo" version="18" parent="hkReferencedObject">
+    <member name="gravity" type="vec4"/>
+    <member name="broadPhaseQuerySize" type="int"/>
+    <member name="contactRestingVelocity" type="real"/>
+    <member name="broadPhaseType" type="int"/>
+    <member name="broadPhaseBorderBehaviour" type="int"/>
+    <member name="mtPostponeAndSortBroadPhaseBorderCallbacks" type="byte"/>
+    <member name="broadPhaseWorldAabb" type="struct" class="hkAabb"/>
+    <member name="collisionTolerance" type="real"/>
+    <member name="collisionFilter" type="ref" class="hkpCollisionFilter"/>
+    <member name="convexListFilter" type="ref" class="hkpConvexListFilter"/>
+    <member name="expectedMaxLinearVelocity" type="real"/>
+    <member name="sizeOfToiEventQueue" type="int"/>
+    <member name="expectedMinPsiDeltaTime" type="real"/>
+    <member name="memoryWatchDog" type="ref" class="hkWorldMemoryAvailableWatchDog"/>
+    <member name="broadPhaseNumMarkers" type="int"/>
+    <member name="contactPointGeneration" type="int"/>
+    <member name="allowToSkipConfirmedCallbacks" type="byte"/>
+    <member name="solverTau" type="real"/>
+    <member name="solverDamp" type="real"/>
+    <member name="solverIterations" type="int"/>
+    <member name="solverMicrosteps" type="int"/>
+    <member name="maxConstraintViolation" type="real"/>
+    <member name="forceCoherentConstraintOrderingInSolver" type="byte"/>
+    <member name="snapCollisionToConvexEdgeThreshold" type="real"/>
+    <member name="snapCollisionToConcaveEdgeThreshold" type="real"/>
+    <member name="enableToiWeldRejection" type="byte"/>
+    <member name="enableDeprecatedWelding" type="byte"/>
+    <member name="iterativeLinearCastEarlyOutDistance" type="real"/>
+    <member name="iterativeLinearCastMaxIterations" type="int"/>
+    <member name="deactivationNumInactiveFramesSelectFlag0" type="byte"/>
+    <member name="deactivationNumInactiveFramesSelectFlag1" type="byte"/>
+    <member name="deactivationIntegrateCounter" type="byte"/>
+    <member name="shouldActivateOnRigidBodyTransformChange" type="byte"/>
+    <member name="deactivationReferenceDistance" type="real"/>
+    <member name="toiCollisionResponseRotateNormal" type="real"/>
+    <member name="useCompoundSpuElf" type="byte"/>
+    <member name="maxSectorsPerMidphaseCollideTask" type="int"/>
+    <member name="maxSectorsPerNarrowphaseCollideTask" type="int"/>
+    <member name="processToisMultithreaded" type="byte"/>
+    <member name="maxEntriesPerToiMidphaseCollideTask" type="int"/>
+    <member name="maxEntriesPerToiNarrowphaseCollideTask" type="int"/>
+    <member name="maxNumToiCollisionPairsSinglethreaded" type="int"/>
+    <member name="numToisTillAllowedPenetrationSimplifiedToi" type="real"/>
+    <member name="numToisTillAllowedPenetrationToi" type="real"/>
+    <member name="numToisTillAllowedPenetrationToiHigher" type="real"/>
+    <member name="numToisTillAllowedPenetrationToiForced" type="real"/>
+    <member name="enableDeactivation" type="byte"/>
+    <member name="simulationType" type="int"/>
+    <member name="enableSimulationIslands" type="byte"/>
+    <member name="minDesiredIslandSize" type="int"/>
+    <member name="processActionsInSingleThread" type="byte"/>
+    <member name="allowIntegrationOfIslandsWithoutConstraintsInASeparateJob" type="byte"/>
+    <member name="frameMarkerPsiSnap" type="real"/>
+    <member name="fireCollisionCallbacks" type="byte"/>
+  </class>
+  <class name="hkpCollisionFilter" version="0" parent="hkReferencedObject">
+    <member name="prepad" type="int" count="2"/>
+    <member name="type" type="int"/>
+    <member name="postpad" type="int" count="3"/>
+  </class>
+  <class name="hkpConvexListFilter" version="0" parent="hkReferencedObject">
+  </class>
+  <class name="hkWorldMemoryAvailableWatchDog" version="1" parent="hkReferencedObject">
+  </class>
+  <class name="hkpPhysicsSystem" version="0" parent="hkReferencedObject">
+    <member name="rigidBodies" type="ref" array="true" class="hkpRigidBody"/>
+    <member name="constraints" type="ref" array="true" class="hkpConstraintInstance"/>
+    <member name="actions" type="ref" array="true" class="hkpAction"/>
+    <member name="phantoms" type="ref" array="true" class="hkpPhantom"/>
+    <member name="name" type="string"/>
+    <member name="userData" type="int"/>
+    <member name="active" type="byte"/>
+  </class>
+  <class name="hkpConstraintInstance" version="1" parent="hkReferencedObject">
+    <member name="owner" type="void"/>
+    <member name="data" type="ref" class="hkpConstraintData"/>
+    <member name="constraintModifiers" type="ref" class="hkpModifierConstraintAtom"/>
+    <member name="entities" type="ref" count="2" class="hkpEntity"/>
+    <member name="priority" type="byte"/>
+    <member name="wantRuntime" type="byte"/>
+    <member name="destructionRemapInfo" type="byte"/>
+    <member name="listeners" type="void"/>
+    <member name="name" type="string"/>
+    <member name="userData" type="int"/>
+    <member name="internal" type="void"/>
+    <member name="uid" type="void"/>
+  </class>
+  <class name="hkpConstraintData" version="0" parent="hkReferencedObject">
+    <member name="userData" type="int"/>
+  </class>
+  <class name="hkpConstraintAtom" version="0">
+    <member name="type" type="int"/>
+  </class>
+  <class name="hkpModifierConstraintAtom" version="1" parent="hkpConstraintAtom">
+    <member name="modifierAtomSize" type="int"/>
+    <member name="childSize" type="int"/>
+    <member name="child" type="ref" class="hkpConstraintAtom"/>
+    <member name="pad" type="void"/>
+  </class>
+  <class name="hkpAction" version="0" parent="hkReferencedObject">
+    <member name="world" type="void"/>
+    <member name="island" type="void"/>
+    <member name="userData" type="int"/>
+    <member name="name" type="string"/>
+  </class>
+  <class name="hkpPhantom" version="0" parent="hkpWorldObject">
+    <member name="overlapListeners" type="void"/>
+    <member name="phantomListeners" type="void"/>
+  </class>
+
+  <object id="#0001" type="hkRootLevelContainer">
+    <array name="namedVariants" size="3">
+      <struct>
+        <string name="name">Scene Data</string>
+        <string name="className">hkxScene</string>
+        <ref name="variant">#0002</ref>
+      </struct>
+      <struct>
+        <string name="name">Resource Data</string>
+        <string name="className">hkMemoryResourceContainer</string>
+        <ref name="variant">#0021</ref>
+      </struct>
+      <struct>
+        <string name="name">Physics Data</string>
+        <string name="className">hkpPhysicsData</string>
+        <ref name="variant">#0028</ref>
+      </struct>
+    </array>
+  </object>
+  <object id="#0002" type="hkxScene">
+    <string name="modeller">3ds max 16.0.420</string>
+    <string name="asset">D:\Dropbox\Projects\3D Engine\Resources\3D Max\scene.max</string>
+    <real name="sceneLength">x40555555 <!-- 3.33333 --></real>
+    <int name="numFrames">101</int>
+    <ref name="rootNode">#0003</ref>
+    <array name="meshes" size="1">
+      <ref>#0012</ref>
+    </array>
+    <vec12 name="appliedTransform">x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec12>
+  </object>
+  <object id="#0003" type="hkxNode">
+    <string name="name">ROOT_NODE</string>
+    <array name="keyFrames" size="1">
+      <vec16>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <array name="children" size="1">
+      <ref>#0004</ref>
+    </array>
+  </object>
+  <object id="#0004" type="hkxNode">
+    <array name="attributeGroups" size="2">
+      <struct>
+        <string name="name">hkRigidBody</string>
+        <array name="attributes" size="6">
+          <struct>
+            <string name="name">mass</string>
+            <ref name="value">#0005</ref>
+          </struct>
+          <struct>
+            <string name="name">friction</string>
+            <ref name="value">#0006</ref>
+          </struct>
+          <struct>
+            <string name="name">restitution</string>
+            <ref name="value">#0007</ref>
+          </struct>
+          <struct>
+            <string name="name">qualityType</string>
+            <ref name="value">#0008</ref>
+          </struct>
+          <struct>
+            <string name="name">scaleInertiaTensor</string>
+            <ref name="value">#0009</ref>
+          </struct>
+          <struct>
+            <string name="name">inertiaTensorScale</string>
+            <ref name="value">#0010</ref>
+          </struct>
+        </array>
+      </struct>
+      <struct>
+        <string name="name">hkShape</string>
+        <array name="attributes" size="1">
+          <struct>
+            <string name="name">shapeType</string>
+            <ref name="value">#0011</ref>
+          </struct>
+        </array>
+      </struct>
+    </array>
+    <string name="name">block10-15</string>
+    <ref name="object">#0012</ref>
+    <array name="keyFrames" size="2">
+      <vec16>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+      <vec16>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <string name="userProperties"></string>
+    <byte name="selected">1</byte>
+  </object>
+  <object id="#0005" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0006" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f000000 <!-- 0.5 --> 
+    </array>
+  </object>
+  <object id="#0007" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3ecccccd <!-- 0.4 --> 
+    </array>
+  </object>
+  <object id="#0008" type="hkxSparselyAnimatedString">
+    <array name="strings" size="1">
+      <string>Fixed</string>
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0009" type="hkxSparselyAnimatedBool">
+    <array name="bools" size="1">
+      0 
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0010" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f800000 <!-- 1.0 --> 
+    </array>
+  </object>
+  <object id="#0011" type="hkxSparselyAnimatedString">
+    <array name="strings" size="1">
+      <string>Mesh</string>
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0012" type="hkxMesh">
+    <array name="sections" size="1">
+      <ref>#0013</ref>
+    </array>
+    <array name="userChannelInfos" size="2">
+      <ref>#0019</ref>
+      <ref>#0020</ref>
+    </array>
+  </object>
+  <object id="#0013" type="hkxMeshSection">
+    <ref name="vertexBuffer">#0014</ref>
+    <array name="indexBuffers" size="1">
+      <ref>#0015</ref>
+    </array>
+    <ref name="material">#0016</ref>
+    <array name="userChannels" size="2">
+      <ref>#0017</ref>
+      <ref>#0018</ref>
+    </array>
+  </object>
+  <object id="#0014" type="hkxVertexBuffer">
+    <struct name="data">
+      <array name="vectorData" size="64">
+        xbfc00000 <!-- -1.5 --> x00000000 <!-- 0.0 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbfc00000 <!-- -1.5 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3fc00000 <!-- 1.5 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3fc00000 <!-- 1.5 --> x00000000 <!-- 0.0 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbfc00000 <!-- -1.5 --> x3f800000 <!-- 1.0 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbe285833 <!-- -0.164399 --> x3f7c844f <!-- 0.986394 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3fc00000 <!-- 1.5 --> x3fc00000 <!-- 1.5 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbe285834 <!-- -0.164399 --> x3f7c844f <!-- 0.986394 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3fc00000 <!-- 1.5 --> x3fc00000 <!-- 1.5 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbe285833 <!-- -0.164399 --> x3f7c844f <!-- 0.986394 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbfc00000 <!-- -1.5 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbe285834 <!-- -0.164399 --> x3f7c844f <!-- 0.986394 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <array name="floatData" size="16">
+        x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> 
+      </array>
+      <int name="numVerts">8</int>
+      <int name="vectorStride">32</int>
+      <int name="floatStride">8</int>
+    </struct>
+    <struct name="desc">
+      <array name="decls" size="3">
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">1</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="byteOffset">16</int>
+          <int name="type">4</int>
+          <int name="usage">4</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">32</int>
+          <int name="byteStride">8</int>
+          <byte name="numElements">2</byte>
+        </struct>
+      </array>
+    </struct>
+  </object>
+  <object id="#0015" type="hkxIndexBuffer">
+    <int name="indexType">1</int>
+    <array name="indices16" size="36">
+      0 1 2 2 3 0 4 5 
+      6 6 7 4 0 3 5 5 
+      4 0 3 2 6 6 5 3 
+      2 1 7 7 6 2 1 0 
+      4 4 7 1 
+    </array>
+    <int name="length">36</int>
+  </object>
+  <object id="#0016" type="hkxMaterial">
+    <string name="name">wirecolor_block10-15</string>
+    <vec4 name="diffuseColor">x3f30b0b1 <!-- 0.690196 --> x3dd0d0d2 <!-- 0.101961 --> x3dd0d0d2 <!-- 0.101961 --> x3f800000 <!-- 1.0 --></vec4>
+    <vec4 name="ambientColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="specularColor">x3f30b0b1 <!-- 0.690196 --> x3dd0d0d2 <!-- 0.101961 --> x3dd0d0d2 <!-- 0.101961 --> x42960000 <!-- 75.0 --></vec4>
+    <vec4 name="emissiveColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <tuple name="uvMapScale" size="2">
+      x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+    </tuple>
+    <int name="uvMapAlgorithm">2</int>
+    <real name="specularMultiplier">x3f800000 <!-- 1.0 --></real>
+    <real name="specularExponent">x42960000 <!-- 75.0 --></real>
+    <byte name="transparency">160</byte>
+  </object>
+  <object id="#0017" type="hkxEdgeSelectionChannel">
+    <array name="selectedEdges" size="12">
+      2 5 8 11 14 17 20 23 
+      26 29 32 35 
+    </array>
+  </object>
+  <object id="#0018" type="hkxVertexIntDataChannel">
+    <array name="perVertexInts" size="8">
+      0 2 3 1 4 5 7 6 
+    </array>
+  </object>
+  <object id="#0019" type="hkxMeshUserChannelInfo">
+    <string name="name">hidden_edges</string>
+    <string name="className">hkxEdgeSelectionChannel</string>
+  </object>
+  <object id="#0020" type="hkxMeshUserChannelInfo">
+    <string name="name">normalIds</string>
+    <string name="className">hkxVertexIntDataChannel</string>
+  </object>
+  <object id="#0021" type="hkMemoryResourceContainer">
+    <string name="name"></string>
+    <array name="children" size="1">
+      <ref>#0022</ref>
+    </array>
+  </object>
+  <object id="#0022" type="hkMemoryResourceContainer">
+    <string name="name">block10-15</string>
+    <array name="resourceHandles" size="2">
+      <ref>#0023</ref>
+      <ref>#0026</ref>
+    </array>
+  </object>
+  <object id="#0023" type="hkMemoryResourceHandle">
+    <ref name="variant">#0024</ref>
+    <string name="name">hkRigidBody</string>
+  </object>
+  <object id="#0024" type="hkpRigidBody">
+    <struct name="collidable">
+      <ref name="shape">#0025</ref>
+      <int name="shapeKey">4294967295</int>
+      <byte name="forceCollideOntoPpu">8</byte>
+      <struct name="broadPhaseHandle">
+        <int name="type">1</int>
+      </struct>
+      <real name="allowedPenetrationDepth">x7f7fffee <!-- 3.40282e+038 --></real>
+    </struct>
+    <struct name="multiThreadCheck">
+    </struct>
+    <string name="name">block10-15</string>
+    <struct name="material">
+      <int name="responseType">1</int>
+      <real name="friction">x3f000000 <!-- 0.5 --></real>
+      <real name="restitution">x3ecccccd <!-- 0.4 --></real>
+    </struct>
+    <real name="damageMultiplier">x3f800000 <!-- 1.0 --></real>
+    <int name="storageIndex">65535</int>
+    <int name="contactPointCallbackDelay">65535</int>
+    <int name="uid">4294967295</int>
+    <struct name="spuCollisionCallback">
+      <byte name="eventFilter">3</byte>
+      <byte name="userFilter">1</byte>
+    </struct>
+    <struct name="motion">
+      <byte name="type">5</byte>
+      <byte name="deactivationIntegrateCounter">15</byte>
+      <tuple name="deactivationNumInactiveFrames" size="2">
+        49152 49152 
+      </tuple>
+      <struct name="motionState">
+        <vec16 name="transform">x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+        <struct name="sweptTransform">
+          <vec4 name="centerOfMass0">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="centerOfMass1">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="rotation0">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --></vec4>
+          <vec4 name="rotation1">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --></vec4>
+          <vec4 name="centerOfMassLocal">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        </struct>
+        <vec4 name="deltaAngle">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <real name="objectRadius">x401617e1 <!-- 2.34521 --></real>
+        <real name="angularDamping">x3d4d0000 <!-- 0.0500488 --></real>
+        <real name="timeFactor">x3f800000 <!-- 1.0 --></real>
+        <struct name="maxLinearVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <struct name="maxAngularVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <byte name="deactivationClass">1</byte>
+      </struct>
+      <vec4 name="inertiaAndMassInv">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="linearVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="angularVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <tuple name="deactivationRefPosition" size="2">
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      </tuple>
+      <real name="gravityFactor">x3f800000 <!-- 1.0 --></real>
+    </struct>
+    <int name="npData">4294967295</int>
+  </object>
+  <object id="#0025" type="hkpBvCompressedMeshShape">
+    <byte name="dispatchType">4</byte>
+    <byte name="bvTreeType">3</byte>
+    <struct name="tree">
+      <array name="nodes" size="1">
+        <struct>
+        </struct>
+      </array>
+      <struct name="domain">
+        <vec4 name="min">xbfbffffe <!-- -1.5 --> x00000000 <!-- 0.0 --> xbf7ffffe <!-- -1.0 --> x00000000 <!-- 0.0 --></vec4>
+        <vec4 name="max">x3fbffffe <!-- 1.5 --> x3fbffffe <!-- 1.5 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --></vec4>
+      </struct>
+      <int name="numPrimitiveKeys">12</int>
+      <int name="bitsPerKey">5</int>
+      <int name="maxKeyValue">22</int>
+      <array name="sections" size="1">
+        <struct>
+          <array name="nodes" size="23">
+            <struct>
+              <byte name="data">5</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                15 8 0 
+              </tuple>
+              <byte name="data">3</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                15 3 0 
+              </tuple>
+              <byte name="data">4</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                15 3 0 
+              </tuple>
+              <byte name="data">16</byte>
+            </struct>
+            <struct>
+              <byte name="data">17</byte>
+            </struct>
+            <struct>
+              <byte name="data">13</byte>
+            </struct>
+            <struct>
+              <byte name="data">9</byte>
+            </struct>
+            <struct>
+              <byte name="data">5</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 192 0 
+              </tuple>
+              <byte name="data">3</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 64 0 
+              </tuple>
+              <byte name="data">14</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 64 0 
+              </tuple>
+              <byte name="data">18</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 15 0 
+              </tuple>
+              <byte name="data">3</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 15 0 
+              </tuple>
+              <byte name="data">20</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 15 0 
+              </tuple>
+              <byte name="data">22</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 0 15 
+              </tuple>
+              <byte name="data">3</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 0 15 
+              </tuple>
+              <byte name="data">12</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 0 15 
+              </tuple>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                240 0 0 
+              </tuple>
+              <byte name="data">3</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                240 0 0 
+              </tuple>
+              <byte name="data">8</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                240 0 0 
+              </tuple>
+              <byte name="data">10</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 0 240 
+              </tuple>
+              <byte name="data">3</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 0 240 
+              </tuple>
+              <byte name="data">2</byte>
+            </struct>
+            <struct>
+              <tuple name="xyz" size="3">
+                0 8 240 
+              </tuple>
+              <byte name="data">6</byte>
+            </struct>
+          </array>
+          <struct name="domain">
+            <vec4 name="min">xbfbffffe <!-- -1.5 --> x00000000 <!-- 0.0 --> xbf7ffffe <!-- -1.0 --> x00000000 <!-- 0.0 --></vec4>
+            <vec4 name="max">x3fbffffe <!-- 1.5 --> x3fbffffe <!-- 1.5 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --></vec4>
+          </struct>
+          <tuple name="codecParms" size="6">
+            xbfbffffe <!-- -1.5 --> x00000000 <!-- 0.0 --> xbf7ffffe <!-- -1.0 --> x3ac01801 <!-- 0.00146556 --> x3a401801 <!-- 0.00073278 --> x3b002007 <!-- 0.00195503 --> 
+          </tuple>
+          <struct name="sharedVertices">
+            <int name="data">8</int>
+          </struct>
+          <struct name="primitives">
+            <int name="data">12</int>
+          </struct>
+          <struct name="dataRuns">
+            <int name="data">7</int>
+          </struct>
+          <byte name="numPackedVertices">8</byte>
+        </struct>
+      </array>
+      <array name="primitives" size="12">
+        <struct>
+          <tuple name="indices" size="4">
+            4 2 1 1 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            3 5 6 6 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            0 1 2 2 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            6 0 3 3 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            5 4 7 7 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            7 6 5 5 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            1 7 4 4 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            2 4 5 5 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            2 3 0 0 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            5 3 2 2 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            1 0 6 6 
+          </tuple>
+        </struct>
+        <struct>
+          <tuple name="indices" size="4">
+            6 7 1 1 
+          </tuple>
+        </struct>
+      </array>
+      <array name="packedVertices" size="8">
+        4290772992 0 2795520 4293568512 4194303 4294967295 4290775039 2047 
+      </array>
+      <array name="primitiveDataRuns" size="7">
+        <struct>
+          <int name="value">1023934464</int>
+          <byte name="count">4</byte>
+        </struct>
+        <struct>
+          <int name="value">1023868928</int>
+          <byte name="index">4</byte>
+          <byte name="count">1</byte>
+        </struct>
+        <struct>
+          <int name="value">1023934464</int>
+          <byte name="index">5</byte>
+          <byte name="count">2</byte>
+        </struct>
+        <struct>
+          <int name="value">1021837312</int>
+          <byte name="index">7</byte>
+          <byte name="count">1</byte>
+        </struct>
+        <struct>
+          <int name="value">1024000000</int>
+          <byte name="index">8</byte>
+          <byte name="count">1</byte>
+        </struct>
+        <struct>
+          <int name="value">1026031616</int>
+          <byte name="index">9</byte>
+          <byte name="count">1</byte>
+        </struct>
+        <struct>
+          <int name="value">1023934464</int>
+          <byte name="index">10</byte>
+          <byte name="count">2</byte>
+        </struct>
+      </array>
+    </struct>
+  </object>
+  <object id="#0026" type="hkMemoryResourceHandle">
+    <ref name="variant">#0027</ref>
+    <string name="name">hkpShapeInfo</string>
+  </object>
+  <object id="#0027" type="hkpShapeInfo">
+    <ref name="shape">#0025</ref>
+    <array name="childShapeNames" size="1">
+      <string>block10-15</string>
+    </array>
+    <array name="childTransforms" size="1">
+      <vec16>x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec16>
+    </array>
+    <vec16 name="transform">x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+  </object>
+  <object id="#0028" type="hkpPhysicsData">
+    <array name="systems" size="1">
+      <ref>#0029</ref>
+    </array>
+  </object>
+  <object id="#0029" type="hkpPhysicsSystem">
+    <array name="rigidBodies" size="1">
+      <ref>#0024</ref>
+    </array>
+    <string name="name">Default Physics System</string>
+    <byte name="active">1</byte>
+  </object>
+</hktagfile>

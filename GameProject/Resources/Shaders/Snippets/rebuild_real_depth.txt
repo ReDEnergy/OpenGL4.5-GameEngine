@@ -1,0 +1,58 @@
+    vec4 normalTex = vec4(texture2D(normalSampler, gl_FragCoord.xy / resolution));
+    vec3 normal = decode(vec4(unpack2(normalTex.xy), unpack2(normalTex.zw), 0, 0));
+    gl_FragColor = vec4(normal, 1.0);
+	
+
+    // Sample from depth buffer
+    float depth = texture2D(depthSampler, gl_FragCoord.xy / resolution).x;
+    // Transform to ndc coords
+    depth = 2.0 * depth - 1.0;
+
+    // Invert projection
+    depth = (depth * uPmat[3][3] - uPmat[3][2]) / (uPmat[2][2] - depth * uPmat[2][3]);
+    //depth = -uPmat[3][2] / (uPmat[2][2] + depth);
+
+    // Reconstruct eye position
+    vec3 eyePos = vec3(vRay, 1.0) * depth;
+
+
+	//////////////////////////////
+	/// JS
+	
+	
+    var quadBufferData = new Float32Array([
+        -1., 1., 0.,    // lower right
+        -1., -1., 0.,   // lower left
+        1., 1., 0.,     // upper right
+        1., -1., 0.]);  // upper left
+
+    this.quadVertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.quadVertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, quadBufferData, gl.STATIC_DRAW);
+
+
+    var quadRayData = new Float32Array(4 * 2);
+
+    var i, j, k = 0, l = 0;
+
+    for (i = 0; i < 4; ++i) {
+        var corner = vec4.create();
+        corner[3] = 1.0;
+        for (j = 0; j < 3; ++j, ++k) {
+            corner[j] = quadBufferData[k];
+        }
+
+        var ray = vec4.create();
+        //console.log(corner);
+        vec4.transformMat4(ray, corner, this.pInvMatrix);
+        //console.log(ray);
+
+        vec4.scale(ray, ray, 1.0 / ray[3]);
+        vec4.scale(ray, ray, 1.0 / ray[2]);
+
+
+        for (j = 0; j < 2; ++j, ++l) {
+            quadRayData[l] = ray[j];
+        }
+    }	
+	

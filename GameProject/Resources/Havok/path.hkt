@@ -1,0 +1,2792 @@
+<?xml version="1.0" encoding="ascii"?>
+<hktagfile version="1" sdkversion="hk_2013.1.0-r1">
+  <class name="hkRootLevelContainer" version="0">
+    <member name="namedVariants" type="struct" array="true" class="hkRootLevelContainerNamedVariant"/>
+  </class>
+  <class name="hkRootLevelContainerNamedVariant" version="1">
+    <member name="name" type="string"/>
+    <member name="className" type="string"/>
+    <member name="variant" type="ref" class="hkReferencedObject"/>
+  </class>
+  <class name="hkBaseObject" version="0">
+  </class>
+  <class name="hkReferencedObject" version="0" parent="hkBaseObject">
+    <member name="memSizeAndFlags" type="void"/>
+    <member name="referenceCount" type="void"/>
+  </class>
+  <class name="hkxScene" version="2" parent="hkReferencedObject">
+    <member name="modeller" type="string"/>
+    <member name="asset" type="string"/>
+    <member name="sceneLength" type="real"/>
+    <member name="numFrames" type="int"/>
+    <member name="rootNode" type="ref" class="hkxNode"/>
+    <member name="selectionSets" type="ref" array="true" class="hkxNodeSelectionSet"/>
+    <member name="cameras" type="ref" array="true" class="hkxCamera"/>
+    <member name="lights" type="ref" array="true" class="hkxLight"/>
+    <member name="meshes" type="ref" array="true" class="hkxMesh"/>
+    <member name="materials" type="ref" array="true" class="hkxMaterial"/>
+    <member name="inplaceTextures" type="ref" array="true" class="hkxTextureInplace"/>
+    <member name="externalTextures" type="ref" array="true" class="hkxTextureFile"/>
+    <member name="skinBindings" type="ref" array="true" class="hkxSkinBinding"/>
+    <member name="splines" type="ref" array="true" class="hkxSpline"/>
+    <member name="appliedTransform" type="vec12"/>
+  </class>
+  <class name="hkxAttributeHolder" version="2" parent="hkReferencedObject">
+    <member name="attributeGroups" type="struct" array="true" class="hkxAttributeGroup"/>
+  </class>
+  <class name="hkxAttributeGroup" version="0">
+    <member name="name" type="string"/>
+    <member name="attributes" type="struct" array="true" class="hkxAttribute"/>
+  </class>
+  <class name="hkxAttribute" version="1">
+    <member name="name" type="string"/>
+    <member name="value" type="ref" class="hkReferencedObject"/>
+  </class>
+  <class name="hkxNode" version="4" parent="hkxAttributeHolder">
+    <member name="name" type="string"/>
+    <member name="object" type="ref" class="hkReferencedObject"/>
+    <member name="keyFrames" type="vec16" array="true"/>
+    <member name="children" type="ref" array="true" class="hkxNode"/>
+    <member name="annotations" type="struct" array="true" class="hkxNodeAnnotationData"/>
+    <member name="linearKeyFrameHints" type="real" array="true"/>
+    <member name="userProperties" type="string"/>
+    <member name="selected" type="byte"/>
+    <member name="bone" type="byte"/>
+  </class>
+  <class name="hkxNodeAnnotationData" version="0">
+    <member name="time" type="real"/>
+    <member name="description" type="string"/>
+  </class>
+  <class name="hkxNodeSelectionSet" version="0" parent="hkxAttributeHolder">
+    <member name="selectedNodes" type="ref" array="true" class="hkxNode"/>
+    <member name="name" type="string"/>
+  </class>
+  <class name="hkxCamera" version="1" parent="hkReferencedObject">
+    <member name="from" type="vec4"/>
+    <member name="focus" type="vec4"/>
+    <member name="up" type="vec4"/>
+    <member name="fov" type="real"/>
+    <member name="far" type="real"/>
+    <member name="near" type="real"/>
+    <member name="leftHanded" type="byte"/>
+  </class>
+  <class name="hkxLight" version="3" parent="hkReferencedObject">
+    <member name="type" type="int"/>
+    <member name="position" type="vec4"/>
+    <member name="direction" type="vec4"/>
+    <member name="color" type="int"/>
+    <member name="angle" type="real"/>
+    <member name="range" type="real"/>
+    <member name="fadeStart" type="real"/>
+    <member name="fadeEnd" type="real"/>
+    <member name="decayRate" type="int"/>
+    <member name="intensity" type="real"/>
+    <member name="shadowCaster" type="byte"/>
+  </class>
+  <class name="hkxMesh" version="1" parent="hkReferencedObject">
+    <member name="sections" type="ref" array="true" class="hkxMeshSection"/>
+    <member name="userChannelInfos" type="ref" array="true" class="hkxMeshUserChannelInfo"/>
+  </class>
+  <class name="hkxMeshSection" version="4" parent="hkReferencedObject">
+    <member name="vertexBuffer" type="ref" class="hkxVertexBuffer"/>
+    <member name="indexBuffers" type="ref" array="true" class="hkxIndexBuffer"/>
+    <member name="material" type="ref" class="hkxMaterial"/>
+    <member name="userChannels" type="ref" array="true" class="hkReferencedObject"/>
+    <member name="vertexAnimations" type="ref" array="true" class="hkxVertexAnimation"/>
+    <member name="linearKeyFrameHints" type="real" array="true"/>
+  </class>
+  <class name="hkxVertexBuffer" version="1" parent="hkReferencedObject">
+    <member name="data" type="struct" class="hkxVertexBufferVertexData"/>
+    <member name="desc" type="struct" class="hkxVertexDescription"/>
+  </class>
+  <class name="hkxVertexBufferVertexData" version="1">
+    <member name="vectorData" type="real" array="true"/>
+    <member name="floatData" type="real" array="true"/>
+    <member name="uint32Data" type="int" array="true"/>
+    <member name="uint16Data" type="int" array="true"/>
+    <member name="uint8Data" type="byte" array="true"/>
+    <member name="numVerts" type="int"/>
+    <member name="vectorStride" type="int"/>
+    <member name="floatStride" type="int"/>
+    <member name="uint32Stride" type="int"/>
+    <member name="uint16Stride" type="int"/>
+    <member name="uint8Stride" type="int"/>
+  </class>
+  <class name="hkxVertexDescription" version="1">
+    <member name="decls" type="struct" array="true" class="hkxVertexDescriptionElementDecl"/>
+  </class>
+  <class name="hkxVertexDescriptionElementDecl" version="3">
+    <member name="byteOffset" type="int"/>
+    <member name="type" type="int"/>
+    <member name="usage" type="int"/>
+    <member name="byteStride" type="int"/>
+    <member name="numElements" type="byte"/>
+    <member name="hint" type="int"/>
+  </class>
+  <class name="hkxIndexBuffer" version="1" parent="hkReferencedObject">
+    <member name="indexType" type="int"/>
+    <member name="indices16" type="int" array="true"/>
+    <member name="indices32" type="int" array="true"/>
+    <member name="vertexBaseOffset" type="int"/>
+    <member name="length" type="int"/>
+  </class>
+  <class name="hkxMaterial" version="4" parent="hkxAttributeHolder">
+    <member name="name" type="string"/>
+    <member name="stages" type="struct" array="true" class="hkxMaterialTextureStage"/>
+    <member name="diffuseColor" type="vec4"/>
+    <member name="ambientColor" type="vec4"/>
+    <member name="specularColor" type="vec4"/>
+    <member name="emissiveColor" type="vec4"/>
+    <member name="subMaterials" type="ref" array="true" class="hkxMaterial"/>
+    <member name="extraData" type="ref" class="hkReferencedObject"/>
+    <member name="uvMapScale" type="real" count="2"/>
+    <member name="uvMapOffset" type="real" count="2"/>
+    <member name="uvMapRotation" type="real"/>
+    <member name="uvMapAlgorithm" type="int"/>
+    <member name="specularMultiplier" type="real"/>
+    <member name="specularExponent" type="real"/>
+    <member name="transparency" type="byte"/>
+    <member name="properties" type="struct" array="true" class="hkxMaterialProperty"/>
+  </class>
+  <class name="hkxMaterialTextureStage" version="1">
+    <member name="texture" type="ref" class="hkReferencedObject"/>
+    <member name="usageHint" type="int"/>
+    <member name="tcoordChannel" type="int"/>
+  </class>
+  <class name="hkxMaterialProperty" version="0">
+    <member name="key" type="int"/>
+    <member name="value" type="int"/>
+  </class>
+  <class name="hkxVertexAnimation" version="0" parent="hkReferencedObject">
+    <member name="time" type="real"/>
+    <member name="vertData" type="struct" class="hkxVertexBuffer"/>
+    <member name="vertexIndexMap" type="int" array="true"/>
+    <member name="componentMap" type="struct" array="true" class="hkxVertexAnimationUsageMap"/>
+  </class>
+  <class name="hkxVertexAnimationUsageMap" version="0">
+    <member name="use" type="int"/>
+    <member name="useIndexOrig" type="byte"/>
+    <member name="useIndexLocal" type="byte"/>
+  </class>
+  <class name="hkxMeshUserChannelInfo" version="0" parent="hkxAttributeHolder">
+    <member name="name" type="string"/>
+    <member name="className" type="string"/>
+  </class>
+  <class name="hkxTextureInplace" version="1" parent="hkReferencedObject">
+    <member name="fileType" type="byte" count="4"/>
+    <member name="data" type="byte" array="true"/>
+    <member name="name" type="string"/>
+    <member name="originalFilename" type="string"/>
+  </class>
+  <class name="hkxTextureFile" version="1" parent="hkReferencedObject">
+    <member name="filename" type="string"/>
+    <member name="name" type="string"/>
+    <member name="originalFilename" type="string"/>
+  </class>
+  <class name="hkxSkinBinding" version="2" parent="hkReferencedObject">
+    <member name="mesh" type="ref" class="hkxMesh"/>
+    <member name="nodeNames" type="string" array="true"/>
+    <member name="bindPose" type="vec16" array="true"/>
+    <member name="initSkinTransform" type="vec16"/>
+  </class>
+  <class name="hkxSpline" version="0" parent="hkReferencedObject">
+    <member name="controlPoints" type="struct" array="true" class="hkxSplineControlPoint"/>
+    <member name="isClosed" type="byte"/>
+  </class>
+  <class name="hkxSplineControlPoint" version="0">
+    <member name="position" type="vec4"/>
+    <member name="tangentIn" type="vec4"/>
+    <member name="tangentOut" type="vec4"/>
+    <member name="inType" type="byte"/>
+    <member name="outType" type="byte"/>
+  </class>
+  <class name="hkxAnimatedFloat" version="1" parent="hkReferencedObject">
+    <member name="floats" type="real" array="true"/>
+    <member name="hint" type="byte"/>
+  </class>
+  <class name="hkxSparselyAnimatedBool" version="1" parent="hkReferencedObject">
+    <member name="bools" type="byte" array="true"/>
+    <member name="times" type="real" array="true"/>
+  </class>
+  <class name="hkxSparselyAnimatedString" version="2" parent="hkReferencedObject">
+    <member name="strings" type="string" array="true"/>
+    <member name="times" type="real" array="true"/>
+  </class>
+  <class name="hkxEdgeSelectionChannel" version="1" parent="hkReferencedObject">
+    <member name="selectedEdges" type="int" array="true"/>
+  </class>
+  <class name="hkxVertexIntDataChannel" version="1" parent="hkReferencedObject">
+    <member name="perVertexInts" type="int" array="true"/>
+  </class>
+  <class name="hkResourceBase" version="0" parent="hkReferencedObject">
+  </class>
+  <class name="hkResourceContainer" version="0" parent="hkResourceBase">
+  </class>
+  <class name="hkMemoryResourceContainer" version="1" parent="hkResourceContainer">
+    <member name="name" type="string"/>
+    <member name="parent" type="void"/>
+    <member name="resourceHandles" type="ref" array="true" class="hkMemoryResourceHandle"/>
+    <member name="children" type="ref" array="true" class="hkMemoryResourceContainer"/>
+  </class>
+  <class name="hkResourceHandle" version="0" parent="hkResourceBase">
+  </class>
+  <class name="hkMemoryResourceHandle" version="3" parent="hkResourceHandle">
+    <member name="variant" type="ref" class="hkReferencedObject"/>
+    <member name="name" type="string"/>
+    <member name="references" type="struct" array="true" class="hkMemoryResourceHandleExternalLink"/>
+  </class>
+  <class name="hkMemoryResourceHandleExternalLink" version="1">
+    <member name="memberName" type="string"/>
+    <member name="externalId" type="string"/>
+  </class>
+  <class name="hkpWorldObject" version="0" parent="hkReferencedObject">
+    <member name="world" type="void"/>
+    <member name="userData" type="int"/>
+    <member name="collidable" type="struct" class="hkpLinkedCollidable"/>
+    <member name="multiThreadCheck" type="struct" class="hkMultiThreadCheck"/>
+    <member name="name" type="string"/>
+    <member name="properties" type="struct" array="true" class="hkSimpleProperty"/>
+  </class>
+  <class name="hkpCdBody" version="1">
+    <member name="shape" type="ref" class="hkpShape"/>
+    <member name="shapeKey" type="int"/>
+    <member name="motion" type="void"/>
+    <member name="parent" type="void"/>
+  </class>
+  <class name="hkcdShape" version="0" parent="hkReferencedObject">
+    <member name="type" type="void"/>
+    <member name="dispatchType" type="byte"/>
+    <member name="bitsPerKey" type="byte"/>
+    <member name="shapeInfoCodecType" type="byte"/>
+  </class>
+  <class name="hkpShapeBase" version="0" parent="hkcdShape">
+  </class>
+  <class name="hkpShape" version="1" parent="hkpShapeBase">
+    <member name="userData" type="int"/>
+  </class>
+  <class name="hkpCollidable" version="0" parent="hkpCdBody">
+    <member name="ownerOffset" type="void"/>
+    <member name="forceCollideOntoPpu" type="byte"/>
+    <member name="shapeSizeOnSpu" type="void"/>
+    <member name="broadPhaseHandle" type="struct" class="hkpTypedBroadPhaseHandle"/>
+    <member name="boundingVolumeData" type="void"/>
+    <member name="allowedPenetrationDepth" type="real"/>
+  </class>
+  <class name="hkpBroadPhaseHandle" version="0">
+    <member name="id" type="void"/>
+  </class>
+  <class name="hkpTypedBroadPhaseHandle" version="0" parent="hkpBroadPhaseHandle">
+    <member name="type" type="int"/>
+    <member name="ownerOffset" type="void"/>
+    <member name="objectQualityType" type="int"/>
+    <member name="collisionFilterInfo" type="int"/>
+  </class>
+  <class name="hkpLinkedCollidable" version="0" parent="hkpCollidable">
+    <member name="collisionEntries" type="void"/>
+  </class>
+  <class name="hkMultiThreadCheck" version="0">
+    <member name="threadId" type="void"/>
+    <member name="stackTraceId" type="void"/>
+    <member name="markCount" type="void"/>
+    <member name="markBitStack" type="void"/>
+  </class>
+  <class name="hkSimpleProperty" version="2">
+    <member name="key" type="int"/>
+    <member name="alignmentPadding" type="void"/>
+    <member name="value" type="struct" class="hkSimplePropertyValue"/>
+  </class>
+  <class name="hkSimplePropertyValue" version="1">
+    <member name="data" type="int"/>
+  </class>
+  <class name="hkpEntity" version="3" parent="hkpWorldObject">
+    <member name="material" type="struct" class="hkpMaterial"/>
+    <member name="limitContactImpulseUtilAndFlag" type="void"/>
+    <member name="damageMultiplier" type="real"/>
+    <member name="breakableBody" type="void"/>
+    <member name="solverData" type="void"/>
+    <member name="storageIndex" type="int"/>
+    <member name="contactPointCallbackDelay" type="int"/>
+    <member name="constraintsMaster" type="void"/>
+    <member name="constraintsSlave" type="void"/>
+    <member name="constraintRuntime" type="void"/>
+    <member name="simulationIsland" type="void"/>
+    <member name="autoRemoveLevel" type="int"/>
+    <member name="numShapeKeysInContactPointProperties" type="byte"/>
+    <member name="responseModifierFlags" type="byte"/>
+    <member name="uid" type="int"/>
+    <member name="spuCollisionCallback" type="struct" class="hkpEntitySpuCollisionCallback"/>
+    <member name="motion" type="struct" class="hkpMotion"/>
+    <member name="contactListeners" type="void"/>
+    <member name="actions" type="void"/>
+    <member name="localFrame" type="ref" class="hkLocalFrame"/>
+    <member name="extendedListeners" type="void"/>
+    <member name="npData" type="int"/>
+  </class>
+  <class name="hkpMaterial" version="2">
+    <member name="responseType" type="int"/>
+    <member name="rollingFrictionMultiplier" type="real"/>
+    <member name="friction" type="real"/>
+    <member name="restitution" type="real"/>
+  </class>
+  <class name="hkpEntitySpuCollisionCallback" version="0">
+    <member name="util" type="void"/>
+    <member name="capacity" type="void"/>
+    <member name="eventFilter" type="byte"/>
+    <member name="userFilter" type="byte"/>
+  </class>
+  <class name="hkpMotion" version="3" parent="hkReferencedObject">
+    <member name="type" type="byte"/>
+    <member name="deactivationIntegrateCounter" type="byte"/>
+    <member name="deactivationNumInactiveFrames" type="int" count="2"/>
+    <member name="motionState" type="struct" class="hkMotionState"/>
+    <member name="inertiaAndMassInv" type="vec4"/>
+    <member name="linearVelocity" type="vec4"/>
+    <member name="angularVelocity" type="vec4"/>
+    <member name="deactivationRefPosition" type="vec4" count="2"/>
+    <member name="deactivationRefOrientation" type="int" count="2"/>
+    <member name="savedMotion" type="ref" class="hkpMotion"/>
+    <member name="savedQualityTypeIndex" type="int"/>
+    <member name="gravityFactor" type="real"/>
+  </class>
+  <class name="hkMotionState" version="2">
+    <member name="transform" type="vec16"/>
+    <member name="sweptTransform" type="struct" class="hkSweptTransformf"/>
+    <member name="deltaAngle" type="vec4"/>
+    <member name="objectRadius" type="real"/>
+    <member name="linearDamping" type="real"/>
+    <member name="angularDamping" type="real"/>
+    <member name="timeFactor" type="real"/>
+    <member name="maxLinearVelocity" type="struct" class="hkUFloat8"/>
+    <member name="maxAngularVelocity" type="struct" class="hkUFloat8"/>
+    <member name="deactivationClass" type="byte"/>
+  </class>
+  <class name="hkSweptTransformf" version="0">
+    <member name="centerOfMass0" type="vec4"/>
+    <member name="centerOfMass1" type="vec4"/>
+    <member name="rotation0" type="vec4"/>
+    <member name="rotation1" type="vec4"/>
+    <member name="centerOfMassLocal" type="vec4"/>
+  </class>
+  <class name="hkUFloat8" version="0">
+    <member name="value" type="byte"/>
+  </class>
+  <class name="hkLocalFrame" version="0" parent="hkReferencedObject">
+  </class>
+  <class name="hkpRigidBody" version="0" parent="hkpEntity">
+  </class>
+  <class name="hkpSphereRepShape" version="0" parent="hkpShape">
+  </class>
+  <class name="hkpConvexShape" version="0" parent="hkpSphereRepShape">
+    <member name="radius" type="real"/>
+  </class>
+  <class name="hkpConvexVerticesShape" version="4" parent="hkpConvexShape">
+    <member name="aabbHalfExtents" type="vec4"/>
+    <member name="aabbCenter" type="vec4"/>
+    <member name="rotatedVertices" type="struct" array="true" class="hkFourTransposedPointsf"/>
+    <member name="numVertices" type="int"/>
+    <member name="useSpuBuffer" type="void"/>
+    <member name="planeEquations" type="vec4" array="true"/>
+    <member name="connectivity" type="ref" class="hkpConvexVerticesConnectivity"/>
+  </class>
+  <class name="hkFourTransposedPointsf" version="0">
+    <member name="vertices" type="vec4" count="3"/>
+  </class>
+  <class name="hkpConvexVerticesConnectivity" version="0" parent="hkReferencedObject">
+    <member name="vertexIndices" type="int" array="true"/>
+    <member name="numVerticesPerFace" type="byte" array="true"/>
+  </class>
+  <class name="hkpShapeInfo" version="0" parent="hkReferencedObject">
+    <member name="shape" type="ref" class="hkpShape"/>
+    <member name="isHierarchicalCompound" type="byte"/>
+    <member name="hkdShapesCollected" type="byte"/>
+    <member name="childShapeNames" type="string" array="true"/>
+    <member name="childTransforms" type="vec16" array="true"/>
+    <member name="transform" type="vec16"/>
+  </class>
+  <class name="hkpPhysicsData" version="0" parent="hkReferencedObject">
+    <member name="worldCinfo" type="ref" class="hkpWorldCinfo"/>
+    <member name="systems" type="ref" array="true" class="hkpPhysicsSystem"/>
+  </class>
+  <class name="hkpWorldCinfo" version="18" parent="hkReferencedObject">
+    <member name="gravity" type="vec4"/>
+    <member name="broadPhaseQuerySize" type="int"/>
+    <member name="contactRestingVelocity" type="real"/>
+    <member name="broadPhaseType" type="int"/>
+    <member name="broadPhaseBorderBehaviour" type="int"/>
+    <member name="mtPostponeAndSortBroadPhaseBorderCallbacks" type="byte"/>
+    <member name="broadPhaseWorldAabb" type="struct" class="hkAabb"/>
+    <member name="collisionTolerance" type="real"/>
+    <member name="collisionFilter" type="ref" class="hkpCollisionFilter"/>
+    <member name="convexListFilter" type="ref" class="hkpConvexListFilter"/>
+    <member name="expectedMaxLinearVelocity" type="real"/>
+    <member name="sizeOfToiEventQueue" type="int"/>
+    <member name="expectedMinPsiDeltaTime" type="real"/>
+    <member name="memoryWatchDog" type="ref" class="hkWorldMemoryAvailableWatchDog"/>
+    <member name="broadPhaseNumMarkers" type="int"/>
+    <member name="contactPointGeneration" type="int"/>
+    <member name="allowToSkipConfirmedCallbacks" type="byte"/>
+    <member name="solverTau" type="real"/>
+    <member name="solverDamp" type="real"/>
+    <member name="solverIterations" type="int"/>
+    <member name="solverMicrosteps" type="int"/>
+    <member name="maxConstraintViolation" type="real"/>
+    <member name="forceCoherentConstraintOrderingInSolver" type="byte"/>
+    <member name="snapCollisionToConvexEdgeThreshold" type="real"/>
+    <member name="snapCollisionToConcaveEdgeThreshold" type="real"/>
+    <member name="enableToiWeldRejection" type="byte"/>
+    <member name="enableDeprecatedWelding" type="byte"/>
+    <member name="iterativeLinearCastEarlyOutDistance" type="real"/>
+    <member name="iterativeLinearCastMaxIterations" type="int"/>
+    <member name="deactivationNumInactiveFramesSelectFlag0" type="byte"/>
+    <member name="deactivationNumInactiveFramesSelectFlag1" type="byte"/>
+    <member name="deactivationIntegrateCounter" type="byte"/>
+    <member name="shouldActivateOnRigidBodyTransformChange" type="byte"/>
+    <member name="deactivationReferenceDistance" type="real"/>
+    <member name="toiCollisionResponseRotateNormal" type="real"/>
+    <member name="useCompoundSpuElf" type="byte"/>
+    <member name="maxSectorsPerMidphaseCollideTask" type="int"/>
+    <member name="maxSectorsPerNarrowphaseCollideTask" type="int"/>
+    <member name="processToisMultithreaded" type="byte"/>
+    <member name="maxEntriesPerToiMidphaseCollideTask" type="int"/>
+    <member name="maxEntriesPerToiNarrowphaseCollideTask" type="int"/>
+    <member name="maxNumToiCollisionPairsSinglethreaded" type="int"/>
+    <member name="numToisTillAllowedPenetrationSimplifiedToi" type="real"/>
+    <member name="numToisTillAllowedPenetrationToi" type="real"/>
+    <member name="numToisTillAllowedPenetrationToiHigher" type="real"/>
+    <member name="numToisTillAllowedPenetrationToiForced" type="real"/>
+    <member name="enableDeactivation" type="byte"/>
+    <member name="simulationType" type="int"/>
+    <member name="enableSimulationIslands" type="byte"/>
+    <member name="minDesiredIslandSize" type="int"/>
+    <member name="processActionsInSingleThread" type="byte"/>
+    <member name="allowIntegrationOfIslandsWithoutConstraintsInASeparateJob" type="byte"/>
+    <member name="frameMarkerPsiSnap" type="real"/>
+    <member name="fireCollisionCallbacks" type="byte"/>
+  </class>
+  <class name="hkAabb" version="0">
+    <member name="min" type="vec4"/>
+    <member name="max" type="vec4"/>
+  </class>
+  <class name="hkpCollisionFilter" version="0" parent="hkReferencedObject">
+    <member name="prepad" type="int" count="2"/>
+    <member name="type" type="int"/>
+    <member name="postpad" type="int" count="3"/>
+  </class>
+  <class name="hkpConvexListFilter" version="0" parent="hkReferencedObject">
+  </class>
+  <class name="hkWorldMemoryAvailableWatchDog" version="1" parent="hkReferencedObject">
+  </class>
+  <class name="hkpPhysicsSystem" version="0" parent="hkReferencedObject">
+    <member name="rigidBodies" type="ref" array="true" class="hkpRigidBody"/>
+    <member name="constraints" type="ref" array="true" class="hkpConstraintInstance"/>
+    <member name="actions" type="ref" array="true" class="hkpAction"/>
+    <member name="phantoms" type="ref" array="true" class="hkpPhantom"/>
+    <member name="name" type="string"/>
+    <member name="userData" type="int"/>
+    <member name="active" type="byte"/>
+  </class>
+  <class name="hkpConstraintInstance" version="1" parent="hkReferencedObject">
+    <member name="owner" type="void"/>
+    <member name="data" type="ref" class="hkpConstraintData"/>
+    <member name="constraintModifiers" type="ref" class="hkpModifierConstraintAtom"/>
+    <member name="entities" type="ref" count="2" class="hkpEntity"/>
+    <member name="priority" type="byte"/>
+    <member name="wantRuntime" type="byte"/>
+    <member name="destructionRemapInfo" type="byte"/>
+    <member name="listeners" type="void"/>
+    <member name="name" type="string"/>
+    <member name="userData" type="int"/>
+    <member name="internal" type="void"/>
+    <member name="uid" type="void"/>
+  </class>
+  <class name="hkpConstraintData" version="0" parent="hkReferencedObject">
+    <member name="userData" type="int"/>
+  </class>
+  <class name="hkpConstraintAtom" version="0">
+    <member name="type" type="int"/>
+  </class>
+  <class name="hkpModifierConstraintAtom" version="1" parent="hkpConstraintAtom">
+    <member name="modifierAtomSize" type="int"/>
+    <member name="childSize" type="int"/>
+    <member name="child" type="ref" class="hkpConstraintAtom"/>
+    <member name="pad" type="void"/>
+  </class>
+  <class name="hkpAction" version="0" parent="hkReferencedObject">
+    <member name="world" type="void"/>
+    <member name="island" type="void"/>
+    <member name="userData" type="int"/>
+    <member name="name" type="string"/>
+  </class>
+  <class name="hkpPhantom" version="0" parent="hkpWorldObject">
+    <member name="overlapListeners" type="void"/>
+    <member name="phantomListeners" type="void"/>
+  </class>
+
+  <object id="#0001" type="hkRootLevelContainer">
+    <array name="namedVariants" size="3">
+      <struct>
+        <string name="name">Scene Data</string>
+        <string name="className">hkxScene</string>
+        <ref name="variant">#0002</ref>
+      </struct>
+      <struct>
+        <string name="name">Resource Data</string>
+        <string name="className">hkMemoryResourceContainer</string>
+        <ref name="variant">#0100</ref>
+      </struct>
+      <struct>
+        <string name="name">Physics Data</string>
+        <string name="className">hkpPhysicsData</string>
+        <ref name="variant">#0137</ref>
+      </struct>
+    </array>
+  </object>
+  <object id="#0002" type="hkxScene">
+    <string name="modeller">3ds max 16.0.420</string>
+    <string name="asset">D:\Dropbox\Projects\3D Engine\Resources\3D Max\scene.max</string>
+    <real name="sceneLength">x40555555 <!-- 3.33333 --></real>
+    <int name="numFrames">101</int>
+    <ref name="rootNode">#0003</ref>
+    <array name="meshes" size="6">
+      <ref>#0011</ref>
+      <ref>#0027</ref>
+      <ref>#0043</ref>
+      <ref>#0059</ref>
+      <ref>#0075</ref>
+      <ref>#0091</ref>
+    </array>
+    <vec12 name="appliedTransform">x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec12>
+  </object>
+  <object id="#0003" type="hkxNode">
+    <string name="name">ROOT_NODE</string>
+    <array name="keyFrames" size="1">
+      <vec16>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <array name="children" size="6">
+      <ref>#0004</ref>
+      <ref>#0020</ref>
+      <ref>#0036</ref>
+      <ref>#0052</ref>
+      <ref>#0068</ref>
+      <ref>#0084</ref>
+    </array>
+  </object>
+  <object id="#0004" type="hkxNode">
+    <array name="attributeGroups" size="2">
+      <struct>
+        <string name="name">hkRigidBody</string>
+        <array name="attributes" size="5">
+          <struct>
+            <string name="name">mass</string>
+            <ref name="value">#0005</ref>
+          </struct>
+          <struct>
+            <string name="name">friction</string>
+            <ref name="value">#0006</ref>
+          </struct>
+          <struct>
+            <string name="name">restitution</string>
+            <ref name="value">#0007</ref>
+          </struct>
+          <struct>
+            <string name="name">scaleInertiaTensor</string>
+            <ref name="value">#0008</ref>
+          </struct>
+          <struct>
+            <string name="name">inertiaTensorScale</string>
+            <ref name="value">#0009</ref>
+          </struct>
+        </array>
+      </struct>
+      <struct>
+        <string name="name">hkShape</string>
+        <array name="attributes" size="1">
+          <struct>
+            <string name="name">shapeType</string>
+            <ref name="value">#0010</ref>
+          </struct>
+        </array>
+      </struct>
+    </array>
+    <string name="name">path004</string>
+    <ref name="object">#0011</ref>
+    <array name="keyFrames" size="2">
+      <vec16>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4a22168 <!-- -3.01992e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x34a22168 <!-- 3.01992e-007 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x42240000 <!-- 41.0 --> x3f6a78a9 <!-- 0.915904 --> x34500000 <!-- 1.93715e-007 --> x3f800000 <!-- 1.0 --></vec16>
+      <vec16>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4a22168 <!-- -3.01992e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x34a22168 <!-- 3.01992e-007 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x42240000 <!-- 41.0 --> x3f6a78a9 <!-- 0.915904 --> x34500000 <!-- 1.93715e-007 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <string name="userProperties"></string>
+    <byte name="selected">1</byte>
+  </object>
+  <object id="#0005" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0006" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f000000 <!-- 0.5 --> 
+    </array>
+  </object>
+  <object id="#0007" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3ecccccd <!-- 0.4 --> 
+    </array>
+  </object>
+  <object id="#0008" type="hkxSparselyAnimatedBool">
+    <array name="bools" size="1">
+      0 
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0009" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f800000 <!-- 1.0 --> 
+    </array>
+  </object>
+  <object id="#0010" type="hkxSparselyAnimatedString">
+    <array name="strings" size="1">
+      <string>Hull</string>
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0011" type="hkxMesh">
+    <array name="sections" size="1">
+      <ref>#0012</ref>
+    </array>
+    <array name="userChannelInfos" size="2">
+      <ref>#0018</ref>
+      <ref>#0019</ref>
+    </array>
+  </object>
+  <object id="#0012" type="hkxMeshSection">
+    <ref name="vertexBuffer">#0013</ref>
+    <array name="indexBuffers" size="1">
+      <ref>#0014</ref>
+    </array>
+    <ref name="material">#0015</ref>
+    <array name="userChannels" size="2">
+      <ref>#0016</ref>
+      <ref>#0017</ref>
+    </array>
+  </object>
+  <object id="#0013" type="hkxVertexBuffer">
+    <struct name="data">
+      <array name="vectorData" size="192">
+        xc09ffffe <!-- -5.0 --> x3fef682c <!-- 1.87037 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbe8b05b5 <!-- -0.271528 --> xbf7661d8 <!-- -0.96243 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc0591bb4 <!-- -3.39232 --> x3fb5598c <!-- 1.4168 --> x3f7ffffe <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbefd0f29 <!-- -0.494256 --> xbf5e8b81 <!-- -0.869316 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc0591bb4 <!-- -3.39232 --> x3fb5598c <!-- 1.4168 --> xbf800001 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbefd0f29 <!-- -0.494256 --> xbf5e8b81 <!-- -0.869316 --> x32566eeb <!-- 1.24817e-008 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> x3fef682c <!-- 1.87037 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbe8b05b5 <!-- -0.271528 --> xbf7661da <!-- -0.962431 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffd <!-- -3.0 --> x401f4782 <!-- 2.48874 --> xbf7fd669 <!-- -0.999365 --> x3f800000 <!-- 1.0 --> xb9ddeb7c <!-- -0.000423279 --> x3a0e1a6f <!-- 0.000542081 --> xbf7ffffb <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> x400c3304 <!-- 2.19061 --> xbf7f5c4a <!-- -0.997502 --> x3f800000 <!-- 1.0 --> x3a8b3d18 <!-- 0.00106231 --> x3bb21ae8 <!-- 0.00543534 --> xbf7ffefe <!-- -0.999985 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> x3dac3ab8 <!-- 0.0840964 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> x3dac3ab8 <!-- 0.0840964 --> xbf7fffff <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc01392e3 <!-- -2.30584 --> x3ec5c46e <!-- 0.386264 --> x3f7ffffa <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb85cfafc <!-- -5.26858e-005 --> x399a44f6 <!-- 0.000294245 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffd <!-- -3.0 --> x401ab840 <!-- 2.4175 --> x3f7fd669 <!-- 0.999365 --> x3f800000 <!-- 1.0 --> xb89048fd <!-- -6.88005e-005 --> x3a497a46 <!-- 0.000768576 --> x3f7ffffa <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> x401835ab <!-- 2.37828 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb9a43fec <!-- -0.000313281 --> x395727ef <!-- 0.000205189 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> x400b3c6f <!-- 2.17556 --> x3f7f5c47 <!-- 0.997502 --> x3f800000 <!-- 1.0 --> xbf4053ef <!-- -0.751281 --> x3f28f365 <!-- 0.659964 --> x3ba3248e <!-- 0.00497872 --> x00000000 <!-- 0.0 --> 
+        xc01392e3 <!-- -2.30584 --> x3ec5c46e <!-- 0.386264 --> xbf800003 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbf4d6da6 <!-- -0.802454 --> xbf18c235 <!-- -0.596713 --> x334d6da6 <!-- 4.783e-008 --> x00000000 <!-- 0.0 --> 
+        xbfab3456 <!-- -1.33753 --> xbf6a78a9 <!-- -0.915904 --> x3f7ffff4 <!-- 0.999999 --> x3f800000 <!-- 1.0 --> xbf4d6da6 <!-- -0.802454 --> xbf18c235 <!-- -0.596713 --> x334d6da6 <!-- 4.783e-008 --> x00000000 <!-- 0.0 --> 
+        xbfab345a <!-- -1.33754 --> xbf6a78a9 <!-- -0.915904 --> xbf800006 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbf4d6da9 <!-- -0.802455 --> xbf18c233 <!-- -0.596713 --> x344d6da9 <!-- 1.9132e-007 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> x40037b0a <!-- 2.05438 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb2e1c6e7 <!-- -2.62839e-008 --> xb42e44ee <!-- -1.62301e-007 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> x3f99336c <!-- 1.19688 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3ee1a4eb <!-- 0.440711 --> x3f65cc52 <!-- 0.897649 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> x3f99336c <!-- 1.19688 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3ee1a4e8 <!-- 0.440711 --> x3f65cc51 <!-- 0.897649 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> x401835ab <!-- 2.37828 --> xbf7fffff <!-- -1.0 --> x3f800000 <!-- 1.0 --> xb3481b22 <!-- -4.65908e-008 --> x3480d8a8 <!-- 2.39995e-007 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> x40037b0a <!-- 2.05438 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x320c1b8d <!-- 8.15534e-009 --> x347bab60 <!-- 2.34385e-007 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <array name="floatData" size="48">
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> 
+        x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <int name="numVerts">24</int>
+      <int name="vectorStride">32</int>
+      <int name="floatStride">8</int>
+    </struct>
+    <struct name="desc">
+      <array name="decls" size="3">
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">1</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="byteOffset">16</int>
+          <int name="type">4</int>
+          <int name="usage">4</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">32</int>
+          <int name="byteStride">8</int>
+          <byte name="numElements">2</byte>
+        </struct>
+      </array>
+    </struct>
+  </object>
+  <object id="#0014" type="hkxIndexBuffer">
+    <int name="indexType">1</int>
+    <array name="indices16" size="132">
+      0 1 2 2 3 0 2 4 
+      5 5 3 2 6 7 8 8 
+      9 6 10 1 11 11 12 10 
+      5 13 0 0 3 5 14 10 
+      15 15 16 14 10 12 17 17 
+      15 10 18 9 8 8 19 18 
+      20 14 16 16 21 20 16 15 
+      22 22 23 16 15 17 19 19 
+      22 15 21 16 23 23 18 21 
+      23 22 7 7 6 23 22 19 
+      8 8 7 22 18 23 6 6 
+      9 18 19 17 21 21 18 19 
+      12 20 21 21 17 12 20 12 
+      11 11 4 20 5 4 11 11 
+      13 5 2 1 10 10 14 2 
+      14 20 4 4 2 14 0 13 
+      11 11 1 0 
+    </array>
+    <int name="length">132</int>
+  </object>
+  <object id="#0015" type="hkxMaterial">
+    <string name="name">wirecolor_path004</string>
+    <vec4 name="diffuseColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x3f800000 <!-- 1.0 --></vec4>
+    <vec4 name="ambientColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="specularColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x42960000 <!-- 75.0 --></vec4>
+    <vec4 name="emissiveColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <tuple name="uvMapScale" size="2">
+      x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+    </tuple>
+    <int name="uvMapAlgorithm">2</int>
+    <real name="specularMultiplier">x3f800000 <!-- 1.0 --></real>
+    <real name="specularExponent">x42960000 <!-- 75.0 --></real>
+    <byte name="transparency">192</byte>
+  </object>
+  <object id="#0016" type="hkxEdgeSelectionChannel">
+    <array name="selectedEdges" size="44">
+      2 5 8 11 14 17 20 23 
+      26 29 32 35 38 41 44 47 
+      50 53 56 59 62 65 68 71 
+      74 77 80 83 86 89 92 95 
+      98 101 104 107 110 113 116 119 
+      122 125 128 131 
+    </array>
+  </object>
+  <object id="#0017" type="hkxVertexIntDataChannel">
+    <array name="perVertexInts" size="24">
+      2 23 22 0 8 4 18 19 
+      20 21 3 9 7 6 1 11 
+      10 12 17 16 5 13 15 14 
+    </array>
+  </object>
+  <object id="#0018" type="hkxMeshUserChannelInfo">
+    <string name="name">hidden_edges</string>
+    <string name="className">hkxEdgeSelectionChannel</string>
+  </object>
+  <object id="#0019" type="hkxMeshUserChannelInfo">
+    <string name="name">normalIds</string>
+    <string name="className">hkxVertexIntDataChannel</string>
+  </object>
+  <object id="#0020" type="hkxNode">
+    <array name="attributeGroups" size="2">
+      <struct>
+        <string name="name">hkRigidBody</string>
+        <array name="attributes" size="5">
+          <struct>
+            <string name="name">mass</string>
+            <ref name="value">#0021</ref>
+          </struct>
+          <struct>
+            <string name="name">friction</string>
+            <ref name="value">#0022</ref>
+          </struct>
+          <struct>
+            <string name="name">restitution</string>
+            <ref name="value">#0023</ref>
+          </struct>
+          <struct>
+            <string name="name">scaleInertiaTensor</string>
+            <ref name="value">#0024</ref>
+          </struct>
+          <struct>
+            <string name="name">inertiaTensorScale</string>
+            <ref name="value">#0025</ref>
+          </struct>
+        </array>
+      </struct>
+      <struct>
+        <string name="name">hkShape</string>
+        <array name="attributes" size="1">
+          <struct>
+            <string name="name">shapeType</string>
+            <ref name="value">#0026</ref>
+          </struct>
+        </array>
+      </struct>
+    </array>
+    <string name="name">path005</string>
+    <ref name="object">#0027</ref>
+    <array name="keyFrames" size="2">
+      <vec16>xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xb4222168 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x424c0000 <!-- 51.0 --> x3f6a78a9 <!-- 0.915904 --> x34500000 <!-- 1.93715e-007 --> x3f800000 <!-- 1.0 --></vec16>
+      <vec16>xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xb4222168 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x424c0000 <!-- 51.0 --> x3f6a78a9 <!-- 0.915904 --> x34500000 <!-- 1.93715e-007 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <string name="userProperties"></string>
+    <byte name="selected">1</byte>
+  </object>
+  <object id="#0021" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0022" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f000000 <!-- 0.5 --> 
+    </array>
+  </object>
+  <object id="#0023" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3ecccccd <!-- 0.4 --> 
+    </array>
+  </object>
+  <object id="#0024" type="hkxSparselyAnimatedBool">
+    <array name="bools" size="1">
+      0 
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0025" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f800000 <!-- 1.0 --> 
+    </array>
+  </object>
+  <object id="#0026" type="hkxSparselyAnimatedString">
+    <array name="strings" size="1">
+      <string>Hull</string>
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0027" type="hkxMesh">
+    <array name="sections" size="1">
+      <ref>#0028</ref>
+    </array>
+    <array name="userChannelInfos" size="2">
+      <ref>#0034</ref>
+      <ref>#0035</ref>
+    </array>
+  </object>
+  <object id="#0028" type="hkxMeshSection">
+    <ref name="vertexBuffer">#0029</ref>
+    <array name="indexBuffers" size="1">
+      <ref>#0030</ref>
+    </array>
+    <ref name="material">#0031</ref>
+    <array name="userChannels" size="2">
+      <ref>#0032</ref>
+      <ref>#0033</ref>
+    </array>
+  </object>
+  <object id="#0029" type="hkxVertexBuffer">
+    <struct name="data">
+      <array name="vectorData" size="192">
+        xc09ffffe <!-- -5.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffb <!-- -3.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffb <!-- -3.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffb <!-- -3.0 --> xbd263f70 <!-- -0.0405878 --> xbf7fd669 <!-- -0.999365 --> x3f800000 <!-- 1.0 --> xba0f8d2d <!-- -0.000547605 --> x3a162239 <!-- 0.000572715 --> xbf7ffffa <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> xbf350cf3 <!-- -0.707229 --> xbf7f5c48 <!-- -0.997502 --> x3f800000 <!-- 1.0 --> xb98a62db <!-- -0.000263951 --> x3c1aaf30 <!-- 0.00944118 --> xbf7ffd13 <!-- -0.999955 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> x3dac3ab8 <!-- 0.0840964 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> x3dac3ab8 <!-- 0.0840964 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb97bc008 <!-- -0.000240088 --> x39496579 <!-- 0.000192067 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffb <!-- -3.0 --> xbde507f0 <!-- -0.111832 --> x3f7fd669 <!-- 0.999365 --> x3f800000 <!-- 1.0 --> xb9524dd2 <!-- -0.000200562 --> x3a7bf81c <!-- 0.000961186 --> x3f7ffff7 <!-- 0.999999 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> x3ed86296 <!-- 0.422627 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb9a65bfe <!-- -0.000317305 --> x00000000 <!-- 0.0 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> xbf38e749 <!-- -0.722279 --> x3f7f5c48 <!-- 0.997502 --> x3f800000 <!-- 1.0 --> xbf4e8686 <!-- -0.80674 --> x3f17448a <!-- 0.59089 --> x3b92119e <!-- 0.00445767 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> x3f0361ff <!-- 0.513214 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> x3e37a39c <!-- 0.179335 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3dd9b286 <!-- 0.106298 --> x3f7e8cb1 <!-- 0.994334 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> x3e37a39c <!-- 0.179335 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3dd9b288 <!-- 0.106298 --> x3f7e8cb1 <!-- 0.994334 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> x3ed86296 <!-- 0.422627 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> x3f0361ff <!-- 0.513214 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <array name="floatData" size="48">
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> 
+        x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <int name="numVerts">24</int>
+      <int name="vectorStride">32</int>
+      <int name="floatStride">8</int>
+    </struct>
+    <struct name="desc">
+      <array name="decls" size="3">
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">1</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="byteOffset">16</int>
+          <int name="type">4</int>
+          <int name="usage">4</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">32</int>
+          <int name="byteStride">8</int>
+          <byte name="numElements">2</byte>
+        </struct>
+      </array>
+    </struct>
+  </object>
+  <object id="#0030" type="hkxIndexBuffer">
+    <int name="indexType">1</int>
+    <array name="indices16" size="132">
+      0 1 2 2 3 0 2 4 
+      5 5 3 2 6 7 8 8 
+      9 6 10 1 11 11 12 10 
+      5 13 0 0 3 5 14 10 
+      15 15 16 14 10 12 17 17 
+      15 10 18 9 8 8 19 18 
+      20 14 16 16 21 20 16 15 
+      22 22 23 16 15 17 19 19 
+      22 15 21 16 23 23 18 21 
+      23 22 7 7 6 23 22 19 
+      8 8 7 22 18 23 6 6 
+      9 18 19 17 21 21 18 19 
+      12 20 21 21 17 12 20 12 
+      11 11 4 20 5 4 11 11 
+      13 5 2 1 10 10 14 2 
+      14 20 4 4 2 14 0 13 
+      11 11 1 0 
+    </array>
+    <int name="length">132</int>
+  </object>
+  <object id="#0031" type="hkxMaterial">
+    <string name="name">wirecolor_path005</string>
+    <vec4 name="diffuseColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x3f800000 <!-- 1.0 --></vec4>
+    <vec4 name="ambientColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="specularColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x42960000 <!-- 75.0 --></vec4>
+    <vec4 name="emissiveColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <tuple name="uvMapScale" size="2">
+      x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+    </tuple>
+    <int name="uvMapAlgorithm">2</int>
+    <real name="specularMultiplier">x3f800000 <!-- 1.0 --></real>
+    <real name="specularExponent">x42960000 <!-- 75.0 --></real>
+    <byte name="transparency">192</byte>
+  </object>
+  <object id="#0032" type="hkxEdgeSelectionChannel">
+    <array name="selectedEdges" size="44">
+      2 5 8 11 14 17 20 23 
+      26 29 32 35 38 41 44 47 
+      50 53 56 59 62 65 68 71 
+      74 77 80 83 86 89 92 95 
+      98 101 104 107 110 113 116 119 
+      122 125 128 131 
+    </array>
+  </object>
+  <object id="#0033" type="hkxVertexIntDataChannel">
+    <array name="perVertexInts" size="24">
+      2 23 22 0 8 4 18 19 
+      20 21 3 9 7 6 1 11 
+      10 12 17 16 5 13 15 14 
+    </array>
+  </object>
+  <object id="#0034" type="hkxMeshUserChannelInfo">
+    <string name="name">hidden_edges</string>
+    <string name="className">hkxEdgeSelectionChannel</string>
+  </object>
+  <object id="#0035" type="hkxMeshUserChannelInfo">
+    <string name="name">normalIds</string>
+    <string name="className">hkxVertexIntDataChannel</string>
+  </object>
+  <object id="#0036" type="hkxNode">
+    <array name="attributeGroups" size="2">
+      <struct>
+        <string name="name">hkRigidBody</string>
+        <array name="attributes" size="5">
+          <struct>
+            <string name="name">mass</string>
+            <ref name="value">#0037</ref>
+          </struct>
+          <struct>
+            <string name="name">friction</string>
+            <ref name="value">#0038</ref>
+          </struct>
+          <struct>
+            <string name="name">restitution</string>
+            <ref name="value">#0039</ref>
+          </struct>
+          <struct>
+            <string name="name">scaleInertiaTensor</string>
+            <ref name="value">#0040</ref>
+          </struct>
+          <struct>
+            <string name="name">inertiaTensorScale</string>
+            <ref name="value">#0041</ref>
+          </struct>
+        </array>
+      </struct>
+      <struct>
+        <string name="name">hkShape</string>
+        <array name="attributes" size="1">
+          <struct>
+            <string name="name">shapeType</string>
+            <ref name="value">#0042</ref>
+          </struct>
+        </array>
+      </struct>
+    </array>
+    <string name="name">path006</string>
+    <ref name="object">#0043</ref>
+    <array name="keyFrames" size="2">
+      <vec16>xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xb4222168 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x41f0f214 <!-- 30.1182 --> x3f6a78a9 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+      <vec16>xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xb4222168 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x41f0f214 <!-- 30.1182 --> x3f6a78a9 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <string name="userProperties"></string>
+    <byte name="selected">1</byte>
+  </object>
+  <object id="#0037" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0038" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f000000 <!-- 0.5 --> 
+    </array>
+  </object>
+  <object id="#0039" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3ecccccd <!-- 0.4 --> 
+    </array>
+  </object>
+  <object id="#0040" type="hkxSparselyAnimatedBool">
+    <array name="bools" size="1">
+      0 
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0041" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f800000 <!-- 1.0 --> 
+    </array>
+  </object>
+  <object id="#0042" type="hkxSparselyAnimatedString">
+    <array name="strings" size="1">
+      <string>Hull</string>
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0043" type="hkxMesh">
+    <array name="sections" size="1">
+      <ref>#0044</ref>
+    </array>
+    <array name="userChannelInfos" size="2">
+      <ref>#0050</ref>
+      <ref>#0051</ref>
+    </array>
+  </object>
+  <object id="#0044" type="hkxMeshSection">
+    <ref name="vertexBuffer">#0045</ref>
+    <array name="indexBuffers" size="1">
+      <ref>#0046</ref>
+    </array>
+    <ref name="material">#0047</ref>
+    <array name="userChannels" size="2">
+      <ref>#0048</ref>
+      <ref>#0049</ref>
+    </array>
+  </object>
+  <object id="#0045" type="hkxVertexBuffer">
+    <struct name="data">
+      <array name="vectorData" size="192">
+        xc05d71d4 <!-- -3.46007 --> x3fef682c <!-- 1.87037 --> x3f800002 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbe732e4e <!-- -0.237481 --> xbf78ad26 <!-- -0.971392 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc0114dd3 <!-- -2.27038 --> x3fca2d8c <!-- 1.57951 --> x3f800001 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbef7154e <!-- -0.482584 --> xbf6037aa <!-- -0.875849 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc0114dd3 <!-- -2.27038 --> x3fca2d8c <!-- 1.57951 --> xbf7ffffe <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbef7154e <!-- -0.482584 --> xbf6037aa <!-- -0.875849 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc05d71d4 <!-- -3.46007 --> x3fef682c <!-- 1.87037 --> xbf7ffffc <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbe732e4e <!-- -0.237481 --> xbf78ad26 <!-- -0.971392 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3edbcf90 <!-- 0.429318 --> x3f160c3b <!-- 0.586124 --> xbf800005 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f449aac <!-- 0.767985 --> xbf23f5b2 <!-- -0.640468 --> x34062a7b <!-- 1.24952e-007 --> x00000000 <!-- 0.0 --> 
+        x3edbcf90 <!-- 0.429318 --> x3f160c3b <!-- 0.586124 --> x3f7ffff6 <!-- 0.999999 --> x3f800000 <!-- 1.0 --> x3f449aae <!-- 0.767985 --> xbf23f5af <!-- -0.640468 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f904810 <!-- 1.1272 --> x3fb6235c <!-- 1.42295 --> x3f7ffff6 <!-- 0.999999 --> x3f800000 <!-- 1.0 --> x3f449aad <!-- 0.767985 --> xbf23f5b1 <!-- -0.640468 --> x3379c0c1 <!-- 5.81501e-008 --> x00000000 <!-- 0.0 --> 
+        x3f904814 <!-- 1.1272 --> x3fb6235c <!-- 1.42295 --> xbf800004 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f449aab <!-- 0.767985 --> xbf23f5b3 <!-- -0.640468 --> x34449aac <!-- 1.83102e-007 --> x00000000 <!-- 0.0 --> 
+        xc05d71d4 <!-- -3.46007 --> x400561d6 <!-- 2.0841 --> xbf800004 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbf350996 <!-- -0.707178 --> x3f350050 <!-- 0.707036 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc05d71d4 <!-- -3.46007 --> x400561d6 <!-- 2.0841 --> x3f7ffff7 <!-- 0.999999 --> x3f800000 <!-- 1.0 --> xbf3509ad <!-- -0.707179 --> x3f350038 <!-- 0.707035 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf9d3b57 <!-- -1.22837 --> x3f1304eb <!-- 0.574294 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbf7a53f6 <!-- -0.977844 --> xbe565c48 <!-- -0.209336 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf9d3b57 <!-- -1.22837 --> x3f1304eb <!-- 0.574294 --> x3f7fffff <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbf7a53f6 <!-- -0.977844 --> xbe565c48 <!-- -0.209336 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf6853b0 <!-- -0.907527 --> xbf6ca781 <!-- -0.924431 --> x3f7ffffe <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbf7a53f6 <!-- -0.977844 --> xbe565c48 <!-- -0.209336 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf6853b0 <!-- -0.907527 --> xbf6ca799 <!-- -0.924432 --> xbf800003 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbf7a53f8 <!-- -0.977844 --> xbe565c3e <!-- -0.209336 --> x3420c52c <!-- 1.49729e-007 --> x00000000 <!-- 0.0 --> 
+        x401ddd2c <!-- 2.46662 --> x3ffafbe0 <!-- 1.96081 --> xbf800002 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f54150f <!-- 0.828446 --> xbf0f60a7 <!-- -0.560069 --> x34c2c059 <!-- 3.62753e-007 --> x00000000 <!-- 0.0 --> 
+        x401ddd28 <!-- 2.46662 --> x3ffafbe0 <!-- 1.96081 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f5414f7 <!-- 0.828445 --> xbf0f60c7 <!-- -0.56007 --> x33fe85bb <!-- 1.18521e-007 --> x00000000 <!-- 0.0 --> 
+        x3e708fb0 <!-- 0.234923 --> xbf6f50a9 <!-- -0.934825 --> x3f7ffffb <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbc150cc1 <!-- -0.00909728 --> xbf7ffd49 <!-- -0.999959 --> x353ffdf5 <!-- 7.15226e-007 --> x00000000 <!-- 0.0 --> 
+        x3e708fb0 <!-- 0.234923 --> xbf6f50a9 <!-- -0.934825 --> xbf800005 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbc150781 <!-- -0.00909603 --> xbf7ffd49 <!-- -0.999959 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x401ddd26 <!-- 2.46662 --> x400561d6 <!-- 2.0841 --> x3f800002 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f3504d4 <!-- 0.707105 --> x3f350511 <!-- 0.707109 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x401ddd26 <!-- 2.46662 --> x400561d6 <!-- 2.0841 --> xbf7ffffc <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f3504bd <!-- 0.707104 --> x3f350528 <!-- 0.70711 --> x34adec7e <!-- 3.23958e-007 --> x00000000 <!-- 0.0 --> 
+        x3f0a38b4 <!-- 0.539928 --> x400561d6 <!-- 2.0841 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f0a38b4 <!-- 0.539928 --> x400561d6 <!-- 2.0841 --> xbf7ffffd <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbfbae3a6 <!-- -1.46007 --> x400561d6 <!-- 2.0841 --> x3f7fd66d <!-- 0.999366 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbfbae3a6 <!-- -1.46007 --> x400561d6 <!-- 2.0841 --> xbf7fd665 <!-- -0.999365 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <array name="floatData" size="48">
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> 
+        x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> 
+        x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+        x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> x3f000000 <!-- 0.5 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <int name="numVerts">24</int>
+      <int name="vectorStride">32</int>
+      <int name="floatStride">8</int>
+    </struct>
+    <struct name="desc">
+      <array name="decls" size="3">
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">1</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="byteOffset">16</int>
+          <int name="type">4</int>
+          <int name="usage">4</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">32</int>
+          <int name="byteStride">8</int>
+          <byte name="numElements">2</byte>
+        </struct>
+      </array>
+    </struct>
+  </object>
+  <object id="#0046" type="hkxIndexBuffer">
+    <int name="indexType">1</int>
+    <array name="indices16" size="132">
+      0 1 2 2 3 0 4 5 
+      6 6 7 4 8 9 0 0 
+      3 8 10 11 12 12 13 10 
+      14 7 6 6 15 14 13 12 
+      16 16 17 13 17 16 5 5 
+      4 17 15 18 19 19 14 15 
+      20 21 19 19 18 20 21 20 
+      22 22 23 21 8 23 22 22 
+      9 8 2 1 11 11 10 2 
+      10 13 17 10 17 4 7 14 
+      19 7 19 21 4 7 21 23 
+      8 3 21 23 3 21 3 2 
+      4 21 2 10 4 2 20 18 
+      15 22 20 15 22 15 6 5 
+      16 12 6 5 12 6 12 11 
+      22 6 11 22 11 1 9 22 
+      1 0 9 1 
+    </array>
+    <int name="length">132</int>
+  </object>
+  <object id="#0047" type="hkxMaterial">
+    <string name="name">wirecolor_path006</string>
+    <vec4 name="diffuseColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x3f800000 <!-- 1.0 --></vec4>
+    <vec4 name="ambientColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="specularColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x42960000 <!-- 75.0 --></vec4>
+    <vec4 name="emissiveColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <tuple name="uvMapScale" size="2">
+      x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+    </tuple>
+    <int name="uvMapAlgorithm">2</int>
+    <real name="specularMultiplier">x3f800000 <!-- 1.0 --></real>
+    <real name="specularExponent">x42960000 <!-- 75.0 --></real>
+    <byte name="transparency">192</byte>
+  </object>
+  <object id="#0048" type="hkxEdgeSelectionChannel">
+    <array name="selectedEdges" size="60">
+      2 5 8 11 14 17 20 23 
+      26 29 32 35 38 41 44 47 
+      50 53 56 59 62 65 68 71 
+      74 75 77 80 81 83 85 86 
+      89 91 92 93 95 96 97 98 
+      99 100 104 106 107 108 110 113 
+      115 116 117 119 120 121 122 123 
+      125 127 128 130 
+    </array>
+  </object>
+  <object id="#0049" type="hkxVertexIntDataChannel">
+    <array name="perVertexInts" size="24">
+      2 23 22 0 18 19 20 21 
+      4 6 1 3 11 10 17 16 
+      15 14 12 13 7 5 9 8 
+    </array>
+  </object>
+  <object id="#0050" type="hkxMeshUserChannelInfo">
+    <string name="name">hidden_edges</string>
+    <string name="className">hkxEdgeSelectionChannel</string>
+  </object>
+  <object id="#0051" type="hkxMeshUserChannelInfo">
+    <string name="name">normalIds</string>
+    <string name="className">hkxVertexIntDataChannel</string>
+  </object>
+  <object id="#0052" type="hkxNode">
+    <array name="attributeGroups" size="2">
+      <struct>
+        <string name="name">hkRigidBody</string>
+        <array name="attributes" size="5">
+          <struct>
+            <string name="name">mass</string>
+            <ref name="value">#0053</ref>
+          </struct>
+          <struct>
+            <string name="name">friction</string>
+            <ref name="value">#0054</ref>
+          </struct>
+          <struct>
+            <string name="name">restitution</string>
+            <ref name="value">#0055</ref>
+          </struct>
+          <struct>
+            <string name="name">scaleInertiaTensor</string>
+            <ref name="value">#0056</ref>
+          </struct>
+          <struct>
+            <string name="name">inertiaTensorScale</string>
+            <ref name="value">#0057</ref>
+          </struct>
+        </array>
+      </struct>
+      <struct>
+        <string name="name">hkShape</string>
+        <array name="attributes" size="1">
+          <struct>
+            <string name="name">shapeType</string>
+            <ref name="value">#0058</ref>
+          </struct>
+        </array>
+      </struct>
+    </array>
+    <string name="name">path01</string>
+    <ref name="object">#0059</ref>
+    <array name="keyFrames" size="2">
+      <vec16>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4800000 <!-- -2.38419e-007 --> x3f6a78a9 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+      <vec16>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4800000 <!-- -2.38419e-007 --> x3f6a78a9 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <string name="userProperties"></string>
+    <byte name="selected">1</byte>
+  </object>
+  <object id="#0053" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0054" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f000000 <!-- 0.5 --> 
+    </array>
+  </object>
+  <object id="#0055" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3ecccccd <!-- 0.4 --> 
+    </array>
+  </object>
+  <object id="#0056" type="hkxSparselyAnimatedBool">
+    <array name="bools" size="1">
+      0 
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0057" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f800000 <!-- 1.0 --> 
+    </array>
+  </object>
+  <object id="#0058" type="hkxSparselyAnimatedString">
+    <array name="strings" size="1">
+      <string>Hull</string>
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0059" type="hkxMesh">
+    <array name="sections" size="1">
+      <ref>#0060</ref>
+    </array>
+    <array name="userChannelInfos" size="2">
+      <ref>#0066</ref>
+      <ref>#0067</ref>
+    </array>
+  </object>
+  <object id="#0060" type="hkxMeshSection">
+    <ref name="vertexBuffer">#0061</ref>
+    <array name="indexBuffers" size="1">
+      <ref>#0062</ref>
+    </array>
+    <ref name="material">#0063</ref>
+    <array name="userChannels" size="2">
+      <ref>#0064</ref>
+      <ref>#0065</ref>
+    </array>
+  </object>
+  <object id="#0061" type="hkxVertexBuffer">
+    <struct name="data">
+      <array name="vectorData" size="192">
+        xc0a00000 <!-- -5.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03fffff <!-- -3.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03fffff <!-- -3.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc0a00000 <!-- -5.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03fffff <!-- -3.0 --> xbf0b44a0 <!-- -0.544016 --> xbf7fd669 <!-- -0.999365 --> x3f800000 <!-- 1.0 --> xba0b5c83 <!-- -0.000531621 --> x3acd1e06 <!-- 0.00156492 --> xbf7fffe8 <!-- -0.999999 --> x00000000 <!-- 0.0 --> 
+        xc0a00000 <!-- -5.0 --> xbf3275c7 <!-- -0.69711 --> xbf7f5c48 <!-- -0.997502 --> x3f800000 <!-- 1.0 --> xb8fab90b <!-- -0.000119554 --> x3c292784 <!-- 0.0103244 --> xbf7ffc81 <!-- -0.999947 --> x00000000 <!-- 0.0 --> 
+        x40a00000 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00000 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00000 <!-- 5.0 --> x3f8ac3ac <!-- 1.0841 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00000 <!-- 5.0 --> x3f8ac3ac <!-- 1.0841 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7ffffc <!-- -1.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb9968eae <!-- -0.000287165 --> x39523deb <!-- 0.000200502 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc03fffff <!-- -3.0 --> xbf1d81a6 <!-- -0.61526 --> x3f7fd669 <!-- 0.999365 --> x3f800000 <!-- 1.0 --> xb89adc7c <!-- -7.38436e-005 --> x3b13fa4d <!-- 0.00225796 --> x3f7fffd4 <!-- 0.999997 --> x00000000 <!-- 0.0 --> 
+        xbf7ffffc <!-- -1.0 --> xbec7ca0e <!-- -0.390213 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb9a65bfe <!-- -0.000317305 --> x00000000 <!-- 0.0 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc0a00000 <!-- -5.0 --> xbf36501e <!-- -0.71216 --> x3f7f5c49 <!-- 0.997502 --> x3f800000 <!-- 1.0 --> xbf3a5e5f <!-- -0.728002 --> x3f2f8088 <!-- 0.685555 --> x3ba97883 <!-- 0.00517184 --> x00000000 <!-- 0.0 --> 
+        xbf7ffffc <!-- -1.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> xbd51ecf0 <!-- -0.0512514 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x40400000 <!-- 3.0 --> x3f04e799 <!-- 0.519159 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbe8bcd47 <!-- -0.273051 --> x3f76459c <!-- 0.962 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400000 <!-- 3.0 --> x3f04e799 <!-- 0.519159 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbe8bcd48 <!-- -0.273051 --> x3f76459d <!-- 0.962 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7ffffc <!-- -1.0 --> xbec7ca0e <!-- -0.390213 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> xbd51ecf0 <!-- -0.0512514 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x40400000 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400000 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <array name="floatData" size="48">
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> 
+        x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <int name="numVerts">24</int>
+      <int name="vectorStride">32</int>
+      <int name="floatStride">8</int>
+    </struct>
+    <struct name="desc">
+      <array name="decls" size="3">
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">1</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="byteOffset">16</int>
+          <int name="type">4</int>
+          <int name="usage">4</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">32</int>
+          <int name="byteStride">8</int>
+          <byte name="numElements">2</byte>
+        </struct>
+      </array>
+    </struct>
+  </object>
+  <object id="#0062" type="hkxIndexBuffer">
+    <int name="indexType">1</int>
+    <array name="indices16" size="132">
+      0 1 2 2 3 0 2 4 
+      5 5 3 2 6 7 8 8 
+      9 6 10 1 11 11 12 10 
+      5 13 0 0 3 5 14 10 
+      15 15 16 14 10 12 17 17 
+      15 10 18 9 8 8 19 18 
+      20 14 16 16 21 20 16 15 
+      22 22 23 16 15 17 19 19 
+      22 15 21 16 23 23 18 21 
+      23 22 7 7 6 23 22 19 
+      8 8 7 22 18 23 6 6 
+      9 18 19 17 21 21 18 19 
+      12 20 21 21 17 12 20 12 
+      11 11 4 20 5 4 11 11 
+      13 5 2 1 10 10 14 2 
+      14 20 4 4 2 14 0 13 
+      11 11 1 0 
+    </array>
+    <int name="length">132</int>
+  </object>
+  <object id="#0063" type="hkxMaterial">
+    <string name="name">wirecolor_path01</string>
+    <vec4 name="diffuseColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x3f800000 <!-- 1.0 --></vec4>
+    <vec4 name="ambientColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="specularColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x42960000 <!-- 75.0 --></vec4>
+    <vec4 name="emissiveColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <tuple name="uvMapScale" size="2">
+      x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+    </tuple>
+    <int name="uvMapAlgorithm">2</int>
+    <real name="specularMultiplier">x3f800000 <!-- 1.0 --></real>
+    <real name="specularExponent">x42960000 <!-- 75.0 --></real>
+    <byte name="transparency">192</byte>
+  </object>
+  <object id="#0064" type="hkxEdgeSelectionChannel">
+    <array name="selectedEdges" size="44">
+      2 5 8 11 14 17 20 23 
+      26 29 32 35 38 41 44 47 
+      50 53 56 59 62 65 68 71 
+      74 77 80 83 86 89 92 95 
+      98 101 104 107 110 113 116 119 
+      122 125 128 131 
+    </array>
+  </object>
+  <object id="#0065" type="hkxVertexIntDataChannel">
+    <array name="perVertexInts" size="24">
+      2 23 22 0 8 4 18 19 
+      20 21 3 9 7 6 1 11 
+      10 12 17 16 5 13 15 14 
+    </array>
+  </object>
+  <object id="#0066" type="hkxMeshUserChannelInfo">
+    <string name="name">hidden_edges</string>
+    <string name="className">hkxEdgeSelectionChannel</string>
+  </object>
+  <object id="#0067" type="hkxMeshUserChannelInfo">
+    <string name="name">normalIds</string>
+    <string name="className">hkxVertexIntDataChannel</string>
+  </object>
+  <object id="#0068" type="hkxNode">
+    <array name="attributeGroups" size="2">
+      <struct>
+        <string name="name">hkRigidBody</string>
+        <array name="attributes" size="5">
+          <struct>
+            <string name="name">mass</string>
+            <ref name="value">#0069</ref>
+          </struct>
+          <struct>
+            <string name="name">friction</string>
+            <ref name="value">#0070</ref>
+          </struct>
+          <struct>
+            <string name="name">restitution</string>
+            <ref name="value">#0071</ref>
+          </struct>
+          <struct>
+            <string name="name">scaleInertiaTensor</string>
+            <ref name="value">#0072</ref>
+          </struct>
+          <struct>
+            <string name="name">inertiaTensorScale</string>
+            <ref name="value">#0073</ref>
+          </struct>
+        </array>
+      </struct>
+      <struct>
+        <string name="name">hkShape</string>
+        <array name="attributes" size="1">
+          <struct>
+            <string name="name">shapeType</string>
+            <ref name="value">#0074</ref>
+          </struct>
+        </array>
+      </struct>
+    </array>
+    <string name="name">path02</string>
+    <ref name="object">#0075</ref>
+    <array name="keyFrames" size="2">
+      <vec16>xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xb4222168 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x41200000 <!-- 10.0 --> x3f6a78a9 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+      <vec16>xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xb4222168 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x41200000 <!-- 10.0 --> x3f6a78a9 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <string name="userProperties"></string>
+    <byte name="selected">1</byte>
+  </object>
+  <object id="#0069" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0070" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f000000 <!-- 0.5 --> 
+    </array>
+  </object>
+  <object id="#0071" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3ecccccd <!-- 0.4 --> 
+    </array>
+  </object>
+  <object id="#0072" type="hkxSparselyAnimatedBool">
+    <array name="bools" size="1">
+      0 
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0073" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f800000 <!-- 1.0 --> 
+    </array>
+  </object>
+  <object id="#0074" type="hkxSparselyAnimatedString">
+    <array name="strings" size="1">
+      <string>Hull</string>
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0075" type="hkxMesh">
+    <array name="sections" size="1">
+      <ref>#0076</ref>
+    </array>
+    <array name="userChannelInfos" size="2">
+      <ref>#0082</ref>
+      <ref>#0083</ref>
+    </array>
+  </object>
+  <object id="#0076" type="hkxMeshSection">
+    <ref name="vertexBuffer">#0077</ref>
+    <array name="indexBuffers" size="1">
+      <ref>#0078</ref>
+    </array>
+    <ref name="material">#0079</ref>
+    <array name="userChannels" size="2">
+      <ref>#0080</ref>
+      <ref>#0081</ref>
+    </array>
+  </object>
+  <object id="#0077" type="hkxVertexBuffer">
+    <struct name="data">
+      <array name="vectorData" size="192">
+        xc0a00000 <!-- -5.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03fffff <!-- -3.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03fffff <!-- -3.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc0a00000 <!-- -5.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03fffff <!-- -3.0 --> xbd263f70 <!-- -0.0405878 --> xbf7fd669 <!-- -0.999365 --> x3f800000 <!-- 1.0 --> xba0c8471 <!-- -0.000536031 --> x3a0e969f <!-- 0.000543931 --> xbf7ffffa <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        xc0a00000 <!-- -5.0 --> xbf350cf3 <!-- -0.707229 --> xbf7f5c48 <!-- -0.997502 --> x3f800000 <!-- 1.0 --> xb98a62db <!-- -0.000263951 --> x3c1aaf30 <!-- 0.00944118 --> xbf7ffd13 <!-- -0.999955 --> x00000000 <!-- 0.0 --> 
+        x40a00000 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00000 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00000 <!-- 5.0 --> x3f8ac3ac <!-- 1.0841 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00000 <!-- 5.0 --> x3f8ac3ac <!-- 1.0841 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7ffffc <!-- -1.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb97bc008 <!-- -0.000240088 --> x3949657b <!-- 0.000192067 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc03fffff <!-- -3.0 --> xbde507f0 <!-- -0.111832 --> x3f7fd669 <!-- 0.999365 --> x3f800000 <!-- 1.0 --> xb9583928 <!-- -0.000206207 --> x3a6fc90d <!-- 0.000914709 --> x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xbf7ffffc <!-- -1.0 --> x3f476291 <!-- 0.778848 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb9a65bfe <!-- -0.000317305 --> x00000000 <!-- 0.0 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc0a00000 <!-- -5.0 --> xbf38e749 <!-- -0.722279 --> x3f7f5c48 <!-- 0.997502 --> x3f800000 <!-- 1.0 --> xbf4e8686 <!-- -0.80674 --> x3f17448a <!-- 0.59089 --> x3b92119e <!-- 0.00445767 --> x00000000 <!-- 0.0 --> 
+        xbf7ffffc <!-- -1.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> x3f8c0d1c <!-- 1.09415 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x40400000 <!-- 3.0 --> x3f99336c <!-- 1.19688 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3b243dc5 <!-- 0.00250612 --> x3f7fffcc <!-- 0.999997 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400000 <!-- 3.0 --> x3f99336c <!-- 1.19688 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3b243dd5 <!-- 0.00250613 --> x3f7fffcc <!-- 0.999997 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7ffffc <!-- -1.0 --> x3f476291 <!-- 0.778848 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> x3f8c0d1c <!-- 1.09415 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x40400000 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400000 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <array name="floatData" size="48">
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> 
+        x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <int name="numVerts">24</int>
+      <int name="vectorStride">32</int>
+      <int name="floatStride">8</int>
+    </struct>
+    <struct name="desc">
+      <array name="decls" size="3">
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">1</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="byteOffset">16</int>
+          <int name="type">4</int>
+          <int name="usage">4</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">32</int>
+          <int name="byteStride">8</int>
+          <byte name="numElements">2</byte>
+        </struct>
+      </array>
+    </struct>
+  </object>
+  <object id="#0078" type="hkxIndexBuffer">
+    <int name="indexType">1</int>
+    <array name="indices16" size="132">
+      0 1 2 2 3 0 2 4 
+      5 5 3 2 6 7 8 8 
+      9 6 10 1 11 11 12 10 
+      5 13 0 0 3 5 14 10 
+      15 15 16 14 10 12 17 17 
+      15 10 18 9 8 8 19 18 
+      20 14 16 16 21 20 16 15 
+      22 22 23 16 15 17 19 19 
+      22 15 21 16 23 23 18 21 
+      23 22 7 7 6 23 22 19 
+      8 8 7 22 18 23 6 6 
+      9 18 19 17 21 21 18 19 
+      12 20 21 21 17 12 20 12 
+      11 11 4 20 5 4 11 11 
+      13 5 2 1 10 10 14 2 
+      14 20 4 4 2 14 0 13 
+      11 11 1 0 
+    </array>
+    <int name="length">132</int>
+  </object>
+  <object id="#0079" type="hkxMaterial">
+    <string name="name">wirecolor_path02</string>
+    <vec4 name="diffuseColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x3f800000 <!-- 1.0 --></vec4>
+    <vec4 name="ambientColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="specularColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x42960000 <!-- 75.0 --></vec4>
+    <vec4 name="emissiveColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <tuple name="uvMapScale" size="2">
+      x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+    </tuple>
+    <int name="uvMapAlgorithm">2</int>
+    <real name="specularMultiplier">x3f800000 <!-- 1.0 --></real>
+    <real name="specularExponent">x42960000 <!-- 75.0 --></real>
+    <byte name="transparency">192</byte>
+  </object>
+  <object id="#0080" type="hkxEdgeSelectionChannel">
+    <array name="selectedEdges" size="44">
+      2 5 8 11 14 17 20 23 
+      26 29 32 35 38 41 44 47 
+      50 53 56 59 62 65 68 71 
+      74 77 80 83 86 89 92 95 
+      98 101 104 107 110 113 116 119 
+      122 125 128 131 
+    </array>
+  </object>
+  <object id="#0081" type="hkxVertexIntDataChannel">
+    <array name="perVertexInts" size="24">
+      2 23 22 0 8 4 18 19 
+      20 21 3 9 7 6 1 11 
+      10 12 17 16 5 13 15 14 
+    </array>
+  </object>
+  <object id="#0082" type="hkxMeshUserChannelInfo">
+    <string name="name">hidden_edges</string>
+    <string name="className">hkxEdgeSelectionChannel</string>
+  </object>
+  <object id="#0083" type="hkxMeshUserChannelInfo">
+    <string name="name">normalIds</string>
+    <string name="className">hkxVertexIntDataChannel</string>
+  </object>
+  <object id="#0084" type="hkxNode">
+    <array name="attributeGroups" size="2">
+      <struct>
+        <string name="name">hkRigidBody</string>
+        <array name="attributes" size="5">
+          <struct>
+            <string name="name">mass</string>
+            <ref name="value">#0085</ref>
+          </struct>
+          <struct>
+            <string name="name">friction</string>
+            <ref name="value">#0086</ref>
+          </struct>
+          <struct>
+            <string name="name">restitution</string>
+            <ref name="value">#0087</ref>
+          </struct>
+          <struct>
+            <string name="name">scaleInertiaTensor</string>
+            <ref name="value">#0088</ref>
+          </struct>
+          <struct>
+            <string name="name">inertiaTensorScale</string>
+            <ref name="value">#0089</ref>
+          </struct>
+        </array>
+      </struct>
+      <struct>
+        <string name="name">hkShape</string>
+        <array name="attributes" size="1">
+          <struct>
+            <string name="name">shapeType</string>
+            <ref name="value">#0090</ref>
+          </struct>
+        </array>
+      </struct>
+    </array>
+    <string name="name">path03</string>
+    <ref name="object">#0091</ref>
+    <array name="keyFrames" size="2">
+      <vec16>xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xb4222168 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x41a00000 <!-- 20.0 --> x3f6a78a9 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+      <vec16>xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xb4222168 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> x41a00000 <!-- 20.0 --> x3f6a78a9 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+    </array>
+    <string name="userProperties"></string>
+    <byte name="selected">1</byte>
+  </object>
+  <object id="#0085" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0086" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f000000 <!-- 0.5 --> 
+    </array>
+  </object>
+  <object id="#0087" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3ecccccd <!-- 0.4 --> 
+    </array>
+  </object>
+  <object id="#0088" type="hkxSparselyAnimatedBool">
+    <array name="bools" size="1">
+      0 
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0089" type="hkxAnimatedFloat">
+    <array name="floats" size="1">
+      x3f800000 <!-- 1.0 --> 
+    </array>
+  </object>
+  <object id="#0090" type="hkxSparselyAnimatedString">
+    <array name="strings" size="1">
+      <string>Hull</string>
+    </array>
+    <array name="times" size="1">
+      x00000000 <!-- 0.0 --> 
+    </array>
+  </object>
+  <object id="#0091" type="hkxMesh">
+    <array name="sections" size="1">
+      <ref>#0092</ref>
+    </array>
+    <array name="userChannelInfos" size="2">
+      <ref>#0098</ref>
+      <ref>#0099</ref>
+    </array>
+  </object>
+  <object id="#0092" type="hkxMeshSection">
+    <ref name="vertexBuffer">#0093</ref>
+    <array name="indexBuffers" size="1">
+      <ref>#0094</ref>
+    </array>
+    <ref name="material">#0095</ref>
+    <array name="userChannels" size="2">
+      <ref>#0096</ref>
+      <ref>#0097</ref>
+    </array>
+  </object>
+  <object id="#0093" type="hkxVertexBuffer">
+    <struct name="data">
+      <array name="vectorData" size="192">
+        xc09ffffe <!-- -5.0 --> x3fef682c <!-- 1.87037 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbe135da8 <!-- -0.143912 --> xbf7d55ce <!-- -0.989591 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffb <!-- -3.0 --> x3fca2d8c <!-- 1.57951 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbe252af8 <!-- -0.161297 --> xbf7ca5dd <!-- -0.986906 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffb <!-- -3.0 --> x3fca2d8c <!-- 1.57951 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbe252af9 <!-- -0.161297 --> xbf7ca5dd <!-- -0.986906 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> x3fef682c <!-- 1.87037 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbe135da8 <!-- -0.143912 --> xbf7d55ce <!-- -0.989591 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffb <!-- -3.0 --> x4003aeec <!-- 2.05755 --> xbf7fd669 <!-- -0.999365 --> x3f800000 <!-- 1.0 --> xb9c78ac7 <!-- -0.000380596 --> x3a95cbc8 <!-- 0.00114285 --> xbf7ffff3 <!-- -0.999999 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> x400c3304 <!-- 2.19061 --> xbf7f5c4a <!-- -0.997502 --> x3f800000 <!-- 1.0 --> x3a5a0ebb <!-- 0.000831824 --> x3bdf26eb <!-- 0.00681006 --> xbf7ffe74 <!-- -0.999976 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> x3dac3ab8 <!-- 0.0840964 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40a00002 <!-- 5.0 --> x3dac3ab8 <!-- 0.0840964 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> x3f9bb360 <!-- 1.21641 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb977aeec <!-- -0.000236209 --> x395ce6af <!-- 0.000210668 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc03ffffb <!-- -3.0 --> x3ffe3f54 <!-- 1.98631 --> x3f7fd669 <!-- 0.999365 --> x3f800000 <!-- 1.0 --> x392224b4 <!-- 0.000154632 --> x3ad80414 <!-- 0.00164807 --> x3f7fffe8 <!-- 0.999999 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> x400ada9b <!-- 2.16959 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xb9a65bfe <!-- -0.000317305 --> x00000000 <!-- 0.0 --> x3f7ffffe <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        xc09ffffe <!-- -5.0 --> x400b3c6f <!-- 2.17556 --> x3f7f5c47 <!-- 0.997502 --> x3f800000 <!-- 1.0 --> xbf2d357e <!-- -0.676597 --> x3f3c8043 <!-- 0.736332 --> x3bb6055f <!-- 0.00555484 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> x3f9bb360 <!-- 1.21641 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbecd559c <!-- -0.401044 --> xbf6a82d5 <!-- -0.916059 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> x3eae80ce <!-- 0.340826 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbecd559c <!-- -0.401044 --> xbf6a82d5 <!-- -0.916059 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> x3eae80ce <!-- 0.340826 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbecd559c <!-- -0.401044 --> xbf6a82d5 <!-- -0.916059 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> x40037b0a <!-- 2.05438 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> x3f99336c <!-- 1.19688 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x3ee1a4eb <!-- 0.440711 --> x3f65cc52 <!-- 0.897649 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> x3f99336c <!-- 1.19688 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3ee1a4e8 <!-- 0.440711 --> x3f65cc51 <!-- 0.897649 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        xbf7fffec <!-- -0.999999 --> x400ada9b <!-- 2.16959 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800008 <!-- 1.0 --> x40037b0a <!-- 2.05438 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> xbf08342f <!-- -0.532046 --> xbf58c256 <!-- -0.846715 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+        x40400004 <!-- 3.0 --> xbf6a78a9 <!-- -0.915904 --> xbf800000 <!-- -1.0 --> x3f800000 <!-- 1.0 --> xbf08342f <!-- -0.532046 --> xbf58c256 <!-- -0.846715 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <array name="floatData" size="48">
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x3f800000 <!-- 1.0 --> x3f002ee4 <!-- 0.500715 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f000000 <!-- 0.5 --> x3f800000 <!-- 1.0 --> 
+        x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> 
+        x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+        x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> 
+      </array>
+      <int name="numVerts">24</int>
+      <int name="vectorStride">32</int>
+      <int name="floatStride">8</int>
+    </struct>
+    <struct name="desc">
+      <array name="decls" size="3">
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">1</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="byteOffset">16</int>
+          <int name="type">4</int>
+          <int name="usage">4</int>
+          <int name="byteStride">32</int>
+          <byte name="numElements">3</byte>
+        </struct>
+        <struct>
+          <int name="type">4</int>
+          <int name="usage">32</int>
+          <int name="byteStride">8</int>
+          <byte name="numElements">2</byte>
+        </struct>
+      </array>
+    </struct>
+  </object>
+  <object id="#0094" type="hkxIndexBuffer">
+    <int name="indexType">1</int>
+    <array name="indices16" size="132">
+      0 1 2 2 3 0 2 4 
+      5 5 3 2 6 7 8 8 
+      9 6 10 1 11 11 12 10 
+      5 13 0 0 3 5 14 10 
+      15 15 16 14 10 12 17 17 
+      15 10 18 9 8 8 19 18 
+      20 14 16 16 21 20 16 15 
+      22 22 23 16 15 17 19 19 
+      22 15 21 16 23 23 18 21 
+      23 22 7 7 6 23 22 19 
+      8 8 7 22 18 23 6 6 
+      9 18 19 17 21 21 18 19 
+      12 20 21 21 17 12 20 12 
+      11 11 4 20 5 4 11 11 
+      13 5 2 1 10 10 14 2 
+      14 20 4 4 2 14 0 13 
+      11 11 1 0 
+    </array>
+    <int name="length">132</int>
+  </object>
+  <object id="#0095" type="hkxMaterial">
+    <string name="name">wirecolor_path03</string>
+    <vec4 name="diffuseColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x3f800000 <!-- 1.0 --></vec4>
+    <vec4 name="ambientColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="specularColor">x3f1a9a9b <!-- 0.603922 --> x3f39b9ba <!-- 0.72549 --> x3f65e5e7 <!-- 0.898039 --> x42960000 <!-- 75.0 --></vec4>
+    <vec4 name="emissiveColor">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <tuple name="uvMapScale" size="2">
+      x3f800000 <!-- 1.0 --> x3f800000 <!-- 1.0 --> 
+    </tuple>
+    <int name="uvMapAlgorithm">2</int>
+    <real name="specularMultiplier">x3f800000 <!-- 1.0 --></real>
+    <real name="specularExponent">x42960000 <!-- 75.0 --></real>
+    <byte name="transparency">192</byte>
+  </object>
+  <object id="#0096" type="hkxEdgeSelectionChannel">
+    <array name="selectedEdges" size="44">
+      2 5 8 11 14 17 20 23 
+      26 29 32 35 38 41 44 47 
+      50 53 56 59 62 65 68 71 
+      74 77 80 83 86 89 92 95 
+      98 101 104 107 110 113 116 119 
+      122 125 128 131 
+    </array>
+  </object>
+  <object id="#0097" type="hkxVertexIntDataChannel">
+    <array name="perVertexInts" size="24">
+      2 23 22 0 8 4 18 19 
+      20 21 3 9 7 6 1 11 
+      10 12 17 16 5 13 15 14 
+    </array>
+  </object>
+  <object id="#0098" type="hkxMeshUserChannelInfo">
+    <string name="name">hidden_edges</string>
+    <string name="className">hkxEdgeSelectionChannel</string>
+  </object>
+  <object id="#0099" type="hkxMeshUserChannelInfo">
+    <string name="name">normalIds</string>
+    <string name="className">hkxVertexIntDataChannel</string>
+  </object>
+  <object id="#0100" type="hkMemoryResourceContainer">
+    <string name="name"></string>
+    <array name="children" size="6">
+      <ref>#0101</ref>
+      <ref>#0107</ref>
+      <ref>#0113</ref>
+      <ref>#0119</ref>
+      <ref>#0125</ref>
+      <ref>#0131</ref>
+    </array>
+  </object>
+  <object id="#0101" type="hkMemoryResourceContainer">
+    <string name="name">path004</string>
+    <array name="resourceHandles" size="2">
+      <ref>#0102</ref>
+      <ref>#0105</ref>
+    </array>
+  </object>
+  <object id="#0102" type="hkMemoryResourceHandle">
+    <ref name="variant">#0103</ref>
+    <string name="name">hkRigidBody</string>
+  </object>
+  <object id="#0103" type="hkpRigidBody">
+    <struct name="collidable">
+      <ref name="shape">#0104</ref>
+      <int name="shapeKey">4294967295</int>
+      <byte name="forceCollideOntoPpu">8</byte>
+      <struct name="broadPhaseHandle">
+        <int name="type">1</int>
+      </struct>
+      <real name="allowedPenetrationDepth">x7f7fffee <!-- 3.40282e+038 --></real>
+    </struct>
+    <struct name="multiThreadCheck">
+    </struct>
+    <string name="name">path004</string>
+    <struct name="material">
+      <int name="responseType">1</int>
+      <real name="friction">x3f000000 <!-- 0.5 --></real>
+      <real name="restitution">x3ecccccd <!-- 0.4 --></real>
+    </struct>
+    <real name="damageMultiplier">x3f800000 <!-- 1.0 --></real>
+    <int name="storageIndex">65535</int>
+    <int name="contactPointCallbackDelay">65535</int>
+    <int name="uid">4294967295</int>
+    <struct name="spuCollisionCallback">
+      <byte name="eventFilter">3</byte>
+      <byte name="userFilter">1</byte>
+    </struct>
+    <struct name="motion">
+      <byte name="type">5</byte>
+      <byte name="deactivationIntegrateCounter">15</byte>
+      <tuple name="deactivationNumInactiveFrames" size="2">
+        49152 49152 
+      </tuple>
+      <struct name="motionState">
+        <vec16 name="transform">x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4a22167 <!-- -3.01992e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x34a22167 <!-- 3.01992e-007 --> x34a22167 <!-- 3.01992e-007 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x4223ffff <!-- 41.0 --> x3f6a78a8 <!-- 0.915904 --> x344fffff <!-- 1.93715e-007 --> x3f800000 <!-- 1.0 --></vec16>
+        <struct name="sweptTransform">
+          <vec4 name="centerOfMass0">x4223ffff <!-- 41.0 --> x3f6a78a8 <!-- 0.915904 --> x344fffff <!-- 1.93715e-007 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="centerOfMass1">x4223ffff <!-- 41.0 --> x3f6a78a8 <!-- 0.915904 --> x344fffff <!-- 1.93715e-007 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="rotation0">x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --></vec4>
+          <vec4 name="rotation1">x00000000 <!-- 0.0 --> x34222168 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --></vec4>
+          <vec4 name="centerOfMassLocal">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        </struct>
+        <vec4 name="deltaAngle">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <real name="objectRadius">x40b59117 <!-- 5.67396 --></real>
+        <real name="angularDamping">x3d4d0000 <!-- 0.0500488 --></real>
+        <real name="timeFactor">x3f800000 <!-- 1.0 --></real>
+        <struct name="maxLinearVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <struct name="maxAngularVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <byte name="deactivationClass">1</byte>
+      </struct>
+      <vec4 name="inertiaAndMassInv">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="linearVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="angularVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <tuple name="deactivationRefPosition" size="2">
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      </tuple>
+      <real name="gravityFactor">x3f800000 <!-- 1.0 --></real>
+    </struct>
+    <int name="npData">4294967295</int>
+  </object>
+  <object id="#0104" type="hkpConvexVerticesShape">
+    <byte name="dispatchType">4</byte>
+    <vec4 name="aabbHalfExtents">x40a00000 <!-- 5.0 --> x3fd9e5ac <!-- 1.70232 --> x3f800004 <!-- 1.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="aabbCenter">x35800000 <!-- 9.53674e-007 --> x3f4952b0 <!-- 0.786418 --> xb4c00000 <!-- -3.57628e-007 --> x00000000 <!-- 0.0 --></vec4>
+    <array name="rotatedVertices" size="5">
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00002 <!-- 5.0 --> x40a00002 <!-- 5.0 --> x40a00002 <!-- 5.0 --> xc09ffffe <!-- -5.0 --></vec4>
+          <vec4>xbf6a78a9 <!-- -0.915904 --> xbf6a78a9 <!-- -0.915904 --> x3dac5f48 <!-- 0.0841661 --> x400c34a7 <!-- 2.19071 --></vec4>
+          <vec4>xbf800007 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800007 <!-- -1.0 --> xbf7f6009 <!-- -0.997559 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00002 <!-- 5.0 --> xc04003fc <!-- -3.00024 --> xc04003fc <!-- -3.00024 --> xbfab3151 <!-- -1.33744 --></vec4>
+          <vec4>x3dac5f48 <!-- 0.0841661 --> x401ab792 <!-- 2.41745 --> x401f4782 <!-- 2.48874 --> xbf6a78a9 <!-- -0.915904 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> x3f7fd800 <!-- 0.99939 --> xbf7fd80c <!-- -0.99939 --> xbf800007 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>xbfab3151 <!-- -1.33744 --> xbf7ff7f0 <!-- -0.999877 --> xbf7ff7f0 <!-- -0.999877 --> x3f7ff810 <!-- 0.999879 --></vec4>
+          <vec4>xbf6a78a9 <!-- -0.915904 --> x40183404 <!-- 2.37817 --> x40183404 <!-- 2.37817 --> x40037aef <!-- 2.05438 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800007 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800007 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x3f7ff810 <!-- 0.999879 --> x40400404 <!-- 3.00025 --> x40400404 <!-- 3.00025 --> xc09ffffe <!-- -5.0 --></vec4>
+          <vec4>x40037aef <!-- 2.05438 --> x3f993353 <!-- 1.19688 --> x3f993353 <!-- 1.19688 --> x400b3c15 <!-- 2.17554 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800007 <!-- -1.0 --> x3f800001 <!-- 1.0 --> x3f7f5ffd <!-- 0.997558 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>xc09ffffe <!-- -5.0 --> xc09ffffe <!-- -5.0 --> xc09ffffe <!-- -5.0 --> xc09ffffe <!-- -5.0 --></vec4>
+          <vec4>x3fef6aea <!-- 1.87045 --> x3fef6aea <!-- 1.87045 --> x3fef6aea <!-- 1.87045 --> x3fef6aea <!-- 1.87045 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800007 <!-- -1.0 --> xbf800007 <!-- -1.0 --> xbf800007 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+    </array>
+    <int name="numVertices">18</int>
+    <array name="planeEquations" size="15">
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf800000 <!-- -1.0 --> xbf800006 <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> xbf800000 <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> xbf6a78a6 <!-- -0.915903 --></vec4>
+      <vec4>xbf1b001b <!-- -0.60547 --> xbf4bbdff <!-- -0.795868 --> x00000000 <!-- 0.0 --> xbfc4f6f4 <!-- -1.53879 --></vec4>
+      <vec4>x3ef8f233 <!-- 0.486223 --> x3f5fb3a3 <!-- 0.873835 --> x00000000 <!-- 0.0 --> xc0204c62 <!-- -2.50466 --></vec4>
+      <vec4>x3ec9b9f3 <!-- 0.393997 --> x3f6b4ae9 <!-- 0.919112 --> x80000000 <!-- -0.0 --> xc0120fac <!-- -2.28221 --></vec4>
+      <vec4>x3e23ac22 <!-- 0.159836 --> x3f7cb570 <!-- 0.987144 --> x80000000 <!-- -0.0 --> xc00c05f4 <!-- -2.18786 --></vec4>
+      <vec4>xbe16edff <!-- -0.147392 --> x3f7d3258 <!-- 0.989049 --> x3bf67330 <!-- 0.00752106 --> xc0395b64 <!-- -2.8962 --></vec4>
+      <vec4>xbdf5ddd5 <!-- -0.120052 --> x3f7dfcae <!-- 0.992137 --> x3d10eec1 <!-- 0.0353839 --> xc032d118 <!-- -2.79401 --></vec4>
+      <vec4>x3d620ccf <!-- 0.055188 --> x3f7f9c1f <!-- 0.998476 --> x00000000 <!-- 0.0 --> xc0147214 <!-- -2.31946 --></vec4>
+      <vec4>x3ca0a313 <!-- 0.019609 --> x3f7fc9c5 <!-- 0.999173 --> x3d11f5de <!-- 0.0356349 --> xc0191bfe <!-- -2.39233 --></vec4>
+      <vec4>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xc0a00001 <!-- -5.0 --></vec4>
+      <vec4>xbf800000 <!-- -1.0 --> x80000000 <!-- -0.0 --> x00000000 <!-- 0.0 --> xc09ffffe <!-- -5.0 --></vec4>
+      <vec4>xbb0678ee <!-- -0.00205189 --> x3bf9d130 <!-- 0.00762381 --> xbf7ffdf7 <!-- -0.999969 --> xbf832275 <!-- -1.02449 --></vec4>
+      <vec4>xbaf6ea5f <!-- -0.00188382 --> x3c031ea0 <!-- 0.00800291 --> x3f7ffdc9 <!-- 0.999966 --> xbf831e0b <!-- -1.02435 --></vec4>
+    </array>
+  </object>
+  <object id="#0105" type="hkMemoryResourceHandle">
+    <ref name="variant">#0106</ref>
+    <string name="name">hkpShapeInfo</string>
+  </object>
+  <object id="#0106" type="hkpShapeInfo">
+    <ref name="shape">#0104</ref>
+    <array name="childShapeNames" size="1">
+      <string>path004</string>
+    </array>
+    <array name="childTransforms" size="1">
+      <vec16>x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec16>
+    </array>
+    <vec16 name="transform">x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4a22167 <!-- -3.01992e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x34a22167 <!-- 3.01992e-007 --> x34a22167 <!-- 3.01992e-007 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x4223ffff <!-- 41.0 --> x3f6a78a8 <!-- 0.915904 --> x344fffff <!-- 1.93715e-007 --> x3f800000 <!-- 1.0 --></vec16>
+  </object>
+  <object id="#0107" type="hkMemoryResourceContainer">
+    <string name="name">path005</string>
+    <array name="resourceHandles" size="2">
+      <ref>#0108</ref>
+      <ref>#0111</ref>
+    </array>
+  </object>
+  <object id="#0108" type="hkMemoryResourceHandle">
+    <ref name="variant">#0109</ref>
+    <string name="name">hkRigidBody</string>
+  </object>
+  <object id="#0109" type="hkpRigidBody">
+    <struct name="collidable">
+      <ref name="shape">#0110</ref>
+      <int name="shapeKey">4294967295</int>
+      <byte name="forceCollideOntoPpu">8</byte>
+      <struct name="broadPhaseHandle">
+        <int name="type">1</int>
+      </struct>
+      <real name="allowedPenetrationDepth">x7f7fffee <!-- 3.40282e+038 --></real>
+    </struct>
+    <struct name="multiThreadCheck">
+    </struct>
+    <string name="name">path005</string>
+    <struct name="material">
+      <int name="responseType">1</int>
+      <real name="friction">x3f000000 <!-- 0.5 --></real>
+      <real name="restitution">x3ecccccd <!-- 0.4 --></real>
+    </struct>
+    <real name="damageMultiplier">x3f800000 <!-- 1.0 --></real>
+    <int name="storageIndex">65535</int>
+    <int name="contactPointCallbackDelay">65535</int>
+    <int name="uid">4294967295</int>
+    <struct name="spuCollisionCallback">
+      <byte name="eventFilter">3</byte>
+      <byte name="userFilter">1</byte>
+    </struct>
+    <struct name="motion">
+      <byte name="type">5</byte>
+      <byte name="deactivationIntegrateCounter">15</byte>
+      <tuple name="deactivationNumInactiveFrames" size="2">
+        49152 49152 
+      </tuple>
+      <struct name="motionState">
+        <vec16 name="transform">xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222167 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4222167 <!-- -1.50996e-007 --> xb4222167 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x424bffff <!-- 51.0 --> x3f6a78a8 <!-- 0.915904 --> x344fffff <!-- 1.93715e-007 --> x3f800000 <!-- 1.0 --></vec16>
+        <struct name="sweptTransform">
+          <vec4 name="centerOfMass0">x424bffff <!-- 51.0 --> x3f6a78a8 <!-- 0.915904 --> x344fffff <!-- 1.93715e-007 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="centerOfMass1">x424bffff <!-- 51.0 --> x3f6a78a8 <!-- 0.915904 --> x344fffff <!-- 1.93715e-007 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="rotation0">x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb3a22168 <!-- -7.54979e-008 --></vec4>
+          <vec4 name="rotation1">x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb3a22168 <!-- -7.54979e-008 --></vec4>
+          <vec4 name="centerOfMassLocal">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        </struct>
+        <vec4 name="deltaAngle">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <real name="objectRadius">x40a5c7ad <!-- 5.18062 --></real>
+        <real name="angularDamping">x3d4d0000 <!-- 0.0500488 --></real>
+        <real name="timeFactor">x3f800000 <!-- 1.0 --></real>
+        <struct name="maxLinearVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <struct name="maxAngularVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <byte name="deactivationClass">1</byte>
+      </struct>
+      <vec4 name="inertiaAndMassInv">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="linearVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="angularVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <tuple name="deactivationRefPosition" size="2">
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      </tuple>
+      <real name="gravityFactor">x3f800000 <!-- 1.0 --></real>
+    </struct>
+    <int name="npData">4294967295</int>
+  </object>
+  <object id="#0110" type="hkpConvexVerticesShape">
+    <byte name="dispatchType">4</byte>
+    <vec4 name="aabbHalfExtents">x40a00000 <!-- 5.0 --> x3f36ed54 <!-- 0.714559 --> x3f800001 <!-- 1.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="aabbCenter">x35800000 <!-- 9.53674e-007 --> xbe4e2d54 <!-- -0.201345 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <array name="rotatedVertices" size="4">
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00002 <!-- 5.0 --> x40a00002 <!-- 5.0 --> x40a00002 <!-- 5.0 --> xc09ffffe <!-- -5.0 --></vec4>
+          <vec4>xbf6a78a9 <!-- -0.915904 --> xbf6a78a9 <!-- -0.915904 --> x3dac39f4 <!-- 0.0840949 --> xbf350d32 <!-- -0.707233 --></vec4>
+          <vec4>xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> xbf7f5ffd <!-- -0.997558 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00002 <!-- 5.0 --> xc04003fc <!-- -3.00024 --> xc04003fc <!-- -3.00024 --> xbf7ff7f0 <!-- -0.999877 --></vec4>
+          <vec4>x3dac39f4 <!-- 0.0840949 --> xbde50c22 <!-- -0.11184 --> xbd262970 <!-- -0.0405669 --> x3ed86728 <!-- 0.422662 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> x3f7fd800 <!-- 0.99939 --> xbf7fd800 <!-- -0.99939 --> xbf800001 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>xbf7ff7f0 <!-- -0.999877 --> x3f7ff810 <!-- 0.999879 --> x3f7ff810 <!-- 0.999879 --> xc09ffffe <!-- -5.0 --></vec4>
+          <vec4>x3ed86728 <!-- 0.422662 --> x3f0361ff <!-- 0.513214 --> x3f0361ff <!-- 0.513214 --> xbf38e48c <!-- -0.722237 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> x3f7f5ffd <!-- 0.997558 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>xc09ffffe <!-- -5.0 --> xc09ffffe <!-- -5.0 --> xc09ffffe <!-- -5.0 --> xc09ffffe <!-- -5.0 --></vec4>
+          <vec4>xbf6a78a9 <!-- -0.915904 --> xbf6a78a9 <!-- -0.915904 --> xbf6a78a9 <!-- -0.915904 --> xbf6a78a9 <!-- -0.915904 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> xbf800001 <!-- -1.0 --> xbf800001 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+    </array>
+    <int name="numVertices">14</int>
+    <array name="planeEquations" size="14">
+      <vec4>x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> xbf6a78a6 <!-- -0.915903 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> xbf800000 <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf800000 <!-- -1.0 --> xbf800000 <!-- -1.0 --></vec4>
+      <vec4>x3dda72eb <!-- 0.106665 --> x3f7e8a1e <!-- 0.994295 --> x00000000 <!-- 0.0 --> xbf1df07a <!-- -0.616951 --></vec4>
+      <vec4>xbea1eb48 <!-- -0.316248 --> x3f72dab4 <!-- 0.94865 --> x3be9c8ea <!-- 0.00713455 --> xbf6738db <!-- -0.903211 --></vec4>
+      <vec4>xbe95668f <!-- -0.291798 --> x3f74b40f <!-- 0.955872 --> x3d0b9c4c <!-- 0.0340846 --> xbf4d78ce <!-- -0.802625 --></vec4>
+      <vec4>xbe8418da <!-- -0.258002 --> x3f772d05 <!-- 0.965531 --> x3d0d056c <!-- 0.034429 --> xbf335378 <!-- -0.700492 --></vec4>
+      <vec4>xbe670435 <!-- -0.225602 --> x3f796673 <!-- 0.97422 --> x00000000 <!-- 0.0 --> xbf2328b1 <!-- -0.63734 --></vec4>
+      <vec4>xbd394889 <!-- -0.0452352 --> x3f7fbcea <!-- 0.998976 --> x00000000 <!-- 0.0 --> xbeef56c4 <!-- -0.467459 --></vec4>
+      <vec4>x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xc0a00002 <!-- -5.0 --></vec4>
+      <vec4>xbac68206 <!-- -0.0015145 --> x3b944db2 <!-- 0.00452586 --> x3f7fff41 <!-- 0.999989 --> xbf806fee <!-- -1.00342 --></vec4>
+      <vec4>xbf7ffffe <!-- -1.0 --> x80000000 <!-- -0.0 --> x00000000 <!-- 0.0 --> xc09ffffd <!-- -5.0 --></vec4>
+      <vec4>xbb9dd15d <!-- -0.00481622 --> x3c3fb284 <!-- 0.0117003 --> xbf7ffac1 <!-- -0.99992 --> xbf81b350 <!-- -1.01328 --></vec4>
+      <vec4>xbb9c1865 <!-- -0.00476365 --> x3c4e8c1d <!-- 0.0126066 --> x3f7ffa0b <!-- 0.999909 --> xbf818f25 <!-- -1.01218 --></vec4>
+    </array>
+  </object>
+  <object id="#0111" type="hkMemoryResourceHandle">
+    <ref name="variant">#0112</ref>
+    <string name="name">hkpShapeInfo</string>
+  </object>
+  <object id="#0112" type="hkpShapeInfo">
+    <ref name="shape">#0110</ref>
+    <array name="childShapeNames" size="1">
+      <string>path005</string>
+    </array>
+    <array name="childTransforms" size="1">
+      <vec16>x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec16>
+    </array>
+    <vec16 name="transform">xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222167 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4222167 <!-- -1.50996e-007 --> xb4222167 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x424bffff <!-- 51.0 --> x3f6a78a8 <!-- 0.915904 --> x344fffff <!-- 1.93715e-007 --> x3f800000 <!-- 1.0 --></vec16>
+  </object>
+  <object id="#0113" type="hkMemoryResourceContainer">
+    <string name="name">path006</string>
+    <array name="resourceHandles" size="2">
+      <ref>#0114</ref>
+      <ref>#0117</ref>
+    </array>
+  </object>
+  <object id="#0114" type="hkMemoryResourceHandle">
+    <ref name="variant">#0115</ref>
+    <string name="name">hkRigidBody</string>
+  </object>
+  <object id="#0115" type="hkpRigidBody">
+    <struct name="collidable">
+      <ref name="shape">#0116</ref>
+      <int name="shapeKey">4294967295</int>
+      <byte name="forceCollideOntoPpu">8</byte>
+      <struct name="broadPhaseHandle">
+        <int name="type">1</int>
+      </struct>
+      <real name="allowedPenetrationDepth">x7f7fffee <!-- 3.40282e+038 --></real>
+    </struct>
+    <struct name="multiThreadCheck">
+    </struct>
+    <string name="name">path006</string>
+    <struct name="material">
+      <int name="responseType">1</int>
+      <real name="friction">x3f000000 <!-- 0.5 --></real>
+      <real name="restitution">x3ecccccd <!-- 0.4 --></real>
+    </struct>
+    <real name="damageMultiplier">x3f800000 <!-- 1.0 --></real>
+    <int name="storageIndex">65535</int>
+    <int name="contactPointCallbackDelay">65535</int>
+    <int name="uid">4294967295</int>
+    <struct name="spuCollisionCallback">
+      <byte name="eventFilter">3</byte>
+      <byte name="userFilter">1</byte>
+    </struct>
+    <struct name="motion">
+      <byte name="type">5</byte>
+      <byte name="deactivationIntegrateCounter">15</byte>
+      <tuple name="deactivationNumInactiveFrames" size="2">
+        49152 49152 
+      </tuple>
+      <struct name="motionState">
+        <vec16 name="transform">xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222167 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4222167 <!-- -1.50996e-007 --> xb4222167 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x41f0f213 <!-- 30.1182 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+        <struct name="sweptTransform">
+          <vec4 name="centerOfMass0">x41f0f213 <!-- 30.1182 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="centerOfMass1">x41f0f213 <!-- 30.1182 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="rotation0">x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb3a22168 <!-- -7.54979e-008 --></vec4>
+          <vec4 name="rotation1">x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb3a22168 <!-- -7.54979e-008 --></vec4>
+          <vec4 name="centerOfMassLocal">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        </struct>
+        <vec4 name="deltaAngle">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <real name="objectRadius">x406e2536 <!-- 3.72102 --></real>
+        <real name="angularDamping">x3d4d0000 <!-- 0.0500488 --></real>
+        <real name="timeFactor">x3f800000 <!-- 1.0 --></real>
+        <struct name="maxLinearVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <struct name="maxAngularVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <byte name="deactivationClass">1</byte>
+      </struct>
+      <vec4 name="inertiaAndMassInv">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="linearVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="angularVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <tuple name="deactivationRefPosition" size="2">
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      </tuple>
+      <real name="gravityFactor">x3f800000 <!-- 1.0 --></real>
+    </struct>
+    <int name="npData">4294967295</int>
+  </object>
+  <object id="#0116" type="hkpConvexVerticesShape">
+    <byte name="dispatchType">4</byte>
+    <vec4 name="aabbHalfExtents">x403da781 <!-- 2.96335 --> x3fc135ff <!-- 1.50946 --> x3f800005 <!-- 1.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="aabbCenter">xbefe52a0 <!-- -0.496724 --> x3f131b56 <!-- 0.574636 --> xb4000000 <!-- -1.19209e-007 --> x00000000 <!-- 0.0 --></vec4>
+    <array name="rotatedVertices" size="3">
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x401ddd2d <!-- 2.46662 --> x401ddd2d <!-- 2.46662 --> x401ddd2d <!-- 2.46662 --> xc05d71d5 <!-- -3.46007 --></vec4>
+          <vec4>x3ffafbdc <!-- 1.96081 --> x3ffafbdc <!-- 1.96081 --> x400561d5 <!-- 2.0841 --> x400561d5 <!-- 2.0841 --></vec4>
+          <vec4>xbf800006 <!-- -1.0 --> x3f800004 <!-- 1.0 --> xbf800006 <!-- -1.0 --> x3f800004 <!-- 1.0 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x401ddd2d <!-- 2.46662 --> xbf685f83 <!-- -0.907707 --> xbf685f83 <!-- -0.907707 --> x3e706ea8 <!-- 0.234797 --></vec4>
+          <vec4>x400561d5 <!-- 2.0841 --> xbf6cac55 <!-- -0.924505 --> xbf6cac55 <!-- -0.924505 --> xbf6f50a7 <!-- -0.934824 --></vec4>
+          <vec4>x3f800004 <!-- 1.0 --> xbf800006 <!-- -1.0 --> x3f800004 <!-- 1.0 --> xbf800006 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x3e706ea8 <!-- 0.234797 --> xc05d71d5 <!-- -3.46007 --> xc05d71d5 <!-- -3.46007 --> xc05d71d5 <!-- -3.46007 --></vec4>
+          <vec4>xbf6f50a7 <!-- -0.934824 --> x400561d5 <!-- 2.0841 --> x3fef66ea <!-- 1.87033 --> x3fef66ea <!-- 1.87033 --></vec4>
+          <vec4>x3f800004 <!-- 1.0 --> xbf800006 <!-- -1.0 --> x3f800004 <!-- 1.0 --> xbf800006 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+    </array>
+    <int name="numVertices">12</int>
+    <array name="planeEquations" size="8">
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> xbf800004 <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> xbf800002 <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x80000000 <!-- -0.0 --> xc00561d4 <!-- -2.0841 --></vec4>
+      <vec4>xbf3d088c <!-- -0.738412 --> xbf2ca238 <!-- -0.67435 --> x00000000 <!-- 0.0 --> xbfa59803 <!-- -1.2937 --></vec4>
+      <vec4>x3f4ac322 <!-- 0.79204 --> xbf1c47b7 <!-- -0.610469 --> x00000000 <!-- 0.0 --> xbf41ba5e <!-- -0.75675 --></vec4>
+      <vec4>xbc13fc15 <!-- -0.00903227 --> xbf7ffd53 <!-- -0.999959 --> x00000000 <!-- 0.0 --> xbf6ec329 <!-- -0.932665 --></vec4>
+      <vec4>xbf7ffffe <!-- -1.0 --> x80000000 <!-- -0.0 --> x00000000 <!-- 0.0 --> xc05d71d2 <!-- -3.46007 --></vec4>
+      <vec4>x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xc01ddd2c <!-- -2.46662 --></vec4>
+    </array>
+  </object>
+  <object id="#0117" type="hkMemoryResourceHandle">
+    <ref name="variant">#0118</ref>
+    <string name="name">hkpShapeInfo</string>
+  </object>
+  <object id="#0118" type="hkpShapeInfo">
+    <ref name="shape">#0116</ref>
+    <array name="childShapeNames" size="1">
+      <string>path006</string>
+    </array>
+    <array name="childTransforms" size="1">
+      <vec16>x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec16>
+    </array>
+    <vec16 name="transform">xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222167 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4222167 <!-- -1.50996e-007 --> xb4222167 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x41f0f213 <!-- 30.1182 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+  </object>
+  <object id="#0119" type="hkMemoryResourceContainer">
+    <string name="name">path01</string>
+    <array name="resourceHandles" size="2">
+      <ref>#0120</ref>
+      <ref>#0123</ref>
+    </array>
+  </object>
+  <object id="#0120" type="hkMemoryResourceHandle">
+    <ref name="variant">#0121</ref>
+    <string name="name">hkRigidBody</string>
+  </object>
+  <object id="#0121" type="hkpRigidBody">
+    <struct name="collidable">
+      <ref name="shape">#0122</ref>
+      <int name="shapeKey">4294967295</int>
+      <byte name="forceCollideOntoPpu">8</byte>
+      <struct name="broadPhaseHandle">
+        <int name="type">1</int>
+      </struct>
+      <real name="allowedPenetrationDepth">x7f7fffee <!-- 3.40282e+038 --></real>
+    </struct>
+    <struct name="multiThreadCheck">
+    </struct>
+    <string name="name">path01</string>
+    <struct name="material">
+      <int name="responseType">1</int>
+      <real name="friction">x3f000000 <!-- 0.5 --></real>
+      <real name="restitution">x3ecccccd <!-- 0.4 --></real>
+    </struct>
+    <real name="damageMultiplier">x3f800000 <!-- 1.0 --></real>
+    <int name="storageIndex">65535</int>
+    <int name="contactPointCallbackDelay">65535</int>
+    <int name="uid">4294967295</int>
+    <struct name="spuCollisionCallback">
+      <byte name="eventFilter">3</byte>
+      <byte name="userFilter">1</byte>
+    </struct>
+    <struct name="motion">
+      <byte name="type">5</byte>
+      <byte name="deactivationIntegrateCounter">15</byte>
+      <tuple name="deactivationNumInactiveFrames" size="2">
+        49152 49152 
+      </tuple>
+      <struct name="motionState">
+        <vec16 name="transform">x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb47fffff <!-- -2.38419e-007 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+        <struct name="sweptTransform">
+          <vec4 name="centerOfMass0">xb47fffff <!-- -2.38419e-007 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="centerOfMass1">xb47fffff <!-- -2.38419e-007 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="rotation0">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --></vec4>
+          <vec4 name="rotation1">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --></vec4>
+          <vec4 name="centerOfMassLocal">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        </struct>
+        <vec4 name="deltaAngle">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <real name="objectRadius">x40a6d0d0 <!-- 5.21299 --></real>
+        <real name="angularDamping">x3d4d0000 <!-- 0.0500488 --></real>
+        <real name="timeFactor">x3f800000 <!-- 1.0 --></real>
+        <struct name="maxLinearVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <struct name="maxAngularVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <byte name="deactivationClass">1</byte>
+      </struct>
+      <vec4 name="inertiaAndMassInv">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="linearVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="angularVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <tuple name="deactivationRefPosition" size="2">
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      </tuple>
+      <real name="gravityFactor">x3f800000 <!-- 1.0 --></real>
+    </struct>
+    <int name="npData">4294967295</int>
+  </object>
+  <object id="#0122" type="hkpConvexVerticesShape">
+    <byte name="dispatchType">4</byte>
+    <vec4 name="aabbHalfExtents">x40a00000 <!-- 5.0 --> x3f800001 <!-- 1.0 --> x3f800001 <!-- 1.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="aabbCenter">x00000000 <!-- 0.0 --> x3dac3ab4 <!-- 0.0840963 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <array name="rotatedVertices" size="2">
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00000 <!-- 5.0 --> x40a00000 <!-- 5.0 --> x40a00000 <!-- 5.0 --> xc0a00000 <!-- -5.0 --></vec4>
+          <vec4>xbf6a78ab <!-- -0.915904 --> xbf6a78ab <!-- -0.915904 --> x3f8ac3ac <!-- 1.0841 --> xbf3276ea <!-- -0.697127 --></vec4>
+          <vec4>xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> xbf7f5ffd <!-- -0.997558 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00000 <!-- 5.0 --> xc0a00000 <!-- -5.0 --> xc0a00000 <!-- -5.0 --> xc0a00000 <!-- -5.0 --></vec4>
+          <vec4>x3f8ac3ac <!-- 1.0841 --> xbf364f09 <!-- -0.712143 --> xbf6a78ab <!-- -0.915904 --> xbf6a78ab <!-- -0.915904 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> x3f7f5ffd <!-- 0.997558 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+    </array>
+    <int name="numVertices">8</int>
+    <array name="planeEquations" size="10">
+      <vec4>xbe339223 <!-- -0.175362 --> x3f7c0873 <!-- 0.984504 --> x00000000 <!-- 0.0 --> xbe431358 <!-- -0.190503 --></vec4>
+      <vec4>xbe3508d0 <!-- -0.176791 --> x3f7bf5e0 <!-- 0.984221 --> x3bf2bd9f <!-- 0.00740786 --> xbe430771 <!-- -0.190458 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> xbf7ffffe <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x80000000 <!-- -0.0 --> x3f7fffff <!-- 1.0 --> xbf7ffffe <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> xbf6a78a8 <!-- -0.915904 --></vec4>
+      <vec4>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xc09fffff <!-- -5.0 --></vec4>
+      <vec4>xbb1246b8 <!-- -0.002232 --> x3c36d865 <!-- 0.01116 --> xbf7ffbc1 <!-- -0.999935 --> xbf801ca1 <!-- -1.00087 --></vec4>
+      <vec4>xbb1d0e01 <!-- -0.00239646 --> x3c445180 <!-- 0.0119823 --> x3f7ffb1b <!-- 0.999925 --> xbf801e92 <!-- -1.00093 --></vec4>
+      <vec4>xbf7ffffd <!-- -1.0 --> x80000000 <!-- -0.0 --> x00000000 <!-- 0.0 --> xc09ffffe <!-- -5.0 --></vec4>
+      <vec4>x3f246204 <!-- 0.642121 --> x3f444022 <!-- 0.766604 --> x00000000 <!-- 0.0 --> xc0815567 <!-- -4.04168 --></vec4>
+    </array>
+  </object>
+  <object id="#0123" type="hkMemoryResourceHandle">
+    <ref name="variant">#0124</ref>
+    <string name="name">hkpShapeInfo</string>
+  </object>
+  <object id="#0124" type="hkpShapeInfo">
+    <ref name="shape">#0122</ref>
+    <array name="childShapeNames" size="1">
+      <string>path01</string>
+    </array>
+    <array name="childTransforms" size="1">
+      <vec16>x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec16>
+    </array>
+    <vec16 name="transform">x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb47fffff <!-- -2.38419e-007 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+  </object>
+  <object id="#0125" type="hkMemoryResourceContainer">
+    <string name="name">path02</string>
+    <array name="resourceHandles" size="2">
+      <ref>#0126</ref>
+      <ref>#0129</ref>
+    </array>
+  </object>
+  <object id="#0126" type="hkMemoryResourceHandle">
+    <ref name="variant">#0127</ref>
+    <string name="name">hkRigidBody</string>
+  </object>
+  <object id="#0127" type="hkpRigidBody">
+    <struct name="collidable">
+      <ref name="shape">#0128</ref>
+      <int name="shapeKey">4294967295</int>
+      <byte name="forceCollideOntoPpu">8</byte>
+      <struct name="broadPhaseHandle">
+        <int name="type">1</int>
+      </struct>
+      <real name="allowedPenetrationDepth">x7f7fffee <!-- 3.40282e+038 --></real>
+    </struct>
+    <struct name="multiThreadCheck">
+    </struct>
+    <string name="name">path02</string>
+    <struct name="material">
+      <int name="responseType">1</int>
+      <real name="friction">x3f000000 <!-- 0.5 --></real>
+      <real name="restitution">x3ecccccd <!-- 0.4 --></real>
+    </struct>
+    <real name="damageMultiplier">x3f800000 <!-- 1.0 --></real>
+    <int name="storageIndex">65535</int>
+    <int name="contactPointCallbackDelay">65535</int>
+    <int name="uid">4294967295</int>
+    <struct name="spuCollisionCallback">
+      <byte name="eventFilter">3</byte>
+      <byte name="userFilter">1</byte>
+    </struct>
+    <struct name="motion">
+      <byte name="type">5</byte>
+      <byte name="deactivationIntegrateCounter">15</byte>
+      <tuple name="deactivationNumInactiveFrames" size="2">
+        49152 49152 
+      </tuple>
+      <struct name="motionState">
+        <vec16 name="transform">xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222167 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4222167 <!-- -1.50996e-007 --> xb4222167 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x411fffff <!-- 10.0 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+        <struct name="sweptTransform">
+          <vec4 name="centerOfMass0">x411fffff <!-- 10.0 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="centerOfMass1">x411fffff <!-- 10.0 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="rotation0">x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb3a22168 <!-- -7.54979e-008 --></vec4>
+          <vec4 name="rotation1">x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb3a22168 <!-- -7.54979e-008 --></vec4>
+          <vec4 name="centerOfMassLocal">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        </struct>
+        <vec4 name="deltaAngle">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <real name="objectRadius">x40a79a79 <!-- 5.23761 --></real>
+        <real name="angularDamping">x3d4d0000 <!-- 0.0500488 --></real>
+        <real name="timeFactor">x3f800000 <!-- 1.0 --></real>
+        <struct name="maxLinearVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <struct name="maxAngularVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <byte name="deactivationClass">1</byte>
+      </struct>
+      <vec4 name="inertiaAndMassInv">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="linearVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="angularVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <tuple name="deactivationRefPosition" size="2">
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      </tuple>
+      <real name="gravityFactor">x3f800000 <!-- 1.0 --></real>
+    </struct>
+    <int name="npData">4294967295</int>
+  </object>
+  <object id="#0128" type="hkpConvexVerticesShape">
+    <byte name="dispatchType">4</byte>
+    <vec4 name="aabbHalfExtents">x40a00000 <!-- 5.0 --> x3f8737df <!-- 1.05639 --> x3f800001 <!-- 1.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="aabbCenter">x00000000 <!-- 0.0 --> x3e0fdc5a <!-- 0.140489 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <array name="rotatedVertices" size="4">
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00000 <!-- 5.0 --> x40a00000 <!-- 5.0 --> x40a00000 <!-- 5.0 --> xc0a00000 <!-- -5.0 --></vec4>
+          <vec4>xbf6a78a7 <!-- -0.915904 --> xbf6a78a7 <!-- -0.915904 --> x3f8ac198 <!-- 1.08403 --> xbf350d0a <!-- -0.70723 --></vec4>
+          <vec4>xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> xbf7f5ffd <!-- -0.997558 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00000 <!-- 5.0 --> xbf7ff800 <!-- -0.999878 --> xbf7ff800 <!-- -0.999878 --> x3f7ff800 <!-- 0.999878 --></vec4>
+          <vec4>x3f8ac198 <!-- 1.08403 --> x3f476558 <!-- 0.77889 --> x3f476558 <!-- 0.77889 --> x3f8c0b3a <!-- 1.09409 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x3f7ff800 <!-- 0.999878 --> x40400400 <!-- 3.00024 --> x40400400 <!-- 3.00024 --> xc0a00000 <!-- -5.0 --></vec4>
+          <vec4>x3f8c0b3a <!-- 1.09409 --> x3f99336a <!-- 1.19688 --> x3f99336a <!-- 1.19688 --> xbf38e9f1 <!-- -0.72232 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> x3f7f5ffd <!-- 0.997558 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>xc0a00000 <!-- -5.0 --> xc0a00000 <!-- -5.0 --> xc0a00000 <!-- -5.0 --> xc0a00000 <!-- -5.0 --></vec4>
+          <vec4>xbf6a78a7 <!-- -0.915904 --> xbf6a78a7 <!-- -0.915904 --> xbf6a78a7 <!-- -0.915904 --> xbf6a78a7 <!-- -0.915904 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> xbf800001 <!-- -1.0 --> xbf800001 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+    </array>
+    <int name="numVertices">14</int>
+    <array name="planeEquations" size="12">
+      <vec4>x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> x00000000 <!-- 0.0 --> xbf6a78a6 <!-- -0.915903 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> xbf7ffffe <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf7fffff <!-- -1.0 --> xbf7ffffe <!-- -1.0 --></vec4>
+      <vec4>xbeb24f3e <!-- -0.348261 --> x3f6ff94b <!-- 0.937398 --> x00000000 <!-- 0.0 --> xbf8a0765 <!-- -1.07835 --></vec4>
+      <vec4>xbeb3e518 <!-- -0.351357 --> x3f6fabc3 <!-- 0.936215 --> x3be805d0 <!-- 0.00708077 --> xbf8b37d0 <!-- -1.08764 --></vec4>
+      <vec4>xbe1f6f5c <!-- -0.155698 --> x3f7ce0c4 <!-- 0.987805 --> x00000000 <!-- 0.0 --> xbf6cd3e3 <!-- -0.925108 --></vec4>
+      <vec4>xbd523223 <!-- -0.0513173 --> x3f7fa9a5 <!-- 0.998682 --> x00000000 <!-- 0.0 --> xbf854c4c <!-- -1.04139 --></vec4>
+      <vec4>x3d66c659 <!-- 0.0563415 --> x3f7f97e4 <!-- 0.998411 --> x80000000 <!-- -0.0 --> xbfae9a3a <!-- -1.36408 --></vec4>
+      <vec4>x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xc0a00000 <!-- -5.0 --></vec4>
+      <vec4>xbba26fd7 <!-- -0.00495718 --> x3c3fb1f4 <!-- 0.0117001 --> xbf7ffab5 <!-- -0.999919 --> xbf81ca64 <!-- -1.01399 --></vec4>
+      <vec4>xbbaf1897 <!-- -0.00534351 --> x3c4ea26c <!-- 0.012612 --> x3f7ff9da <!-- 0.999906 --> xbf81ede4 <!-- -1.01507 --></vec4>
+      <vec4>xbf7fffff <!-- -1.0 --> x80000000 <!-- -0.0 --> x00000000 <!-- 0.0 --> xc09fffff <!-- -5.0 --></vec4>
+    </array>
+  </object>
+  <object id="#0129" type="hkMemoryResourceHandle">
+    <ref name="variant">#0130</ref>
+    <string name="name">hkpShapeInfo</string>
+  </object>
+  <object id="#0130" type="hkpShapeInfo">
+    <ref name="shape">#0128</ref>
+    <array name="childShapeNames" size="1">
+      <string>path02</string>
+    </array>
+    <array name="childTransforms" size="1">
+      <vec16>x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec16>
+    </array>
+    <vec16 name="transform">xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222167 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4222167 <!-- -1.50996e-007 --> xb4222167 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x411fffff <!-- 10.0 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+  </object>
+  <object id="#0131" type="hkMemoryResourceContainer">
+    <string name="name">path03</string>
+    <array name="resourceHandles" size="2">
+      <ref>#0132</ref>
+      <ref>#0135</ref>
+    </array>
+  </object>
+  <object id="#0132" type="hkMemoryResourceHandle">
+    <ref name="variant">#0133</ref>
+    <string name="name">hkRigidBody</string>
+  </object>
+  <object id="#0133" type="hkpRigidBody">
+    <struct name="collidable">
+      <ref name="shape">#0134</ref>
+      <int name="shapeKey">4294967295</int>
+      <byte name="forceCollideOntoPpu">8</byte>
+      <struct name="broadPhaseHandle">
+        <int name="type">1</int>
+      </struct>
+      <real name="allowedPenetrationDepth">x7f7fffee <!-- 3.40282e+038 --></real>
+    </struct>
+    <struct name="multiThreadCheck">
+    </struct>
+    <string name="name">path03</string>
+    <struct name="material">
+      <int name="responseType">1</int>
+      <real name="friction">x3f000000 <!-- 0.5 --></real>
+      <real name="restitution">x3ecccccd <!-- 0.4 --></real>
+    </struct>
+    <real name="damageMultiplier">x3f800000 <!-- 1.0 --></real>
+    <int name="storageIndex">65535</int>
+    <int name="contactPointCallbackDelay">65535</int>
+    <int name="uid">4294967295</int>
+    <struct name="spuCollisionCallback">
+      <byte name="eventFilter">3</byte>
+      <byte name="userFilter">1</byte>
+    </struct>
+    <struct name="motion">
+      <byte name="type">5</byte>
+      <byte name="deactivationIntegrateCounter">15</byte>
+      <tuple name="deactivationNumInactiveFrames" size="2">
+        49152 49152 
+      </tuple>
+      <struct name="motionState">
+        <vec16 name="transform">xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222167 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4222167 <!-- -1.50996e-007 --> xb4222167 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x419fffff <!-- 20.0 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+        <struct name="sweptTransform">
+          <vec4 name="centerOfMass0">x419fffff <!-- 20.0 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="centerOfMass1">x419fffff <!-- 20.0 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+          <vec4 name="rotation0">x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb3a22168 <!-- -7.54979e-008 --></vec4>
+          <vec4 name="rotation1">x00000000 <!-- 0.0 --> x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> xb3a22168 <!-- -7.54979e-008 --></vec4>
+          <vec4 name="centerOfMassLocal">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        </struct>
+        <vec4 name="deltaAngle">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <real name="objectRadius">x40b196de <!-- 5.54967 --></real>
+        <real name="angularDamping">x3d4d0000 <!-- 0.0500488 --></real>
+        <real name="timeFactor">x3f800000 <!-- 1.0 --></real>
+        <struct name="maxLinearVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <struct name="maxAngularVelocity">
+          <byte name="value">127</byte>
+        </struct>
+        <byte name="deactivationClass">1</byte>
+      </struct>
+      <vec4 name="inertiaAndMassInv">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="linearVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <vec4 name="angularVelocity">x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      <tuple name="deactivationRefPosition" size="2">
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+        <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+      </tuple>
+      <real name="gravityFactor">x3f800000 <!-- 1.0 --></real>
+    </struct>
+    <int name="npData">4294967295</int>
+  </object>
+  <object id="#0134" type="hkpConvexVerticesShape">
+    <byte name="dispatchType">4</byte>
+    <vec4 name="aabbHalfExtents">x40a00000 <!-- 5.0 --> x3fc6d12f <!-- 1.55326 --> x3f800001 <!-- 1.0 --> x00000000 <!-- 0.0 --></vec4>
+    <vec4 name="aabbCenter">x35800000 <!-- 9.53674e-007 --> x3f2329b2 <!-- 0.637355 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec4>
+    <array name="rotatedVertices" size="4">
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00002 <!-- 5.0 --> x40a00002 <!-- 5.0 --> x40a00002 <!-- 5.0 --> xc09ffffe <!-- -5.0 --></vec4>
+          <vec4>xbf6a78ab <!-- -0.915904 --> xbf6a78ab <!-- -0.915904 --> x3dac1000 <!-- 0.0840149 --> x400c3304 <!-- 2.19061 --></vec4>
+          <vec4>xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> xbf7f5ffd <!-- -0.997558 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40a00002 <!-- 5.0 --> xbf7ff7f0 <!-- -0.999877 --> xbf7ff7f0 <!-- -0.999877 --> x3f7ff810 <!-- 0.999879 --></vec4>
+          <vec4>x3dac1000 <!-- 0.0840149 --> x400ada27 <!-- 2.16956 --> x400ada27 <!-- 2.16956 --> x40037c44 <!-- 2.05446 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x3f7ff810 <!-- 0.999879 --> x40400404 <!-- 3.00025 --> x40400404 <!-- 3.00025 --> x40400404 <!-- 3.00025 --></vec4>
+          <vec4>x40037c44 <!-- 2.05446 --> xbf6a78ab <!-- -0.915904 --> xbf6a78ab <!-- -0.915904 --> x3f9935c2 <!-- 1.19695 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+      <struct>
+        <tuple name="vertices" size="3">
+          <vec4>x40400404 <!-- 3.00025 --> xc09ffffe <!-- -5.0 --> xc09ffffe <!-- -5.0 --> xc09ffffe <!-- -5.0 --></vec4>
+          <vec4>x3f9935c2 <!-- 1.19695 --> x400b3d93 <!-- 2.17563 --> x3fef66f0 <!-- 1.87033 --> x3fef66f0 <!-- 1.87033 --></vec4>
+          <vec4>x3f800001 <!-- 1.0 --> x3f7f5ffd <!-- 0.997558 --> x3f800001 <!-- 1.0 --> xbf800001 <!-- -1.0 --></vec4>
+        </tuple>
+      </struct>
+    </array>
+    <int name="numVertices">16</int>
+    <array name="planeEquations" size="13">
+      <vec4>xbea864b2 <!-- -0.328893 --> xbf71c20a <!-- -0.944367 --> x00000000 <!-- 0.0 --> x3df94e10 <!-- 0.121731 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xbf800000 <!-- -1.0 --> xbf800000 <!-- -1.0 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> xbf800000 <!-- -1.0 --></vec4>
+      <vec4>x3bac6c8a <!-- 0.00526196 --> x3f7fff17 <!-- 0.999986 --> x00000000 <!-- 0.0 --> xc00a83e6 <!-- -2.1643 --></vec4>
+      <vec4>x3ac63b29 <!-- 0.00151238 --> x3f7ffe13 <!-- 0.999971 --> x3bf608f0 <!-- 0.00750839 --> xc00b3bcc <!-- -2.17552 --></vec4>
+      <vec4>x3ef8fc11 <!-- 0.486298 --> x3f5fb0e5 <!-- 0.873793 --> x00000000 <!-- 0.0 --> xc020517e <!-- -2.50497 --></vec4>
+      <vec4>x3ec9ba4f <!-- 0.394 --> x3f6b4ad6 <!-- 0.919111 --> x80000000 <!-- -0.0 --> xc0121004 <!-- -2.28223 --></vec4>
+      <vec4>x3d6b6002 <!-- 0.0574646 --> x3f7f93b4 <!-- 0.998348 --> x80000000 <!-- -0.0 --> xc006f25e <!-- -2.10854 --></vec4>
+      <vec4>x00000000 <!-- 0.0 --> xbf800000 <!-- -1.0 --> x00000000 <!-- 0.0 --> xbf6a78a9 <!-- -0.915904 --></vec4>
+      <vec4>x3f7fffff <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> xc0a00001 <!-- -5.0 --></vec4>
+      <vec4>xba157e88 <!-- -0.000570275 --> x3bf9cd02 <!-- 0.00762332 --> xbf7ffe13 <!-- -0.999971 --> xbf822fb0 <!-- -1.01708 --></vec4>
+      <vec4>xba1cd443 <!-- -0.000598256 --> x3c030753 <!-- 0.00799735 --> x3f7ffde3 <!-- 0.999968 --> xbf824b1a <!-- -1.01792 --></vec4>
+      <vec4>xbf800000 <!-- -1.0 --> x80000000 <!-- -0.0 --> x00000000 <!-- 0.0 --> xc09ffffe <!-- -5.0 --></vec4>
+    </array>
+  </object>
+  <object id="#0135" type="hkMemoryResourceHandle">
+    <ref name="variant">#0136</ref>
+    <string name="name">hkpShapeInfo</string>
+  </object>
+  <object id="#0136" type="hkpShapeInfo">
+    <ref name="shape">#0134</ref>
+    <array name="childShapeNames" size="1">
+      <string>path03</string>
+    </array>
+    <array name="childTransforms" size="1">
+      <vec16>x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f7ffff8 <!-- 1.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --></vec16>
+    </array>
+    <vec16 name="transform">xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x34222167 <!-- 1.50996e-007 --> x00000000 <!-- 0.0 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --> x00000000 <!-- 0.0 --> xb4222167 <!-- -1.50996e-007 --> xb4222167 <!-- -1.50996e-007 --> x00000000 <!-- 0.0 --> xbf7ffffc <!-- -1.0 --> x00000000 <!-- 0.0 --> x419fffff <!-- 20.0 --> x3f6a78a8 <!-- 0.915904 --> x00000000 <!-- 0.0 --> x3f800000 <!-- 1.0 --></vec16>
+  </object>
+  <object id="#0137" type="hkpPhysicsData">
+    <array name="systems" size="1">
+      <ref>#0138</ref>
+    </array>
+  </object>
+  <object id="#0138" type="hkpPhysicsSystem">
+    <array name="rigidBodies" size="6">
+      <ref>#0103</ref>
+      <ref>#0109</ref>
+      <ref>#0115</ref>
+      <ref>#0121</ref>
+      <ref>#0127</ref>
+      <ref>#0133</ref>
+    </array>
+    <string name="name">Default Physics System</string>
+    <byte name="active">1</byte>
+  </object>
+</hktagfile>

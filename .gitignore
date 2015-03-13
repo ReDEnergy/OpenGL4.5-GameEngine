@@ -1,0 +1,10 @@
+/**/*.sdf
+/**/Debug
+/**/Release
+/**/havok
+/**/Kinect
+/**/LeapMotion
+/Tools
+/Other
+/Resources
+/Sensors
