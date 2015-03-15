@@ -90,26 +90,4 @@
 		<vertex>R2T.VS</vertex>
 		<fragment>R2T.FS</fragment>
 	</shader>
-	<shader>
-		<name>particle</name>
-		<vertex>Particles/Particle.VS</vertex>
-		<geometry>Particles/Particle.GS</geometry>
-		<fragment>Particles/Particle.FS</fragment>
-	</shader>
-	<shader>
-		<name>KinectCompute</name>
-		<compute>Kinect/Compute/Depth.CS</compute>
-	</shader>
-	<shader>
-		<name>KinectMotionParticle</name>
-		<vertex>Kinect/Particle/Particle.VS</vertex>
-		<geometry>Kinect/Particle/Particle.GS</geometry>
-		<fragment>Kinect/Particle/Particle.FS</fragment>
-	</shader>
-	<shader>
-		<name>KinectMotionInstanced</name>
-		<vertex>Kinect/Instanced/Instanced.VS</vertex>
-		<fragment>Kinect/Instanced/Instanced.FS</fragment>
-	</shader>
-
 </shaders>
