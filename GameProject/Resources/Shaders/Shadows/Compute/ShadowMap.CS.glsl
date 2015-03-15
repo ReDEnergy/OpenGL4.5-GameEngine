@@ -160,5 +160,5 @@ float EvalShadow() {
 	if (shp.x > 1 || shp.y > 1 || shp.x < 0 || shp.y < 0 || shp.z > 1.0001) return 1;
 
 	float shadowFactor = PCFfactor(depthBuffer);
-	return mix(0.8, 1, shadowFactor);
+	return mix(0.8, 1.0, shadowFactor);
 }
