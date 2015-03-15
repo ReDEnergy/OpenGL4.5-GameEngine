@@ -40,7 +40,7 @@ vec4 DebugView(vec2 text_coord) {
 }
 
 float SoftShadow(vec2 text_coord) {
-	float depth = linearDepth(u_texture_4, text_coord).x;
+	float depth = linearDepth(u_texture_4, text_coord);
 	if (depth > 40)
 		return texture(u_texture_0, text_coord).a;
 
