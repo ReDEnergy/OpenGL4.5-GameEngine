@@ -17,6 +17,7 @@ void main() {
 		float depth = frag_pos.z / frag_pos.w;
 		depth = depth * 0.5 + 0.5;
 
+		CSM = vec4(0);
 		CSM[CSM_cascadeID] = depth;
 	}
 }
