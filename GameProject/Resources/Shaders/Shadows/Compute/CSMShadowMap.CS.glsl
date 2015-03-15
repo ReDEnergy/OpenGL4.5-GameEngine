@@ -29,10 +29,10 @@ ivec2 pixel;
 float EvalShadow();
 float linearDepth(sampler2D depthTexture, ivec2 pixel);
 
-void BakeShadow(image2D MAP, ivec2 pixel, float value) {
-	vec4 color = imageLoad(MAP, pixel);
+void BakeShadow(ivec2 pixel, float value) {
+	vec4 color = imageLoad(diffuseMap, pixel);
 	color.rgb *= value;
-	imageStore(MAP, pixel, color);
+	imageStore(diffuseMap, pixel, color);
 }
 
 ///////////////////////////////////////
@@ -44,7 +44,7 @@ void main()
 	// vec4 color = imageLoad(shadowMaps, pixel);
 	// color[shadowID] = EvalShadow();
 	// imageStore(shadowMaps, pixel, color);
-	BakeShadow(diffuseMap, pixel, EvalShadow());
+	BakeShadow(pixel, EvalShadow());
 }
 
 // -----------------------------------------------------------------------------

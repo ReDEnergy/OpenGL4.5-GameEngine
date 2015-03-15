@@ -21,10 +21,10 @@ uniform vec2 shadow_texel_size;
 
 ivec2 pixel;
 float EvalShadow();
-void BakeShadow(image2D MAP, ivec2 pixel, float value) {
-	vec4 color = imageLoad(MAP, pixel);
+void BakeShadow(ivec2 pixel, float value) {
+	vec4 color = imageLoad(diffuseMap, pixel);
 	color.rgb *= value;
-	imageStore(MAP, pixel, color);
+	imageStore(diffuseMap, pixel, color);
 }
 
 float ChebyshevUpperBound();
@@ -47,7 +47,7 @@ void main()
 		shadow = EvalShadow();
 	}
 	
-	BakeShadow(diffuseMap, pixel, shadow);
+	BakeShadow(pixel, shadow);
 }
 
 // -----------------------------------------------------------------------------
