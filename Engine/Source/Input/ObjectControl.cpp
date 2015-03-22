@@ -36,9 +36,9 @@ void ObjectControl::OnKeyPress(int key, int mods) {
 			cout << "ControlMode: TRANSLATE" << endl;
 			return;
 		case GLFW_KEY_KP_3:
-			glm::log(transform->position, "position");
-			glm::log(transform->eulerAngles, "rotation");
-			glm::log(transform->scale, "scale");
+			cout << "position" << transform->position << endl;
+			cout << "rotation" << transform->eulerAngles << endl;
+			cout << "scale" << transform->scale << endl;
 			return;
 	}
 }

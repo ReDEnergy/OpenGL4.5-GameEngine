@@ -212,16 +212,17 @@ void Camera::SetDirection(glm::vec3 direction)
 // Print information about camera
 void Camera::Log() const
 {
-	cout << "Camera properties : " << endl;
-	glm::log(transform->eulerAngles, "Rotation");
-	glm::log(transform->position, "Position");
-	glm::log(forward, "Forward");
-	glm::log(transform->GetRotationVector(), "tForward");
-	glm::log(up, "Up");
-	cout << "--------------------------------------------------" << endl;
+	cout.precision(2);
+	cout << "Camera =>" << endl;
+	cout << "Rotation: " << transform->eulerAngles << endl;
+	cout << "Position: " << transform->position << endl;
+	cout << "Forward: " << forward << endl;
+	cout << "tForward: " << transform->GetRotationVector() << endl;
+	cout << "Up: " << up << endl;
 
 	float rotateOY = atan2(forward.z, forward.x);
 	cout << "rotateOY: " << rotateOY << endl;
+	cout << "--------------------------------------------------" << endl;
 }
 
 void Camera::BindPosition(GLint location) const

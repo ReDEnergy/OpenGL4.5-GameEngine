@@ -19,14 +19,6 @@ namespace glm {
 	const glm::mat4 matI4 = glm::mat4(1.0f);
 	const glm::mat3 matI3 = glm::mat3(1.0f);
 
-	inline void log(glm::vec4 v, const char* const info = "") {
-		fprintf(stderr, "%s : %.2f %.2f %.2f %.2f\n", info, v.x, v.y, v.z, v.w);
-	}
-
-	inline void log(glm::vec3 v, const char* const info = "") {
-		fprintf(stderr, "%s : %.2f %.2f %.2f\n", info, v.x, v.y, v.z);
-	}
-
 	// Rotate a Point around OY (0, 1, 0) with a specific angle(radians)
 	inline glm::vec3 RotateOY(const glm::vec3 P, float radians) {
 		glm::vec3 R;
@@ -73,5 +65,55 @@ namespace glm {
 	inline void BindUniform3f(GLint location, glm::vec3 vec) {
 		glUniform3f(location, vec.x, vec.y, vec.z);
 	};
+}
 
+/**
+ ** overload ostream << for easy printing glm classes
+ */
+inline ostream &operator<< (ostream &out, const glm::ivec2 &vec) {
+	out << "{"
+		<< vec.x << " " << vec.y
+		<< "}";
+
+	return out;
+}
+
+inline ostream &operator<< (ostream &out, const glm::ivec3 &vec) {
+	out << "{"
+		<< vec.x << " " << vec.y << " " << vec.z
+		<< "}";
+
+	return out;
+}
+
+inline ostream &operator<< (ostream &out, const glm::ivec4 &vec) {
+	out << "{"
+		<< vec.x << " " << vec.y << " " << vec.z << " " << vec.w
+		<< "}";
+
+	return out;
+}
+
+inline ostream &operator<< (ostream &out, const glm::vec2 &vec) {
+	out << "{"
+		<< vec.x << " " << vec.y
+		<< "}";
+
+	return out;
+}
+
+inline ostream &operator<< (ostream &out, const glm::vec3 &vec) {
+	out << "{"
+		<< vec.x << " " << vec.y << " " << vec.z
+		<< "}";
+
+	return out;
+}
+
+inline ostream &operator<< (ostream &out, const glm::vec4 &vec) {
+	out << "{"
+		<< vec.x << " " << vec.y << " " << vec.z << " " << vec.w
+		<< "}";
+
+	return out;
 }
