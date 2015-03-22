@@ -34,6 +34,8 @@
 	- sliders/drop-downs/etc
 	- see the Menu.xml file
 
+4. Move MenuSystem from Game to Engine
+
 [ENGINE][PHYSICS]
 1. Swap Havok Physics with Nvidia Physics
 
