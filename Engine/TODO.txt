@@ -36,6 +36,10 @@
 
 4. Move MenuSystem from Game to Engine
 
+5. Generic key-binding based on actions
+	- use actions for keyboard and mouse events
+	- keyboard/mouse -> action -> update registered action
+
 [ENGINE][PHYSICS]
 1. Swap Havok Physics with Nvidia Physics
 
