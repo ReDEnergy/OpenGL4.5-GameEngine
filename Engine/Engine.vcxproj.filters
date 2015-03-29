@@ -222,13 +222,13 @@
     <ClCompile Include="Source\Physics\PhysicsPhantom.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Manager\HavokCore.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\Physics.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Manager\PhysicsManager.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Manager\HavokCore.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -374,9 +374,6 @@
     <ClInclude Include="Source\Manager\Manager.h">
       <Filter>Source Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Manager\PhysicsManager.h">
-      <Filter>Source Files\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Manager\RenderingSystem.h">
       <Filter>Source Files\Managers</Filter>
     </ClInclude>
@@ -419,9 +416,6 @@
     <ClInclude Include="Source\Lighting\SpotLight.h">
       <Filter>Source Files\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Physics\PhysicsPhantom.h">
       <Filter>Source Files\Physics</Filter>
     </ClInclude>
@@ -429,6 +423,9 @@
       <Filter>Source Files\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Physics.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Manager\PhysicsManager.h">
       <Filter>Source Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>

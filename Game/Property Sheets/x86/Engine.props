@@ -5,7 +5,7 @@
   <PropertyGroup>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>..\include;..\Engine\Source;Source;$(IncludePath)</IncludePath>
-    <LibraryPath>..\GameEngine\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\GameEngine\$(Configuration);$(LibraryPath)</LibraryPath>
     <_PropertySheetDisplayName>Engine</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>

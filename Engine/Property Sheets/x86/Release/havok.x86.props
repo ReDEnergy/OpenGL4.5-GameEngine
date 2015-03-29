@@ -4,7 +4,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <IncludePath>..\include\havok;$(IncludePath)</IncludePath>
-    <LibraryPath>..\libs\x86\havok\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\libs\x86\havok\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

@@ -1,8 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug-Physics|Win32">
+      <Configuration>Debug-Physics</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-Physics|Win32">
+      <Configuration>Release-Physics</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -36,10 +44,23 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
@@ -54,14 +75,30 @@
     <Import Project="Property Sheets\x86\Debug\pugixml.x86.props" />
     <Import Project="Property Sheets\x86\Debug\glew.x86.debug.props" />
     <Import Project="Property Sheets\x86\Debug\glfw.x86.debug.props" />
-    <Import Project="Property Sheets\x86\Debug\Engine.props" />
+    <Import Project="Property Sheets\x86\Engine.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property Sheets\x86\Debug\pugixml.x86.props" />
+    <Import Project="Property Sheets\x86\Debug\glew.x86.debug.props" />
+    <Import Project="Property Sheets\x86\Debug\glfw.x86.debug.props" />
+    <Import Project="Property Sheets\x86\Debug\havok.x86.debug.props" />
+    <Import Project="Property Sheets\x86\Engine.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="Property Sheets\x86\Release\pugixml.x86.props" />
     <Import Project="Property Sheets\x86\Release\glew.x86.props" />
     <Import Project="Property Sheets\x86\Release\glfw.x86.props" />
-    <Import Project="Property Sheets\x86\Release\Engine.props" />
+    <Import Project="Property Sheets\x86\Engine.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property Sheets\x86\Release\pugixml.x86.props" />
+    <Import Project="Property Sheets\x86\Release\glew.x86.props" />
+    <Import Project="Property Sheets\x86\Release\glfw.x86.props" />
+    <Import Project="Property Sheets\x86\Release\havok.x86.props" />
+    <Import Project="Property Sheets\x86\Engine.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -70,8 +107,25 @@
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
     <LibraryWPath>$(LibraryWPath)</LibraryWPath>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)</TargetName>
+    <LibraryWPath>$(LibraryWPath)</LibraryWPath>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
@@ -98,8 +152,7 @@
     </Link>
     <PostBuildEvent />
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\libs\x86\GLFW\Debug\*.dll" "$(OutDir)"
@@ -112,9 +165,43 @@ xcopy /y /d "..\libs\x86\SFML\Debug\openal32.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\SFML\Debug\libsndfile-1.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\SFML\Debug\sfml-audio-d-2.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\SFML\Debug\sfml-system-d-2.dll" "$(OutDir)"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PHYSICS_ENGINE;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions> /ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent />
+    <PreBuildEvent>
+      <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\libs\x86\GLFW\Debug\*.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\GL\Debug\*.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\assimp\Debug\*.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\pugixml\Debug\*.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\FreeType\Debug\*.dll" "$(OutDir)"
 
-xcopy /y /d "..\GameEngine\Debug\Engine.dll" "$(OutDir)"
-
+xcopy /y /d "..\libs\x86\SFML\Debug\openal32.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\SFML\Debug\libsndfile-1.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\SFML\Debug\sfml-audio-d-2.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\SFML\Debug\sfml-system-d-2.dll" "$(OutDir)"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -149,9 +236,38 @@ xcopy /y /d "..\libs\x86\FreeType\Release\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\SFML\Release\openal32.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\SFML\Release\libsndfile-1.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\SFML\Release\sfml-audio-2.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Release\sfml-system-2.dll" "$(OutDir)"
-
-xcopy /y /d "..\GameEngine\Release\Engine.dll" "$(OutDir)"</Command>
+xcopy /y /d "..\libs\x86\SFML\Release\sfml-system-2.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>
+    </PreBuildEvent>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PHYSICS_ENGINE;_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
