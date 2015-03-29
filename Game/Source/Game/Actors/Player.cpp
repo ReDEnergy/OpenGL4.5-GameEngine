@@ -2,13 +2,14 @@
 
 #include <include/util.h>
 
-// #include <Component/Physics.h>
 #include <Component/Transform.h>
 
 #include <Game/Input/PlayerInput.h>
 
 #include <Manager/Manager.h>
+
 // #include <Manager/HavokCore.h>
+// #include <Component/Physics.h>
 
 /*
 // character rigid body
@@ -37,7 +38,7 @@ Player::Player(const GameObject &gameObject)
 	input = new PlayerInput(this);
 
 	/*
-	Manager::Havok->MarkForWrite();
+	Manager::GetHavok()->MarkForWrite();
 
 	//	Create a character rigid body object
 	{
@@ -65,7 +66,7 @@ Player::Player(const GameObject &gameObject)
 			characterRigidBody->setListener( listener );
 			listener->removeReference();
 		}
-		Manager::Havok->_pWorld->addEntity(characterRigidBody->getRigidBody());
+		Manager::GetHavok()->_pWorld->addEntity(characterRigidBody->getRigidBody());
 
 		this->physics = new Physics(this);
 		this->physics->body = characterRigidBody->getRigidBody();
@@ -115,7 +116,7 @@ Player::Player(const GameObject &gameObject)
 		//	Create and add the constraint
 		{
 			hkpConstraintInstance* constraint = new hkpConstraintInstance(this->physics->body, NULL, plane );
-			Manager::Havok->_pWorld->addConstraint(constraint);
+			Manager::GetHavok()->_pWorld->addConstraint(constraint);
 			constraint->removeReference();
 		}		
 
@@ -130,7 +131,7 @@ Player::Player(const GameObject &gameObject)
 
 	}
 
-	Manager::Havok->UnmarkForWrite();
+	Manager::GetHavok()->UnmarkForWrite();
 	*/
 
 }
@@ -150,7 +151,7 @@ void Player::Update(float deltaTime) {
 	hkpCharacterInput pInput;
 	hkpCharacterOutput output;
 
-	Manager::Havok->MarkForWrite();
+	Manager::GetHavok()->MarkForWrite();
 
 	pInput.m_up.set(0, 1, 0);
 	pInput.m_forward.set(1, 0, 0);
@@ -173,7 +174,7 @@ void Player::Update(float deltaTime) {
 	characterContext->update(pInput, output);
 	characterRigidBody->setLinearVelocity(output.m_velocity, deltaTime);
 
-	Manager::Havok->UnmarkForWrite();
+	Manager::GetHavok()->UnmarkForWrite();
 
 	// --- Display state --- //
 	{

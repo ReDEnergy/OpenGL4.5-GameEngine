@@ -17,7 +17,7 @@ PlayerInput::PlayerInput(Player *player)
 }
 
 void PlayerInput::Update(float deltaTime, int mods) {
-//	Manager::Havok->MarkForWrite();
+//	Manager::GetHavok()->MarkForWrite();
 	{
 		if (InputSystem::KeyHold(GLFW_KEY_LEFT))
 			player->MoveLeft(deltaTime);
@@ -25,11 +25,11 @@ void PlayerInput::Update(float deltaTime, int mods) {
 		if (InputSystem::KeyHold(GLFW_KEY_RIGHT))
 			player->MoveRight(deltaTime);
 	}
-//	Manager::Havok->UnmarkForWrite();
+//	Manager::GetHavok()->UnmarkForWrite();
 }
 
 void PlayerInput::OnKeyPress(int key, int mods) {
-//	Manager::Havok->MarkForWrite();
+//	Manager::GetHavok()->MarkForWrite();
 	{
 		if (InputSystem::KeyHold(GLFW_KEY_LEFT))
 			player->transform->SetRotation(glm::vec3(0, 180, 0));
@@ -40,7 +40,7 @@ void PlayerInput::OnKeyPress(int key, int mods) {
 		if (key == GLFW_KEY_SPACE)
 			player->Jump();
 	}
-//	Manager::Havok->UnmarkForWrite();
+//	Manager::GetHavok()->UnmarkForWrite();
 }
 
 void PlayerInput::OnKeyRelease(int key, int mods) {

@@ -36,7 +36,7 @@ GameMenu::GameMenu()
 	HUDCamera->SetPosition(glm::vec3(0, 0, 10.0f));
 	HUDCamera->Update();
 
-	for (auto page : (Manager::GetMenu()->pages)) {
+	for (auto &page : (Manager::GetMenu()->pages)) {
 		SetPageLayout(page.second);
 	}
 

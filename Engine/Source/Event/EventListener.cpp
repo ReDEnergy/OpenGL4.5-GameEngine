@@ -11,9 +11,9 @@ EventListener::~EventListener() {
 }
 
 void EventListener::SubscribeToEvent(string eventID) {
-	Manager::Event->Subscribe(this, eventID);
+	Manager::GetEvent()->Subscribe(this, eventID);
 }
 
 void EventListener::SubscribeToEvent(EventType Event) {
-	Manager::Event->Subscribe(Event, this);
+	Manager::GetEvent()->Subscribe(Event, this);
 }
