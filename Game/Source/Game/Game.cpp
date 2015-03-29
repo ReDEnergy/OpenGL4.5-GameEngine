@@ -61,7 +61,7 @@
 // #include <Common/Base/Config/hkProductFeatures.cxx>
 
 Texture *ShadowMap;
-PointLight *PLSC;
+//PointLight *PLSC;
 
 Game::Game() {
 }
@@ -107,22 +107,22 @@ void Game::Init() {
 	Spot->SetPerspective(90, 1, 0.1f, 50);
 	Spot->ComputeFrustum();
 	Spot->SetDirection(glm::vec3(1, 0, 0));
-
-	PLSC = new PointLight();
-	PLSC->InitCaster();
-	PLSC->transform->position = glm::vec3(10, 5, 0);
-
 	Manager::GetDebug()->Add(Spot);
-	Manager::GetDebug()->Add(PLSC);
+
+	//PLSC = new PointLight();
+	//PLSC->InitCaster();
+	//PLSC->transform->position = glm::vec3(10, 5, 0);
+	//Manager::GetDebug()->Add(PLSC);
+
 
 	ShadowMap = new Texture();
 	ShadowMap->Create2DTextureFloat(NULL, resolution.x, resolution.y, 4, 32);
 
 	// --- Create FBO for rendering to texture --- //
 	FBO = new FrameBuffer();
-	FBO_Light = new FrameBuffer();
-
 	FBO->Generate(resolution.x, resolution.y, 5);
+
+	FBO_Light = new FrameBuffer();
 	FBO_Light->Generate(resolution.x, resolution.y, 1);
 
 	// Rendering 
@@ -166,7 +166,7 @@ void Game::Init() {
 		light->SetDebugView(true);
 	}
 
-	ObjectControl *control = new ObjectControl(PLSC->transform);
+	//ObjectControl *control = new ObjectControl(PLSC->transform);
 
 };
 
@@ -199,12 +199,6 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		}
 
 		player->Update(deltaTime);
-	}
-
-	for (auto *obj: Manager::GetScene()->activeObjects) {
-		if (obj->aabb && activeCamera == Sun) {
-			obj->aabb->Update(Sun->transform->rotationQ);
-		}
 	}
 
 	if (Manager::GetDebug()->debugView) {
@@ -253,7 +247,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 	}
 	{
 		Spot->CastShadows();
-		PLSC->CastShadows();
+		//PLSC->CastShadows();
 	}
 
 
@@ -290,14 +284,14 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			glFinish();
 			glMemoryBarrier(GL_ALL_BARRIER_BITS);
 		}
-		{
-			PLSC->BindForUse(sha);
-			glUniform1i(sha->loc_shadowID, 200);
+		//{
+		//	PLSC->BindForUse(sha);
+		//	glUniform1i(sha->loc_shadowID, 200);
 
-			glDispatchCompute(GLuint(UPPER_BOUND(FBO->GetResolution().x, 16)), GLuint(UPPER_BOUND(FBO->GetResolution().y, 16)), 1);
-			glFinish();
-			glMemoryBarrier(GL_ALL_BARRIER_BITS);
-		}
+		//	glDispatchCompute(GLuint(UPPER_BOUND(FBO->GetResolution().x, 16)), GLuint(UPPER_BOUND(FBO->GetResolution().y, 16)), 1);
+		//	glFinish();
+		//	glMemoryBarrier(GL_ALL_BARRIER_BITS);
+		//}
 	}
 	///////////////////////////////////////////////////////////////////////////	
 
@@ -375,7 +369,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			Debug->Use();
 			glUniform1i(Debug->loc_debug_id, Manager::GetRenderSys()->debugParam);
 			activeCamera->BindProjectionDistances(Debug);
-			glm::BindUniform3f(Debug->loc_eye_pos, PLSC->transform->position);
+			//glm::BindUniform3f(Debug->loc_eye_pos, PLSC->transform->position);
 
 			glDisable(GL_DEPTH_TEST);
 			FBO->BindAllTextures();
@@ -387,7 +381,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			Sun->FBO->BindDepthTexture(GL_TEXTURE11);
 			Spot->FBO->BindTexture(0, GL_TEXTURE12);
 			Spot->FBO->BindDepthTexture(GL_TEXTURE13);
-			PLSC->BindTexture(GL_TEXTURE14);
+			//PLSC->BindTexture(GL_TEXTURE14);
 
 			DebugPanel->Render();
 
