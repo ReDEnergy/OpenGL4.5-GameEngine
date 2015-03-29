@@ -36,15 +36,15 @@ void Physics::Update() {
 		return;
 	}
 	if (body->isActive()) {
-		float q[4];
-		float p[4];
+		float val[4];
 		hkVector4 pos = body->getPosition();
-		hkQuaternionf qrot = body->getRotation();
-		memcpy(q, &qrot.m_vec, 4 * sizeof(float));
-		memcpy(p, &pos, 4 * sizeof(float));
+		memcpy(val, &pos, 4 * sizeof(float));
+		parent->transform->position = glm::vec3(val[0], val[1], val[2]);
 
-		parent->transform->rotationQ = glm::quat(q[3], q[0], q[1], q[2]);
-		parent->transform->position = glm::vec3(p[0], p[1], p[2]);
+		hkQuaternionf qrot = body->getRotation();
+		memcpy(val, &qrot.m_vec, 4 * sizeof(float));
+		parent->transform->rotationQ = glm::quat(val[3], val[0], val[1], val[2]);
+
 		parent->transform->Update();
 	}
 }
