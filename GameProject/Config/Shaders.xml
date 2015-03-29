@@ -24,11 +24,6 @@
 		<fragment>Debug.FS</fragment>
 	</shader>
 	<shader>
-		<name>kinect</name>
-		<vertex>Model.Texture.VS</vertex>
-		<fragment>Kinect/KinectFrame.FS</fragment>
-	</shader>
-	<shader>
 		<name>default</name>
 		<vertex>MVP.Texture.VS</vertex>
 		<fragment>Default.FS</fragment>
