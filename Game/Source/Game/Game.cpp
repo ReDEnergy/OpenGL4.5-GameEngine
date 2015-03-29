@@ -347,7 +347,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		{
 			Shader *Composition = Manager::GetShader()->GetShader("composition");
 			Composition->Use();
-			glUniform2f(Composition->loc_resolution, (float)Manager::GetConfig()->resolution.x, (float)Manager::GetConfig()->resolution.y);
+			glUniform2f(Composition->loc_resolution, (float)Engine::Window->resolution.x, (float)Engine::Window->resolution.y);
 			glUniform1i(Composition->active_ssao, Manager::GetRenderSys()->Is(RenderState::SS_AO));
 			glUniform1i(Composition->loc_debug_view, Manager::GetDebug()->debugView);
 			activeCamera->BindProjectionDistances(Composition);
