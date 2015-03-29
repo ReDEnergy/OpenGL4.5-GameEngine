@@ -24,11 +24,6 @@ using namespace std;
 GameMenu::GameMenu()
 	: ObjectInput(InputGroup::IG_IN_GAME_MENU)
 {
-	//auto x = Manager::GetMenu()->pages.find("in_game_menu");
-	//if (x != Manager::GetMenu()->pages.end()) {
-	//	cout << x->first << endl;
-	//}
-
 	activePage = Manager::GetMenu()->pages["in_game_menu"];
 	activeEntryIndex = 0;
 
