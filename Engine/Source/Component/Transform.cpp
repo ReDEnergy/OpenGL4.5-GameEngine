@@ -10,6 +10,7 @@ Transform::Transform() {
 	rotateSpeed = 2.5f;
 	moveSpeed = 2.5f;
 	scaleSpeed = 0.02f;
+	Update();
 }
 
 Transform::Transform(const Transform &transform) {
@@ -65,7 +66,9 @@ void Transform::RotatePitch(float deltaTime) {
 void Transform::SetPosition(glm::vec3 position)
 {
 	this->position = position;
-	Update();
+	model[3][0] = position[0];
+	model[3][1] = position[1];
+	model[3][2] = position[2];
 }
 
 void Transform::SetRotation(glm::vec3 eulerAngles) {
