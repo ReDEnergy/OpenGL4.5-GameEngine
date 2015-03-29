@@ -167,3 +167,15 @@ ConfigFile* Manager::GetConfig()
 {
 	return Config;
 }
+
+#ifdef PHYSICS_ENGINE
+HavokCore* Manager::GetHavok()
+{
+	return Havok;
+}
+
+PhysicsManager* Manager::GetPhysics()
+{
+	return Physics;
+}
+#endif

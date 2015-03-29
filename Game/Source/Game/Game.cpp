@@ -42,12 +42,17 @@
 #include <Manager/EventSystem.h>
 #include <Manager/DebugInfo.h>
 #include <Manager/ConfigFile.h>
-#include <Manager/HavokCore.h>
 #include <Manager/Manager.h>
 #include <Manager/ResourceManager.h>
 #include <Manager/SceneManager.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/RenderingSystem.h>
+
+#ifdef PHYSICS_ENGINE
+#include <Manager/HavokCore.h>
+#include <Manager/PhysicsManager.h>
+#endif
+
 
 #include <Rendering/SSAO.h>
 
@@ -83,12 +88,12 @@ void Game::Init() {
 	gameCamera->SetPerspective(40, aspectRation, 0.1f, 150);
 	gameCamera->SetPosition(glm::vec3(0, 5, 5));
 	gameCamera->SplitFrustum(5);
-	gameCamera->Update();
+	//gameCamera->Update();
 
 	freeCamera = new Camera();
 	freeCamera->SetPerspective(40, aspectRation, 0.1f, 500);
 	freeCamera->SetPosition(glm::vec3(0.0f, 10.0f, 10.0f));
-	freeCamera->Update();
+	//freeCamera->Update();
 
 	activeCamera = gameCamera;
 	cameraInput = new CameraInput(activeCamera);
@@ -108,12 +113,6 @@ void Game::Init() {
 	Spot->ComputeFrustum();
 	Spot->SetDirection(glm::vec3(1, 0, 0));
 	Manager::GetDebug()->Add(Spot);
-
-	//PLSC = new PointLight();
-	//PLSC->InitCaster();
-	//PLSC->transform->position = glm::vec3(10, 5, 0);
-	//Manager::GetDebug()->Add(PLSC);
-
 
 	ShadowMap = new Texture();
 	ShadowMap->Create2DTextureFloat(NULL, resolution.x, resolution.y, 4, 32);
@@ -144,7 +143,9 @@ void Game::Init() {
 	// Game Menu
 	Menu = new GameMenu();
 
-//	Manager::Havok->StepSimulation(0.016f);
+#ifdef PHYSICS_ENGINE
+	Manager::GetHavok()->StepSimulation(0.016f);
+#endif
 
 	// GameObjects
 	player = new Player(*Manager::GetResource()->GetGameObject("player"));
@@ -184,15 +185,15 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		// --- Physics Simulation --- //
 		// ---------------------------//
 
-//		Manager::Havok->StepSimulation(deltaTime);
-
+#ifdef PHYSICS_ENGINE
+		Manager::GetHavok()->StepSimulation(deltaTime);
+#endif
 		// -----------------------//
 		// --- Update Objects --- //
 		// -----------------------//
   		InputSystem::UpdateObservers(deltaTime);
 
 		Manager::GetScene()->Update();
-		// Manager::Audio->Update();
 
 		for (auto *obj: Manager::GetScene()->activeObjects) {
 			obj->Update();
@@ -237,17 +238,16 @@ void Game::Update(float elapsedTime, float deltaTime) {
 	// ---------------------//
 	{
 		gameCamera->UpdateBoundingBox(Sun);
-		//for (auto *obj : Manager::GetScene()->activeObjects) {
-		//	if (obj->aabb && activeCamera == Sun) {
-		//		obj->aabb->Update(Sun->transform->rotationQ);
-		//	}
-		//}
+		for (auto *obj : Manager::GetScene()->activeObjects) {
+			if (obj->aabb) {
+				obj->aabb->Update(Sun->transform->rotationQ);
+			}
+		}
 		Manager::GetScene()->FrustumCulling(gameCamera);
 		Sun->CastShadows(gameCamera);
 	}
 	{
 		Spot->CastShadows();
-		//PLSC->CastShadows();
 	}
 
 
@@ -284,14 +284,6 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			glFinish();
 			glMemoryBarrier(GL_ALL_BARRIER_BITS);
 		}
-		//{
-		//	PLSC->BindForUse(sha);
-		//	glUniform1i(sha->loc_shadowID, 200);
-
-		//	glDispatchCompute(GLuint(UPPER_BOUND(FBO->GetResolution().x, 16)), GLuint(UPPER_BOUND(FBO->GetResolution().y, 16)), 1);
-		//	glFinish();
-		//	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-		//}
 	}
 	///////////////////////////////////////////////////////////////////////////	
 
@@ -403,6 +395,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 }
 
 void Game::BarrelPhysicsTest() {
+#ifdef PHYSICS_ENGINE
 	glm::vec3 pos = player->transform->position;
 	GameObject *barrel = Manager::GetResource()->GetGameObject("oildrum");
 	for (int i=0; i<100; i++) {
@@ -410,6 +403,7 @@ void Game::BarrelPhysicsTest() {
 		box->transform->position = pos + glm::vec3(rand() % 10 - 5, rand() % 5 + 5, rand() % 10 - 5);
 		Manager::GetScene()->AddObject(box);
 	}
+#endif
 };
 
 void Game::OnEvent(EventType Event, Object *data) {

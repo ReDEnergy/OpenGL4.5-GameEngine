@@ -44,6 +44,11 @@ class Manager
 		DLLExport static TextureManager* GetTexture();
 		DLLExport static ConfigFile* GetConfig();
 
+#ifdef PHYSICS_ENGINE
+		DLLExport static HavokCore* GetHavok();
+		DLLExport static PhysicsManager* GetPhysics();
+#endif
+
 	public:
 		static AudioManager *Audio;
 		static ColorPicking *ColorPick;
@@ -57,6 +62,7 @@ class Manager
 		static ShaderManager *Shader;
 		static ConfigFile *Config;
 		static RenderingSystem *RenderSys;
+
 #ifdef PHYSICS_ENGINE
 		static HavokCore *Havok;
 		static PhysicsManager *Physics;
