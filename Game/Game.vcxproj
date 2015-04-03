@@ -270,8 +270,7 @@ xcopy /y /d "..\libs\x86\SFML\Release\sfml-system-2.dll" "$(OutDir)"</Command>
       <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>
     </PreBuildEvent>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>

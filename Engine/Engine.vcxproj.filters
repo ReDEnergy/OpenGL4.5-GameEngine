@@ -231,6 +231,9 @@
     <ClCompile Include="Source\Manager\HavokCore.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\SkinnedMesh.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\AABB.h">
@@ -240,9 +243,6 @@
       <Filter>Source Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ObjectInput.h">
-      <Filter>Source Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ParticleEffect.h">
       <Filter>Source Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Renderer.h">
@@ -427,6 +427,12 @@
     </ClInclude>
     <ClInclude Include="Source\Manager\PhysicsManager.h">
       <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\SkinnedMesh.h">
+      <Filter>Source Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\include\assimp_utils.h">
+      <Filter>Header Files\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

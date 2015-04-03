@@ -196,6 +196,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\Component\Renderer.cpp" />
+    <ClCompile Include="Source\Component\SkinnedMesh.cpp" />
     <ClCompile Include="Source\Component\Text.cpp" />
     <ClCompile Include="Source\Component\Transform.cpp" />
     <ClCompile Include="Source\Core\Camera\Camera.cpp" />
@@ -229,7 +230,10 @@
     <ClCompile Include="Source\Manager\DebugInfo.cpp" />
     <ClCompile Include="Source\Manager\EventSystem.cpp" />
     <ClCompile Include="Source\Manager\FontManager.cpp" />
-    <ClCompile Include="Source\Manager\HavokCore.cpp" />
+    <ClCompile Include="Source\Manager\HavokCore.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Source\Manager\Manager.cpp" />
     <ClCompile Include="Source\Manager\PhysicsManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -246,8 +250,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
-      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\Rendering\ShadowMapping.cpp" />
     <ClCompile Include="Source\Rendering\SSAO.cpp" />
@@ -260,7 +263,6 @@
     <ClInclude Include="Source\Component\AABB.h" />
     <ClInclude Include="Source\Component\Mesh.h" />
     <ClInclude Include="Source\Component\ObjectInput.h" />
-    <ClInclude Include="Source\Component\ParticleEffect.h" />
     <ClInclude Include="Source\Component\Physics.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
@@ -268,6 +270,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Source\Component\Renderer.h" />
+    <ClInclude Include="Source\Component\SkinnedMesh.h" />
     <ClInclude Include="Source\Component\Text.h" />
     <ClInclude Include="Source\Component\Transform.h" />
     <ClInclude Include="Source\Core\Camera\Camera.h" />
@@ -285,6 +288,7 @@
     <ClInclude Include="Source\GPU\Material.h" />
     <ClInclude Include="Source\GPU\Shader.h" />
     <ClInclude Include="Source\GPU\Texture.h" />
+    <ClInclude Include="Source\include\assimp_utils.h" />
     <ClInclude Include="Source\include\dll_export.h" />
     <ClInclude Include="Source\include\gl.h" />
     <ClInclude Include="Source\include\glfw_keys.h" />
