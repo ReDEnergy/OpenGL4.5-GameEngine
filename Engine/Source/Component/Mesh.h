@@ -7,6 +7,7 @@
 
 #include <include/gl.h>
 #include <include/glm.h>
+#include <include/dll_export.h>
 
 using namespace std;
 
@@ -34,38 +35,27 @@ struct MeshEntry {
 class Mesh {
 	public:
 		Mesh();
-		~Mesh();
+		virtual ~Mesh();
 
-		bool LoadMesh(const std::string& fileName);
 		bool InitFromData();
 		bool InitFromData(vector<glm::vec3>& positions, 
 						vector<glm::vec3>& normals,
 						vector<glm::vec2>& texCoords,
 						vector<unsigned short>& indices);
-		void Render();
-		void RenderInstanced(unsigned int instances);
-		void RenderDebug();
-		void UseMaterials(bool);
+
+		virtual bool LoadMesh(const std::string& fileName);
+		virtual void Render();
+		virtual void RenderInstanced(unsigned int instances);
+		virtual void RenderDebug();
+		virtual void UseMaterials(bool);
+
 		void SetGlPrimitive(unsigned int glPrimitive);
 
-	private:
+	protected:
 		void Clear();
-		bool InitFromScene(const aiScene* pScene, const std::string& File);
-		void InitMesh(const aiMesh* paiMesh,
-					vector<glm::vec3>& positions,
-					vector<glm::vec3>& normals,
-					vector<glm::vec2>& texCoords,
-					vector<unsigned short>& indices);
-
+		virtual bool InitFromScene(const aiScene* pScene, const std::string& File);
+		void InitMesh(const aiMesh* paiMesh);
 		bool InitMaterials(const aiScene* pScene, const std::string& File);
-
-	private:
-		bool useMaterial;
-		unsigned int glPrimitive;
-		GPUBuffers *buffers;
-
-		vector<MeshEntry*> meshEntries;
-		vector<Material*> materials;
 
 	public:
 		glm::vec4 debugColor;
@@ -73,12 +63,12 @@ class Mesh {
 		vector<glm::vec3> normals;
 		vector<glm::vec2> texCoords;
 		vector<unsigned short> indices;
-};
 
-inline void color_to_vec4(const aiColor4D &color, glm::vec4 &dest)
-{
-	dest.r = color.r;
-	dest.g = color.g;
-	dest.b = color.b;
-	dest.a = color.a;
-}
+	protected:
+		bool useMaterial;
+		unsigned int glPrimitive;
+		GPUBuffers *buffers;
+
+		vector<MeshEntry*> meshEntries;
+		vector<Material*> materials;
+};

@@ -2,6 +2,7 @@
 #include "Mesh.h"
 
 #include <include/util.h>
+#include <include/assimp_utils.h>
 
 #include <GPU/Shader.h>
 #include <GPU/Texture.h>
@@ -109,7 +110,7 @@ bool Mesh::InitFromScene(const aiScene* pScene, const string& File)
 	// Initialize the meshes in the scene one by one
 	for (unsigned int i = 0 ; i < meshEntries.size() ; i++) {
 		const aiMesh* paiMesh = pScene->mMeshes[i];
-		InitMesh(paiMesh, positions, normals, texCoords, indices);
+		InitMesh(paiMesh);
 	}
 
 	if (useMaterial && !InitMaterials(pScene, File))
@@ -119,11 +120,7 @@ bool Mesh::InitFromScene(const aiScene* pScene, const string& File)
 	return buffers->VAO != -1;
 }
 
-void Mesh::InitMesh(const aiMesh* paiMesh,
-					vector<glm::vec3>& Positions,
-					vector<glm::vec3>& Normals,
-					vector<glm::vec2>& TexCoords,
-					vector<unsigned short>& Indices)
+void Mesh::InitMesh(const aiMesh* paiMesh)
 {    
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 
@@ -133,19 +130,19 @@ void Mesh::InitMesh(const aiMesh* paiMesh,
 		const aiVector3D* pNormal   = &(paiMesh->mNormals[i]);
 		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
 
-		Positions.push_back(glm::vec3(pPos->x, pPos->y, pPos->z));
-		Normals.push_back(glm::vec3(pNormal->x, pNormal->y, pNormal->z));
-		TexCoords.push_back(glm::vec2(pTexCoord->x, pTexCoord->y));
+		positions.push_back(glm::vec3(pPos->x, pPos->y, pPos->z));
+		normals.push_back(glm::vec3(pNormal->x, pNormal->y, pNormal->z));
+		texCoords.push_back(glm::vec2(pTexCoord->x, pTexCoord->y));
 	}
 
-	// Populate the index buffer
+	// Init the index buffer
 	for (unsigned int i = 0; i < paiMesh->mNumFaces; i++) {
 		const aiFace& Face = paiMesh->mFaces[i];
-		Indices.push_back(Face.mIndices[0]);
-		Indices.push_back(Face.mIndices[1]);
-		Indices.push_back(Face.mIndices[2]);
+		indices.push_back(Face.mIndices[0]);
+		indices.push_back(Face.mIndices[1]);
+		indices.push_back(Face.mIndices[2]);
 		if (Face.mNumIndices == 4)
-			Indices.push_back(Face.mIndices[3]);
+			indices.push_back(Face.mIndices[3]);
 	}
 }
 
@@ -166,17 +163,17 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 
 			aiColor4D color;
 
-			if(aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_AMBIENT, &color) == AI_SUCCESS)
-				color_to_vec4(color, materials[i]->ambient);
+			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_AMBIENT, &color) == AI_SUCCESS)
+				assimp::CopyColor(color, materials[i]->ambient);
 
-			if(aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS)
-				color_to_vec4(color, materials[i]->diffuse);
+			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS)
+				assimp::CopyColor(color, materials[i]->diffuse);
 
-			if(aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_SPECULAR, &color) == AI_SUCCESS)
-				color_to_vec4(color, materials[i]->specular);
+			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_SPECULAR, &color) == AI_SUCCESS)
+				assimp::CopyColor(color, materials[i]->specular);
 
-			if(aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_EMISSIVE, &color) == AI_SUCCESS)
-				color_to_vec4(color, materials[i]->emissive);
+			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_EMISSIVE, &color) == AI_SUCCESS)
+				assimp::CopyColor(color, materials[i]->emissive);
 
 			unsigned int max;
 			aiGetMaterialFloatArray(pMaterial, AI_MATKEY_SHININESS, &materials[i]->shininess, &max);
