@@ -196,7 +196,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\Component\Renderer.cpp" />
-    <ClCompile Include="Source\Component\SkinnedMesh.cpp" />
+    <ClCompile Include="Source\Component\SkinnedMesh.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Source\Component\Text.cpp" />
     <ClCompile Include="Source\Component\Transform.cpp" />
     <ClCompile Include="Source\Core\Camera\Camera.cpp" />
@@ -270,7 +273,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Source\Component\Renderer.h" />
-    <ClInclude Include="Source\Component\SkinnedMesh.h" />
+    <ClInclude Include="Source\Component\SkinnedMesh.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Source\Component\Text.h" />
     <ClInclude Include="Source\Component\Transform.h" />
     <ClInclude Include="Source\Core\Camera\Camera.h" />

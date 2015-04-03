@@ -13,6 +13,7 @@
 
 #include <Core/GameObject.h>
 #include <Component/Mesh.h>
+#include <Component/SkinnedMesh.h>
 #include <Component/Transform.h>
 #include <Component/Renderer.h>
 
@@ -39,20 +40,22 @@ void ResourceManager::Load(const char* file) {
 
 	// Load Meshes
 	const char* meshName;
-	pugi::xml_node materialXML;
 	pugi::xml_node meshesXML = doc.child("meshes");
 
 	for (pugi::xml_node mesh: meshesXML.children()) {
+		bool skinned = mesh.attribute("skinned").as_bool();
+		bool quad = mesh.attribute("quad").as_bool();
+		bool noMaterial = !mesh.attribute("material").as_bool();
+
 		string fileLocation = mesh.child_value("path");
 		fileLocation += '\\';
 		fileLocation += mesh.child_value("file");
 		meshName = mesh.child_value("name");
-		materialXML = mesh.child("material");
-		auto quad = mesh.attribute("quad");
 
-		Mesh *M = new Mesh();
+		Mesh *M = skinned ? new SkinnedMesh() : new Mesh();
+
 		if (quad)			M->SetGlPrimitive(GL_QUADS);
-		if (materialXML) 	M->UseMaterials(false);
+		if (noMaterial) 	M->UseMaterials(false);
 		if (!M->LoadMesh(fileLocation)) {
 			SAFE_FREE(M);
 			continue;
