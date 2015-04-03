@@ -28,7 +28,7 @@ void main() {
 // Phong Light
 
 const vec3 ld = vec3 (0.5);	// Diffuse factor
-const vec3 ls = vec3 (0.9);	// Specular factor
+const vec3 ls = vec3 (0.3);	// Specular factor
 const float specular_exponent = 40.0;	// Specular exponent
 const vec3 light_dir = vec3 (0.0, -1.0, 0.0);
 const float cut_off = 0.75;
@@ -36,8 +36,6 @@ const float cut_off = 0.75;
 vec4 PhongLight(vec3 w_pos, vec3 w_N)
 {
 	vec3 L = normalize(light_position - w_pos);
-	vec3 V = normalize(eye_position - w_pos);
-	vec3 H = normalize(L + V);
 
 	float dist = distance(light_position, w_pos);
 
@@ -48,8 +46,11 @@ vec4 PhongLight(vec3 w_pos, vec3 w_N)
 	
 	float dot_specular = dot(w_N, L);
 	vec3 specular = vec3(0);
-	if (dot_specular > 0)
+	if (dot_specular > 0) {
+		vec3 V = normalize(eye_position - w_pos);
+		vec3 H = normalize(L + V);
 		specular = ls * pow(max(dot(w_N, H), 0), specular_exponent);
+	}
 
 	vec3 diffuse = ld * max(dot_specular, 0);
 
