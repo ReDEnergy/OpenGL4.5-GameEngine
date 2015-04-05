@@ -25,9 +25,6 @@
     <Filter Include="Source Files\Game\State">
       <UniqueIdentifier>{7e12767d-ec5f-4067-aa80-331aeb298889}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\HUD">
-      <UniqueIdentifier>{8d57eb3b-d474-4aa2-b1dd-7516f335018e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Game.cpp">
