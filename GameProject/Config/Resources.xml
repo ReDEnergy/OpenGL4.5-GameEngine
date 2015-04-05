@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Meshes -->
 <meshes>
-	<mesh>
+	<mesh skinned="true">
+		<name>guard</name>
+		<path>Resources/Models</path>
+		<file>boblampclean.md5mesh</file>
+	</mesh>
+	<mesh skinned="true">
+		<name>astroBoy</name>
+		<path>Resources/Models</path>
+		<file>astroBoy.dae</file>
+	</mesh>
+	<mesh material="no">
 		<name>screen-quad</name>
 		<path>Resources/Models</path>
 		<file>screen_quad.obj</file>
-		<material>no</material>
 	</mesh>
-	<mesh quad="">
+	<mesh quad="true">
 		<name>box</name>
 		<path>Resources/Models/Primitives</path>
 		<file>box.obj</file>
 	</mesh>
-	<mesh>
+	<mesh material="no">
 		<name>sphere</name>
 		<path>Resources/Models/Primitives</path>
 		<file>sphere.obj</file>
-		<material>no</material>
 	</mesh>
 	<mesh>
 		<name>player</name>
