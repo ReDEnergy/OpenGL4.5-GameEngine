@@ -234,8 +234,10 @@
     <ClCompile Include="Source\Manager\EventSystem.cpp" />
     <ClCompile Include="Source\Manager\FontManager.cpp" />
     <ClCompile Include="Source\Manager\HavokCore.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\Manager\Manager.cpp" />
     <ClCompile Include="Source\Manager\PhysicsManager.cpp">
