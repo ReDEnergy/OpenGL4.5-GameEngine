@@ -3,23 +3,23 @@
 
 namespace UtilsGPU {
 
-	DLLExport GPUBuffers* UploadData(const vector<glm::vec3> &positions,
+	GPUBuffers* UploadData(const vector<glm::vec3> &positions,
 					const vector<glm::vec3> &normals, 
 					const vector<unsigned short>& indices)
 	{
-		GPUBuffers *buffers = new GPUBuffers();
+		GPUBuffers *buffers = new GPUBuffers(3);
 		glBindVertexArray(buffers->VAO);
 
 		// Generate and populate the buffers with vertex attributes and the indices
 		glBindBuffer(GL_ARRAY_BUFFER, buffers->VBO[0]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(positions[0]) * positions.size(), &positions[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::POS);
+		glVertexAttribPointer(VERTEX_ATTRIBUTE_LOC::POS, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, buffers->VBO[1]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(normals[0]) * normals.size(), &normals[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::TEX_COORD);
+		glVertexAttribPointer(VERTEX_ATTRIBUTE_LOC::TEX_COORD, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers->VBO[2]);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
@@ -32,24 +32,24 @@ namespace UtilsGPU {
 		return buffers;
 	}
 
-	DLLExport GPUBuffers* UploadData(const vector<glm::vec3> &positions,
+	GPUBuffers* UploadData(const vector<glm::vec3> &positions,
 					const vector<glm::vec2> &text_coords, 
 					const vector<unsigned short>& indices)
 	{
 		// Create the VAO
-		GPUBuffers *buffers = new GPUBuffers();
+		GPUBuffers *buffers = new GPUBuffers(3);
 		glBindVertexArray(buffers->VAO);
 
 		// Generate and populate the buffers with vertex attributes and the indices
 		glBindBuffer(GL_ARRAY_BUFFER, buffers->VBO[0]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(positions[0]) * positions.size(), &positions[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::POS);
+		glVertexAttribPointer(VERTEX_ATTRIBUTE_LOC::POS, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, buffers->VBO[1]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(text_coords[0]) * text_coords.size(), &text_coords[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::TEX_COORD);
+		glVertexAttribPointer(VERTEX_ATTRIBUTE_LOC::TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers->VBO[2]);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
@@ -62,30 +62,30 @@ namespace UtilsGPU {
 		return buffers;
 	}
 
-	DLLExport GPUBuffers* UploadData(const vector<glm::vec3> &positions,
+	GPUBuffers* UploadData(const vector<glm::vec3> &positions,
 					const vector<glm::vec3> &normals,
 					const vector<glm::vec2> &text_coords,
 					const vector<unsigned short> &indices)
 	{
 		// Create the VAO
-		GPUBuffers *buffers = new GPUBuffers();
+		GPUBuffers *buffers = new GPUBuffers(4);
 		glBindVertexArray(buffers->VAO);
 
 		// Generate and populate the buffers with vertex attributes and the indices
 		glBindBuffer(GL_ARRAY_BUFFER, buffers->VBO[0]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(positions[0]) * positions.size(), &positions[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);    
+		glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::POS);
+		glVertexAttribPointer(VERTEX_ATTRIBUTE_LOC::POS, 3, GL_FLOAT, GL_FALSE, 0, 0);    
 
 		glBindBuffer(GL_ARRAY_BUFFER, buffers->VBO[1]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(text_coords[0]) * text_coords.size(), &text_coords[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::TEX_COORD);
+		glVertexAttribPointer(VERTEX_ATTRIBUTE_LOC::TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, buffers->VBO[2]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(normals[0]) * normals.size(), &normals[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::NORMAL);
+		glVertexAttribPointer(VERTEX_ATTRIBUTE_LOC::NORMAL, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers->VBO[3]);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
