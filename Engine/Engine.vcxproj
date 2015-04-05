@@ -229,7 +229,9 @@
     <ClCompile Include="Source\Manager\DebugInfo.cpp" />
     <ClCompile Include="Source\Manager\EventSystem.cpp" />
     <ClCompile Include="Source\Manager\FontManager.cpp" />
-    <ClCompile Include="Source\Manager\HavokCore.cpp" />
+    <ClCompile Include="Source\Manager\HavokCore.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Source\Manager\Manager.cpp" />
     <ClCompile Include="Source\Manager\PhysicsManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -251,6 +253,7 @@
     </ClCompile>
     <ClCompile Include="Source\Rendering\ShadowMapping.cpp" />
     <ClCompile Include="Source\Rendering\SSAO.cpp" />
+    <ClCompile Include="Source\UI\GameMenu.cpp" />
     <ClCompile Include="Source\UI\MenuSystem.cpp" />
     <ClCompile Include="Source\UI\Overlay.cpp" />
     <ClCompile Include="Source\Utils\3D.cpp" />
@@ -343,6 +346,7 @@
     <ClInclude Include="Source\Rendering\ShadowMapping.h" />
     <ClInclude Include="Source\Rendering\SSAO.h" />
     <ClInclude Include="Source\templates\singleton.h" />
+    <ClInclude Include="Source\UI\GameMenu.h" />
     <ClInclude Include="Source\UI\MenuSystem.h" />
     <ClInclude Include="Source\UI\Overlay.h" />
     <ClInclude Include="Source\Utils\3D.h" />

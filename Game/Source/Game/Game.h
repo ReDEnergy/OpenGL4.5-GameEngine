@@ -11,7 +11,6 @@ class CameraDebugInput;
 class DirectionalLight;
 class SpotLight;
 class FrameBuffer;
-class GameMenu;
 class GameObject;
 class Overlay;
 class Player;
@@ -45,8 +44,6 @@ class Game : public World,
 
 		FrameBuffer			*FBO;
 		FrameBuffer			*FBO_Light;
-
-		GameMenu			*Menu;
 
 		GameObject			*ScreenQuad;
 		GameObject			*DebugPanel;
