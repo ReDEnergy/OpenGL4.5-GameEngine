@@ -25,7 +25,6 @@
 
 #include <Game/Actors/Player.h>
 //#include <Game/Actors/TransitionGate.h>
-#include <Game/HUD/GameMenu.h>
 #include <Game/State/GameState.h>
 #include <Game/Input/GameInput.h>
 
@@ -47,6 +46,9 @@
 #include <Manager/SceneManager.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/RenderingSystem.h>
+#include <UI/MenuSystem.h>
+
+#include "State/GameState.h"
 
 #ifdef PHYSICS_ENGINE
 #include <Manager/HavokCore.h>
@@ -78,6 +80,7 @@ void Game::Init() {
 
 	SubscribeToEvent(EventType::DEBUG_BARREL_SPAWN);
 	SubscribeToEvent(EventType::SWITCH_CAMERA);
+	SubscribeToEvent(EventType::CLOSE_MENU);
 
 	// Game resolution
 	glm::ivec2 resolution = Manager::GetConfig()->resolution;
@@ -140,8 +143,6 @@ void Game::Init() {
 	ObjectInput *DI = new DebugInput();
 	ObjectInput *GI = new GameInput(this);
 
-	// Game Menu
-	Menu = new GameMenu();
 
 #ifdef PHYSICS_ENGINE
 	Manager::GetHavok()->StepSimulation(0.016f);
@@ -383,8 +384,10 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		glDepthMask(GL_TRUE);
 	}
 
+
+
 	if (RuntimeState::STATE == RunState::PAUSE_MENU) {
-		Menu->Render();
+		Manager::GetMenu()->RenderMenu();
 	}
 	else {
 		overlay->Update(deltaTime);
@@ -432,6 +435,8 @@ void Game::OnEvent(EventType Event, Object *data) {
 				InputRules::SetRule(InputRule::R_GAMEPLAY);
 			}
 			cameraInput->camera = activeCamera;
+		case EventType::CLOSE_MENU:
+			RuntimeState::STATE = RunState::GAMEPLAY;
 		default:
 			break;
 	}

@@ -231,6 +231,9 @@
     <ClCompile Include="Source\Manager\HavokCore.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\GameMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\AABB.h">
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="Source\Manager\PhysicsManager.h">
       <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\GameMenu.h">
+      <Filter>Source Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
