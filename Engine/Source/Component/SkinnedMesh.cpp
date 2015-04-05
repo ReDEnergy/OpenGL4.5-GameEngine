@@ -14,6 +14,7 @@
 #include <Utils/GPU.h>
 
 SkinnedMesh::SkinnedMesh() {
+	nrBones = 0;
 }
 
 
