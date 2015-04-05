@@ -198,7 +198,7 @@
     <ClCompile Include="Source\Component\Renderer.cpp" />
     <ClCompile Include="Source\Component\SkinnedMesh.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\Component\Text.cpp" />
     <ClCompile Include="Source\Component\Transform.cpp" />
@@ -275,7 +275,7 @@
     <ClInclude Include="Source\Component\Renderer.h" />
     <ClInclude Include="Source\Component\SkinnedMesh.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Source\Component\Text.h" />
     <ClInclude Include="Source\Component\Transform.h" />
@@ -308,7 +308,7 @@
     </ClInclude>
     <ClInclude Include="Source\include\math.h" />
     <ClInclude Include="Source\include\pugixml.h" />
-    <ClInclude Include="Source\include\util.h" />
+    <ClInclude Include="Source\include\utils.h" />
     <ClInclude Include="Source\InputComponent\CameraDebugInput.h" />
     <ClInclude Include="Source\InputComponent\CameraInput.h" />
     <ClInclude Include="Source\InputComponent\DebugInput.h" />

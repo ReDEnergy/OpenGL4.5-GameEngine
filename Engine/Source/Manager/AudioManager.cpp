@@ -4,7 +4,7 @@
 #include <string>
 
 #include <include/gl.h>
-#include <include/util.h>
+#include <include/utils.h>
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
 

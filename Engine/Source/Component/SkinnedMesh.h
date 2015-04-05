@@ -7,7 +7,7 @@
 
 #include <include/gl.h>
 #include <include/glm.h>
-#include <include/util.h>
+#include <include/utils.h>
 
 #include <Component/Mesh.h>
 

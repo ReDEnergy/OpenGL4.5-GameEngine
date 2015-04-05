@@ -3,7 +3,7 @@
 
 #include <include/glm.h>
 #include <include/glm_utils.h>
-#include <include/util.h>
+#include <include/utils.h>
 #include <sstream>
 
 #include <Manager/Manager.h>
@@ -45,7 +45,7 @@ void ResourceManager::Load(const char* file) {
 	for (pugi::xml_node mesh: meshesXML.children()) {
 		bool skinned = mesh.attribute("skinned").as_bool();
 		bool quad = mesh.attribute("quad").as_bool();
-		bool noMaterial = !mesh.attribute("material").as_bool();
+		bool noMaterial = mesh.attribute("material") ? true : false;
 
 		string fileLocation = mesh.child_value("path");
 		fileLocation += '\\';
@@ -54,8 +54,12 @@ void ResourceManager::Load(const char* file) {
 
 		Mesh *M = skinned ? new SkinnedMesh() : new Mesh();
 
-		if (quad)			M->SetGlPrimitive(GL_QUADS);
-		if (noMaterial) 	M->UseMaterials(false);
+		if (quad) {
+			M->SetGlPrimitive(GL_QUADS);
+		}
+		if (noMaterial) {
+			M->UseMaterials(false);
+		}
 		if (!M->LoadMesh(fileLocation)) {
 			SAFE_FREE(M);
 			continue;

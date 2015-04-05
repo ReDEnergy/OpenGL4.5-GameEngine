@@ -1,7 +1,7 @@
 //#include <pch.h>
 #include "Mesh.h"
 
-#include <include/util.h>
+#include <include/utils.h>
 #include <include/assimp_utils.h>
 
 #include <GPU/Shader.h>
@@ -149,6 +149,7 @@ void Mesh::InitMesh(const aiMesh* paiMesh)
 bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 {
 	bool ret = true;
+	aiColor4D color;
 
 	for (unsigned int i = 0 ; i < pScene->mNumMaterials ; i++) {
 
@@ -160,8 +161,6 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
 				materials[i]->texture = Manager::Texture->LoadTexture(Path.data);
 			}
-
-			aiColor4D color;
 
 			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_AMBIENT, &color) == AI_SUCCESS)
 				assimp::CopyColor(color, materials[i]->ambient);
@@ -211,10 +210,10 @@ void Mesh::Render()
 		}
 
 		glDrawElementsBaseVertex(glPrimitive,
-			meshEntries[i]->nrIndices,
-			GL_UNSIGNED_SHORT,
-			(void*)(sizeof(unsigned short) * meshEntries[i]->baseIndex),
-			meshEntries[i]->baseVertex);
+								meshEntries[i]->nrIndices,
+								GL_UNSIGNED_SHORT,
+								(void*)(sizeof(unsigned short) * meshEntries[i]->baseIndex),
+								meshEntries[i]->baseVertex);
 
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}

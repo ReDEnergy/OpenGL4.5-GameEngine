@@ -4,7 +4,7 @@
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
 #include <GPU/Texture.h>
-#include <include/util.h>
+#include <include/utils.h>
 
 static const string T_PATH("Resources\\Models\\maps\\");
 

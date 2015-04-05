@@ -4,7 +4,7 @@
 #include <GPU/Shader.h>
 #include <GPU/Texture.h>
 #include <Core/Engine.h>
-#include <include/util.h>
+#include <include/utils.h>
 
 FrameBuffer::FrameBuffer() {
 	FBO = 0; 

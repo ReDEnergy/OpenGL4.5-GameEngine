@@ -4,7 +4,7 @@
 #include <include/glm.h>
 #include <include/glm_utils.h>
 #include <include/math.h>
-#include <include/util.h>
+#include <include/utils.h>
 
 #include <InputComponent/CameraInput.h>
 #include <InputComponent/CameraDebugInput.h>

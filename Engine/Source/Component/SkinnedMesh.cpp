@@ -1,7 +1,7 @@
 //#include <pch.h>
 #include "SkinnedMesh.h"
 
-#include <include/util.h>
+#include <include/utils.h>
 #include <include/assimp_utils.h>
 
 #include <GPU/Shader.h>
@@ -41,7 +41,7 @@ bool SkinnedMesh::LoadMesh(const std::string& fileName)
 
 void SkinnedMesh::Render()
 {
-
+	Mesh::Render();
 }
 
 bool SkinnedMesh::InitFromScene(const aiScene* pScene, const std::string& File)
@@ -81,7 +81,7 @@ bool SkinnedMesh::InitFromScene(const aiScene* pScene, const std::string& File)
 	if (useMaterial && !InitMaterials(pScene, File))
 		return false;
 
-	buffers = UtilsGPU::UploadData(positions, normals, texCoords, bones, indices);
+	buffers = UtilsGPU::UploadData<VertexBoneData>(positions, normals, texCoords, bones, indices);
 	return buffers->VAO != -1;
 }
 

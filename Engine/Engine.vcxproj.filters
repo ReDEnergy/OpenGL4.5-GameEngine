@@ -317,9 +317,6 @@
     <ClInclude Include="Source\include\pugixml.h">
       <Filter>Header Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="Source\include\util.h">
-      <Filter>Header Files\include</Filter>
-    </ClInclude>
     <ClInclude Include="Source\include\dll_export.h">
       <Filter>Header Files\include</Filter>
     </ClInclude>
@@ -432,6 +429,9 @@
       <Filter>Source Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\include\assimp_utils.h">
+      <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\include\utils.h">
       <Filter>Header Files\include</Filter>
     </ClInclude>
   </ItemGroup>

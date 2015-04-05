@@ -7,7 +7,7 @@
 
 #include <include/gl.h>
 #include <include/pugixml.h>
-#include <include/util.h>
+#include <include/utils.h>
 
 #include <GPU/Shader.h>
 #include <Manager/DebugInfo.h>
