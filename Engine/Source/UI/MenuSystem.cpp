@@ -27,6 +27,12 @@ void MenuSystem::Load(const char* file) {
 		MenuPage *page = new MenuPage(pageXML);
 		pages[page->UID] = page;
 	}
+
+	Menu = new GameMenu();
+}
+
+void MenuSystem::RenderMenu() {
+	Menu->Render();
 }
 
 MenuPage::MenuPage(pugi::xml_node &pageXML)

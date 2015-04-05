@@ -3,6 +3,7 @@
 namespace _EventType {
 	enum E {
 		// Gameplay
+		CLOSE_MENU,
 		RESUME_GAMEPLAY,
 		PLAY_SOUND_FX,
 		WARNING_COLLECT_EVERYTHING,

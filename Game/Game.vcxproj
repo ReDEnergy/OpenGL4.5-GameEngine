@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="Source\Game\Actors\Player.cpp" />
     <ClCompile Include="Source\Game\Game.cpp" />
-    <ClCompile Include="Source\Game\HUD\GameMenu.cpp" />
     <ClCompile Include="Source\Game\Input\GameInput.cpp" />
     <ClCompile Include="Source\Game\Input\PlayerInput.cpp" />
     <ClCompile Include="Source\Game\State\GameState.cpp" />
@@ -30,7 +29,6 @@
   <ItemGroup>
     <ClInclude Include="Source\Game\Actors\Player.h" />
     <ClInclude Include="Source\Game\Game.h" />
-    <ClInclude Include="Source\Game\HUD\GameMenu.h" />
     <ClInclude Include="Source\Game\Input\GameInput.h" />
     <ClInclude Include="Source\Game\Input\PlayerInput.h" />
     <ClInclude Include="Source\Game\State\GameState.h" />

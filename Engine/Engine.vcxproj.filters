@@ -234,6 +234,9 @@
     <ClCompile Include="Source\Component\SkinnedMesh.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\GameMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\AABB.h">
@@ -424,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="Source\Manager\PhysicsManager.h">
       <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\GameMenu.h">
+      <Filter>Source Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\SkinnedMesh.h">
       <Filter>Source Files\Components</Filter>

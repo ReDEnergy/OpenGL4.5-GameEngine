@@ -3,7 +3,11 @@
 #include <string>
 #include <vector>
 
+#include "GameMenu.h"
+
 #include <include/pugixml.h>
+
+#include <include/dll_export.h>
 
 using namespace std;
 
@@ -71,17 +75,19 @@ class MenuPage {
 		vector<PageEntry*> entries;
 };
 
-class MenuSystem 
+class DLLExport MenuSystem 
 {
 	public:
 		MenuSystem();
 		~MenuSystem();
 
 		void Load(const char* file);
+		void RenderMenu();
 
 	private:
 		void ConstructPage(pugi::xml_node &pageXML);
 
 	public:
 		unordered_map<string, MenuPage*> pages;
+		GameMenu *Menu;
 };

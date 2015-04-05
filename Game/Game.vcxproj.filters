@@ -45,9 +45,6 @@
     <ClCompile Include="Source\Game\State\GameState.cpp">
       <Filter>Source Files\Game\State</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\HUD\GameMenu.cpp">
-      <Filter>Source Files\Game\HUD</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Input\GameInput.cpp">
       <Filter>Source Files\Game\Input</Filter>
     </ClCompile>
@@ -64,9 +61,6 @@
     </ClInclude>
     <ClInclude Include="Source\Game\State\GameState.h">
       <Filter>Source Files\Game\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\HUD\GameMenu.h">
-      <Filter>Source Files\Game\HUD</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Input\GameInput.h">
       <Filter>Source Files\Game\Input</Filter>
