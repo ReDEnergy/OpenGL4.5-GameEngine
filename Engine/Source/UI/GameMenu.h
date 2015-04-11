@@ -28,6 +28,7 @@ class GameMenu
 
 		// Custom Events
 		void OnEvent(const char *eventID, Object *data);
+		void OnEvent(EventType Event, Object *data);
 
 		void Render() const;
 

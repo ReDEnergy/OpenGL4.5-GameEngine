@@ -44,6 +44,7 @@ GameMenu::GameMenu()
 	SubscribeToEvent("resume");
 	SubscribeToEvent("exit");
 	SubscribeToEvent("toggle-test");
+	SubscribeToEvent(EventType::OPEN_GAME_MENU);
 }
 
 void GameMenu::SetPageLayout(MenuPage *page) {
@@ -62,6 +63,10 @@ GameMenu::~GameMenu() {
 }
 
 void GameMenu::Render() const {
+
+	if (!InputRules::IsActiveRule(InputRule::R_IN_GAME_MENU))
+		return;
+
 	glm::vec3 color = glm::vec3(0.967f, 0.333f, 0.486f);
 	glm::vec3 selectColor = glm::vec3(0.967f, 0.873f, 0.486f);
 
@@ -83,10 +88,11 @@ void GameMenu::Render() const {
 }
 
 void GameMenu::Open() {
+	InputRules::PushRule(InputRule::R_IN_GAME_MENU);
 }
 
 void GameMenu::Close() {
-	InputRules::SetRule(InputRule::R_GAMEPLAY);
+	InputRules::PopRule();
 	Manager::GetEvent()->EmitSync(EventType::CLOSE_MENU, nullptr);
 }
 
@@ -109,6 +115,17 @@ void GameMenu::OnEvent(const char *eventID, Object *data) {
 	if (strcmp(eventID, "exit") == 0) {
 		Engine::Exit();
 		return;
+	}
+}
+
+
+void GameMenu::OnEvent(EventType Event, Object *data)
+{
+	switch (Event)
+	{
+		case EventType::OPEN_GAME_MENU:
+			Open();
+			return;
 	}
 }
 
