@@ -83,6 +83,27 @@ void ShaderManager::Reload() {
 		shader.second->Reload();
 }
 
+bool ShaderManager::PushState(const Shader *shader)
+{
+	if (programs.empty() || programs.top() != shader) {
+		shader->Use();
+		programs.push(shader);
+		return true;
+	}
+
+	return false;
+}
+
+const Shader* ShaderManager::PopState()
+{
+	if (programs.empty())
+		return NULL;
+
+	const Shader *sh = programs.top();
+	programs.pop();
+	return sh;
+}
+
 void ShaderManager::ReloadFromFile() {
 	for (auto shader: shaders)
 		shader.second->Reload();

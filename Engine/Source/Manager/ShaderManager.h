@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <stack>
 
 #include <include/dll_export.h>
 #include <include/pugixml.h>
@@ -18,9 +19,11 @@ class DLLExport ShaderManager
 		~ShaderManager();
 
 	public:
-		Shader* GetShader(const char* name);
 		void Load(const char *file);
 		void Reload();
+		bool PushState(const Shader *shader);
+		const Shader* PopState();
+		Shader* GetShader(const char* name);
 
 	private:
 		Shader* LoadShader(vector<string> &shaderFiles);
@@ -30,5 +33,6 @@ class DLLExport ShaderManager
 
 	private:
 		unordered_map<string, Shader*> shaders;
+		stack <const Shader*> programs;
 
 };
