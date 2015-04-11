@@ -22,6 +22,7 @@ class DLLExport GameObject: virtual public Object
 		GameObject(const GameObject &obj);
 		virtual ~GameObject();
 
+		void Init();
 		bool ColidesWith(GameObject *object);
 		float DistTo(GameObject *object);
 
@@ -40,17 +41,20 @@ class DLLExport GameObject: virtual public Object
 		AABB *aabb;
 		Mesh *mesh;
 		Shader *shader;
-		#ifdef PHYSICS_ENGINE
-			Physics *physics;
-		#endif
 		Renderer *renderer;
 		Transform *transform;
 		ObjectInput *input;
+
 		glm::vec3 colorID;
+
+#ifdef PHYSICS_ENGINE
+		Physics *physics;
+#endif
 
 	private:
 		char *refID;
 		bool debugView;
+
 };
 
 // TODO idea

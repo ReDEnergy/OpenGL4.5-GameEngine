@@ -19,31 +19,23 @@
 
 GameObject::GameObject(const char *name)
 {
+	Init();
 	if (name) {
 		refID = new char[strlen(name)];
 		refID = strcpy(refID, name);
 	}
-	aabb = nullptr;
-	shader = nullptr;
-	#ifdef PHYSICS_ENGINE
-		physics = nullptr;
-	#endif
 	renderer = new Renderer();
 	transform = new Transform();
-	colorID = Manager::ColorPick->GetColorUID();
 }
 
 GameObject::GameObject(const GameObject &obj) {
-	refID	= obj.refID;
+	Init();
+	refID = obj.refID;
 	mesh	= obj.mesh;
 	shader	= obj.shader;
 	input	= obj.input;
 	renderer = obj.renderer;
-	#ifdef PHYSICS_ENGINE
-		physics = nullptr;
-	#endif
 	transform = new Transform(*obj.transform);
-
 	SetupAABB();
 
 #ifdef PHYSICS_ENGINE
@@ -52,11 +44,27 @@ GameObject::GameObject(const GameObject &obj) {
 		physics->body = Manager::Physics->GetCopyOf(obj.physics->body);
 	}
 #endif
-	colorID = Manager::ColorPick->GetColorUID();
 }
 
 GameObject::~GameObject() {
 	Manager::Debug->Remove(this);
+}
+
+void GameObject::Init()
+{
+	aabb = nullptr;
+	mesh = nullptr;
+	shader = nullptr;
+	renderer = nullptr;
+	transform = nullptr;
+	input = nullptr;
+
+#ifdef PHYSICS_ENGINE
+	physics = nullptr;
+#endif
+
+	colorID = Manager::ColorPick->GetColorUID();
+	SetDebugView(true);
 }
 
 void GameObject::SetupAABB() {
@@ -83,13 +91,13 @@ bool GameObject::ColidesWith(GameObject *object) {
 void GameObject::Render() const {
 	if (!mesh || !shader) return;
 	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->model));
-	mesh->Render();
+	mesh->Render(shader);
 }
 
 void GameObject::Render(const Shader *shader) const {
 	if (!mesh) return;
 	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->model));
-	mesh->Render();
+	mesh->Render(shader);
 }
 
 void GameObject::RenderInstanced(const Shader *shader, unsigned int instances) const
