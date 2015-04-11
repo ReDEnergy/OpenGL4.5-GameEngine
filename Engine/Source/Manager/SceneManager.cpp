@@ -51,8 +51,11 @@ void SceneManager::LoadScene(const char *fileName) {
 		transformInfo	= obj.child("transform");
 
 		GameObject *GO = Manager::Resource->GetGameObject(refID);
+		if (GO == nullptr) {
+			cout << "Error: Resource game-object not found => '" << refID << "'" << endl;
+			continue;
+		}
 		Manager::Resource->SetTransform(transformInfo, *GO->transform);
-		GO->SetupAABB();
 		AddObject(GO);
 	}
 
