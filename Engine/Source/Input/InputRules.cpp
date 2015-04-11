@@ -8,7 +8,8 @@
 #define NR_MAX_RULES 10
 
 InputRule InputRules::ACTIVE_RULE = InputRule::R_GAMEPLAY;
-vector <int> InputRules::rulesConfig (NR_MAX_RULES, 0);
+vector <int> InputRules::rulesConfig(NR_MAX_RULES, 0);
+vector <InputRule> InputRules::rules;
 
 void InputRules::Init() {
 
@@ -35,11 +36,24 @@ void InputRules::Init() {
 	ACTIVE_RULE = InputRule::R_GAMEPLAY;
 }
 
-void InputRules::SetRule(InputRule RULE) {
+void InputRules::PushRule(InputRule RULE)
+{
 	ACTIVE_RULE = RULE;
+	rules.push_back(RULE);
 	InputSystem::RuleUpdate();
 }
 
-bool InputRules::IsActiveRule(InputGroup GROUP) {
-	return (rulesConfig[ACTIVE_RULE] & 1<< GROUP) != 0;
+void InputRules::PopRule() {
+	if (rules.size())
+		rules.pop_back();
+	ACTIVE_RULE = rules.back();
+	InputSystem::RuleUpdate();
+}
+
+bool InputRules::IsActiveRule(InputRule Rule) {
+	return (ACTIVE_RULE == Rule);
+}
+
+bool InputRules::IsActiveGroup(InputGroup GROUP) {
+	return (rulesConfig[ACTIVE_RULE] & 1 << GROUP) != 0;
 }

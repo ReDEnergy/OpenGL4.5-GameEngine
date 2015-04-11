@@ -12,5 +12,5 @@ ObjectInput::~ObjectInput() {
 }
 
 bool ObjectInput::IsActive() {
-	return InputRules::IsActiveRule(this->GROUP);
+	return InputRules::IsActiveGroup(this->GROUP);
 }

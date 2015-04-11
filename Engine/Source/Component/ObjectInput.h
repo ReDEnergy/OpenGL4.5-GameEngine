@@ -12,7 +12,7 @@ class DLLExport ObjectInput : virtual public Object {
 		virtual void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {};
 		virtual bool IsActive();
 
-	private:
+	protected:
 		InputGroup GROUP;
 };
 

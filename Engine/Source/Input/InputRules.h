@@ -33,9 +33,12 @@ class DLLExport InputRules
 	private:
 		static InputRule ACTIVE_RULE;
 		static vector<int> rulesConfig;
+		static vector<InputRule> rules;
 
 	public:
 		static void Init();
-		static void SetRule(InputRule RULE);
-		static bool IsActiveRule(InputGroup GROUP);
+		static void PushRule(InputRule RULE);
+		static void PopRule();
+		static bool IsActiveRule(InputRule RULE);
+		static bool IsActiveGroup(InputGroup GROUP);
 };
