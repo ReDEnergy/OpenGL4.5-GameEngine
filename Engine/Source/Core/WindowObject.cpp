@@ -19,10 +19,6 @@ void WindowObject::Init(char* name, glm::ivec2 resolution, glm::ivec2 position, 
 	center = resolution / 2;
 }
 
-glm::ivec2 WindowObject::GetCenter() {
-	return center;
-}
-
 void WindowObject::FullScreen() {
 	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode *videoDisplay = glfwGetVideoMode(monitor);
@@ -44,9 +40,8 @@ void WindowObject::SetWindowCallbacks() {
 	glfwSetWindowSizeCallback(window, WindowManager::OnResize);
 	glfwSetKeyCallback(window, InputSystem::KeyCallback);
 	glfwSetCursorPosCallback(window, InputSystem::CursorMove);
-
-	/* Force Vertical Sync */
-//	wglSwapIntervalEXT(1);
+	HidePointer(true);
+	ClipPointer(true);
 }
 
 void WindowObject::SetSize(int width, int height) {
@@ -54,15 +49,15 @@ void WindowObject::SetSize(int width, int height) {
 	center = resolution / 2;
 	aspectRatio = float(width) / height;
 	glViewport(0, 0, width, height);
-//	ClipPointer(true);
 }
 
 // Clip user cursor inside the Window
 // ClipCursor function use from Window.h
 void WindowObject::ClipPointer(bool state) {
 	int clippingEdge = 5;
+	cursorClip = state;
 	if (state == false) {
-		// ClipCursor(0);
+		ClipCursor(0);
 		return;
 	}
 
@@ -73,5 +68,23 @@ void WindowObject::ClipPointer(bool state) {
 	WindowRECT.bottom = WindowRECT.top + resolution.y - 2 * clippingEdge;
 	WindowRECT.right = WindowRECT.left + resolution.x - 2 * clippingEdge;
 
-	// ClipCursor(&WindowRECT);
+	ClipCursor(&WindowRECT);
+}
+
+void WindowObject::HidePointer(bool state)
+{
+	hiddenPointer = state;
+	glfwSetInputMode(window, GLFW_CURSOR, hiddenPointer ? GLFW_CURSOR_HIDDEN : GLFW_CURSOR_NORMAL);
+}
+
+void WindowObject::SetPointerPosition(glm::ivec2 position)
+{
+	if (cursorClip) {
+		pointerPos = center;
+		glfwSetCursorPos(window, center.x, center.y);
+	}
+	else {
+		pointerPos = position;
+		glfwSetCursorPos(window, position.x, position.y);
+	}
 }

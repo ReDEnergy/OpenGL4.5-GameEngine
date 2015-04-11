@@ -31,11 +31,11 @@ void InputSystem::ResetKeys() {
 
 void InputSystem::CursorMove(GLFWwindow *W, double posX, double posY) {
 	WindowObject *Wobj = WindowManager::GetWindowObject(W);
-	glm::ivec2 center = Wobj->GetCenter();
-	int deltaX = (int)(posX - center.x);
-	int deltaY = (int)(posY - center.y);
-	glfwSetCursorPos(Wobj->window, (int)center.x, (int)center.y);
-	NotifyObservers((int)posX, (int)posY, deltaX, deltaY);
+
+	glm::ivec2 mousePos = glm::ivec2(posX, posY);
+	glm::ivec2 delta = mousePos - Wobj->pointerPos;
+	NotifyObservers(mousePos.x, mousePos.y, delta.x, delta.y);
+	Wobj->SetPointerPosition(mousePos);
 }
 
 void InputSystem::Subscribe(ObjectInput *IC) {

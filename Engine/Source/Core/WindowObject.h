@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 
+#include <include/dll_export.h>
 #include <include/gl.h>
 #include <include/glm.h>
 
@@ -8,7 +9,7 @@
  * Class WindowObject
  */
 
-class WindowObject
+class DLLExport WindowObject
 {
 	friend class WindowManager;
 
@@ -19,8 +20,9 @@ class WindowObject
 
 		void FullScreen();
 		void WindowMode();
-		glm::ivec2 GetCenter();
 		void ClipPointer(bool state);
+		void HidePointer(bool state);
+		void SetPointerPosition(glm::ivec2 position);
 		void SetSize(int width, int height);
 		void Init(char* name, glm::ivec2 resolution, glm::ivec2 position, bool reshapable);
 
@@ -28,41 +30,17 @@ class WindowObject
 		void SetWindowCallbacks();
 
 	public:
-		glm::ivec2 resolution;
 		float aspectRatio;
+		glm::ivec2 resolution;
+		glm::ivec2 pointerPos;
 		GLFWwindow* window;
 
 	private:
 		char* name;
 		glm::ivec2 position;
 		glm::ivec2 center;
-		int positionX;
-		int positionY;
 		bool reshapable;
+		bool hiddenPointer;
+		bool cursorClip;
 		RECT WindowRECT;
 };
-
-//case GLFW_KEY_F6:
-//{
-//	clipCursor = !clipCursor;
-//	ClipWindowCursor(clipCursor);
-//	cout << "CLIP CURSOR: " << clipCursor << endl;
-//	break;
-//}
-
-//case GLFW_KEY_F7:
-//{
-//	hideCursor = !hideCursor;
-//	hideCursor ? glfwSetInputMode(W, GLFW_CURSOR, GLFW_CURSOR_HIDDEN) : glfwSetInputMode(W, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-//	cout << "CURSOR: " << hideCursor << endl;
-//	break;
-//}
-
-//case GLFW_KEY_F11:
-//{
-//	fullScreen = !fullScreen;
-//	cout << "FullScreen: " << fullScreen << endl;
-//	fullScreen ? EnterFullScreen() : EnterWindowMode();
-//	ClipWindowCursor(clipCursor);
-//}
-
