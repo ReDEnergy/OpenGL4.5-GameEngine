@@ -1,7 +1,6 @@
 #pragma once
 #include <include/dll_export.h>
 #include <include/glm.h>
-#include <vector>
 
 using namespace std;
 
@@ -24,12 +23,12 @@ class DLLExport AABB
 		void Render(const Shader *shader) const;
 		void Update();
 		void Update(glm::quat rotationQ);
+		void InitAABB();
 		bool Overlaps(AABB *aabb);
 
 	public:
 		Transform *transform;
 		GameObject *obj;
-		static GameObject *box;
 
 	private:
 		glm::vec3 center;

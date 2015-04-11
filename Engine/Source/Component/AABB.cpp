@@ -12,16 +12,17 @@
 #include <Manager/ResourceManager.h>
 #include <Utils/3D.h>
 
-GameObject* AABB::box = nullptr;
+static GameObject* box = nullptr;
 
 AABB::AABB(GameObject *obj)
 	: obj(obj)
 {
-	if (obj->mesh == nullptr) {
-		printf("Error, AABB");
-		assert (false);
-	}
 	transform = new Transform();
+
+	if (obj->mesh == nullptr) {
+		cout << "file: " << __FILE__ << "line: " << __LINE__ << endl;
+		assert(false);
+	}
 }
 
 AABB::~AABB() {
@@ -30,6 +31,9 @@ AABB::~AABB() {
 void AABB::Init() {
 	box = Manager::Resource->GetGameObject("box");
 }
+
+// Collision test not exactly ok
+// prbably different rotation are used for halfSize and positions
 
 bool AABB::Overlaps(AABB *aabb)
 {
@@ -51,15 +55,12 @@ void AABB::Update()
 void AABB::Update(glm::quat rotationQ)
 {
 	auto q = glm::inverse(rotationQ) * obj->transform->rotationQ;
-	vector<glm::vec3> pos;
-	for (auto point: obj->mesh->positions) {
-		pos.push_back(glm::rotate(q, point));
-	}
 
-	glm::vec3 max = pos[0];
-	glm::vec3 min = pos[0];
+	glm::vec3 min, max = glm::rotate(q, obj->mesh->bbox->points[0]);
 
-	for (auto point: pos) {
+	for (auto point: obj->mesh->bbox->points) {
+
+		point = glm::rotate(q, point);
 
 		// find max
 		if (point.x > max.x)
@@ -80,9 +81,10 @@ void AABB::Update(glm::quat rotationQ)
 
 	halfSize = (max - min) / 2.0f * obj->transform->scale;
 	center = (max + min) / 2.0f * obj->transform->scale;
+	center = glm::rotate(rotationQ, center);
 
 	transform->scale = halfSize * 2.0f;
-	transform->position = glm::rotate(rotationQ, center) + obj->transform->position;
+	transform->position = center + obj->transform->position;
 	transform->SetRotation(rotationQ);
 }
 
