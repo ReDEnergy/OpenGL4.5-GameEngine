@@ -7,9 +7,11 @@ Transform::Transform() {
 	eulerAngles = glm::vec3(0.0f, 0.0f, 0.0f);
 	rotationQ = glm::quat(1.0f, 0, 0, 0);
 	scale = glm::vec3(1.0f);
+
 	rotateSpeed = 2.5f;
 	moveSpeed = 2.5f;
 	scaleSpeed = 0.02f;
+
 	Update();
 }
 
@@ -34,10 +36,18 @@ Transform::~Transform() {
 }
 
 void Transform::Update() {
-	glm::mat4 rotationMatrix = glm::toMat4(rotationQ);
-	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
-	model = translationMatrix * rotationMatrix;
-	model = glm::scale(model, scale);
+	model = glm::toMat4(rotationQ);
+	model[0] *= scale[0];
+	model[1] *= scale[1];
+	model[2] *= scale[2];
+	UpdatePosition();
+}
+
+void Transform::UpdatePosition()
+{
+	model[3][0] = position[0];
+	model[3][1] = position[1];
+	model[3][2] = position[2];
 }
 
 void Transform::Move(const glm::vec3 dir, float deltaTime) {
@@ -66,9 +76,7 @@ void Transform::RotatePitch(float deltaTime) {
 void Transform::SetPosition(glm::vec3 position)
 {
 	this->position = position;
-	model[3][0] = position[0];
-	model[3][1] = position[1];
-	model[3][2] = position[2];
+	UpdatePosition();
 }
 
 void Transform::SetRotation(glm::vec3 eulerAngles) {
@@ -80,6 +88,12 @@ void Transform::SetRotation(glm::vec3 eulerAngles) {
 void Transform::SetRotation(glm::quat roationQ)
 {
 	this->rotationQ = roationQ;
+	Update();
+}
+
+void Transform::SetScale(glm::vec3 scale)
+{
+	this->scale = scale;
 	Update();
 }
 

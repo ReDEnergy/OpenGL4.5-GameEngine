@@ -21,12 +21,17 @@ class DLLExport Transform: virtual public Object
 
 		void SetPosition(glm::vec3 position);
 		void SetRotationRadians(glm::vec3 eulerAngles);
+		void SetRotation(glm::quat roationQ);
+
 		// Set rotation using degree angles (0 - 360)
 		void SetRotation(glm::vec3 eulerAngles);
-		void SetRotation(glm::quat roationQ);
 		glm::vec3 GetRotationVector();
 
+		void SetScale(glm::vec3 scale);
 		void Scale(float deltaTime);
+
+	private:
+		void UpdatePosition();
 
 	// TODO - make them private
 	public:
