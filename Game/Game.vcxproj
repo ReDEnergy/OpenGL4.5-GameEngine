@@ -165,6 +165,9 @@ xcopy /y /d "..\libs\x86\SFML\Debug\sfml-audio-d-2.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\SFML\Debug\sfml-system-d-2.dll" "$(OutDir)"
 </Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Outputs>no_existent_file</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
     <ClCompile>
@@ -202,6 +205,9 @@ xcopy /y /d "..\libs\x86\SFML\Debug\sfml-audio-d-2.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\SFML\Debug\sfml-system-d-2.dll" "$(OutDir)"
 </Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Outputs>no_existent_file</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -242,6 +248,9 @@ xcopy /y /d "..\libs\x86\SFML\Release\sfml-system-2.dll" "$(OutDir)"</Command>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <CustomBuildStep>
+      <Outputs>no_existent_file</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
     <ClCompile>
@@ -273,6 +282,9 @@ xcopy /y /d "..\libs\x86\SFML\Release\sfml-system-2.dll" "$(OutDir)"</Command>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <CustomBuildStep>
+      <Outputs>no_existent_file</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

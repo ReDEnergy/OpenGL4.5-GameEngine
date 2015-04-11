@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 using namespace std;
 
@@ -31,6 +32,7 @@ class Game : public World,
 
 	private:
 		void OnEvent(EventType Event, Object *data);
+		void InitSceneCameras();
 
 	private:
 		Camera				*activeCamera;
@@ -47,9 +49,11 @@ class Game : public World,
 
 		GameObject			*ScreenQuad;
 		GameObject			*DebugPanel;
-		Overlay				*overlay;
 		Player				*player;
 
 		SSAO				*ssao;
 		CSM					*csm;
+
+		vector<Camera*>		sceneCameras;
+		unsigned int		activeSceneCamera;
 };

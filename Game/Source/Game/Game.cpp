@@ -13,6 +13,7 @@
 
 #include <Component/AABB.h>
 #include <Component/Mesh.h>
+#include <Component/SkinnedMesh.h>
 #include <Component/Text.h>
 #include <Component/Transform.h>
 #include <Component/ObjectInput.h>
@@ -24,7 +25,6 @@
 #include <Core/InputSystem.h>
 
 #include <Game/Actors/Player.h>
-//#include <Game/Actors/TransitionGate.h>
 #include <Game/State/GameState.h>
 #include <Game/Input/GameInput.h>
 
@@ -46,26 +46,19 @@
 #include <Manager/SceneManager.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/RenderingSystem.h>
-#include <UI/MenuSystem.h>
-
-#include "State/GameState.h"
 
 #ifdef PHYSICS_ENGINE
 #include <Manager/HavokCore.h>
 #include <Manager/PhysicsManager.h>
 #endif
 
-
 #include <Rendering/SSAO.h>
 
+#include <UI/MenuSystem.h>
 #include <UI/Overlay.h>
 
 #include <templates/singleton.h>
 
-
-// Havok
-// #include <Common/Base/keycode.cxx>
-// #include <Common/Base/Config/hkProductFeatures.cxx>
 
 Texture *ShadowMap;
 //PointLight *PLSC;
@@ -77,10 +70,6 @@ Game::~Game() {
 }
 
 void Game::Init() {
-
-	SubscribeToEvent(EventType::DEBUG_BARREL_SPAWN);
-	SubscribeToEvent(EventType::SWITCH_CAMERA);
-	SubscribeToEvent(EventType::CLOSE_MENU);
 
 	// Game resolution
 	glm::ivec2 resolution = Manager::GetConfig()->resolution;
@@ -99,8 +88,6 @@ void Game::Init() {
 	//freeCamera->Update();
 
 	activeCamera = gameCamera;
-	cameraInput = new CameraInput(activeCamera);
-	cameraDebugInput = new CameraDebugInput(gameCamera);
 
 	// Lights
 	Sun = new DirectionalLight();
@@ -140,13 +127,20 @@ void Game::Init() {
 	DebugPanel->transform->scale = glm::vec3(0.5);
 	DebugPanel->transform->SetPosition(glm::vec3(0.5));
 
+	// Listens to Events and Input
+
+	SubscribeToEvent(EventType::DEBUG_BARREL_SPAWN);
+	SubscribeToEvent(EventType::SWITCH_CAMERA);
+	SubscribeToEvent(EventType::CLOSE_MENU);
+	SubscribeToEvent(EventType::OPEN_GAME_MENU);
+
+	cameraInput = new CameraInput(activeCamera);
+	cameraDebugInput = new CameraDebugInput(gameCamera);
 	ObjectInput *DI = new DebugInput();
 	ObjectInput *GI = new GameInput(this);
+	//ObjectControl *control = new ObjectControl(PLSC->transform);
+	InputRules::PushRule(InputRule::R_GAMEPLAY);
 
-
-#ifdef PHYSICS_ENGINE
-	Manager::GetHavok()->StepSimulation(0.016f);
-#endif
 
 	// GameObjects
 	player = new Player(*Manager::GetResource()->GetGameObject("player"));
@@ -154,22 +148,15 @@ void Game::Init() {
 		for (int j = -3; j < 3; j++) {
 			GameObject *ground = Manager::GetResource()->GetGameObject("ground");
 			ground->transform->SetPosition(glm::vec3(i * 10, 0, j * 10));
-			ground->SetupAABB();
 			Manager::GetScene()->AddObject(ground);
 		}
 	}
 
-	//TransitionGate *gate = new TransitionGate(*Manager::GetResource()->GetGameObject("gate"));
-	//Manager::GetScene()->AddObject(gate);
+	InitSceneCameras();
 
-	overlay = new Overlay();
-
-	for (PointLight *light: Manager::GetScene()->lights) {
-		light->SetDebugView(true);
-	}
-
-	//ObjectControl *control = new ObjectControl(PLSC->transform);
-
+#ifdef PHYSICS_ENGINE
+	Manager::GetHavok()->StepSimulation(0.016f);
+#endif
 };
 
 
@@ -221,22 +208,35 @@ void Game::Update(float elapsedTime, float deltaTime) {
 	}
 
 	{
+		Shader *R2TSk = Manager::GetShader()->GetShader("r2tskinning");
+		R2TSk->Use();
+		activeCamera->BindPosition(R2TSk->loc_eye_pos);
+		activeCamera->BindViewMatrix(R2TSk->loc_view_matrix);
+		activeCamera->BindProjectionMatrix(R2TSk->loc_projection_matrix);
+
 		Shader *R2T = Manager::GetShader()->GetShader("rendertargets");
 		R2T->Use();
-
 		activeCamera->BindPosition(R2T->loc_eye_pos);
 		activeCamera->BindViewMatrix(R2T->loc_view_matrix);
 		activeCamera->BindProjectionMatrix(R2T->loc_projection_matrix);
 
+
 		for (auto *obj : Manager::GetScene()->frustumObjects) {
-			obj->Render(R2T);
+			if (obj->mesh && obj->mesh->meshType == MeshType::SKINNED) {
+				Manager::GetShader()->PushState(R2TSk);
+				obj->Render(R2TSk);
+			}
+			else {
+				Manager::GetShader()->PushState(R2T);
+				obj->Render(R2T);
+			}
 		}
 		player->Render(R2T);
 	}
 
-	// ---------------------//
-	// --- Cast Shadows --- //
-	// ---------------------//
+	// -------------------------------------------//
+	// --- Camera Culling and Shadows Casting --- //
+	// -------------------------------------------//
 	{
 		gameCamera->UpdateBoundingBox(Sun);
 		for (auto *obj : Manager::GetScene()->activeObjects) {
@@ -374,7 +374,6 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			Sun->FBO->BindDepthTexture(GL_TEXTURE11);
 			Spot->FBO->BindTexture(0, GL_TEXTURE12);
 			Spot->FBO->BindDepthTexture(GL_TEXTURE13);
-			//PLSC->BindTexture(GL_TEXTURE14);
 
 			DebugPanel->Render();
 
@@ -384,14 +383,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		glDepthMask(GL_TRUE);
 	}
 
-
-
-	if (RuntimeState::STATE == RunState::PAUSE_MENU) {
-		Manager::GetMenu()->RenderMenu();
-	}
-	else {
-		overlay->Update(deltaTime);
-	}
+	Manager::GetMenu()->RenderMenu();
 	
 	double endT = glfwGetTime();
 	//fprintf(stderr, "FRAME TIME: %.2lf ms, DELTA TIME: %d ms\n", (endT - startT) * 1000, int(deltaTime * 1000));
@@ -403,7 +395,7 @@ void Game::BarrelPhysicsTest() {
 	GameObject *barrel = Manager::GetResource()->GetGameObject("oildrum");
 	for (int i=0; i<100; i++) {
 		GameObject *box = new GameObject(*barrel);
-		box->transform->position = pos + glm::vec3(rand() % 10 - 5, rand() % 5 + 5, rand() % 10 - 5);
+		box->transform->position = pos; // +glm::vec3(rand() % 10 - 5, rand() % 5 + 5, rand() % 10 - 5);
 		Manager::GetScene()->AddObject(box);
 	}
 #endif
@@ -412,32 +404,46 @@ void Game::BarrelPhysicsTest() {
 void Game::OnEvent(EventType Event, Object *data) {
 	switch (Event)
 	{
-		case EventType::DEBUG_BARREL_SPAWN:
-			BarrelPhysicsTest();
-			return;
-		case EventType::SWITCH_CAMERA:
-			// Free roam camera
-			if (activeCamera == gameCamera) {
-				gameCamera->SetDebugView(true);
-				Sun->SetDebugView(true);
-				activeCamera = freeCamera;
-				InputRules::SetRule(InputRule::R_EDITOR);
-			}
-			// Sun camera
-			else if (activeCamera == freeCamera) {
-				activeCamera = Spot;
-				//Spot->SetDebugView(false);
-			}
-			// Game camera
-			else {
-				activeCamera = gameCamera;
-				gameCamera->SetDebugView(false);
-				InputRules::SetRule(InputRule::R_GAMEPLAY);
-			}
-			cameraInput->camera = activeCamera;
-		case EventType::CLOSE_MENU:
-			RuntimeState::STATE = RunState::GAMEPLAY;
-		default:
-			break;
+	case EventType::OPEN_GAME_MENU:
+		Engine::Window->ClipPointer(false);
+		Engine::Window->HidePointer(false);
+		return;
+
+	case EventType::CLOSE_MENU:
+		Engine::Window->ClipPointer(true);
+		Engine::Window->HidePointer(true);
+		return;
+
+	case EventType::DEBUG_BARREL_SPAWN:
+		BarrelPhysicsTest();
+		return;
+
+	case EventType::SWITCH_CAMERA:
+
+		activeCamera->SetDebugView(true);
+
+		activeSceneCamera++;
+		if (activeSceneCamera == sceneCameras.size()) {
+			activeSceneCamera = 0;
+		}
+
+		activeCamera = sceneCameras[activeSceneCamera];
+		activeCamera->SetDebugView(false);
+		cameraInput->camera = activeCamera;
+		// InputRules::PushRule(activeCamera == gameCamera ? InputRule::R_GAMEPLAY : InputRule::R_EDITOR);
+
+	default:
+		break;
 	}
+}
+
+void Game::InitSceneCameras()
+{
+	activeSceneCamera = 0;
+	sceneCameras.push_back(gameCamera);
+	sceneCameras.push_back(freeCamera);
+	sceneCameras.push_back(Spot);
+	sceneCameras.push_back(Sun);
+
+	activeCamera->SetDebugView(false);
 }
