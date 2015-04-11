@@ -5,7 +5,6 @@ layout(location = 1) in vec4 world_position;
 layout(location = 2) in vec4 world_normal;
 layout(location = 3) in vec4 view_position;
 layout(location = 4) in vec4 view_normal;
-layout(location = 5) in vec4 frag_position;
 
 uniform sampler2D u_texture_0;	// Diffuse texture
 

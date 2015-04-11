@@ -85,4 +85,9 @@
 		<vertex>R2T.VS</vertex>
 		<fragment>R2T.FS</fragment>
 	</shader>
+	<shader>
+		<name>r2tskinning</name>
+		<vertex>Skinning/R2T.VS</vertex>
+		<fragment>Skinning/R2T.FS</fragment>
+	</shader>	
 </shaders>

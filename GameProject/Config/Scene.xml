@@ -1,42 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Scene -->
 <objects>
-	<!-- back wall -->
-<!--	<object>
-		<ref>ground</ref>
+	<!-- skinning -->
+	<object>
+		<ref>guard</ref>
 		<transform>
-			<position>0 0 -5</position>
-			<rotation>30 0 0</rotation>
+			<position>0 0 2</position>
 		</transform>
 	</object>
+	
 	<object>
-		<ref>ground</ref>
+		<ref>astroBoy</ref>
 		<transform>
-			<position>10 0 -5</position>
-			<rotation>30 0 0</rotation>
+			<position>0 0 -2</position>
 		</transform>
 	</object>
-	<object>
-		<ref>ground</ref>
-		<transform>
-			<position>20 0 -5</position>
-			<rotation>30 0 0</rotation>
-		</transform>
-	</object>
-	<object>
-		<ref>ground</ref>
-		<transform>
-			<position>0 0 5</position>
-			<rotation>-35 0 0</rotation>
-		</transform>
-	</object>	
--->
+
 	<!-- left -->
 	<object>
 		<ref>ground</ref>
 		<transform>
 			<position>-5 0 0</position>
-			<rotation>0 0 135</rotation>
+			<rotation>0 0 60</rotation>
 		</transform>
 	</object>
 	
@@ -44,7 +29,7 @@
 	<object>
 		<ref>block10-10</ref>
 		<transform>
-			<position>3 0 0</position>
+			<position>3 0 -10</position>
 			<rotation>30 0 0</rotation>
 		</transform>
 	</object>

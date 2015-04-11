@@ -3597,7 +3597,7 @@ See license file or www.creativecommons.org for details.
   </library_lights>
   <library_images>
     <image id="file9" name="file9">
-      <init_from>./boy_10.tga</init_from>
+      <init_from>./boy_10.jpg</init_from>
       <extra>
         <technique profile="MAYA">
           <dgnode_type>kFile</dgnode_type>

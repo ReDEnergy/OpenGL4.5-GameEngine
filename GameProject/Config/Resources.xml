@@ -126,15 +126,6 @@
 		</transform>
 	</object>
 	<object>
-		<name>wall</name>
-		<mesh>wall</mesh>
-		<shadow>yes</shadow>
-		<transform>
-			<position>2.5 0 -2.5</position>
-			<scale>0.03</scale>
-		</transform>
-	</object>
-	<object>
 		<name>invwall</name>
 		<transform>
 			<rotation>0 0 90</rotation>
@@ -185,4 +176,20 @@
 			<file>Resources/Havok/Path/block15-15.hkt</file>
 		</physics>
 	</object>
+	<object>
+		<name>astroBoy</name>
+		<mesh>astroBoy</mesh>
+		<transform>
+			<scale>0.1</scale>
+			<rotation>0 90 0</rotation>
+		</transform>
+	</object>	
+	<object>
+		<name>guard</name>
+		<mesh>guard</mesh>
+		<transform>
+			<scale>0.025</scale>
+			<rotation>-90 90 0</rotation>
+		</transform>
+	</object>	
 </objects>
