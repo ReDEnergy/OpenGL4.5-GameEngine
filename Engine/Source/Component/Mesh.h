@@ -18,6 +18,12 @@ class GPUBuffers;
 
 static const unsigned int INVALID_MATERIAL = 0xFFFFFFFF;
 
+enum class MeshType {
+	STATIC,
+	MORPHING,
+	SKINNED
+};
+
 struct MeshEntry {
 	MeshEntry()
 	{
@@ -32,6 +38,18 @@ struct MeshEntry {
 	unsigned int materialIndex;
 };
 
+/**
+ * BoundingBox for original mesh vertices data
+ */
+class BoundingBox {
+	
+	public:
+		BoundingBox(vector<glm::vec3> &positions);
+
+	public:
+		vector<glm::vec3> points;
+};
+
 class Mesh {
 	public:
 		Mesh();
@@ -44,7 +62,7 @@ class Mesh {
 						vector<unsigned short>& indices);
 
 		virtual bool LoadMesh(const std::string& fileName);
-		virtual void Render();
+		virtual void Render(const Shader *shader);
 		virtual void RenderInstanced(unsigned int instances);
 		virtual void RenderDebug();
 		virtual void UseMaterials(bool);
@@ -58,11 +76,13 @@ class Mesh {
 		bool InitMaterials(const aiScene* pScene, const std::string& File);
 
 	public:
+		MeshType meshType;
 		glm::vec4 debugColor;
 		vector<glm::vec3> positions;
 		vector<glm::vec3> normals;
 		vector<glm::vec2> texCoords;
 		vector<unsigned short> indices;
+		BoundingBox *bbox;
 
 	protected:
 		bool useMaterial;

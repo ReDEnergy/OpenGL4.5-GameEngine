@@ -14,6 +14,7 @@
 #include <Utils/GPU.h>
 
 Mesh::Mesh() {
+	meshType = MeshType::STATIC;
 	useMaterial = true;
 	debugColor = glm::vec4(1);
 	glPrimitive = GL_TRIANGLES;
@@ -77,6 +78,7 @@ bool Mesh::InitFromData(vector<glm::vec3>& positions,
 	this->texCoords = texCoords;
 	this->indices = indices;
 
+	bbox = new BoundingBox(positions);
 	return InitFromData();
 }
 
@@ -144,6 +146,8 @@ void Mesh::InitMesh(const aiMesh* paiMesh)
 		if (Face.mNumIndices == 4)
 			indices.push_back(Face.mIndices[3]);
 	}
+
+	bbox = new BoundingBox(positions);
 }
 
 bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
@@ -193,7 +197,7 @@ void Mesh::SetGlPrimitive(unsigned int glPrimitive)
 	this->glPrimitive = glPrimitive;
 }
 
-void Mesh::Render()
+void Mesh::Render(const Shader *shader)
 {
 	glBindVertexArray(buffers->VAO);
 	for (unsigned int i = 0 ; i < meshEntries.size() ; i++) {
@@ -253,3 +257,50 @@ void Mesh::RenderDebug()
 {
 
 }
+
+BoundingBox::BoundingBox(vector<glm::vec3> &positions)
+{
+	glm::vec3 max = positions[0];
+	glm::vec3 min = positions[0];
+
+	for (auto point : positions) {
+		// find max
+		if (point.x > max.x)
+			max.x = point.x;
+		if (point.y > max.y)
+			max.y = point.y;
+		if (point.z > max.z)
+			max.z = point.z;
+
+		// find min
+		if (point.x < min.x)
+			min.x = point.x;
+		if (point.y < min.y)
+			min.y = point.y;
+		if (point.z < min.z)
+			min.z = point.z;
+	}
+
+	glm::vec3 halfSize = (max - min) / 2.0f;
+	glm::vec3 center = (max + min) / 2.0f;
+
+	points.push_back(center + halfSize * glm::vec3( 1,  1,  1));
+	points.push_back(center + halfSize * glm::vec3( 1,  1, -1));
+	points.push_back(center + halfSize * glm::vec3( 1, -1,  1));
+	points.push_back(center + halfSize * glm::vec3( 1, -1, -1));
+												   
+	points.push_back(center + halfSize * glm::vec3(-1,  1,  1));
+	points.push_back(center + halfSize * glm::vec3(-1,  1, -1));
+	points.push_back(center + halfSize * glm::vec3(-1, -1,  1));
+	points.push_back(center + halfSize * glm::vec3(-1, -1, -1));
+
+}
+
+// Code for rendering mesh BBOX (needs mesh transform info)
+//BoundingBox::Render(glm::quat rotationQ) {
+	//auto q = obj->transform->rotationQ;
+	//glm::vec3 newCenter = glm::rotate(q, center) * obj->transform->scale;
+	//transform->SetScale(halfSize * obj->transform->scale * 2.0f);
+	//transform->SetPosition(newCenter + obj->transform->position);
+	//transform->SetRotation(q);
+//}
