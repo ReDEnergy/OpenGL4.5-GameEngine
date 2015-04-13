@@ -69,8 +69,16 @@ void Shader::GetUniforms() {
 	// Material Block
 	loc_material = glGetUniformBlockIndex(program, "Material");	
 
-	// Textures
 	char buffer[64];
+
+	// Skinning data
+	for (unsigned int i = 0; i < MAX_BONES; i++) {
+		memset(buffer, 0, sizeof(buffer));
+		sprintf_s(buffer, "Bones[%d]", i);
+		loc_bones[i] = glGetUniformLocation(program, buffer);
+	}
+
+	// Textures
 	for (int i = 0; i < MAX_2D_TEXTURES; i++) {
 		sprintf_s(buffer, "u_texture_%d", i);
 		loc_textures[i]	 = glGetUniformLocation(program, buffer);
@@ -79,7 +87,6 @@ void Shader::GetUniforms() {
 		loc_cube_textures[i] = glGetUniformLocation(program, buffer);
 	}
 	loc_channel_mask = glGetUniformLocation(program, "channel_mask");
-
 
 	// Text
 	text_color = glGetUniformLocation(program, "text_color");	
@@ -237,7 +244,7 @@ unsigned int Shader::CreateProgram(const vector<unsigned int> &shaderObjects)
 	CheckOpenGLError();
 }
 
-void Shader::Use()
+void Shader::Use() const
 {
 	glUseProgram(program);
 }

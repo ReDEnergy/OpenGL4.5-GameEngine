@@ -7,6 +7,7 @@
 #include <include/gl.h>
 
 #define MAX_2D_TEXTURES 16
+#define MAX_BONES		100
 #define INVALID_LOC -1
 
 using namespace std;
@@ -20,7 +21,7 @@ class DLLExport Shader
 		void Reload();
 		void BindTexturesUnits();
 		void SetShaderFiles(vector <string> shaderFiles);
-		void Use();
+		void Use() const;
 
 	private:
 		void GetUniforms();
@@ -79,6 +80,9 @@ class DLLExport Shader
 		GLint active_ssao;
 		GLint active_deferred;
 		GLint active_shadow;
+
+		// Skinning
+		GLint loc_bones[MAX_BONES];
 
 		// Text
 		GLint text_color;
