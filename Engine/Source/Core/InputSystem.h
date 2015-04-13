@@ -23,6 +23,7 @@ class DLLExport InputSystem
 
 		// Mouse
 		static void CursorMove(GLFWwindow *W, double posX, double posY);
+		static void MouseClick(GLFWwindow *W, int button, int action, int mods);
 
 		// Event Dispatch
 		static void Subscribe(ObjectInput* O);

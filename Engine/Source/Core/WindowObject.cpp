@@ -39,9 +39,8 @@ void WindowObject::WindowMode() {
 void WindowObject::SetWindowCallbacks() {
 	glfwSetWindowSizeCallback(window, WindowManager::OnResize);
 	glfwSetKeyCallback(window, InputSystem::KeyCallback);
+	glfwSetMouseButtonCallback(window, InputSystem::MouseClick);
 	glfwSetCursorPosCallback(window, InputSystem::CursorMove);
-	HidePointer(true);
-	ClipPointer(true);
 }
 
 void WindowObject::SetSize(int width, int height) {

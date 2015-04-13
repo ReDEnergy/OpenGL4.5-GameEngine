@@ -38,6 +38,16 @@ void InputSystem::CursorMove(GLFWwindow *W, double posX, double posY) {
 	Wobj->SetPointerPosition(mousePos);
 }
 
+void InputSystem::MouseClick(GLFWwindow *W, int button, int action, int mods)
+{
+	double posX, posY;
+	glfwGetCursorPos(W, &posX, &posY);
+	for (auto obs : activeObserver) {
+		if (obs->IsActive())
+			obs->OnMouseBtnEvent((int)posX, (int)posY, button, action, mods);
+	}
+}
+
 void InputSystem::Subscribe(ObjectInput *IC) {
 	observers.push_back(IC);
 	if (IC->IsActive())
