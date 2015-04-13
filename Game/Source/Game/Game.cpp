@@ -399,16 +399,6 @@ void Game::BarrelPhysicsTest() {
 void Game::OnEvent(EventType Event, Object *data) {
 	switch (Event)
 	{
-	case EventType::OPEN_GAME_MENU:
-		Engine::Window->ClipPointer(false);
-		Engine::Window->HidePointer(false);
-		return;
-
-	case EventType::CLOSE_MENU:
-		Engine::Window->ClipPointer(true);
-		Engine::Window->HidePointer(true);
-		return;
-
 	case EventType::DEBUG_BARREL_SPAWN:
 		BarrelPhysicsTest();
 		return;
