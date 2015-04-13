@@ -61,6 +61,7 @@ class Mesh {
 						vector<glm::vec2>& texCoords,
 						vector<unsigned short>& indices);
 
+		virtual void Update() {};
 		virtual bool LoadMesh(const std::string& fileName);
 		virtual void Render(const Shader *shader);
 		virtual void RenderInstanced(unsigned int instances);
