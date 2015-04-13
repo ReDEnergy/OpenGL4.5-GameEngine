@@ -14,6 +14,8 @@ void RenderingSystem::Init() {
 	Set(RenderState::POST_PROCESS, true);
 	Set(RenderState::SHADOW, true);
 	Set(RenderState::SS_AO, false);
+	Set(RenderState::HIDE_POINTER, true);
+	Set(RenderState::CLIP_POINTER, true);
 }
 
 bool RenderingSystem::Is(RenderState STATE) {

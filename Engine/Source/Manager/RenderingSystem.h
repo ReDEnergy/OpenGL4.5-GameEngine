@@ -13,6 +13,8 @@ namespace ERenderState {
 			SS_AO,
 			DEFERRED,
 			POST_PROCESS,
+			HIDE_POINTER,
+			CLIP_POINTER
 	};
 }
 typedef ERenderState::RS RenderState;
