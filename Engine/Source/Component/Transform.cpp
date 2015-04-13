@@ -91,6 +91,13 @@ void Transform::SetRotation(glm::quat roationQ)
 	Update();
 }
 
+void Transform::SetRotationAndScale(glm::quat roationQ, glm::vec3 scale)
+{
+	this->rotationQ = roationQ;
+	this->scale = scale;
+	Update();
+}
+
 void Transform::SetScale(glm::vec3 scale)
 {
 	this->scale = scale;
