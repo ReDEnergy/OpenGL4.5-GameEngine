@@ -65,26 +65,38 @@ void DebugInput::OnKeyPress(int key, int mods) {
 
 	switch (key)
 	{
-		case GLFW_KEY_P:
-			Engine::Pause();
-			return;
+	case GLFW_KEY_P: {
+		Engine::Pause();
+		return;
+	}
 
-		case GLFW_KEY_F1:
-			Manager::RenderSys->Toggle(RenderState::DEBUG);
-			return;
+	case GLFW_KEY_F1: {
+		Manager::RenderSys->Toggle(RenderState::DEBUG);
+		return;
+	}
 
-		case GLFW_KEY_F3: {
-			Manager::RenderSys->Toggle(RenderState::WIREFRAME);
-			return;
-		}
+	case GLFW_KEY_F3: {
+		Manager::RenderSys->Toggle(RenderState::WIREFRAME);
+		return;
+	}
 
-		case GLFW_KEY_F4:
-			Manager::RenderSys->Toggle(RenderState::POST_PROCESS);
-			return;
+	case GLFW_KEY_F4: {
+		Manager::RenderSys->Toggle(RenderState::POST_PROCESS);
+		return;
+	}
 
-		case GLFW_KEY_F5:
-			Manager::Shader->Reload();
-			return;
+	case GLFW_KEY_F5: {
+		Manager::Shader->Reload();
+		return;
+	}
+
+	case GLFW_KEY_F6: {
+		bool state = Manager::RenderSys->Toggle(RenderState::HIDE_POINTER);
+		Manager::RenderSys->Toggle(RenderState::CLIP_POINTER);
+		Engine::Window->ClipPointer(state);
+		Engine::Window->HidePointer(state);
+		return;
+	}
 	}
 }
 
