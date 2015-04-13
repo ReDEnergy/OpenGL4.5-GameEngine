@@ -23,38 +23,37 @@ void Engine::SetWorldInstance(World *world_instance) {
 	world = world_instance;
 }
 
-void Engine::Render() {
+void Engine::Run() {
+
+	/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(Window->window)) {
+		Update();
+	}
+
+	Exit();
+}
+
+void Engine::Update()
+{
+	/* Poll and process events */
+	glfwPollEvents();
 
 	ComputeFrameDeltaTime();
-
 	if (paused) return;
 
+	/* Clear previous frame */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	/* Render Frame */
 	if (world)
 		world->Update((float)elapsedTime, (float)deltaTime);
-}
 
-void Engine::Run() {
+	InputSystem::EndFrame();
 
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(Window->window))
-	{
-		/* Poll for and process events */
-		glfwPollEvents();
+	/* Swap front and back buffers */
+	if (!paused)
+		glfwSwapBuffers(Window->window);
 
-		/* Render */
-		Render();
-
-		InputSystem::EndFrame();
-
-		/* Swap front and back buffers */
-		if (!paused) 
-			glfwSwapBuffers(Window->window);
-	}
-
-	Exit();
 }
 
 void Engine::Pause() {

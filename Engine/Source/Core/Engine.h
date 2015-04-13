@@ -18,15 +18,15 @@ class DLLExport Engine {
 	public:
 		static void Init();
 		static void Run();
-		static void SetWorldInstance(World *world);
 		static void Pause();
 		static void Exit();
+		static void SetWorldInstance(World *world);
 
 	public:
 		static WindowObject *Window;
 
 	private:
-		static void Render();
+		static void Update();
 		static void ComputeFrameDeltaTime();
 
 	private:
