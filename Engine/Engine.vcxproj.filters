@@ -67,6 +67,9 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{33fc24f8-c636-4e05-800a-4dfde7bf73ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scripting">
+      <UniqueIdentifier>{481270b2-96fb-4b63-b181-5458f3821379}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DLL\dllmain.cpp">
@@ -130,9 +133,6 @@
       <Filter>Source Files\GPU</Filter>
     </ClCompile>
     <ClCompile Include="Source\Input\InputRules.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Input\ObjectControl.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\InputComponent\CameraInput.cpp">
@@ -237,6 +237,12 @@
     <ClCompile Include="Source\UI\GameMenu.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Input\ObjectControl.cpp">
+      <Filter>Source Files\InputComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InputComponent\GlobalInput.cpp">
+      <Filter>Source Files\InputComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\AABB.h">
@@ -329,9 +335,6 @@
     <ClInclude Include="Source\Input\InputRules.h">
       <Filter>Source Files\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Input\ObjectControl.h">
-      <Filter>Source Files\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Source\InputComponent\CameraInput.h">
       <Filter>Source Files\InputComponent</Filter>
     </ClInclude>
@@ -339,9 +342,6 @@
       <Filter>Source Files\InputComponent</Filter>
     </ClInclude>
     <ClInclude Include="Source\InputComponent\EditorInput.h">
-      <Filter>Source Files\InputComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\InputComponent\PlayerInput.h">
       <Filter>Source Files\InputComponent</Filter>
     </ClInclude>
     <ClInclude Include="Source\InputComponent\CameraDebugInput.h">
@@ -439,6 +439,12 @@
     </ClInclude>
     <ClInclude Include="Source\include\utils.h">
       <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\ObjectControl.h">
+      <Filter>Source Files\InputComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InputComponent\GlobalInput.h">
+      <Filter>Source Files\InputComponent</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

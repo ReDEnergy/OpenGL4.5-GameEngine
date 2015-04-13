@@ -218,6 +218,7 @@
     <ClCompile Include="Source\InputComponent\CameraDebugInput.cpp" />
     <ClCompile Include="Source\InputComponent\CameraInput.cpp" />
     <ClCompile Include="Source\InputComponent\DebugInput.cpp" />
+    <ClCompile Include="Source\InputComponent\GlobalInput.cpp" />
     <ClCompile Include="Source\InputComponent\EditorInput.cpp" />
     <ClCompile Include="Source\Input\InputRules.cpp" />
     <ClCompile Include="Source\Input\ObjectControl.cpp" />
@@ -315,8 +316,8 @@
     <ClInclude Include="Source\InputComponent\CameraDebugInput.h" />
     <ClInclude Include="Source\InputComponent\CameraInput.h" />
     <ClInclude Include="Source\InputComponent\DebugInput.h" />
+    <ClInclude Include="Source\InputComponent\GlobalInput.h" />
     <ClInclude Include="Source\InputComponent\EditorInput.h" />
-    <ClInclude Include="Source\InputComponent\PlayerInput.h" />
     <ClInclude Include="Source\Input\InputRules.h" />
     <ClInclude Include="Source\Input\ObjectControl.h" />
     <ClInclude Include="Source\Lighting\DirectionalLight.h" />
