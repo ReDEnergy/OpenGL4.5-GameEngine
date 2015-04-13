@@ -105,6 +105,10 @@ void SceneManager::Update() {
 			toRemove.clear();
 		}
 	}
+
+	for (auto obj : activeObjects) {
+		obj->Update();
+	}
 }
 
 void SceneManager::AddObject(GameObject *obj) {
