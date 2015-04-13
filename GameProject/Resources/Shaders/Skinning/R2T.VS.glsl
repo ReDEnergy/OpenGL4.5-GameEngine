@@ -21,14 +21,17 @@ layout(location = 4) out vec4 view_normal;
 void main() {
 	texture_coord = v_texture_coord;
 
-    mat4 BoneTransform = Bones[v_boneIds[0]] * v_weights[0];
+	mat4 BoneTransform = mat4(1.0);
     BoneTransform += Bones[v_boneIds[1]] * v_weights[1];
+    BoneTransform  = Bones[v_boneIds[0]] * v_weights[0];
     BoneTransform += Bones[v_boneIds[2]] * v_weights[2];
     BoneTransform += Bones[v_boneIds[3]] * v_weights[3];
-
-	world_position = BoneTransform * Model * vec4(v_position, 1.0);
-	world_normal = BoneTransform * Model * vec4(v_normal, 1.0);
-
+	
+	world_position = Model * BoneTransform * vec4(v_position, 1.0);
+	world_normal = Model * BoneTransform * vec4(v_normal, 1.0);
+	world_position[1] = -world_position[1];
+	world_position[0] = -world_position[0];
+	
 	view_position = View * world_position;
 	view_normal = View * world_normal;
 	

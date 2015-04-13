@@ -182,11 +182,6 @@ void Game::Update(float elapsedTime, float deltaTime) {
   		InputSystem::UpdateObservers(deltaTime);
 
 		Manager::GetScene()->Update();
-
-		for (auto *obj: Manager::GetScene()->activeObjects) {
-			obj->Update();
-		}
-
 		player->Update(deltaTime);
 	}
 
@@ -204,25 +199,25 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		FrameBuffer::Clear();
 	}
 	else {
-		FBO->Bind();
+		FBO->Bind(true);
 	}
 
 	{
-		Shader *R2TSk = Manager::GetShader()->GetShader("r2tskinning");
-		R2TSk->Use();
-		activeCamera->BindPosition(R2TSk->loc_eye_pos);
-		activeCamera->BindViewMatrix(R2TSk->loc_view_matrix);
-		activeCamera->BindProjectionMatrix(R2TSk->loc_projection_matrix);
-
 		Shader *R2T = Manager::GetShader()->GetShader("rendertargets");
 		R2T->Use();
 		activeCamera->BindPosition(R2T->loc_eye_pos);
 		activeCamera->BindViewMatrix(R2T->loc_view_matrix);
 		activeCamera->BindProjectionMatrix(R2T->loc_projection_matrix);
 
+		Shader *R2TSk = Manager::GetShader()->GetShader("r2tskinning");
+		R2TSk->Use();
+		activeCamera->BindPosition(R2TSk->loc_eye_pos);
+		activeCamera->BindViewMatrix(R2TSk->loc_view_matrix);
+		activeCamera->BindProjectionMatrix(R2TSk->loc_projection_matrix);
 
 		for (auto *obj : Manager::GetScene()->frustumObjects) {
 			if (obj->mesh && obj->mesh->meshType == MeshType::SKINNED) {
+				obj->mesh->Update();
 				Manager::GetShader()->PushState(R2TSk);
 				obj->Render(R2TSk);
 			}
@@ -327,9 +322,9 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		}
 
 		// --- Screen Space Ambient Occlusion (SSAO) --- //
-		if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
-			ssao->Update(FBO, activeCamera);
-		}
+		//if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
+		//	ssao->Update(FBO, activeCamera);
+		//}
 
 		// --- Render to the screen --- //
 		// ---   Composition step   --- //
@@ -348,7 +343,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			FBO->BindTexture(0, GL_TEXTURE0);
 			FBO_Light->BindTexture(0, GL_TEXTURE1);
 			ShadowMap->Bind(GL_TEXTURE2);
-			ssao->BindTexture(GL_TEXTURE3);
+			//ssao->BindTexture(GL_TEXTURE3);
 			FBO->BindDepthTexture(GL_TEXTURE4);
 			Manager::GetDebug()->FBO->BindTexture(0, GL_TEXTURE5);
 			Manager::GetDebug()->FBO->BindDepthTexture(GL_TEXTURE6);
@@ -366,7 +361,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 
 			glDisable(GL_DEPTH_TEST);
 			FBO->BindAllTextures();
-			ssao->BindTexture(GL_TEXTURE4);
+			// ssao->BindTexture(GL_TEXTURE4);
 			FBO_Light->BindTexture(0, GL_TEXTURE5);
 			FBO->BindDepthTexture(GL_TEXTURE6);
 			ShadowMap->Bind(GL_TEXTURE8);
@@ -399,7 +394,7 @@ void Game::BarrelPhysicsTest() {
 		Manager::GetScene()->AddObject(box);
 	}
 #endif
-};
+}
 
 void Game::OnEvent(EventType Event, Object *data) {
 	switch (Event)

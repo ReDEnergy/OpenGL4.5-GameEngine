@@ -8,13 +8,7 @@
 			<position>0 0 2</position>
 		</transform>
 	</object>
-	
-	<object>
-		<ref>astroBoy</ref>
-		<transform>
-			<position>0 0 -2</position>
-		</transform>
-	</object>
+
 
 	<!-- left -->
 	<object>

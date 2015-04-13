@@ -4,7 +4,7 @@
 	<mesh skinned="true">
 		<name>guard</name>
 		<path>Resources/Models</path>
-		<file>boblampclean.md5mesh</file>
+		<file>guard.md5mesh</file>
 	</mesh>
 	<mesh skinned="true">
 		<name>astroBoy</name>
