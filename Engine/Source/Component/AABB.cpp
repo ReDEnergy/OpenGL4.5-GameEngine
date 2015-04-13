@@ -37,10 +37,16 @@ void AABB::Init() {
 
 bool AABB::Overlaps(AABB *aabb)
 {
+	//auto posA = glm::rotate(glm::inverse(aabb->transform->rotationQ), aabb->transform->position);
+	//auto posB = glm::rotate(glm::inverse(transform->rotationQ), transform->position);
+	//auto delta = posA - posB;
+	//auto half = halfSize + aabb->halfSize;
+
 	auto q = glm::inverse(transform->rotationQ);
 	auto deltaPos = transform->position - aabb->transform->position;
 	auto delta = glm::rotate(q, deltaPos);
 	auto half = halfSize + aabb->halfSize;
+
 	bool overlapsX = abs(delta.x) < half.x;
 	bool overlapsY =     delta.y  < half.y;
 	bool overlapsZ = abs(delta.z) < half.z;
