@@ -11,5 +11,5 @@ class GameInput : public ObjectInput {
 		void OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods);
 
 	private:
-		Game *game;
+		Game			*game;
 };
