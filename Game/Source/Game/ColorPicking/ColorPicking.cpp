@@ -56,9 +56,8 @@ void ColorPicking::Update(const Camera* camera){
 		obj->Render(cpShader);
 	}
 
-	glReadPixels(mousePosition.x, mousePosition.y, 1, 1, GL_RGB, GL_FLOAT, objColor);
-	cout << "Object Color:" << objColor[0] * 255 << ' ' << objColor[1] * 255 << ' ' << objColor[2] * 255 << endl;
-	
+	glReadPixels(mousePosition.x, Engine::Window->resolution.y - mousePosition.y, 1, 1, GL_RGB, GL_FLOAT, objColor);
+
 	FrameBuffer::Unbind();
 
 }
