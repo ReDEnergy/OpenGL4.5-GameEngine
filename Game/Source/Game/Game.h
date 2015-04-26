@@ -6,9 +6,13 @@ using namespace std;
 #include <Core/World.h>
 #include <Event/EventListener.h>
 
+
+#include <Game/ColorPicking/ColorPicking.h>
+
 class Camera;
 class CameraInput;
 class CameraDebugInput;
+class ColorPicking;
 class DirectionalLight;
 class SpotLight;
 class FrameBuffer;
@@ -53,6 +57,8 @@ class Game : public World,
 
 		SSAO				*ssao;
 		CSM					*csm;
+
+		ColorPicking		*colorPicking;
 
 		vector<Camera*>		sceneCameras;
 		unsigned int		activeSceneCamera;
