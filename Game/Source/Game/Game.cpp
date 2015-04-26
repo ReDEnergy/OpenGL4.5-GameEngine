@@ -154,6 +154,9 @@ void Game::Init() {
 
 	InitSceneCameras();
 
+	colorPicking = new ColorPicking();
+	colorPicking->Init();
+
 #ifdef PHYSICS_ENGINE
 	Manager::GetHavok()->StepSimulation(0.016f);
 #endif
@@ -189,6 +192,8 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		Manager::GetDebug()->BindForRendering(activeCamera);
 		Manager::GetDebug()->Render(activeCamera);
 	}
+
+	colorPicking->Update(activeCamera);
 
 	// ------------------------//
 	// --- Scene Rendering --- //
