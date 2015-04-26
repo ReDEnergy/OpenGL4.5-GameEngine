@@ -5,6 +5,9 @@ using namespace std;
 
 #include <Core/World.h>
 #include <Event/EventListener.h>
+#include <include/glm.h>
+
+#include <Game/ColorPicking/ColorPicking.h>
 
 
 #include <Game/ColorPicking/ColorPicking.h>
@@ -23,6 +26,7 @@ class SSAO;
 class CSM;
 class Texture;
 
+
 class Game : public World,
 			public EventListener
 {
@@ -38,7 +42,7 @@ class Game : public World,
 		void OnEvent(EventType Event, Object *data);
 		void InitSceneCameras();
 
-	private:
+private:
 		Camera				*activeCamera;
 		Camera				*freeCamera;
 		Camera				*gameCamera;

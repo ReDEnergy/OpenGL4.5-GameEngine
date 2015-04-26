@@ -43,4 +43,5 @@ void GameInput::OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, 
 	}
 
 	printf("pos: %d %d \n button: %d \n action: %d \n mods: %d \n", mouseX, mouseY, button, action, mods);
+	
 }

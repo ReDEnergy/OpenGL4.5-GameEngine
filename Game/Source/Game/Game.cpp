@@ -126,6 +126,7 @@ void Game::Init() {
 	DebugPanel->UseShader(Manager::GetShader()->GetShader("debug"));
 	DebugPanel->transform->scale = glm::vec3(0.5);
 	DebugPanel->transform->SetPosition(glm::vec3(0.5));
+	
 
 	// Listens to Events and Input
 
@@ -368,6 +369,9 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			FBO->BindAllTextures();
 			// ssao->BindTexture(GL_TEXTURE4);
 			FBO_Light->BindTexture(0, GL_TEXTURE5);
+			//Color Picking Debug
+			colorPicking->FBO->BindTexture(0, GL_TEXTURE0);
+
 			FBO->BindDepthTexture(GL_TEXTURE6);
 			ShadowMap->Bind(GL_TEXTURE8);
 			Sun->FBO->BindTexture(0, GL_TEXTURE10);
@@ -400,6 +404,7 @@ void Game::BarrelPhysicsTest() {
 	}
 #endif
 }
+
 
 void Game::OnEvent(EventType Event, Object *data) {
 	switch (Event)
