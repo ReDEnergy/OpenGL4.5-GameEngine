@@ -1,6 +1,7 @@
 //#include <pch.h>
 #include "CameraInput.h"
 
+#include <Core/Engine.h>
 #include <Core/InputSystem.h>
 #include <Core/Camera/Camera.h>
 
@@ -11,7 +12,7 @@ CameraInput::CameraInput(Camera *camera)
 }
 
 void CameraInput::Update(float deltaTime, int mods) {
-	if (mods) return;
+	if (!InputSystem::MouseHold(MOUSE_BUTTON::RIGHT)) return;
 
 	if (InputSystem::KeyHold(GLFW_KEY_W))
 		camera->MoveForward(deltaTime);
@@ -50,8 +51,27 @@ void CameraInput::OnKeyPress(int key, int mods) {
 }
 
 void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
-	//printf("camera mouse: %d %d %d %d\n", mouseX, mouseY, deltaX, deltaY);
-	camera->RotateOY((float)deltaX);
-	camera->RotateOX((float)deltaY);
-	camera->Update();
+
+	if (((InputSystem::GetMods() == SPECIAL_KEY::ALT) && InputSystem::MouseHold(MOUSE_BUTTON::LEFT)) ||
+		InputSystem::MouseHold(MOUSE_BUTTON::RIGHT)) 
+	{
+		camera->RotateOY((float)deltaX);
+		camera->RotateOX((float)deltaY);
+		camera->Update();
+	}
+}
+
+void CameraInput::OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods)
+{
+	if ((mods == SPECIAL_KEY::ALT && button == MOUSE_BUTTON::LEFT) || (button == MOUSE_BUTTON::RIGHT))
+	{
+		if (action == 1) {
+			Engine::Window->ClipPointer(true);
+			Engine::Window->HidePointer(true);
+		}
+		else {
+			Engine::Window->ClipPointer(false);
+			Engine::Window->HidePointer(false);
+		}
+	}
 }
