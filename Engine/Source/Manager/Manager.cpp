@@ -54,7 +54,8 @@ string Manager::configPath;
 
 void Manager::Init() {
 
-	InputSystem::ResetKeys();
+	InputSystem::Init();
+
 	Debug = Singleton<DebugInfo>::Instance();
 	Debug->InitManager("Manager");
 

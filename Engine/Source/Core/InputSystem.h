@@ -8,6 +8,26 @@ using namespace std;
 
 class ObjectInput;
 
+namespace SPECIAL_KEY {
+	enum _SPECIAL_KEY {
+		SHIFT = 1,
+		CTRL = 2,
+		ALT = 4,
+		OS_KEY = 8
+	};
+}
+
+namespace MOUSE_BUTTON {
+	enum _MOUSE_BUTTON {
+		LEFT	= 0,
+		RIGHT	= 1,
+		MIDDLE	= 2,
+		FORWARD	= 3,
+		BACK	= 4,
+	};
+}
+
+
 class DLLExport InputSystem
 {
 	private:
@@ -15,11 +35,13 @@ class DLLExport InputSystem
 
 	public:
 		// KeyBoard
-		static bool KeyPressed(int keyCode);
-		static bool KeyReleased(int keyCode);
 		static bool KeyHold(int keyCode);
+		static bool MouseHold(int button);
+
 		static void KeyCallback(GLFWwindow *W, int key, int scancode, int action, int mods);
-		static void ResetKeys();
+		static void Init();
+
+		static int GetMods();
 
 		// Mouse
 		static void CursorMove(GLFWwindow *W, double posX, double posY);
@@ -41,6 +63,7 @@ class DLLExport InputSystem
 	private:
 		// KeyBuffering arrays for holding key state
 		static bool *keyStates;
+		static bool *mouseStates;
 		static int scancode;
 		static int mods;
 		static bool ruleChanged;

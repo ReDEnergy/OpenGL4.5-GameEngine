@@ -1,6 +1,9 @@
 //#include <pch.h>
 #include "InputSystem.h"
+
+#include <Core/Engine.h>
 #include <Core/WindowManager.h>
+
 #include <Component/ObjectInput.h>
 
 static const int MAX_KEYS = 384;
@@ -9,8 +12,11 @@ list<ObjectInput*> InputSystem::observers;
 list<ObjectInput*> InputSystem::activeObserver;
 
 bool* InputSystem::keyStates = new bool[MAX_KEYS];
+bool* InputSystem::mouseStates = new bool[10];
+
 int InputSystem::scancode = GLFW_KEY_UNKNOWN;
 int InputSystem::mods = GLFW_KEY_UNKNOWN;
+
 bool InputSystem::ruleChanged = false;
 
 void InputSystem::KeyCallback(GLFWwindow *W, int key, int scancode, int action, int mods) {
@@ -24,9 +30,22 @@ bool InputSystem::KeyHold(int keyCode) {
 	return keyStates[keyCode];
 }
 
-void InputSystem::ResetKeys() {
+bool InputSystem::MouseHold(int button)
+{
+	return mouseStates[button];
+}
+
+void InputSystem::Init() {
 	for (int i=0; i<MAX_KEYS; i++)
 		keyStates[i] = GLFW_RELEASE;
+
+	for (int i = 0; i < 10; i++)
+		mouseStates[i] = GLFW_RELEASE;
+}
+
+int InputSystem::GetMods()
+{
+	return mods;
 }
 
 void InputSystem::CursorMove(GLFWwindow *W, double posX, double posY) {
@@ -34,12 +53,15 @@ void InputSystem::CursorMove(GLFWwindow *W, double posX, double posY) {
 
 	glm::ivec2 mousePos = glm::ivec2(posX, posY);
 	glm::ivec2 delta = mousePos - Wobj->pointerPos;
+
 	NotifyObservers(mousePos.x, mousePos.y, delta.x, delta.y);
 	Wobj->SetPointerPosition(mousePos);
 }
 
 void InputSystem::MouseClick(GLFWwindow *W, int button, int action, int mods)
 {
+	mouseStates[button] = action ? true : false;
+	InputSystem::mods = mods;
 	double posX, posY;
 	glfwGetCursorPos(W, &posX, &posY);
 	for (auto obs : activeObserver) {
