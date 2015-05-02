@@ -30,7 +30,7 @@ GameObject::GameObject(const char *name)
 
 GameObject::GameObject(const GameObject &obj) {
 	Init();
-	refID = obj.refID;
+	refID	= obj.refID;
 	mesh	= obj.mesh;
 	shader	= obj.shader;
 	input	= obj.input;
