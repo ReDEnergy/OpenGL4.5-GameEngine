@@ -27,6 +27,7 @@
 #include <Game/Actors/Player.h>
 #include <Game/State/GameState.h>
 #include <Game/Input/GameInput.h>
+#include <Game/ColorPicking/ColorPicking.h>
 
 #include <GPU/FrameBuffer.h>
 #include <GPU/Texture.h>
@@ -157,9 +158,9 @@ void Game::Init() {
 	colorPicking = new ColorPicking();
 	colorPicking->Init();
 
-#ifdef PHYSICS_ENGINE
+	#ifdef PHYSICS_ENGINE
 	Manager::GetHavok()->StepSimulation(0.016f);
-#endif
+	#endif
 };
 
 
@@ -176,9 +177,9 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		// --- Physics Simulation --- //
 		// ---------------------------//
 
-#ifdef PHYSICS_ENGINE
+		#ifdef PHYSICS_ENGINE
 		Manager::GetHavok()->StepSimulation(deltaTime);
-#endif
+		#endif
 		// -----------------------//
 		// --- Update Objects --- //
 		// -----------------------//
@@ -198,6 +199,9 @@ void Game::Update(float elapsedTime, float deltaTime) {
 	// ------------------------//
 	// --- Scene Rendering --- //
 	// ------------------------//
+
+	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
 
 	if (Manager::GetRenderSys()->Is(RenderState::FORWARD)) {
 		FrameBuffer::Unbind();

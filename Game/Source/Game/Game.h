@@ -6,9 +6,6 @@ using namespace std;
 #include <Core/World.h>
 #include <Event/EventListener.h>
 
-
-#include <Game/ColorPicking/ColorPicking.h>
-
 class Camera;
 class CameraInput;
 class CameraDebugInput;
