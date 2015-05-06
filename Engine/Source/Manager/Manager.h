@@ -34,15 +34,16 @@ class Manager
 	public:
 		DLLExport static void Init();
 		DLLExport static void LoadConfig();
-		DLLExport static DebugInfo* GetDebug();
-		DLLExport static SceneManager* GetScene();
-		DLLExport static ResourceManager* GetResource();
-		DLLExport static ShaderManager* GetShader();
-		DLLExport static RenderingSystem* GetRenderSys();
-		DLLExport static EventSystem* GetEvent();
-		DLLExport static MenuSystem* GetMenu();
-		DLLExport static TextureManager* GetTexture();
-		DLLExport static ConfigFile* GetConfig();
+		DLLExport static AudioManager*		GetAudio();
+		DLLExport static DebugInfo*			GetDebug();
+		DLLExport static SceneManager*		GetScene();
+		DLLExport static ResourceManager*	GetResource();
+		DLLExport static ShaderManager*		GetShader();
+		DLLExport static RenderingSystem*	GetRenderSys();
+		DLLExport static EventSystem*		GetEvent();
+		DLLExport static MenuSystem*		GetMenu();
+		DLLExport static TextureManager*	GetTexture();
+		DLLExport static ConfigFile*		GetConfig();
 
 #ifdef PHYSICS_ENGINE
 		DLLExport static HavokCore* GetHavok();
@@ -50,18 +51,18 @@ class Manager
 #endif
 
 	public:
-		static AudioManager *Audio;
-		static ColorPicking *ColorPick;
-		static DebugInfo *Debug;
-		static EventSystem *Event;
-		static FontManager *Font;
-		static MenuSystem *Menu;
-		static ResourceManager *Resource;
-		static TextureManager *Texture;
-		static SceneManager *Scene;
-		static ShaderManager *Shader;
-		static ConfigFile *Config;
-		static RenderingSystem *RenderSys;
+		static AudioManager		*Audio;
+		static ColorPicking		*ColorPick;
+		static DebugInfo		*Debug;
+		static EventSystem		*Event;
+		static FontManager		*Font;
+		static MenuSystem		*Menu;
+		static ResourceManager	*Resource;
+		static TextureManager	*Texture;
+		static SceneManager		*Scene;
+		static ShaderManager	*Shader;
+		static ConfigFile		*Config;
+		static RenderingSystem	*RenderSys;
 
 #ifdef PHYSICS_ENGINE
 		static HavokCore *Havok;

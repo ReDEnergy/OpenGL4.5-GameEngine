@@ -124,6 +124,11 @@ void Manager::LoadConfig() {
 	AABB::Init();
 }
 
+DLLExport AudioManager* Manager::GetAudio()
+{
+	return Audio;
+}
+
 DebugInfo* Manager::GetDebug()
 {
 	return Debug;
