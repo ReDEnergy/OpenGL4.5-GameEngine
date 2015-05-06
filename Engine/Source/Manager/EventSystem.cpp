@@ -1,6 +1,8 @@
 //#include <pch.h>
 #include "EventSystem.h"
 
+#include <include/gl.h>
+
 #include <Manager/DebugInfo.h>
 #include <Event/EventListener.h>
 #include <Manager/Manager.h>
@@ -35,7 +37,43 @@ void EventSystem::EmitSync(EventType Event, Object *data) {
 	}
 }
 
+void EventSystem::Update()
+{
+	auto it = timedEvents.begin();
+	while (it != std::end(timedEvents)) {
+		if ((*it)->Update()) {
+			it = timedEvents.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
+}
+
+void EventSystem::TriggerEvent(EventListener *E, EventType Event, Object *data, float delaySeconds)
+{
+	timedEvents.push_back(new TimedEvent(E, Event, data, delaySeconds));
+}
+
 void EventSystem::Clear() {
 	listeners.clear();
 	listenersEnum->clear();
+}
+
+TimedEvent::TimedEvent(EventListener *E, EventType Event, Object *data, float delaySeconds)
+{
+	event = E;
+	type = Event;
+	this->data = data;
+	triggerTime = float(glfwGetTime()) + delaySeconds;
+}
+
+bool TimedEvent::Update()
+{
+	float deltaTime = float(glfwGetTime());
+	if (float(glfwGetTime()) > triggerTime) {
+		event->OnEvent(type, NULL);
+		return true;
+	}
+	return false;
 }
