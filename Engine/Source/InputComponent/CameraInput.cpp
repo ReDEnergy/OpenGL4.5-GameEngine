@@ -63,15 +63,14 @@ void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
 
 void CameraInput::OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods)
 {
-	if ((mods == SPECIAL_KEY::ALT && button == MOUSE_BUTTON::LEFT) || (button == MOUSE_BUTTON::RIGHT))
+
+	if (action == 0 && (button == MOUSE_BUTTON::LEFT || button == MOUSE_BUTTON::RIGHT)) {
+		Engine::Window->ClipPointer(false);
+		Engine::Window->HidePointer(false);
+	}
+	else if ((mods == SPECIAL_KEY::ALT && button == MOUSE_BUTTON::LEFT) || (button == MOUSE_BUTTON::RIGHT))
 	{
-		if (action == 1) {
-			Engine::Window->ClipPointer(true);
-			Engine::Window->HidePointer(true);
-		}
-		else {
-			Engine::Window->ClipPointer(false);
-			Engine::Window->HidePointer(false);
-		}
+		Engine::Window->ClipPointer(true);
+		Engine::Window->HidePointer(true);
 	}
 }
