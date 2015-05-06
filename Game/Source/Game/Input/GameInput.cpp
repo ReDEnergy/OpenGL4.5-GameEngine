@@ -4,11 +4,13 @@
 #include <include/glfw_keys.h>
 
 #include <Core/Engine.h>
+#include <Core/Camera/Camera.h>
 #include <Core/WindowObject.h>
 #include <Core/InputSystem.h>
 
 #include <Game/Game.h>
 #include <Game/State/GameState.h>
+#include <Manager/AudioManager.h>
 #include <Manager/EventSystem.h>
 #include <Manager/Manager.h>
 #include <Event/EventType.h>
@@ -20,13 +22,36 @@ GameInput::GameInput(Game *game)
 
 }
 
+void GameInput::Update(float deltaTime, int mods) {
+
+	if (InputSystem::KeyHold(GLFW_KEY_RIGHT))
+		game->activeCamera->MoveRight(deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_UP))
+		game->activeCamera->MoveForward(deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_LEFT))
+		game->activeCamera->MoveRight(-deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_DOWN))
+		game->activeCamera->MoveBackward(deltaTime);
+
+	game->activeCamera->Update();
+}
+
 void GameInput::OnKeyPress(int key, int mods)
 {
 	switch (key)
 	{
-	case GLFW_KEY_ESCAPE:
-		Manager::GetEvent()->EmitSync(EventType::OPEN_GAME_MENU, nullptr);
-		return;
+		case GLFW_KEY_ESCAPE:
+			Manager::GetEvent()->EmitSync(EventType::OPEN_GAME_MENU, nullptr);
+			return;
+
+		case GLFW_KEY_F6:
+			Manager::GetAudio()->PlaySoundFX("bell");
+			return;
+
+		case GLFW_KEY_F7:
+			Manager::GetAudio()->PlayStream("relax");
+			return;
+
 	}
 }
 

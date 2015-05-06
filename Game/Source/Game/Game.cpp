@@ -11,6 +11,7 @@
 #include <InputComponent/DebugInput.h>
 #include <Input/ObjectControl.h>
 
+#include <Component/AudioSource.h>
 #include <Component/AABB.h>
 #include <Component/Mesh.h>
 #include <Component/SkinnedMesh.h>
@@ -161,6 +162,12 @@ void Game::Init() {
 	#ifdef PHYSICS_ENGINE
 	Manager::GetHavok()->StepSimulation(0.016f);
 	#endif
+
+	Manager::GetScene()->Update();
+	for (auto *obj : Manager::GetScene()->activeObjects) {
+		if (obj->audioSource)
+			obj->audioSource->Play();
+	}
 };
 
 
@@ -180,211 +187,215 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		#ifdef PHYSICS_ENGINE
 		Manager::GetHavok()->StepSimulation(deltaTime);
 		#endif
-		// -----------------------//
-		// --- Update Objects --- //
-		// -----------------------//
+
+		// ---------------------//
+		// --- Update Scene --- //
+		// ---------------------//
   		InputSystem::UpdateObservers(deltaTime);
 
+		Manager::GetAudio()->Update(activeCamera);
+		Manager::GetEvent()->Update();
 		Manager::GetScene()->Update();
+
+		if (Manager::GetDebug()->debugView) {
+			Manager::GetDebug()->BindForRendering(activeCamera);
+			Manager::GetDebug()->Render(activeCamera);
+		}
+
+		colorPicking->Update(activeCamera);
+
 		player->Update(deltaTime);
-	}
 
-	if (Manager::GetDebug()->debugView) {
-		Manager::GetDebug()->BindForRendering(activeCamera);
-		Manager::GetDebug()->Render(activeCamera);
-	}
+		// ------------------------//
+		// --- Scene Rendering --- //
+		// ------------------------//
 
-	colorPicking->Update(activeCamera);
+		glDepthMask(GL_TRUE);
+		glEnable(GL_DEPTH_TEST);
 
-	// ------------------------//
-	// --- Scene Rendering --- //
-	// ------------------------//
-
-	glDepthMask(GL_TRUE);
-	glEnable(GL_DEPTH_TEST);
-
-	if (Manager::GetRenderSys()->Is(RenderState::FORWARD)) {
-		FrameBuffer::Unbind();
-		FrameBuffer::Clear();
-	}
-	else {
-		FBO->Bind(true);
-	}
-
-	{
-		Shader *R2T = Manager::GetShader()->GetShader("rendertargets");
-		R2T->Use();
-		activeCamera->BindPosition(R2T->loc_eye_pos);
-		activeCamera->BindViewMatrix(R2T->loc_view_matrix);
-		activeCamera->BindProjectionMatrix(R2T->loc_projection_matrix);
-
-		Shader *R2TSk = Manager::GetShader()->GetShader("r2tskinning");
-		R2TSk->Use();
-		activeCamera->BindPosition(R2TSk->loc_eye_pos);
-		activeCamera->BindViewMatrix(R2TSk->loc_view_matrix);
-		activeCamera->BindProjectionMatrix(R2TSk->loc_projection_matrix);
-
-		for (auto *obj : Manager::GetScene()->frustumObjects) {
-			if (obj->mesh && obj->mesh->meshType == MeshType::SKINNED) {
-				obj->mesh->Update();
-				Manager::GetShader()->PushState(R2TSk);
-				obj->Render(R2TSk);
-			}
-			else {
-				Manager::GetShader()->PushState(R2T);
-				obj->Render(R2T);
-			}
+		if (Manager::GetRenderSys()->Is(RenderState::FORWARD)) {
+			FrameBuffer::Unbind();
+			FrameBuffer::Clear();
 		}
-		player->Render(R2T);
-	}
-
-	// -------------------------------------------//
-	// --- Camera Culling and Shadows Casting --- //
-	// -------------------------------------------//
-	{
-		gameCamera->UpdateBoundingBox(Sun);
-		for (auto *obj : Manager::GetScene()->activeObjects) {
-			if (obj->aabb) {
-				obj->aabb->Update(Sun->transform->rotationQ);
-			}
+		else {
+			FBO->Bind(true);
 		}
-		Manager::GetScene()->FrustumCulling(gameCamera);
-		Sun->CastShadows(gameCamera);
-	}
-	{
-		Spot->CastShadows();
-	}
-
-
-	///////////////////////////////////////////////////////////////////////////
-	// Accumulate shadows using a compute shader
-	{
-		Shader *sha = Manager::GetShader()->GetShader("CSMShadowMap");
-		sha->Use();
-
-		FBO->BindDepthTexture(GL_TEXTURE0);
-		gameCamera->BindProjectionDistances(sha);
-
-		glBindImageTexture(0, FBO->textures[0].GetTextureID(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
-		glBindImageTexture(1, FBO->textures[1].GetTextureID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
-		glBindImageTexture(2, ShadowMap->GetTextureID(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 
 		{
-			Sun->BindForUse(sha, gameCamera);
-			glUniform1i(sha->loc_shadowID, 0);
+			Shader *R2T = Manager::GetShader()->GetShader("rendertargets");
+			R2T->Use();
+			activeCamera->BindPosition(R2T->loc_eye_pos);
+			activeCamera->BindViewMatrix(R2T->loc_view_matrix);
+			activeCamera->BindProjectionMatrix(R2T->loc_projection_matrix);
 
-			glDispatchCompute(GLuint(UPPER_BOUND(FBO->GetResolution().x, 16)), GLuint(UPPER_BOUND(FBO->GetResolution().y, 16)), 1);
-			glFinish();
-			glMemoryBarrier(GL_ALL_BARRIER_BITS);
+			Shader *R2TSk = Manager::GetShader()->GetShader("r2tskinning");
+			R2TSk->Use();
+			activeCamera->BindPosition(R2TSk->loc_eye_pos);
+			activeCamera->BindViewMatrix(R2TSk->loc_view_matrix);
+			activeCamera->BindProjectionMatrix(R2TSk->loc_projection_matrix);
+
+			for (auto *obj : Manager::GetScene()->frustumObjects) {
+				if (obj->mesh && obj->mesh->meshType == MeshType::SKINNED) {
+					obj->mesh->Update();
+					Manager::GetShader()->PushState(R2TSk);
+					obj->Render(R2TSk);
+				}
+				else {
+					Manager::GetShader()->PushState(R2T);
+					obj->Render(R2T);
+				}
+			}
+			player->Render(R2T);
 		}
 
-		// Take care - using texture binding from above
-		sha = Manager::GetShader()->GetShader("ShadowMap");
-		sha->Use();
+		// -------------------------------------------//
+		// --- Camera Culling and Shadows Casting --- //
+		// -------------------------------------------//
 		{
-			Spot->BindForUse(sha);
-			glUniform1i(sha->loc_shadowID, 100);
-
-			glDispatchCompute(GLuint(UPPER_BOUND(FBO->GetResolution().x, 16)), GLuint(UPPER_BOUND(FBO->GetResolution().y, 16)), 1);
-			glFinish();
-			glMemoryBarrier(GL_ALL_BARRIER_BITS);
+			gameCamera->UpdateBoundingBox(Sun);
+			for (auto *obj : Manager::GetScene()->activeObjects) {
+				if (obj->aabb) {
+					obj->aabb->Update(Sun->transform->rotationQ);
+				}
+			}
+			Manager::GetScene()->FrustumCulling(gameCamera);
+			Sun->CastShadows(gameCamera);
 		}
-	}
-	///////////////////////////////////////////////////////////////////////////	
-
-
-	// ---------------------------//
-	// --- Deferred Rendering --- //
-	// ---------------------------//
-
-	if (!Manager::GetRenderSys()->Is(RenderState::FORWARD)) {
-
-		// --- Deferred Lighting --- //
 		{
-			FBO_Light->Bind();
+			Spot->CastShadows();
+		}
+
+
+		///////////////////////////////////////////////////////////////////////////
+		// Accumulate shadows using a compute shader
+		{
+			Shader *sha = Manager::GetShader()->GetShader("CSMShadowMap");
+			sha->Use();
+
+			FBO->BindDepthTexture(GL_TEXTURE0);
+			gameCamera->BindProjectionDistances(sha);
+
+			glBindImageTexture(0, FBO->textures[0].GetTextureID(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+			glBindImageTexture(1, FBO->textures[1].GetTextureID(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+			glBindImageTexture(2, ShadowMap->GetTextureID(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+
+			{
+				Sun->BindForUse(sha, gameCamera);
+				glUniform1i(sha->loc_shadowID, 0);
+
+				glDispatchCompute(GLuint(UPPER_BOUND(FBO->GetResolution().x, 16)), GLuint(UPPER_BOUND(FBO->GetResolution().y, 16)), 1);
+				glFinish();
+				glMemoryBarrier(GL_ALL_BARRIER_BITS);
+			}
+
+			// Take care - using texture binding from above
+			sha = Manager::GetShader()->GetShader("ShadowMap");
+			sha->Use();
+			{
+				Spot->BindForUse(sha);
+				glUniform1i(sha->loc_shadowID, 100);
+
+				glDispatchCompute(GLuint(UPPER_BOUND(FBO->GetResolution().x, 16)), GLuint(UPPER_BOUND(FBO->GetResolution().y, 16)), 1);
+				glFinish();
+				glMemoryBarrier(GL_ALL_BARRIER_BITS);
+			}
+		}
+		///////////////////////////////////////////////////////////////////////////	
+
+
+		// ---------------------------//
+		// --- Deferred Rendering --- //
+		// ---------------------------//
+
+		if (!Manager::GetRenderSys()->Is(RenderState::FORWARD)) {
+
+			// --- Deferred Lighting --- //
+			{
+				FBO_Light->Bind();
+				glDepthMask(GL_FALSE);
+				glEnable(GL_BLEND);
+				glEnable(GL_CULL_FACE);
+				glBlendEquation(GL_FUNC_ADD);
+				glBlendFunc(GL_ONE, GL_ONE);
+				glCullFace(GL_BACK);
+
+				Shader *DF = Manager::GetShader()->GetShader("deferred");
+				DF->Use();
+
+				FBO_Light->SendResolution(DF);
+				activeCamera->BindPosition(DF->loc_eye_pos);
+				activeCamera->BindViewMatrix(DF->loc_view_matrix);
+				activeCamera->BindProjectionMatrix(DF->loc_projection_matrix);
+
+				FBO->BindTexture(1, GL_TEXTURE0);
+				FBO->BindTexture(2, GL_TEXTURE1);
+
+				for (auto *light: Manager::GetScene()->lights) {
+					(activeCamera->DistTo(light) < light->transform->scale.x) ? glCullFace(GL_FRONT) : glCullFace(GL_BACK);
+					light->RenderDeferred(DF);
+				}
+
+				glDepthMask(GL_TRUE);
+				glDisable(GL_BLEND);
+				glDisable(GL_CULL_FACE);
+			}
+
+			// --- Screen Space Ambient Occlusion (SSAO) --- //
+			//if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
+			//	ssao->Update(FBO, activeCamera);
+			//}
+
+			// --- Render to the screen --- //
+			// ---   Composition step   --- //
+
+			FrameBuffer::Unbind();
+			FrameBuffer::Clear();
 			glDepthMask(GL_FALSE);
-			glEnable(GL_BLEND);
-			glEnable(GL_CULL_FACE);
-			glBlendEquation(GL_FUNC_ADD);
-			glBlendFunc(GL_ONE, GL_ONE);
-			glCullFace(GL_BACK);
+			{
+				Shader *Composition = Manager::GetShader()->GetShader("composition");
+				Composition->Use();
+				glUniform2f(Composition->loc_resolution, (float)Engine::Window->resolution.x, (float)Engine::Window->resolution.y);
+				glUniform1i(Composition->active_ssao, Manager::GetRenderSys()->Is(RenderState::SS_AO));
+				glUniform1i(Composition->loc_debug_view, Manager::GetDebug()->debugView);
+				activeCamera->BindProjectionDistances(Composition);
 
-			Shader *DF = Manager::GetShader()->GetShader("deferred");
-			DF->Use();
+				FBO->BindTexture(0, GL_TEXTURE0);
+				FBO_Light->BindTexture(0, GL_TEXTURE1);
+				ShadowMap->Bind(GL_TEXTURE2);
+				//ssao->BindTexture(GL_TEXTURE3);
+				FBO->BindDepthTexture(GL_TEXTURE4);
+				Manager::GetDebug()->FBO->BindTexture(0, GL_TEXTURE5);
+				Manager::GetDebug()->FBO->BindDepthTexture(GL_TEXTURE6);
 
-			FBO_Light->SendResolution(DF);
-			activeCamera->BindPosition(DF->loc_eye_pos);
-			activeCamera->BindViewMatrix(DF->loc_view_matrix);
-			activeCamera->BindProjectionMatrix(DF->loc_projection_matrix);
+				ScreenQuad->Render(Composition);
+			}
 
-			FBO->BindTexture(1, GL_TEXTURE0);
-			FBO->BindTexture(2, GL_TEXTURE1);
+			// --- Debug View --- //
+			if (Manager::GetRenderSys()->Is(RenderState::DEBUG)) {
+				Shader *Debug = Manager::GetShader()->GetShader("debug");
+				Debug->Use();
+				glUniform1i(Debug->loc_debug_id, Manager::GetRenderSys()->debugParam);
+				activeCamera->BindProjectionDistances(Debug);
+				//glm::BindUniform3f(Debug->loc_eye_pos, PLSC->transform->position);
 
-			for (auto *light: Manager::GetScene()->lights) {
-				(activeCamera->DistTo(light) < light->transform->scale.x) ? glCullFace(GL_FRONT) : glCullFace(GL_BACK);
-				light->RenderDeferred(DF);
+				glDisable(GL_DEPTH_TEST);
+				FBO->BindAllTextures();
+				// ssao->BindTexture(GL_TEXTURE4);
+				FBO_Light->BindTexture(0, GL_TEXTURE5);
+				FBO->BindDepthTexture(GL_TEXTURE6);
+				ShadowMap->Bind(GL_TEXTURE8);
+				Sun->FBO->BindTexture(0, GL_TEXTURE10);
+				Sun->FBO->BindDepthTexture(GL_TEXTURE11);
+				Spot->FBO->BindTexture(0, GL_TEXTURE12);
+				Spot->FBO->BindDepthTexture(GL_TEXTURE13);
+
+				DebugPanel->Render();
+
+				glEnable(GL_DEPTH_TEST);
 			}
 
 			glDepthMask(GL_TRUE);
-			glDisable(GL_BLEND);
-			glDisable(GL_CULL_FACE);
 		}
-
-		// --- Screen Space Ambient Occlusion (SSAO) --- //
-		//if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
-		//	ssao->Update(FBO, activeCamera);
-		//}
-
-		// --- Render to the screen --- //
-		// ---   Composition step   --- //
-
-		FrameBuffer::Unbind();
-		FrameBuffer::Clear();
-		glDepthMask(GL_FALSE);
-		{
-			Shader *Composition = Manager::GetShader()->GetShader("composition");
-			Composition->Use();
-			glUniform2f(Composition->loc_resolution, (float)Engine::Window->resolution.x, (float)Engine::Window->resolution.y);
-			glUniform1i(Composition->active_ssao, Manager::GetRenderSys()->Is(RenderState::SS_AO));
-			glUniform1i(Composition->loc_debug_view, Manager::GetDebug()->debugView);
-			activeCamera->BindProjectionDistances(Composition);
-
-			FBO->BindTexture(0, GL_TEXTURE0);
-			FBO_Light->BindTexture(0, GL_TEXTURE1);
-			ShadowMap->Bind(GL_TEXTURE2);
-			//ssao->BindTexture(GL_TEXTURE3);
-			FBO->BindDepthTexture(GL_TEXTURE4);
-			Manager::GetDebug()->FBO->BindTexture(0, GL_TEXTURE5);
-			Manager::GetDebug()->FBO->BindDepthTexture(GL_TEXTURE6);
-
-			ScreenQuad->Render(Composition);
-		}
-
-		// --- Debug View --- //
-		if (Manager::GetRenderSys()->Is(RenderState::DEBUG)) {
-			Shader *Debug = Manager::GetShader()->GetShader("debug");
-			Debug->Use();
-			glUniform1i(Debug->loc_debug_id, Manager::GetRenderSys()->debugParam);
-			activeCamera->BindProjectionDistances(Debug);
-			//glm::BindUniform3f(Debug->loc_eye_pos, PLSC->transform->position);
-
-			glDisable(GL_DEPTH_TEST);
-			FBO->BindAllTextures();
-			// ssao->BindTexture(GL_TEXTURE4);
-			FBO_Light->BindTexture(0, GL_TEXTURE5);
-			FBO->BindDepthTexture(GL_TEXTURE6);
-			ShadowMap->Bind(GL_TEXTURE8);
-			Sun->FBO->BindTexture(0, GL_TEXTURE10);
-			Sun->FBO->BindDepthTexture(GL_TEXTURE11);
-			Spot->FBO->BindTexture(0, GL_TEXTURE12);
-			Spot->FBO->BindDepthTexture(GL_TEXTURE13);
-
-			DebugPanel->Render();
-
-			glEnable(GL_DEPTH_TEST);
-		}
-
-		glDepthMask(GL_TRUE);
 	}
 
 	Manager::GetMenu()->RenderMenu();

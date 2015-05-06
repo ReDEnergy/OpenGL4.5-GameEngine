@@ -3,85 +3,145 @@
 <meshes>
 	<mesh skinned="true">
 		<name>guard</name>
-		<path>Resources/Models</path>
 		<file>guard.md5mesh</file>
 	</mesh>
 	<mesh skinned="true">
 		<name>astroBoy</name>
-		<path>Resources/Models</path>
 		<file>astroBoy.dae</file>
 	</mesh>
 	<mesh material="no">
 		<name>screen-quad</name>
-		<path>Resources/Models</path>
 		<file>screen_quad.obj</file>
 	</mesh>
 	<mesh quad="true">
 		<name>box</name>
-		<path>Resources/Models/Primitives</path>
+		<path>Primitives</path>
 		<file>box.obj</file>
 	</mesh>
 	<mesh material="no">
 		<name>sphere</name>
-		<path>Resources/Models/Primitives</path>
+		<path>Primitives</path>
 		<file>sphere.obj</file>
 	</mesh>
 	<mesh>
 		<name>player</name>
-		<path>Resources/Models</path>
 		<file>Player.obj</file>
 	</mesh>
 	<mesh>
 		<name>teapot</name>
-		<path>Resources/Models/Primitives</path>
+		<path>Primitives</path>
 		<file>teapot.obj</file>
 	</mesh>
 	<mesh>
 		<name>ground</name>
-		<path>Resources/Models</path>
 		<file>ground.obj</file>
 	</mesh>
 	<mesh>
 		<name>oildrum</name>
-		<path>Resources/Models</path>
 		<file>oildrum.obj</file>
 	</mesh>
 	<mesh>
 		<name>bamboo</name>
-		<path>Resources/Models</path>
 		<file>bamboo.obj</file>
 	</mesh>	
 	<mesh>
 		<name>wall</name>
-		<path>Resources/Models</path>
 		<file>concrete_wall.obj</file>
 	</mesh>	
 	<mesh>
 		<name>bman</name>
-		<path>Resources/Models</path>
 		<file>Bman.obj</file>
 	</mesh>	
 	<mesh>
 		<name>block10-10</name>
-		<path>Resources/Models/Path</path>
+		<path>Path</path>
 		<file>block10-10.obj</file>
 	</mesh>	
 	<mesh>
 		<name>block10-15</name>
-		<path>Resources/Models/Path</path>
+		<path>Path</path>
 		<file>block10-15.obj</file>
 	</mesh>	
 	<mesh>
 		<name>block15-15</name>
-		<path>Resources/Models/Path</path>
+		<path>Path</path>
 		<file>block15-15.obj</file>
 	</mesh>
 	<mesh>
 		<name>gate</name>
-		<path>Resources/Models</path>
 		<file>opera_gate.obj</file>
 	</mesh>
 </meshes>
+
+<!-- Audio -->
+<audio>
+	<music>
+		<name>relax</name>
+		<file>relax.ogg</file>
+	</music>
+	<music>
+		<name>relaxMono</name>
+		<file>relaxMono.ogg</file>
+	</music>
+	<music>
+		<name>truck</name>
+		<path>SoV</path>
+		<file>truck.wav</file>
+	</music>
+	<music>
+		<name>wind</name>
+		<path>SoV</path>
+		<file>wind.wav</file>
+	</music>
+	<music>
+		<name>greynoise</name>
+		<path>SoV</path>
+		<file>greynoise.wav</file>
+	</music>
+	<music>
+		<name>bluenoise</name>
+		<path>SoV</path>
+		<file>bluenoise.wav</file>
+	</music>
+	<music>
+		<name>brownnoise</name>
+		<path>SoV</path>
+		<file>brownnoise.wav</file>
+	</music>
+	<music>
+		<name>winter</name>
+		<file>winter.ogg</file>
+	</music>
+	<music>
+		<name>music-box</name>
+		<path>Effects</path>
+		<file>music-box.ogg</file>
+	</music>
+	<soundfx>
+		<name>music-box</name>
+		<path>Effects</path>
+		<file>music-box.ogg</file>
+		<effects>
+			<fx>
+				<name>bell</name>
+				<start>1.15</start>
+				<end>1.30</end>
+			</fx>
+		</effects>
+	</soundfx>
+	<soundfx>
+		<name>jump</name>
+		<path>Effects</path>
+		<file>jump.wav</file>
+		<effects>
+			<fx>
+				<name>jump</name>
+				<start>0</start>
+				<end>0.5</end>
+			</fx>
+		</effects>
+	</soundfx>
+</audio>
 
 <!-- GameObjects -->
 <objects>
@@ -109,7 +169,7 @@
 		<name>ground</name>
 		<mesh>ground</mesh>
 		<physics>
-			<file>Resources/Havok/ground.hkt</file>
+			<file>Havok/ground.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -131,7 +191,7 @@
 			<rotation>0 0 90</rotation>
 		</transform>
 		<physics>
-			<file>Resources/Havok/ground.hkt</file>
+			<file>Havok/ground.hkt</file>
 		</physics>
 	</object>		
 	<object>
@@ -139,7 +199,7 @@
 		<mesh>oildrum</mesh>
 		<shadow>yes</shadow>
 		<physics>
-			<file>Resources/Havok/oildrum.hkt</file>
+			<file>Havok/oildrum.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -157,7 +217,7 @@
 		<mesh>block10-10</mesh>
 		<shadow>yes</shadow>
 		<physics>
-			<file>Resources/Havok/Path/block10-10.hkt</file>
+			<file>Havok/Path/block10-10.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -165,7 +225,7 @@
 		<mesh>block10-15</mesh>
 		<shadow>yes</shadow>
 		<physics>
-			<file>Resources/Havok/Path/block10-15.hkt</file>
+			<file>Havok/Path/block10-15.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -173,7 +233,7 @@
 		<mesh>block15-15</mesh>
 		<shadow>yes</shadow>
 		<physics>
-			<file>Resources/Havok/Path/block15-15.hkt</file>
+			<file>Havok/Path/block15-15.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -193,3 +253,4 @@
 		</transform>
 	</object>	
 </objects>
+

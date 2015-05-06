@@ -35,8 +35,10 @@ class Game : public World,
 		void OnEvent(EventType Event, Object *data);
 		void InitSceneCameras();
 
-	private:
+	public:
 		Camera				*activeCamera;
+
+	private:
 		Camera				*freeCamera;
 		Camera				*gameCamera;
 		CameraInput			*cameraInput;
