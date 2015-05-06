@@ -4,25 +4,20 @@
 #include <unordered_map>
 
 #include <include/dll_export.h>
+#include <include/utils.h>
+
 #include <SFML/Audio.hpp>
+#include <Core/Camera/Camera.h>
 
 using namespace std;
 
-class SoundFX {
-	public:
-		SoundFX();
-		~SoundFX();
+class AudioStream;
+class SoundFX;
 
-		void Update();
-		void Play();
-		void Pause();
-
-	public:		
-		double startTime;
-		float offset;
-		float duration;
-		float volume;
-		sf::Sound *sound;
+enum class AUDIO_TYPE {
+	MUSIC,
+	SOUND_FX_FILE,
+	EFFECT,
 };
 
 class DLLExport AudioManager
@@ -33,18 +28,17 @@ class DLLExport AudioManager
 
 	public:
 		void Init();
-		void Update();
+		void Update(Camera *player);
+	
+		void PlayStream(const char *streamUID);
 		void PlaySoundFX(const char *soundFX_UID);
 
-	public:
-		void Play();
+		void LoadAudio(const string &fileLocation, const string &UID, AUDIO_TYPE TYPE);
+		void InitSoundFX(const string &buffer, const string &name, float offset, float duration);
+		AudioSource* GetAudioSource(const string &name);
 
 	private:
-		bool play;
-		sf::Music music;
-		sf::SoundBuffer buffer;
-		sf::Sound *sound;
-		list <SoundFX*> toUpdate;
-		list <SoundFX*> toRemove;
-		unordered_map <string, SoundFX*> effects;
+		unordered_map <string, SoundFX*> soundEffects;
+		unordered_map <string, AudioStream*> audioStreams;
+		unordered_map <string, sf::SoundBuffer*> soundBuffers;
 };

@@ -70,6 +70,9 @@
     <Filter Include="Source Files\Scripting">
       <UniqueIdentifier>{481270b2-96fb-4b63-b181-5458f3821379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{f70d2ce1-295c-44a9-b5aa-4e046ea5b7b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DLL\dllmain.cpp">
@@ -242,6 +245,15 @@
     </ClCompile>
     <ClCompile Include="Source\InputComponent\GlobalInput.cpp">
       <Filter>Source Files\InputComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio\SoundFX.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio\AudioStream.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\AudioSource.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -445,6 +457,15 @@
     </ClInclude>
     <ClInclude Include="Source\InputComponent\GlobalInput.h">
       <Filter>Source Files\InputComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Audio\SoundFX.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Audio\AudioStream.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\AudioSource.h">
+      <Filter>Source Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

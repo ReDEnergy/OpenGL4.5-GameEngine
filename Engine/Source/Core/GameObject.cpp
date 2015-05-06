@@ -1,6 +1,7 @@
 //#include <pch.h>
 #include "GameObject.h"
 
+#include <Component/AudioSource.h>
 #include <Component/AABB.h>
 #include <Component/Mesh.h>
 #include <Component/Renderer.h>
@@ -13,8 +14,8 @@
 #include <Manager/ColorPicking.h>
 
 #ifdef PHYSICS_ENGINE
-	#include <Component/Physics.h>
-	#include <Manager/PhysicsManager.h>
+#include <Component/Physics.h>
+#include <Manager/PhysicsManager.h>
 #endif
 
 GameObject::GameObject(const char *name)
@@ -38,12 +39,12 @@ GameObject::GameObject(const GameObject &obj) {
 	transform = new Transform(*obj.transform);
 	SetupAABB();
 
-#ifdef PHYSICS_ENGINE
+	#ifdef PHYSICS_ENGINE
 	if (obj.physics) {
 		physics = new Physics(this);
 		physics->body = Manager::Physics->GetCopyOf(obj.physics->body);
 	}
-#endif
+	#endif
 }
 
 GameObject::~GameObject() {
@@ -52,17 +53,6 @@ GameObject::~GameObject() {
 
 void GameObject::Init()
 {
-	aabb = nullptr;
-	mesh = nullptr;
-	shader = nullptr;
-	renderer = nullptr;
-	transform = nullptr;
-	input = nullptr;
-
-#ifdef PHYSICS_ENGINE
-	physics = nullptr;
-#endif
-
 	colorID = Manager::ColorPick->GetColorUID();
 	SetDebugView(true);
 }
@@ -80,6 +70,11 @@ void GameObject::Update() {
 		physics->Update();
 	}
 	#endif
+
+	// TODO event based position update through Transform
+	if (audioSource && audioSource->sound3D) {
+		audioSource->SetPosition(transform->position);
+	}
 }
 
 bool GameObject::ColidesWith(GameObject *object) {
@@ -114,6 +109,12 @@ void GameObject::UseShader(Shader *shader) {
 void GameObject::SetDebugView(bool value) {
 	debugView = value;
 	debugView ? Manager::Debug->Add(this) : Manager::Debug->Remove(this);
+}
+
+void GameObject::SetAudioSource(AudioSource *source)
+{
+	audioSource = source;
+	audioSource->SetPosition(transform->position);
 }
 
 float GameObject::DistTo(GameObject *object)

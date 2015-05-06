@@ -6,6 +6,7 @@
 #include <Core/Object.h>
 
 class AABB;
+class AudioSource;
 class Mesh;
 class Shader;
 class Physics;
@@ -33,28 +34,28 @@ class DLLExport GameObject: virtual public Object
 
 		void SetupAABB();
 		void SetDebugView(bool value);
+		void SetAudioSource(AudioSource *source);
 
 		virtual void Update();
 		virtual void UseShader(Shader *shader);
 
 	public:
-		AABB *aabb;
-		Mesh *mesh;
-		Shader *shader;
-		Renderer *renderer;
-		Transform *transform;
-		ObjectInput *input;
-
 		glm::vec3 colorID;
 
-#ifdef PHYSICS_ENGINE
-		Physics *physics;
-#endif
+		AudioSource *audioSource = nullptr;
+		AABB		*aabb = nullptr;
+		Mesh		*mesh = nullptr;
+		ObjectInput	*input = nullptr;
+		Renderer	*renderer = nullptr;
+		Transform	*transform = nullptr;
+		Shader		*shader	= nullptr;
+		#ifdef PHYSICS_ENGINE
+		Physics *physics = nullptr;
+		#endif
 
 	private:
 		char *refID;
 		bool debugView;
-
 };
 
 // TODO idea

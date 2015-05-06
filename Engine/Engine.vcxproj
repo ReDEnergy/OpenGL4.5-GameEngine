@@ -186,7 +186,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DLL\dllmain.cpp" />
+    <ClCompile Include="Source\Audio\AudioStream.cpp" />
+    <ClCompile Include="Source\Audio\SoundFX.cpp" />
     <ClCompile Include="Source\Component\AABB.cpp" />
+    <ClCompile Include="Source\Component\AudioSource.cpp" />
     <ClCompile Include="Source\Component\Mesh.cpp" />
     <ClCompile Include="Source\Component\ObjectInput.cpp" />
     <ClCompile Include="Source\Component\Physics.cpp">
@@ -267,7 +270,10 @@
     <ClCompile Include="Source\Utils\GPU.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Audio\AudioStream.h" />
+    <ClInclude Include="Source\Audio\SoundFX.h" />
     <ClInclude Include="Source\Component\AABB.h" />
+    <ClInclude Include="Source\Component\AudioSource.h" />
     <ClInclude Include="Source\Component\Mesh.h" />
     <ClInclude Include="Source\Component\ObjectInput.h" />
     <ClInclude Include="Source\Component\Physics.h">
