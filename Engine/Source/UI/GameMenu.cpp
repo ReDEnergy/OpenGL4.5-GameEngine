@@ -14,6 +14,7 @@
 #include <Input/ObjectControl.h>
 
 #include <Manager/Manager.h>
+#include <Manager/AudioManager.h>
 #include <Manager/ConfigFile.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/EventSystem.h>
@@ -117,7 +118,6 @@ void GameMenu::OnEvent(const char *eventID, Object *data) {
 		return;
 	}
 }
-
 
 void GameMenu::OnEvent(EventType Event, Object *data)
 {
