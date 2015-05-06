@@ -6,6 +6,7 @@
 #ifdef PHYSICS_ENGINE
 #include <Component/Physics.h>
 #endif
+#include <Component/AudioSource.h>
 #include <Component/Transform.h>
 
 #include <Core/Camera/Camera.h>
@@ -14,6 +15,7 @@
 #include <Lighting/PointLight.h>
 
 #include <Manager/Manager.h>
+#include <Manager/AudioManager.h>
 #include <Manager/ResourceManager.h>
 #include <Manager/DebugInfo.h>
 #include <Manager/EventSystem.h>
@@ -43,12 +45,14 @@ void SceneManager::LoadScene(const char *fileName) {
 
 	// --- Load GameObjects --- //
 	const char *refID;
+	pugi::xml_node audioInfo;
 	pugi::xml_node transformInfo;
 	pugi::xml_node objects = doc.child("objects");
 
 	for (pugi::xml_node obj: objects.children()) {
 		refID	= obj.child_value("ref");
-		transformInfo	= obj.child("transform");
+		transformInfo = obj.child("transform");
+		audioInfo = obj.child("audio");
 
 		GameObject *GO = Manager::Resource->GetGameObject(refID);
 		if (GO == nullptr) {
@@ -56,6 +60,16 @@ void SceneManager::LoadScene(const char *fileName) {
 			continue;
 		}
 		Manager::Resource->SetTransform(transformInfo, *GO->transform);
+
+		if (audioInfo) {
+			bool loop = audioInfo.attribute("loop").as_bool();
+			pugi::xml_attribute att = audioInfo.attribute("volume");
+			GO->SetAudioSource(Manager::Audio->GetAudioSource(audioInfo.text().get()));
+			GO->audioSource->SetLoop(loop);
+			if (!att.empty())
+				GO->audioSource->SetVolume(att.as_float());
+		}
+
 		AddObject(GO);
 	}
 
@@ -113,18 +127,18 @@ void SceneManager::Update() {
 
 void SceneManager::AddObject(GameObject *obj) {
 	toAdd.push_back(obj);
-#ifdef PHYSICS_ENGINE
+	#ifdef PHYSICS_ENGINE
 	if (obj->physics)
 		obj->physics->AddToWorld();
-#endif
+	#endif
 }
 
 void SceneManager::RemoveObject(GameObject *obj) {
 	toRemove.push_back(obj);
-#ifdef PHYSICS_ENGINE
+	#ifdef PHYSICS_ENGINE
 	if (obj->physics)
 		obj->physics->RemoveFromWorld();
-#endif
+	#endif
 }
 
 void SceneManager::FrustumCulling(Camera *camera) {

@@ -20,6 +20,10 @@ class DLLExport ResourceManager
 
 	public:
 		void Load(const char *file);
+		void LoadMeshes(const pugi::xml_document &doc);
+		void LoadGameObjects(const pugi::xml_document &doc);
+		void LoadGameAudio(const pugi::xml_document &doc);
+
 		GameObject* GetGameObject(const char *name);
 
 	public:

@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include <Manager/Manager.h>
+#include <Manager/AudioManager.h>
 #include <Manager/SceneManager.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/DebugInfo.h>
@@ -21,6 +22,12 @@
 #include <include/havok.h>
 #include <Component/Physics.h>
 #endif
+
+namespace RESOURCE_PATH {
+	const string ROOT = "Resources\\";
+	const string MODELS = ROOT + "Models\\";
+	const string AUDIO = ROOT + "Audio\\";
+}
 
 ResourceManager::ResourceManager() {
 }
@@ -38,18 +45,23 @@ void ResourceManager::Load(const char* file) {
 	// Load document
 	const pugi::xml_document &doc = *(pugi::LoadXML(file));
 
-	// Load Meshes
+	LoadMeshes(doc);
+	LoadGameObjects(doc);
+	LoadGameAudio(doc);
+
+}
+
+void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
+{
 	const char* meshName;
 	pugi::xml_node meshesXML = doc.child("meshes");
 
-	for (pugi::xml_node mesh: meshesXML.children()) {
+	for (pugi::xml_node mesh : meshesXML.children()) {
 		bool skinned = mesh.attribute("skinned").as_bool();
 		bool quad = mesh.attribute("quad").as_bool();
 		bool noMaterial = mesh.attribute("material") ? true : false;
 
-		string fileLocation = mesh.child_value("path");
-		fileLocation += '\\';
-		fileLocation += mesh.child_value("file");
+		string fileLocation = RESOURCE_PATH::MODELS + mesh.child_value("path") + '\\' + mesh.child_value("file");
 		meshName = mesh.child_value("name");
 
 		Mesh *M = skinned ? new SkinnedMesh() : new Mesh();
@@ -66,22 +78,56 @@ void ResourceManager::Load(const char* file) {
 		}
 		meshes[meshName] = M;
 	}
+}
 
-	// --- Load GameObjects --- //
+void ResourceManager::LoadGameAudio(const pugi::xml_document &doc)
+{
+	const char* audioName;
+	pugi::xml_node audiosXML = doc.child("audio");
+
+	for (pugi::xml_node audio : audiosXML.children()) {
+		cout << "Audio Type: " << audio.name() << endl;
+
+		audioName = audio.child_value("name");
+		string fileLocation = RESOURCE_PATH::AUDIO + audio.child_value("path") + '\\' + audio.child_value("file");
+
+		if (strcmp(audio.name(), "music") == 0) {
+			Manager::Audio->LoadAudio(fileLocation, audioName, AUDIO_TYPE::MUSIC);
+		}
+
+		if (strcmp(audio.name(), "soundfx") == 0) {
+			Manager::Audio->LoadAudio(fileLocation, audioName, AUDIO_TYPE::SOUND_FX_FILE);
+
+			pugi::xml_node effectsXML = audio.child("effects");
+
+			for (pugi::xml_node fx : effectsXML.children()) {
+				const char* effectName = fx.child_value("name");
+				float offset = fx.child("start").text().as_float();
+				float length = fx.child("end").text().as_float() - offset;
+				Manager::Audio->InitSoundFX(audioName, effectName, offset, length);
+			}
+
+		}
+	}
+}
+
+void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
+{
 	const char *objName;
+	const char* meshName;
 	pugi::xml_node shaderInfo;
 	pugi::xml_node physicsInfo;
 	pugi::xml_node transformInfo;
 	pugi::xml_node renderingInfo;
 	pugi::xml_node objects = doc.child("objects");
 
-	for (pugi::xml_node obj: objects.children()) {
-		objName			= obj.child_value("name");
-		meshName		= obj.child_value("mesh");
-		shaderInfo		= obj.child("shader");
-		physicsInfo		= obj.child("physics");
-		transformInfo	= obj.child("transform");
-		renderingInfo	= obj.child("shadow");
+	for (pugi::xml_node obj : objects.children()) {
+		objName = obj.child_value("name");
+		meshName = obj.child_value("mesh");
+		shaderInfo = obj.child("shader");
+		physicsInfo = obj.child("physics");
+		transformInfo = obj.child("transform");
+		renderingInfo = obj.child("shadow");
 
 		GameObject *GO = new GameObject(objName);
 		SetTransform(transformInfo, *GO->transform);
@@ -94,12 +140,12 @@ void ResourceManager::Load(const char* file) {
 			GO->UseShader(Manager::Shader->GetShader(shaderInfo.text().get()));
 		}
 
-#ifdef PHYSICS_ENGINE
+		#ifdef PHYSICS_ENGINE
 		if (physicsInfo) {
 			GO->physics = new Physics(GO);
 			GO->physics->LoadHavokFile(physicsInfo.child_value("file"));
 		}
-#endif
+		#endif
 
 		if (renderingInfo) {
 			GO->renderer->SetCastShadow(true);
