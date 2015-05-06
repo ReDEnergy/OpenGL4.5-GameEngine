@@ -43,10 +43,6 @@ void DebugInput::OnKeyPress(int key, int mods) {
 			case GLFW_KEY_V:
 				Manager::Debug->debugView = !Manager::Debug->debugView;
 				return;
-
-			case GLFW_KEY_P:
-				Manager::Audio->Play();
-				return;
 		}
 
 		{
@@ -87,14 +83,6 @@ void DebugInput::OnKeyPress(int key, int mods) {
 
 	case GLFW_KEY_F5: {
 		Manager::Shader->Reload();
-		return;
-	}
-
-	case GLFW_KEY_F6: {
-		bool state = Manager::RenderSys->Toggle(RenderState::HIDE_POINTER);
-		Manager::RenderSys->Toggle(RenderState::CLIP_POINTER);
-		Engine::Window->ClipPointer(state);
-		Engine::Window->HidePointer(state);
 		return;
 	}
 	}
