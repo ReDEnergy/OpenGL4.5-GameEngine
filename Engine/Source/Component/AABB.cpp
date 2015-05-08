@@ -33,7 +33,7 @@ void AABB::Init() {
 }
 
 // Collision test not exactly ok
-// prbably different rotation are used for halfSize and positions
+// probably different rotation are used for halfSize and positions
 
 bool AABB::Overlaps(AABB *aabb)
 {
