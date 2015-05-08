@@ -31,19 +31,16 @@ bool Texture::Load2D(const char* file_name, GLenum wrapping_mode)
 	int width, height, chn;
 	unsigned char *data = stbi_load(file_name, &width, &height, &chn, 0);
 
-	#ifdef DEBUG_INFO
-		cout << width << " * " << height << " channels: " << chn << endl;
-	#endif
-
 	if (data == NULL) {
 		#ifdef DEBUG_INFO
-		cout << "Error loading texture: " << file_name << endl;
+		cout << "ERROR loading texture: " << file_name << endl << endl;
 		#endif
 		return false;
 	}
 
 	#ifdef DEBUG_INFO
 	cout << "Loaded " << file_name << endl;
+	cout << width << " * " << height << " channels: " << chn << endl << endl;
 	#endif
 
 	Init2DTexture(width, height);
