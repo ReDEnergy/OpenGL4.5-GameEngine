@@ -23,12 +23,6 @@
 #include <Component/Physics.h>
 #endif
 
-namespace RESOURCE_PATH {
-	const string ROOT = "Resources\\";
-	const string MODELS = ROOT + "Models\\";
-	const string AUDIO = ROOT + "Audio\\";
-}
-
 ResourceManager::ResourceManager() {
 }
 
@@ -61,10 +55,9 @@ void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
 		bool quad = mesh.attribute("quad").as_bool();
 		bool noMaterial = mesh.attribute("material") ? true : false;
 
-		string fileLocation = RESOURCE_PATH::MODELS + mesh.child_value("path") + '\\' + mesh.child_value("file");
 		meshName = mesh.child_value("name");
 
-		Mesh *M = skinned ? new SkinnedMesh() : new Mesh();
+		Mesh *M = skinned ? new SkinnedMesh(meshName) : new Mesh(meshName);
 
 		if (quad) {
 			M->SetGlPrimitive(GL_QUADS);
@@ -72,7 +65,7 @@ void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
 		if (noMaterial) {
 			M->UseMaterials(false);
 		}
-		if (!M->LoadMesh(fileLocation)) {
+		if (!M->LoadMesh(RESOURCE_PATH::MODELS + mesh.child_value("path"), mesh.child_value("file"))) {
 			SAFE_FREE(M);
 			continue;
 		}
@@ -159,6 +152,16 @@ GameObject* ResourceManager::GetGameObject(const char *name) {
 	if (_objects[name])
 		return new GameObject(*_objects[name]);
 	return nullptr;
+}
+
+unsigned int ResourceManager::GetGameObjectUID(const char *name)
+{
+	if (name == nullptr) return -1;
+	if (_counter.find(name) == _counter.end()) {
+		_counter[name] = -1;
+	}
+	_counter[name]++;
+	return _counter[name];
 }
 
 void ResourceManager::SetTransform(pugi::xml_node node, Transform &T) {

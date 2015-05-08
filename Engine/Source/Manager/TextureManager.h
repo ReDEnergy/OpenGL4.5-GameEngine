@@ -13,7 +13,7 @@ class Texture;
 class DLLExport TextureManager
 {
 	public:
-		Texture* LoadTexture(const char* name);
+		Texture* LoadTexture(const string &Path, const char *fileName);
 		Texture* GetTexture(const char* name);
 		Texture* GetTexture(unsigned int textureID);
 		void Init();

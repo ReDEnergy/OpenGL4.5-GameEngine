@@ -25,6 +25,7 @@ class DLLExport SceneManager
 		void FrustumCulling(Camera *camera);
 		void AddObject(GameObject *obj);
 		void RemoveObject(GameObject *obj);
+		GameObject* GetObjectW(char *refID, unsigned int instanceID);
 
 	private:
 		const char *sceneFile;

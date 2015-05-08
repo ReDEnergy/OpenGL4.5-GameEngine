@@ -1,25 +1,26 @@
 //#include <pch.h>
 #include "TextureManager.h"
 
-#include <Manager/DebugInfo.h>
-#include <Manager/Manager.h>
-#include <GPU/Texture.h>
 #include <include/utils.h>
 
-static const string T_PATH("Resources\\Models\\maps\\");
+#include <GPU/Texture.h>
+
+#include <Manager/Manager.h>
+#include <Manager/DebugInfo.h>
+#include <Manager/ResourceManager.h>
 
 TextureManager::TextureManager() {
 	Manager::Debug->InitManager("Shader");
 }
 
 void TextureManager::Init() {
-	LoadTexture("default.png");
-	LoadTexture("white.png");
-	LoadTexture("black.jpg");
-	LoadTexture("noise.png");
-	LoadTexture("random.jpg");
-	LoadTexture("explosion.bmp");
-	LoadTexture("particle.png");
+	LoadTexture(RESOURCE_PATH::TEXTURES, "default.png");
+	LoadTexture(RESOURCE_PATH::TEXTURES, "white.png");
+	LoadTexture(RESOURCE_PATH::TEXTURES, "black.jpg");
+	LoadTexture(RESOURCE_PATH::TEXTURES, "noise.png");
+	LoadTexture(RESOURCE_PATH::TEXTURES, "random.jpg");
+	LoadTexture(RESOURCE_PATH::TEXTURES, "explosion.bmp");
+	LoadTexture(RESOURCE_PATH::TEXTURES, "particle.png");
 }
 
 TextureManager::~TextureManager() {
@@ -29,19 +30,16 @@ TextureManager::~TextureManager() {
 		SAFE_FREE(vTextures[i]);
 }
 
-Texture* TextureManager::LoadTexture(const char* name) {
+Texture* TextureManager::LoadTexture(const string &path, const char *fileName) {
 
-	Texture *texture = GetTexture(name);
+	Texture *texture = GetTexture(fileName);
 
 	if (texture) {
-		#ifdef DEBUG_INFO
-			fprintf(stderr, "Texture: %s already loaded\n", name);
-		#endif
-		return mapTextures[name];
+		return mapTextures[fileName];
 	}
 
 	texture = new Texture();
-	bool rc = texture->Load2D((T_PATH + name).c_str());
+	bool rc = texture->Load2D((path + '\\' + fileName).c_str());
 
 	if (rc == FALSE) {
 		delete texture;
@@ -49,7 +47,7 @@ Texture* TextureManager::LoadTexture(const char* name) {
 	}
 
 	vTextures.push_back(texture);
-	mapTextures[name] = texture;
+	mapTextures[fileName] = texture;
 	return texture;
 }
 

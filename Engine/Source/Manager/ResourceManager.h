@@ -10,6 +10,13 @@ class Mesh;
 class Transform;
 class GameObject;
 
+namespace RESOURCE_PATH {
+	const string ROOT = "Resources\\";
+	const string AUDIO = ROOT + "Audio\\";
+	const string MODELS = ROOT + "Models\\";
+	const string TEXTURES = ROOT + "Textures\\";
+}
+
 class DLLExport ResourceManager
 {
 	friend class SceneManager;
@@ -25,11 +32,13 @@ class DLLExport ResourceManager
 		void LoadGameAudio(const pugi::xml_document &doc);
 
 		GameObject* GetGameObject(const char *name);
+		unsigned int GetGameObjectUID(const char *name);
 
 	public:
 		void SetTransform(pugi::xml_node node, Transform &T);
 
 	private:
 		unordered_map<string, GameObject*> _objects;
+		unordered_map<string, unsigned int> _counter;
 		unordered_map<string, Mesh*> meshes;
 };

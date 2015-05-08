@@ -141,6 +141,16 @@ void SceneManager::RemoveObject(GameObject *obj) {
 	#endif
 }
 
+GameObject* SceneManager::GetObject(char *refID, unsigned int instanceID)
+{
+	for (auto obj : activeObjects) {
+		if (obj->instanceID == instanceID &&
+			strcmp(obj->refID, refID) == 0)
+			return obj;
+	}
+	return nullptr;
+}
+
 void SceneManager::FrustumCulling(Camera *camera) {
 	frustumObjects.clear();
 	for (auto obj: activeObjects) {

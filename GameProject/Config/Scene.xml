@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Scene -->
 <objects>
-	<!-- skinning -->
-	<object>
+	<!-- Animated -->
+  <object>
+    <ref>soldier</ref>
+    <transform>
+      <position>0 0 4</position>
+    </transform>
+  </object>
+
+  <object>
 		<ref>guard</ref>
 		<transform>
 			<position>0 0 2</position>
 		</transform>
 	</object>
-
-
-	<!-- left -->
+  
+  <!-- left -->
 	<object>
 		<ref>ground</ref>
 		<transform>
@@ -28,77 +34,11 @@
 		</transform>
 	</object>
 	<object>
-		<ref>block10-10</ref>
-		<transform>
-			<position>3 0 3</position>
-		</transform>
-	</object>	
-	<object>
-		<ref>block10-15</ref>
-		<transform>
-			<position>6 0 0</position>
-		</transform>
-	</object>
-	<object>
-		<ref>block15-15</ref>
-		<transform>
-			<position>9 0 0</position>
-		</transform>
-	</object>
-	<object>
-		<ref>block15-15</ref>
-		<transform>
-			<position>15 -0.5 0</position>
-		</transform>
-	</object>
-	<object>
-		<ref>block10-15</ref>
-		<transform>
-			<position>18 0 0</position>
-		</transform>
-	</object>
-	<object>
-		<ref>block10-15</ref>
-		<transform>
-			<position>21 0.5 0</position>
-		</transform>
-	</object>
-	<object>
-		<ref>block10-10</ref>
-		<transform>
-			<position>23 -0.5 0</position>
-		</transform>
-	</object>	
-	<object>
-		<ref>block10-15</ref>
-		<transform>
-			<position>27 1.5 0</position>
-		</transform>
-	</object>
-	<object>
-		<ref>block10-15</ref>
-		<transform>
-			<position>30 2 0</position>
-		</transform>
-	</object>
-	<object>
-		<ref>block15-15</ref>
-		<transform>
-			<position>34 0.5 0</position>
-		</transform>
-	</object>
-	<object>
-		<ref>block10-10</ref>
-		<transform>
-			<position>38 0 0</position>
-		</transform>
-	</object>
-	
-	<object>
 		<ref>oildrum</ref>
 		<transform>
 			<position>42 0 0</position>
 		</transform>
+		<audio>relaxMono</audio>
 	</object>	
 	<object>
 		<ref>oildrum</ref>
@@ -121,10 +61,23 @@
 	<object>
 		<ref>oildrum</ref>
 		<transform>
-			<position>54 0 0</position>
+			<position>20 0 12</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>17 0 -15</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>8 0 7</position>
 		</transform>
 	</object>	
 
+	
 	<!-- vegetation -->
 	<object><ref>bamboo</ref><transform><position>1 0 1</position></transform></object>	
 	<object><ref>bamboo</ref><transform><position>3 1 0.4</position></transform></object>	
