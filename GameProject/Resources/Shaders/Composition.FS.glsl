@@ -35,7 +35,7 @@ vec4 DebugView(vec2 text_coord) {
 	float ds = texture(u_texture_4, text_coord).r;
 	float dd = texture(u_texture_6, text_coord).r;
 	if (dd < ds)
-		return texture(u_texture_5, text_coord);
+		return texture(u_texture_5, text_coord) * 0.5;
 	return vec4(0, 0, 0, 0);
 }
 
