@@ -28,6 +28,8 @@
 #include <Game/Actors/Player.h>
 #include <Game/State/GameState.h>
 #include <Game/Input/GameInput.h>
+#include <Game/Input/PlayerInput.h>
+#include <Game/Input/AnimationInput.h>
 #include <Game/ColorPicking/ColorPicking.h>
 
 #include <GPU/FrameBuffer.h>
@@ -168,6 +170,11 @@ void Game::Init() {
 		if (obj->audioSource)
 			obj->audioSource->Play();
 	}
+
+	GameObject* soldier = Manager::GetScene()->GetObjectW("soldier", 1);
+	AnimationInput *aInput = new AnimationInput();
+	aInput->GO = soldier;
+	soldier->input = aInput;
 };
 
 
