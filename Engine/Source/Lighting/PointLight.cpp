@@ -34,7 +34,9 @@ CameraDirection cameraDirections[6] =
 };
 
 
-PointLight::PointLight() {
+PointLight::PointLight()
+	: GameObject("point-light")
+{
 }
 
 void PointLight::RenderDeferred(Shader *shader) {

@@ -7,7 +7,9 @@
 #include <Component/Mesh.h>
 
 
-ThirdPersonCamera::ThirdPersonCamera() {
+ThirdPersonCamera::ThirdPersonCamera()
+	: GameObject("3rd-camera")
+{
 	targetMaxDist = 200.0f;	
 	limitUpTPS =  0.95f * (float) M_PI / 2;
 }

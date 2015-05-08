@@ -17,6 +17,7 @@
 using namespace std;
 
 DirectionalLight::DirectionalLight()
+	: GameObject("dir-light")
 {
 	distanceTo = 100.0f;
 	Camera::Init();

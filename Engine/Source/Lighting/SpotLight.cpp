@@ -17,6 +17,7 @@
 using namespace std;
 
 SpotLight::SpotLight()
+	: GameObject("stop-light")
 {
 	Init();
 }

@@ -18,8 +18,10 @@ using namespace std;
 
 class DLLExport GameObject: virtual public Object
 {
+	friend class SceneManager;
+
 	public:
-		GameObject(const char *name = nullptr);
+		GameObject(const char *name);
 		GameObject(const GameObject &obj);
 		virtual ~GameObject();
 
@@ -53,8 +55,9 @@ class DLLExport GameObject: virtual public Object
 		Physics *physics = nullptr;
 		#endif
 
-	private:
-		char *refID;
+	protected:
+		char *refID = nullptr;
+		unsigned int instanceID = -1;
 		bool debugView;
 };
 

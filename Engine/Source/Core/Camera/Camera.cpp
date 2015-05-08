@@ -25,6 +25,7 @@
 #include <Utils/3D.h>
 
 Camera::Camera()
+	: GameObject("camera")
 {
 	Init();
 }
@@ -351,7 +352,7 @@ void Camera::SplitFrustum(unsigned int splits)
 
 		// Create an AABB for each split section
 		for (unsigned int i = 0; i < splits; i++) {
-			GameObject *fz = new GameObject();
+			GameObject *fz = new GameObject("split-zone");
 			fz->transform = transform;
 			fz->mesh = new Mesh();
 

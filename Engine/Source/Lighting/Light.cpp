@@ -10,6 +10,7 @@
 using namespace std;
 
 Light::Light()
+	: GameObject("light")
 {
 	GameObject *GO = Manager::Resource->GetGameObject("light-debug");
 	this->mesh = GO->mesh;
