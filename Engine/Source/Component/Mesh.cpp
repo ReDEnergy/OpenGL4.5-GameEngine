@@ -9,17 +9,20 @@
 #include <GPU/Material.h>
 
 #include <Manager/Manager.h>
+#include <Manager/ResourceManager.h>
 #include <Manager/TextureManager.h>
 
 #include <Utils/GPU.h>
 
-Mesh::Mesh() {
+Mesh::Mesh(const char* meshID)
+{
+	if (meshID)
+		this->meshID.assign(meshID);
 	meshType = MeshType::STATIC;
 	useMaterial = true;
 	debugColor = glm::vec4(1);
 	glPrimitive = GL_TRIANGLES;
 }
-
 
 Mesh::~Mesh() {
 	Clear();
@@ -35,22 +38,24 @@ void Mesh::Clear()
 }
 
 
-bool Mesh::LoadMesh(const string& fileName) {
-
+bool Mesh::LoadMesh(const string& fileLocation, const string& fileName)
+{
 	Clear();
- 
+	this->fileLocation = fileLocation;
+	string file = (fileLocation + '\\' + fileName).c_str();
+
 	Assimp::Importer Importer;
 
 	unsigned int flags = aiProcess_GenSmoothNormals | aiProcess_FlipUVs;
 	if (glPrimitive == GL_TRIANGLES) flags |= aiProcess_Triangulate;
 
-	const aiScene* pScene = Importer.ReadFile(fileName.c_str(), flags);
-	
+	const aiScene* pScene = Importer.ReadFile(file, flags);
+
 	if (pScene) {
-		return InitFromScene(pScene, fileName);
+		return InitFromScene(pScene);
 	}
 
-	printf("Error parsing '%s': '%s'\n", fileName.c_str(), Importer.GetErrorString());
+	printf("Error parsing '%s': '%s'\n", file, Importer.GetErrorString());
 	return false;
 }
 
@@ -82,7 +87,7 @@ bool Mesh::InitFromData(vector<glm::vec3>& positions,
 	return InitFromData();
 }
 
-bool Mesh::InitFromScene(const aiScene* pScene, const string& File)
+bool Mesh::InitFromScene(const aiScene* pScene)
 {
 
 	meshEntries.resize(pScene->mNumMeshes);
@@ -115,7 +120,7 @@ bool Mesh::InitFromScene(const aiScene* pScene, const string& File)
 		InitMesh(paiMesh);
 	}
 
-	if (useMaterial && !InitMaterials(pScene, File))
+	if (useMaterial && !InitMaterials(pScene))
 		return false;
 
 	buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
@@ -150,7 +155,7 @@ void Mesh::InitMesh(const aiMesh* paiMesh)
 	bbox = new BoundingBox(positions);
 }
 
-bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
+bool Mesh::InitMaterials(const aiScene* pScene)
 {
 	bool ret = true;
 	aiColor4D color;
@@ -163,7 +168,7 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 		if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
 			aiString Path;
 			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
-				materials[i]->texture = Manager::Texture->LoadTexture(Path.data);
+				materials[i]->texture = Manager::Texture->LoadTexture(fileLocation, Path.data);
 			}
 
 			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_AMBIENT, &color) == AI_SUCCESS)

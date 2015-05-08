@@ -50,30 +50,35 @@ struct VertexBoneData
 	void AddBoneData(uint BoneID, float Weight);
 };
 
-class SkinnedMesh : public Mesh
+class DLLExport SkinnedMesh : public Mesh
 {
 	public:
-		SkinnedMesh();
+		SkinnedMesh(const char* meshID = NULL);
 		~SkinnedMesh();
 
-		bool LoadMesh(const std::string& fileName);
+		bool LoadMesh(const std::string& fileLocation, const std::string& fileName);
 		void Render(const Shader* shader);
 		void Update();
+		void SetAnimationState(char *animationState);
 
 	private:
-		bool InitFromScene(const aiScene* pScene, const std::string& File);
+		bool InitFromScene(const aiScene* pScene);
 		void InitMesh(const aiMesh* paiMesh, uint index);
-		void BoneTransform(float timeInSeconds);
+
+		void UpdateAnimation(float timeInSeconds);
 		void ReadNodeHeirarchy(float animationTime, const aiNode* pNode, const glm::mat4 &ParentTransform);
-		void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-		void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-		void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-		uint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
-		uint FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
-		uint FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
+
+		void CalcInterpolatedPosition(aiVector3D& out, float animationTime, const aiNodeAnim* pNodeAnim);
+		void CalcInterpolatedRotation(aiQuaternion& out, float animationTime, const aiNodeAnim* pNodeAnim);
+		void CalcInterpolatedScaling(aiVector3D& out, float animationTime, const aiNodeAnim* pNodeAnim);
+
+		uint FindPositionKeyID(float animationTime, const aiNodeAnim* pNodeAnim);
+		uint FindRotationKeyID(float animationTime, const aiNodeAnim* pNodeAnim);
+		uint FindScalingKeyID(float animationTime, const aiNodeAnim* pNodeAnim);
+
 		const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
 
-private:
+	private:
 		unordered_map<string, uint> skeletalBones;
 		vector<VertexBoneData> boneData;
 		vector<BoneInfo> boneInfo;
@@ -83,4 +88,8 @@ private:
 
 		Assimp::Importer Importer;
 		const aiScene* pScene;
+
+		unordered_map<string, aiAnimation*> animations;
+		aiAnimation *animationState;
+
 };

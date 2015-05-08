@@ -50,9 +50,9 @@ class BoundingBox {
 		vector<glm::vec3> points;
 };
 
-class Mesh {
+class DLLExport Mesh {
 	public:
-		Mesh();
+		Mesh(const char* meshID = NULL);
 		virtual ~Mesh();
 
 		bool InitFromData();
@@ -62,7 +62,7 @@ class Mesh {
 						vector<unsigned short>& indices);
 
 		virtual void Update() {};
-		virtual bool LoadMesh(const std::string& fileName);
+		virtual bool LoadMesh(const string& fileLocation, const string& fileName);
 		virtual void Render(const Shader *shader);
 		virtual void RenderInstanced(unsigned int instances);
 		virtual void RenderDebug();
@@ -72,9 +72,12 @@ class Mesh {
 
 	protected:
 		void Clear();
-		virtual bool InitFromScene(const aiScene* pScene, const std::string& File);
 		void InitMesh(const aiMesh* paiMesh);
-		bool InitMaterials(const aiScene* pScene, const std::string& File);
+		bool InitMaterials(const aiScene* pScene);
+		virtual bool InitFromScene(const aiScene* pScene);
+
+	private:
+		string meshID;
 
 	public:
 		MeshType meshType;
@@ -86,6 +89,8 @@ class Mesh {
 		BoundingBox *bbox;
 
 	protected:
+		string fileLocation;
+
 		bool useMaterial;
 		unsigned int glPrimitive;
 		GPUBuffers *buffers;
