@@ -41,4 +41,5 @@ class DLLExport InputRules
 		static void PopRule();
 		static bool IsActiveRule(InputRule RULE);
 		static bool IsActiveGroup(InputGroup GROUP);
+		static InputRule GetActiveRule();
 };
