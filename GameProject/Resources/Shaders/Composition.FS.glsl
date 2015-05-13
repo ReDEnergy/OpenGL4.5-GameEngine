@@ -9,6 +9,7 @@ uniform sampler2D u_texture_3;	// Ambient occlusion
 uniform sampler2D u_texture_4;	// Depth Scene
 uniform sampler2D u_texture_5;	// Debug View
 uniform sampler2D u_texture_6;	// Debug Debug
+uniform sampler2D u_texture_7;	// Gizmo
 
 uniform vec2 resolution;
 uniform int active_ssao;
@@ -35,7 +36,7 @@ vec4 DebugView(vec2 text_coord) {
 	float ds = texture(u_texture_4, text_coord).r;
 	float dd = texture(u_texture_6, text_coord).r;
 	if (dd < ds)
-		return texture(u_texture_5, text_coord) * 0.5;
+		return texture(u_texture_5, text_coord);
 	return vec4(0, 0, 0, 0);
 }
 
@@ -97,6 +98,12 @@ void main() {
 	// Creates a fake alpha blending
 	if (debug_view == 1)
 		out_color += DebugView(text_coord);
+		
+	//Gizmo
+	vec4 gizmo_add = texture(u_texture_7, text_coord);
+	if ( gizmo_add != vec4(0.0, 0.0, 0.0, 0.0) ) 
+		if( gizmo_add != vec4(0.0, 0.0, 0.0, 1.0) )
+			out_color = gizmo_add;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

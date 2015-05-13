@@ -28,9 +28,6 @@
 #include <Game/Actors/Player.h>
 #include <Game/State/GameState.h>
 #include <Game/Input/GameInput.h>
-#include <Game/Input/PlayerInput.h>
-#include <Game/Input/AnimationInput.h>
-
 #include <Game/ColorPicking/ColorPicking.h>
 
 #include <GPU/FrameBuffer.h>
@@ -90,7 +87,7 @@ void Game::Init() {
 	freeCamera = new Camera();
 	freeCamera->SetPerspective(40, aspectRation, 0.1f, 500);
 	freeCamera->SetPosition(glm::vec3(0.0f, 10.0f, 10.0f));
-	freeCamera->Update();
+	//freeCamera->Update();
 
 	activeCamera = gameCamera;
 
@@ -148,13 +145,14 @@ void Game::Init() {
 
 
 	// GameObjects
-	//for (int i = -5; i < 5; i++) {
-	//	for (int j = -5; j < 5; j++) {
-			//GameObject *ground = Manager::GetResource()->GetGameObject("ground");
-			//ground->transform->SetPosition(glm::vec3(i * 10, 0, j * 10));
-			//Manager::GetScene()->AddObject(ground);
-	//	}
-	//}
+	player = new Player(*Manager::GetResource()->GetGameObject("player"));
+	for (int i = 0; i < 7; i++) {
+		for (int j = -3; j < 3; j++) {
+			GameObject *ground = Manager::GetResource()->GetGameObject("ground");
+			ground->transform->SetPosition(glm::vec3(i * 10, 0, j * 10));
+			Manager::GetScene()->AddObject(ground);
+		}
+	}
 
 	InitSceneCameras();
 
@@ -170,11 +168,6 @@ void Game::Init() {
 		if (obj->audioSource)
 			obj->audioSource->Play();
 	}
-
-	GameObject* soldier = Manager::GetScene()->GetObjectW("soldier", 1);
-	AnimationInput *aInput = new AnimationInput();
-	aInput->GO = soldier;
-	soldier->input = aInput;
 };
 
 
@@ -210,6 +203,8 @@ void Game::Update(float elapsedTime, float deltaTime) {
 		}
 
 		colorPicking->Update(activeCamera);
+
+		player->Update(deltaTime);
 
 		// ------------------------//
 		// --- Scene Rendering --- //
@@ -250,6 +245,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 					obj->Render(R2T);
 				}
 			}
+			player->Render(R2T);
 		}
 
 		// -------------------------------------------//
@@ -370,6 +366,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 				FBO->BindDepthTexture(GL_TEXTURE4);
 				Manager::GetDebug()->FBO->BindTexture(0, GL_TEXTURE5);
 				Manager::GetDebug()->FBO->BindDepthTexture(GL_TEXTURE6);
+				colorPicking->FBO_Gizmo->BindTexture(0, GL_TEXTURE7);
 
 				ScreenQuad->Render(Composition);
 			}
@@ -410,7 +407,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 
 void Game::BarrelPhysicsTest() {
 #ifdef PHYSICS_ENGINE
-	glm::vec3 pos = gameCamera->transform->position;
+	glm::vec3 pos = player->transform->position;
 	GameObject *barrel = Manager::GetResource()->GetGameObject("oildrum");
 	for (int i=0; i<100; i++) {
 		GameObject *box = new GameObject(*barrel);
@@ -439,6 +436,7 @@ void Game::OnEvent(EventType Event, Object *data) {
 		activeCamera = sceneCameras[activeSceneCamera];
 		activeCamera->SetDebugView(false);
 		cameraInput->camera = activeCamera;
+		// InputRules::PushRule(activeCamera == gameCamera ? InputRule::R_GAMEPLAY : InputRule::R_EDITOR);
 
 	default:
 		break;
