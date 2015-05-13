@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Meshes -->
 <meshes>
-  <mesh skinned="true">
-    <name>soldier</name>
-    <path>Characters/Soldier</path>
-    <file>soldier.X</file>
-  </mesh>
-  <mesh skinned="true">
-    <name>guard</name>
-    <path>Characters/Guard</path>
-    <file>guard.md5mesh</file>
-  </mesh>
-  <mesh>
-    <name>player</name>
-    <path>Characters</path>
-    <file>Player.obj</file>
-  </mesh>
-  <mesh material="no">
+	<!-- gizmo objects -->
+	<mesh material="no">
+		<name>gizmo_move</name>
+		<path>Gizmo</path>
+		<file>gizmo_move.obj</file>
+	</mesh>
+	<mesh material="no">
+		<name>gizmo_rotate</name>
+		<path>Gizmo</path>
+		<file>gizmo_rotate.obj</file>
+	</mesh>
+	<mesh material="no">
+		<name>gizmo_scale</name>
+		<path>Gizmo</path>
+		<file>gizmo_scale.obj</file>
+	</mesh>
+	<!-- end gizmo objects -->
+	<mesh skinned="true">
+		<name>guard</name>
+		<file>guard.md5mesh</file>
+	</mesh>
+	<mesh skinned="true">
+		<name>astroBoy</name>
+		<file>astroBoy.dae</file>
+	</mesh>
+	<mesh material="no">
 		<name>screen-quad</name>
-    <path>Primitives</path>
-    <file>screen_quad.obj</file>
+		<file>screen_quad.obj</file>
 	</mesh>
 	<mesh quad="true">
 		<name>box</name>
@@ -32,36 +41,35 @@
 		<file>sphere.obj</file>
 	</mesh>
 	<mesh>
+		<name>player</name>
+		<file>Player.obj</file>
+	</mesh>
+	<mesh>
 		<name>teapot</name>
 		<path>Primitives</path>
 		<file>teapot.obj</file>
 	</mesh>
 	<mesh>
 		<name>ground</name>
-    <path>Props</path>
-    <file>ground.obj</file>
+		<file>ground.obj</file>
 	</mesh>
 	<mesh>
 		<name>oildrum</name>
-    <path>Props</path>
-    <file>oildrum.obj</file>
-  </mesh>
-  <mesh>
-    <name>bamboo</name>
-    <path>Vegetation/Bamboo</path>
-    <file>bamboo.obj</file>
+		<file>oildrum.obj</file>
+	</mesh>
+	<mesh>
+		<name>bamboo</name>
+		<file>bamboo.obj</file>
 	</mesh>	
 	<mesh>
 		<name>wall</name>
-    <path>Props</path>
-    <file>concrete_wall.obj</file>
-	</mesh>
-  <mesh>
-    <name>gate</name>
-    <path>Props</path>
-    <file>opera_gate.obj</file>
-  </mesh>
-  <mesh>
+		<file>concrete_wall.obj</file>
+	</mesh>	
+	<mesh>
+		<name>bman</name>
+		<file>Bman.obj</file>
+	</mesh>	
+	<mesh>
 		<name>block10-10</name>
 		<path>Path</path>
 		<file>block10-10.obj</file>
@@ -76,6 +84,10 @@
 		<path>Path</path>
 		<file>block15-15.obj</file>
 	</mesh>
+	<mesh>
+		<name>gate</name>
+		<file>opera_gate.obj</file>
+	</mesh>
 </meshes>
 
 <!-- Audio -->
@@ -88,7 +100,6 @@
 		<name>relaxMono</name>
 		<file>relaxMono.ogg</file>
 	</music>
-	<!-- 
 	<music>
 		<name>truck</name>
 		<path>SoV</path>
@@ -118,7 +129,6 @@
 		<name>winter</name>
 		<file>winter.ogg</file>
 	</music>
-	-->
 	<music>
 		<name>music-box</name>
 		<path>Effects</path>
@@ -152,6 +162,20 @@
 
 <!-- GameObjects -->
 <objects>
+	<!-- gizmo objects -->
+	<object>
+		<name>gizmo_move</name>
+		<mesh>gizmo_move</mesh>
+	</object>
+	<object>
+		<name>gizmo_rotate</name>
+		<mesh>gizmo_rotate</mesh>
+	</object>
+	<object>
+		<name>gizmo_scale</name>
+		<mesh>gizmo_scale</mesh>
+	</object>
+	<!-- end gizmo objects -->
 	<object>
 		<name>render-quad</name>
 		<mesh>screen-quad</mesh>
@@ -244,19 +268,20 @@
 		</physics>
 	</object>
 	<object>
-		<name>soldier</name>
-		<mesh>soldier</mesh>
+		<name>astroBoy</name>
+		<mesh>astroBoy</mesh>
 		<transform>
-			<scale>0.3</scale>
-      <rotation>180 90 0</rotation>
-    </transform>
-	</object>
-  <object>
+			<scale>0.1</scale>
+			<rotation>0 90 0</rotation>
+		</transform>
+	</object>	
+	<object>
 		<name>guard</name>
 		<mesh>guard</mesh>
 		<transform>
 			<scale>0.025</scale>
 			<rotation>-90 90 0</rotation>
 		</transform>
-	</object>
+	</object>	
 </objects>
+
