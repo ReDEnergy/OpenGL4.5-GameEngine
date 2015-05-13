@@ -57,3 +57,7 @@ bool InputRules::IsActiveRule(InputRule Rule) {
 bool InputRules::IsActiveGroup(InputGroup GROUP) {
 	return (rulesConfig[ACTIVE_RULE] & 1 << GROUP) != 0;
 }
+
+InputRule InputRules::GetActiveRule() {
+	return ACTIVE_RULE;
+}

@@ -1,5 +1,7 @@
 #pragma once
 #include <list>
+#include <unordered_map>
+#include <array>
 
 #include <include/dll_export.h>
 #include <include/gl.h>
@@ -56,9 +58,14 @@ class DLLExport InputSystem
 		static void RuleUpdate();
 		static void EndFrame();
 
+		static unordered_map<string, bool> eventState;
+
 	private:
 		static void NotifyObservers(int key, int action, int mods);
 		static void NotifyObservers(int mouseX, int mouseY, int deltaX, int deltaY);
+		static void Load(const char* file);
+		static void MapKeys();
+		static void MapMouse();
 
 	private:
 		// KeyBuffering arrays for holding key state
@@ -69,6 +76,10 @@ class DLLExport InputSystem
 		static bool ruleChanged;
 		static list<ObjectInput*> observers;
 		static list<ObjectInput*> activeObserver;
+		static unordered_map<string, int> keyMapping;
+		static unordered_map<string, int> mouseMapping;
+		static string keyInputEvents[16][384][3];
+		static string mouseInputEvents[16][8][3];
 };
 
 // TODO

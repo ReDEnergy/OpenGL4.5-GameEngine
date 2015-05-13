@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Instructions and conventions:
+	Important!! EDITOR state is not implemented yet. Use GAMEPLAY and MENU for the moment.
+
+	To add a new key binding, add an <action> node to a certain state.
+	The <action> node must contain one <key> or <mouse> child, and one <event> child.
+	It can also contain a <special> child, which defines the special keys held down
+	in that specific combination, using attributes (for example <special CTRL=""></special>
+	would mean that the key combination also has CTRL pressed down).
+	
+	The <event> child should be a string, preferably with lowercase characters and underscores.
+	
+	Conventions for keys:
+	- letter keys are just capital letters: A-Z
+	- number keys are just the numbers 0-9.
+	- F keys are just F and a number: F1-F12
+	- special keys are CTRL, ALT and SHIFT. 
+	- other available keys: ENTER, ESCAPE, SPACE, TAB
+	
+	Conventions for mouse buttons:
+	- LEFT, RIGHT, MIDDLE for the usual buttons
+	- for mouse buttons 4 through 8, just the number: 4-8
+-->
+<states>
+	<state id="EDITOR">
+
+	</state>
+	<state id="GAMEPLAY">
+		<action>
+			<key>ESCAPE</key>
+			<event>open_menu</event>
+		</action>
+		<action>
+			<mouse>LEFT</mouse>
+			<event>fire</event>
+		</action>
+		<action>
+			<key>R</key>
+			<special CTRL=""></special>
+			<event>kamikaze</event>
+		</action>
+		<action>
+			<key>CTRL</key>
+			<event>crouch</event>
+		</action>
+		<action>
+			<mouse>LEFT</mouse>
+			<special CTRL="" ALT=""></special>
+			<event>uber_laser</event>
+		</action>
+		<action>
+			<key>F6</key>
+			<event>play_sound</event>
+		</action>
+		<action>
+			<key>F7</key>
+			<event>play_music</event>
+		</action>
+	</state>
+	<state id="MENU">
+
+	</state>
+</states>
