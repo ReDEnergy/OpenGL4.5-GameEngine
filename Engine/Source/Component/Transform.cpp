@@ -20,16 +20,12 @@ Transform::Transform(const Transform &transform) {
 	rotationQ = transform.rotationQ;
 	eulerAngles = transform.eulerAngles;
 	scale = transform.scale;
-	Update();
-}
 
-Transform& Transform::operator=(const Transform &transform) {
-	position = transform.position;
-	rotationQ = transform.rotationQ;
-	eulerAngles = transform.eulerAngles;
-	scale = transform.scale;
+	moveSpeed = transform.moveSpeed;
+	rotateSpeed = transform.rotateSpeed;
+	scaleSpeed = transform.scaleSpeed;
+
 	Update();
-	return *this;
 }
 
 Transform::~Transform() {

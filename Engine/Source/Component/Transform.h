@@ -10,7 +10,6 @@ class DLLExport Transform: virtual public Object
 	public:
 		Transform();
 		Transform(const Transform &trasform);
-		Transform& operator= (const Transform &trasform);
 		virtual ~Transform();
 		void Update();
 
