@@ -1,7 +1,6 @@
 #include "AnimationInput.h"
 
 #include <include/gl.h>
-#include <include/glfw_keys.h>
 
 #include <Component/SkinnedMesh.h>
 

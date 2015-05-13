@@ -5,27 +5,24 @@
   <object>
     <ref>soldier</ref>
     <transform>
-      <position>0 0 4</position>
+      <position>20 0 4</position>
     </transform>
   </object>
 
   <object>
 		<ref>guard</ref>
 		<transform>
-			<position>0 0 2</position>
+			<position>20 0 2</position>
 		</transform>
 	</object>
   
-  <!-- left -->
+	<!-- Scene objects -->
 	<object>
 		<ref>ground</ref>
 		<transform>
-			<position>-5 0 0</position>
-			<rotation>0 0 60</rotation>
+			<scale>10 1 10</scale>
 		</transform>
 	</object>
-	
-	<!-- Scene objects -->
 	<object>
 		<ref>block10-10</ref>
 		<transform>
@@ -36,9 +33,9 @@
 	<object>
 		<ref>oildrum</ref>
 		<transform>
-			<position>42 0 0</position>
+			<position>0 0 0</position>
 		</transform>
-		<audio>relaxMono</audio>
+		<audio loop="true">relaxMono</audio>
 	</object>	
 	<object>
 		<ref>oildrum</ref>
