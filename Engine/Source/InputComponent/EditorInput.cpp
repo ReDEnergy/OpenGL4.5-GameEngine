@@ -3,7 +3,6 @@
 
 #include <Manager/Manager.h>
 #include <Manager/RenderingSystem.h>
-#include <include/glfw_keys.h>
 
 EditorInput::EditorInput()
 	: ObjectInput(InputGroup::IG_EDITOR)
@@ -11,6 +10,4 @@ EditorInput::EditorInput()
 }
 
 void EditorInput::OnKeyPress(int key, int mods) {
-	if (mods == GLFW_KEYMOD_CTRL_SHIFT) {
-	}
 }

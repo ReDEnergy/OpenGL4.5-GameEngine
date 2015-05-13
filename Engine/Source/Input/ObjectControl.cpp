@@ -1,7 +1,6 @@
 //#include <pch.h>
 #include "ObjectControl.h"
 
-#include <include/glfw_keys.h>
 #include <include/glm.h>
 #include <include/glm_utils.h>
 
@@ -18,7 +17,7 @@ ObjectControl::ObjectControl(Transform *transform)
 void ObjectControl::OnKeyPress(int key, int mods) {
 	// cout << "key: " << key << " mods: " << mods << endl;
 
-	if (mods != GLFW_KEYMOD_SWIFT)
+	if (mods != GLFW_MOD_SHIFT)
 		return;
 
 	switch (key)
@@ -45,7 +44,7 @@ void ObjectControl::OnKeyPress(int key, int mods) {
 
 void ObjectControl::Update(float deltaTime, int mods) {
 	// Translate
-	if (mods != GLFW_KEYMOD_SWIFT)
+	if (mods != GLFW_MOD_SHIFT)
 		return;
 	if (controlMode == ControlMode::TRANSLATE) {
 		if (InputSystem::KeyHold(GLFW_KEY_KP_5)) {

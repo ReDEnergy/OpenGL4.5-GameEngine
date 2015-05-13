@@ -3,7 +3,6 @@
 
 #include <Core/InputSystem.h>
 #include <Core/Camera/Camera.h>
-#include <include/glfw_keys.h>
 
 CameraDebugInput::CameraDebugInput(Camera *camera)
 	: ObjectInput(InputGroup::IG_ENGINE)
@@ -12,7 +11,7 @@ CameraDebugInput::CameraDebugInput(Camera *camera)
 }
 
 void CameraDebugInput::Update(float deltaTime, int mods) {
-	if (mods != GLFW_KEYMOD_ALT) return;
+	if (mods != GLFW_MOD_ALT) return;
 
 	if (InputSystem::KeyHold(GLFW_KEY_W))
 		camera->MoveForward(deltaTime);

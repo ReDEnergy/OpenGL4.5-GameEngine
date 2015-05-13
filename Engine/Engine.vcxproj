@@ -307,7 +307,6 @@
     <ClInclude Include="Source\include\assimp_utils.h" />
     <ClInclude Include="Source\include\dll_export.h" />
     <ClInclude Include="Source\include\gl.h" />
-    <ClInclude Include="Source\include\glfw_keys.h" />
     <ClInclude Include="Source\include\glm.h" />
     <ClInclude Include="Source\include\glm_utils.h" />
     <ClInclude Include="Source\include\havok.h">

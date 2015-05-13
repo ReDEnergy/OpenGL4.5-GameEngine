@@ -320,9 +320,6 @@
     <ClInclude Include="Source\GPU\Texture.h">
       <Filter>Source Files\GPU</Filter>
     </ClInclude>
-    <ClInclude Include="Source\include\glfw_keys.h">
-      <Filter>Header Files\include</Filter>
-    </ClInclude>
     <ClInclude Include="Source\include\glm.h">
       <Filter>Header Files\include</Filter>
     </ClInclude>

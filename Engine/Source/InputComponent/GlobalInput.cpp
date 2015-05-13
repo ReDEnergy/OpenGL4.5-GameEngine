@@ -2,7 +2,6 @@
 #include "GlobalInput.h"
 
 #include <include/gl.h>
-#include <include/glfw_keys.h>
 
 GlobalInput::GlobalInput()
 	: ObjectInput(InputGroup::IG_ENGINE)

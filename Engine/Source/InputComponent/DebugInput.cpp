@@ -1,8 +1,6 @@
 //#include <pch.h>
 #include "DebugInput.h"
 
-#include <include/glfw_keys.h>
-
 #include <Core/Engine.h>
 #include <Core/InputSystem.h>
 #include <GPU/Shader.h>
@@ -25,7 +23,7 @@ DebugInput::DebugInput()
 }
 
 void DebugInput::OnKeyPress(int key, int mods) {
-	if (mods == GLFW_KEYMOD_CTRL_SHIFT) {
+	if (mods == (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT)) {
 		switch (key)
 		{
 			case GLFW_KEY_C:
