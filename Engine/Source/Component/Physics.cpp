@@ -25,8 +25,9 @@ Physics::~Physics() {
 	RemoveFromWorld();
 }
 
-void Physics::LoadHavokFile(const char *fileName) {
-	body = Manager::Physics->GetFirstRigidBody(fileName);
+void Physics::LoadHavokFile(const string &fileName)
+{
+	body = Manager::Physics->GetFirstRigidBody(fileName.c_str());
 }
 
 void Physics::Update() {

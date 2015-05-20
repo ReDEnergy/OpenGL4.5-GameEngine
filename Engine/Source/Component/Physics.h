@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 #include <include/dll_export.h>
 #include <include/glm.h>
@@ -8,6 +9,8 @@
 
 #include <Physics2012/Dynamics/Entity/hkpRigidBody.h>
 
+using namespace std;
+
 class GameObject;
 
 class DLLExport Physics: virtual public Object {
@@ -16,7 +19,7 @@ class DLLExport Physics: virtual public Object {
 		Physics(Physics &physics);
 		Physics::~Physics();
 
-		void LoadHavokFile(const char *fileName);
+		void LoadHavokFile(const string &fileName);
 		virtual void Update();
 		virtual void AddToWorld();
 		virtual void RemoveFromWorld();
