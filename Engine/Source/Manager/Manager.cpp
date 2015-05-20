@@ -15,7 +15,7 @@
 #include <Input/InputRules.h>
 
 #include <Manager/AudioManager.h>
-#include <Manager/ColorPicking.h>
+#include <Manager/ColorManager.h>
 #include <Manager/ConfigFile.h>
 #include <Manager/DebugInfo.h>
 #include <Manager/EventSystem.h>
@@ -35,7 +35,7 @@
 
 AudioManager*		Manager::Audio = nullptr;
 DebugInfo*			Manager::Debug = nullptr;
-ColorPicking*		Manager::ColorPick = nullptr;
+ColorManager*		Manager::Color = nullptr;
 ConfigFile*			Manager::Config = nullptr;
 EventSystem*		Manager::Event = nullptr;
 FontManager*		Manager::Font = nullptr;
@@ -50,8 +50,6 @@ HavokCore*			Manager::Havok = nullptr;
 PhysicsManager*		Manager::Physics = nullptr;
 #endif
 
-string Manager::configPath;
-
 void Manager::Init() {
 
 	InputSystem::Init();
@@ -63,7 +61,7 @@ void Manager::Init() {
 	RenderSys = Singleton<RenderingSystem>::Instance();
 	Audio = Singleton<AudioManager>::Instance();
 	Event = Singleton<EventSystem>::Instance();
-	ColorPick = Singleton<ColorPicking>::Instance();
+	Color = Singleton<ColorManager>::Instance();
 	Config = Singleton<ConfigFile>::Instance();
 	Font = Singleton<FontManager>::Instance();
 
@@ -75,7 +73,7 @@ void Manager::Init() {
 	Resource = Singleton<ResourceManager>::Instance();
 
 #ifdef PHYSICS_ENGINE
-		Physics = Singleton<PhysicsManager>::Instance();
+	Physics = Singleton<PhysicsManager>::Instance();
 #endif
 
 	Scene = Singleton<SceneManager>::Instance();

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <include/dll_export.h>
-#include <include/pugixml.h>
+#include <string>
 
 class AudioManager;
-class ColorPicking;
+class ColorManager;
 class DebugInfo;
 class EventSystem;
 class FontManager;
@@ -29,8 +29,6 @@ class Manager
 		Manager() {};
 		~Manager() {};
 
-		static const char* GetEntry(pugi::xml_node &config, const char *fileType);
-
 	public:
 		DLLExport static void Init();
 		DLLExport static void LoadConfig();
@@ -45,14 +43,14 @@ class Manager
 		DLLExport static TextureManager*	GetTexture();
 		DLLExport static ConfigFile*		GetConfig();
 
-#ifdef PHYSICS_ENGINE
+		#ifdef PHYSICS_ENGINE
 		DLLExport static HavokCore* GetHavok();
 		DLLExport static PhysicsManager* GetPhysics();
-#endif
+		#endif
 
 	public:
 		static AudioManager		*Audio;
-		static ColorPicking		*ColorPick;
+		static ColorManager		*Color;
 		static DebugInfo		*Debug;
 		static EventSystem		*Event;
 		static FontManager		*Font;
@@ -64,11 +62,9 @@ class Manager
 		static ConfigFile		*Config;
 		static RenderingSystem	*RenderSys;
 
-#ifdef PHYSICS_ENGINE
+		#ifdef PHYSICS_ENGINE
 		static HavokCore *Havok;
 		static PhysicsManager *Physics;
-#endif
+		#endif
 
-	private:
-		static string configPath;
 };
