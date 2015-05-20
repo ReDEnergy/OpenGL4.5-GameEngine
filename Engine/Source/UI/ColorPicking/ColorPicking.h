@@ -1,8 +1,9 @@
 #pragma once
+#include <include/glm.h>
+#include <include/dll_export.h>
 
 #include <Component/ObjectInput.h>
 
-#include <include/glm.h>
 
 class Camera;
 class GameObject;
@@ -16,7 +17,7 @@ enum Gizmo_Action{
 	Scale=2
 };
 
-class ColorPicking : public ObjectInput {
+class DLLExport ColorPicking : public ObjectInput {
 
 public:
 	ColorPicking();
