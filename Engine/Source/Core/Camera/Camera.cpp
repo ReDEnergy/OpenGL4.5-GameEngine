@@ -54,8 +54,8 @@ void Camera::Init()
 	minSpeed = 0.1f;
 	maxSpeed = 100.0f;
 
-	sensivityOX = 0.002f;
-	sensivityOY = 0.002f;
+	sensitivityOX = 0.002f;
+	sensitivityOY = 0.002f;
 
 	transform->moveSpeed = 20.0f;
 
@@ -127,14 +127,14 @@ void Camera::RotateOX(float deltaTime)
 {
 	if (deltaTime == 0)
 		return;
-	 UpdatePitch(deltaTime * sensivityOX);
+	 UpdatePitch(deltaTime * sensitivityOX);
 }
 
 void Camera::RotateOY(float deltaTime)
 {
 	if (deltaTime == 0)
 		return;
-	 SetYaw(deltaTime * sensivityOY);
+	 SetYaw(deltaTime * sensitivityOY);
 }
 
 void Camera::RotateOZ(float deltaTime) {

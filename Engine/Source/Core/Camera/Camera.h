@@ -86,8 +86,8 @@ class DLLExport Camera: virtual public GameObject {
 		// Speed
 		float minSpeed;
 		float maxSpeed;
-		float sensivityOX;
-		float sensivityOY;
+		float sensitivityOX;
+		float sensitivityOY;
 
 		GameObject *frustum;
 		GameObject *physicalDevice;
