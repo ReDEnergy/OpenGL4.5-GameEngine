@@ -39,6 +39,10 @@
 		<fragment>SSAO.FS</fragment>
 	</shader>
 	<shader>
+		<name>ssaoBlur</name>
+		<compute>Compute/Blur.CS</compute>
+	</shader>
+	<shader>
 		<name>blur</name>
 		<vertex>Screen.VS</vertex>
 		<fragment>Filters/Blur.FS</fragment>

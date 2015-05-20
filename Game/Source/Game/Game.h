@@ -29,10 +29,11 @@ class Game : public World,
 		void Init();
 		void Update(float elapsedTime, float deltaTime);
 
-		void BarrelPhysicsTest();
+		void BarrelPhysicsTest(bool pointLights);
 
 	private:
 		void OnEvent(EventType Event, Object *data);
+		void OnEvent(const char* eventID, Object *data);
 		void InitSceneCameras();
 
 	public:

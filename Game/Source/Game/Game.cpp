@@ -31,7 +31,7 @@
 #include <Game/Input/PlayerInput.h>
 #include <Game/Input/AnimationInput.h>
 
-#include <Game/ColorPicking/ColorPicking.h>
+#include <UI/ColorPicking/ColorPicking.h>
 
 #include <GPU/FrameBuffer.h>
 #include <GPU/Texture.h>
@@ -134,7 +134,8 @@ void Game::Init() {
 
 	// Listens to Events and Input
 
-	SubscribeToEvent(EventType::DEBUG_BARREL_SPAWN);
+	SubscribeToEvent("barrels");
+	SubscribeToEvent("barrels-light");
 	SubscribeToEvent(EventType::SWITCH_CAMERA);
 	SubscribeToEvent(EventType::CLOSE_MENU);
 	SubscribeToEvent(EventType::OPEN_GAME_MENU);
@@ -147,14 +148,22 @@ void Game::Init() {
 	InputRules::PushRule(InputRule::R_GAMEPLAY);
 
 
-	// GameObjects
-	//for (int i = -5; i < 5; i++) {
-	//	for (int j = -5; j < 5; j++) {
-			//GameObject *ground = Manager::GetResource()->GetGameObject("ground");
-			//ground->transform->SetPosition(glm::vec3(i * 10, 0, j * 10));
-			//Manager::GetScene()->AddObject(ground);
-	//	}
-	//}
+	//GameObjects
+	for (uint i = 0; i < 300; i++) {
+		GameObject *tree = Manager::GetResource()->GetGameObject("bamboo");
+		tree->transform->SetPosition(glm::vec3(rand() % 100 - 50, 0, rand() % 100 - 50));
+		Manager::GetScene()->AddObject(tree);
+	}
+
+
+	//GameObjects
+	for (int i = -5; i < 5; i++) {
+		for (int j = -5; j < 5; j++) {
+			GameObject *ground = Manager::GetResource()->GetGameObject("ground");
+			ground->transform->SetPosition(glm::vec3(i * 10 + 5, -0.1f, j * 10 + 5));
+			Manager::GetScene()->AddObject(ground);
+		}
+	}
 
 	InitSceneCameras();
 
@@ -172,8 +181,7 @@ void Game::Init() {
 	}
 
 	GameObject* soldier = Manager::GetScene()->GetObjectW("soldier", 1);
-	AnimationInput *aInput = new AnimationInput();
-	aInput->GO = soldier;
+	AnimationInput *aInput = new AnimationInput(soldier);
 	soldier->input = aInput;
 };
 
@@ -335,7 +343,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 				FBO->BindTexture(2, GL_TEXTURE1);
 
 				for (auto *light: Manager::GetScene()->lights) {
-					(activeCamera->DistTo(light) < light->transform->scale.x) ? glCullFace(GL_FRONT) : glCullFace(GL_BACK);
+					(activeCamera->DistTo(light) < light->effectRadius) ? glCullFace(GL_FRONT) : glCullFace(GL_BACK);
 					light->RenderDeferred(DF);
 				}
 
@@ -345,9 +353,9 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			}
 
 			// --- Screen Space Ambient Occlusion (SSAO) --- //
-			//if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
-			//	ssao->Update(FBO, activeCamera);
-			//}
+			if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
+				ssao->Update(FBO, activeCamera);
+			}
 
 			// --- Render to the screen --- //
 			// ---   Composition step   --- //
@@ -366,7 +374,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 				FBO->BindTexture(0, GL_TEXTURE0);
 				FBO_Light->BindTexture(0, GL_TEXTURE1);
 				ShadowMap->Bind(GL_TEXTURE2);
-				//ssao->BindTexture(GL_TEXTURE3);
+				ssao->BindTexture(GL_TEXTURE3);
 				FBO->BindDepthTexture(GL_TEXTURE4);
 				Manager::GetDebug()->FBO->BindTexture(0, GL_TEXTURE5);
 				Manager::GetDebug()->FBO->BindDepthTexture(GL_TEXTURE6);
@@ -384,7 +392,7 @@ void Game::Update(float elapsedTime, float deltaTime) {
 
 				glDisable(GL_DEPTH_TEST);
 				FBO->BindAllTextures();
-				// ssao->BindTexture(GL_TEXTURE4);
+				ssao->BindTexture(GL_TEXTURE4);
 				FBO_Light->BindTexture(0, GL_TEXTURE5);
 				FBO->BindDepthTexture(GL_TEXTURE6);
 				colorPicking->FBO_Gizmo->BindTexture(0, GL_TEXTURE7);
@@ -409,14 +417,23 @@ void Game::Update(float elapsedTime, float deltaTime) {
 	//fprintf(stderr, "FRAME TIME: %.2lf ms, DELTA TIME: %d ms\n", (endT - startT) * 1000, int(deltaTime * 1000));
 }
 
-void Game::BarrelPhysicsTest() {
+void Game::BarrelPhysicsTest(bool pointLights)
+{
 #ifdef PHYSICS_ENGINE
 	glm::vec3 pos = gameCamera->transform->position;
 	GameObject *barrel = Manager::GetResource()->GetGameObject("oildrum");
 	for (int i=0; i<100; i++) {
-		GameObject *box = new GameObject(*barrel);
-		box->transform->position = pos; // +glm::vec3(rand() % 10 - 5, rand() % 5 + 5, rand() % 10 - 5);
-		Manager::GetScene()->AddObject(box);
+		if (pointLights) {
+			PointLight *obj = new PointLight(*barrel);
+			obj->transform->position = pos; // +glm::vec3(rand() % 10 - 5, rand() % 5 + 5, rand() % 10 - 5);
+			Manager::GetScene()->lights.push_back(obj);
+			Manager::GetScene()->AddObject(obj);
+		}
+		else {
+			GameObject *obj = new GameObject(*barrel);
+			obj->transform->position = glm::vec3(rand() % 10 - 5, rand() % 5 + 5, rand() % 10 - 5);
+			Manager::GetScene()->AddObject(obj);
+		}
 	}
 #endif
 }
@@ -424,10 +441,6 @@ void Game::BarrelPhysicsTest() {
 void Game::OnEvent(EventType Event, Object *data) {
 	switch (Event)
 	{
-	case EventType::DEBUG_BARREL_SPAWN:
-		BarrelPhysicsTest();
-		return;
-
 	case EventType::SWITCH_CAMERA:
 
 		activeCamera->SetDebugView(true);
@@ -443,6 +456,17 @@ void Game::OnEvent(EventType Event, Object *data) {
 
 	default:
 		break;
+	}
+}
+
+void Game::OnEvent(const char* eventID, Object *data)
+{
+	if (strcmp(eventID, "barrels-light") == 0) {
+		BarrelPhysicsTest(true);
+	}
+
+	if (strcmp(eventID, "barrels") == 0) {
+		BarrelPhysicsTest(false);
 	}
 }
 

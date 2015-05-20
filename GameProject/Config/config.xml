@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<resolution>840 480</resolution>
-	<position>700 350</position>
-	<fullscreen>true</fullscreen>
+	<resolution>1280 720</resolution>
+	<position>600 350</position>
+	<fullscreen>false</fullscreen>
 	<resource>Resources.xml</resource>
 	<shaders>Shaders.xml</shaders>
 	<scene>Scene.xml</scene>

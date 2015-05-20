@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Actors\Player.cpp" />
-    <ClCompile Include="Source\Game\ColorPicking\ColorPicking.cpp" />
     <ClCompile Include="Source\Game\Game.cpp" />
     <ClCompile Include="Source\Game\Input\AnimationInput.cpp" />
     <ClCompile Include="Source\Game\Input\GameInput.cpp" />
@@ -30,7 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\Actors\Player.h" />
-    <ClInclude Include="Source\Game\ColorPicking\ColorPicking.h" />
     <ClInclude Include="Source\Game\Game.h" />
     <ClInclude Include="Source\Game\Input\AnimationInput.h" />
     <ClInclude Include="Source\Game\Input\GameInput.h" />
@@ -81,33 +79,33 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="Property Sheets\x86\Debug\pugixml.x86.props" />
     <Import Project="Property Sheets\x86\Debug\glew.x86.debug.props" />
     <Import Project="Property Sheets\x86\Debug\glfw.x86.debug.props" />
     <Import Project="Property Sheets\x86\Engine.props" />
+    <Import Project="Property Sheets\x86\Debug\pugixml.x86.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="Property Sheets\x86\Debug\pugixml.x86.props" />
     <Import Project="Property Sheets\x86\Debug\glew.x86.debug.props" />
     <Import Project="Property Sheets\x86\Debug\glfw.x86.debug.props" />
     <Import Project="Property Sheets\x86\Debug\havok.x86.debug.props" />
     <Import Project="Property Sheets\x86\Engine.props" />
+    <Import Project="Property Sheets\x86\Debug\pugixml.x86.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="Property Sheets\x86\Release\pugixml.x86.props" />
     <Import Project="Property Sheets\x86\Release\glew.x86.props" />
     <Import Project="Property Sheets\x86\Release\glfw.x86.props" />
     <Import Project="Property Sheets\x86\Engine.props" />
+    <Import Project="Property Sheets\x86\Release\pugixml.x86.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="Property Sheets\x86\Release\pugixml.x86.props" />
     <Import Project="Property Sheets\x86\Release\glew.x86.props" />
     <Import Project="Property Sheets\x86\Release\glfw.x86.props" />
     <Import Project="Property Sheets\x86\Release\havok.x86.props" />
     <Import Project="Property Sheets\x86\Engine.props" />
+    <Import Project="Property Sheets\x86\Release\pugixml.x86.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -169,11 +167,7 @@ xcopy /y /d "..\libs\x86\GL\Debug\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\assimp\Debug\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\pugixml\Debug\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\FreeType\Debug\*.dll" "$(OutDir)"
-
-xcopy /y /d "..\libs\x86\SFML\Debug\openal32.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Debug\libsndfile-1.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Debug\sfml-audio-d-2.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Debug\sfml-system-d-2.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\SFML\Debug\*.dll" "$(OutDir)"
 </Command>
     </PostBuildEvent>
     <CustomBuildStep>
@@ -209,11 +203,7 @@ xcopy /y /d "..\libs\x86\GL\Debug\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\assimp\Debug\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\pugixml\Debug\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\FreeType\Debug\*.dll" "$(OutDir)"
-
-xcopy /y /d "..\libs\x86\SFML\Debug\openal32.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Debug\libsndfile-1.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Debug\sfml-audio-d-2.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Debug\sfml-system-d-2.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\SFML\Debug\*.dll" "$(OutDir)"
 </Command>
     </PostBuildEvent>
     <CustomBuildStep>
@@ -248,10 +238,7 @@ xcopy /y /d "..\libs\x86\assimp\Release\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\pugixml\Release\*.dll" "$(OutDir)"
 xcopy /y /d "..\libs\x86\FreeType\Release\*.dll" "$(OutDir)"
 
-xcopy /y /d "..\libs\x86\SFML\Release\openal32.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Release\libsndfile-1.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Release\sfml-audio-2.dll" "$(OutDir)"
-xcopy /y /d "..\libs\x86\SFML\Release\sfml-system-2.dll" "$(OutDir)"</Command>
+xcopy /y /d "..\libs\x86\SFML\Release\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>
@@ -285,7 +272,13 @@ xcopy /y /d "..\libs\x86\SFML\Release\sfml-system-2.dll" "$(OutDir)"</Command>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>
+      <Command>xcopy /y /d "..\libs\x86\GLFW\Release\*.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\GL\Release\*.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\assimp\Release\*.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\pugixml\Release\*.dll" "$(OutDir)"
+xcopy /y /d "..\libs\x86\FreeType\Release\*.dll" "$(OutDir)"
+
+xcopy /y /d "..\libs\x86\SFML\Release\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>xcopy /y /d "..\GameEngine\$(Configuration)\Engine.dll" "$(OutDir)"</Command>

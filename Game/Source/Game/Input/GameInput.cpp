@@ -3,13 +3,18 @@
 #include <include/gl.h>
 
 #include <Core/Engine.h>
+#include <Core/GameObject.h>
 #include <Core/Camera/Camera.h>
 #include <Core/WindowObject.h>
 #include <Core/InputSystem.h>
 
+#include <Component/Transform.h>
+
 #include <Game/Game.h>
 #include <Game/State/GameState.h>
 #include <Manager/AudioManager.h>
+#include <Manager/ResourceManager.h>
+#include <Manager/SceneManager.h>
 #include <Manager/EventSystem.h>
 #include <Manager/Manager.h>
 #include <Event/EventType.h>
@@ -50,7 +55,15 @@ void GameInput::OnKeyPress(int key, int mods)
 		case GLFW_KEY_F7:
 			Manager::GetAudio()->PlayStream("relax");
 			return;
+	}
 
+	if (mods == (GLFW_MOD_SHIFT + GLFW_MOD_CONTROL)) {
+		if (key == GLFW_KEY_B) {
+			Manager::GetEvent()->EmitSync("barrels-light", nullptr);
+		}
+		if (key == GLFW_KEY_N) {
+			Manager::GetEvent()->EmitSync("barrels", nullptr);
+		}
 	}
 }
 

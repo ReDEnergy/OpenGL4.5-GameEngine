@@ -18,25 +18,25 @@
 		<file>gizmo_scale.obj</file>
 	</mesh>
 	<!-- end gizmo objects -->
-  <mesh skinned="true">
-    <name>soldier</name>
-    <path>Characters/Soldier</path>
-    <file>soldier.X</file>
-  </mesh>
-  <mesh skinned="true">
-    <name>guard</name>
-    <path>Characters/Guard</path>
-    <file>guard.md5mesh</file>
-  </mesh>
-  <mesh>
-    <name>player</name>
-    <path>Characters</path>
-    <file>Player.obj</file>
-  </mesh>
-  <mesh material="no">
+	<mesh skinned="true">
+		<name>soldier</name>
+		<path>Characters/Soldier</path>
+		<file>soldier.X</file>
+	</mesh>
+	<mesh skinned="true">
+		<name>guard</name>
+		<path>Characters/Guard</path>
+		<file>guard.md5mesh</file>
+	</mesh>
+	<mesh>
+		<name>player</name>
+		<path>Characters</path>
+		<file>Player.obj</file>
+	</mesh>
+	<mesh material="no">
 		<name>screen-quad</name>
-    <path>Primitives</path>
-    <file>screen_quad.obj</file>
+		<path>Primitives</path>
+		<file>screen_quad.obj</file>
 	</mesh>
 	<mesh quad="true">
 		<name>box</name>
@@ -55,30 +55,30 @@
 	</mesh>
 	<mesh>
 		<name>ground</name>
-    <path>Props</path>
-    <file>ground.obj</file>
+		<path>Props</path>
+		<file>ground.obj</file>
 	</mesh>
 	<mesh>
 		<name>oildrum</name>
-    <path>Props</path>
-    <file>oildrum.obj</file>
-  </mesh>
-  <mesh>
-    <name>bamboo</name>
-    <path>Vegetation/Bamboo</path>
-    <file>bamboo.obj</file>
+		<path>Props</path>
+		<file>oildrum.obj</file>
+	</mesh>
+	<mesh>
+		<name>bamboo</name>
+		<path>Vegetation/Bamboo</path>
+		<file>bamboo.obj</file>
 	</mesh>	
 	<mesh>
 		<name>wall</name>
-    <path>Props</path>
-    <file>concrete_wall.obj</file>
+		<path>Props</path>
+		<file>concrete_wall.obj</file>
 	</mesh>
-  <mesh>
-    <name>gate</name>
-    <path>Props</path>
-    <file>opera_gate.obj</file>
-  </mesh>
-  <mesh>
+	<mesh>
+		<name>gate</name>
+		<path>Props</path>
+		<file>opera_gate.obj</file>
+	</mesh>
+	<mesh>
 		<name>block10-10</name>
 		<path>Path</path>
 		<file>block10-10.obj</file>
@@ -194,9 +194,6 @@
 	<object>
 		<name>light-debug</name>
 		<mesh>sphere</mesh>
-		<transform>
-			<scale>3</scale>
-		</transform>
 	</object>
 	<object>
 		<name>player</name>
@@ -207,7 +204,7 @@
 		<name>ground</name>
 		<mesh>ground</mesh>
 		<physics>
-			<file>Havok/ground.hkt</file>
+			<file>ground.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -229,7 +226,7 @@
 			<rotation>0 0 90</rotation>
 		</transform>
 		<physics>
-			<file>Havok/ground.hkt</file>
+			<file>ground.hkt</file>
 		</physics>
 	</object>		
 	<object>
@@ -237,7 +234,7 @@
 		<mesh>oildrum</mesh>
 		<shadow>yes</shadow>
 		<physics>
-			<file>Havok/oildrum.hkt</file>
+			<file>oildrum.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -255,7 +252,7 @@
 		<mesh>block10-10</mesh>
 		<shadow>yes</shadow>
 		<physics>
-			<file>Havok/Path/block10-10.hkt</file>
+			<file>Path/block10-10.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -263,7 +260,7 @@
 		<mesh>block10-15</mesh>
 		<shadow>yes</shadow>
 		<physics>
-			<file>Havok/Path/block10-15.hkt</file>
+			<file>Path/block10-15.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -271,7 +268,7 @@
 		<mesh>block15-15</mesh>
 		<shadow>yes</shadow>
 		<physics>
-			<file>Havok/Path/block15-15.hkt</file>
+			<file>Path/block15-15.hkt</file>
 		</physics>
 	</object>
 	<object>
@@ -279,10 +276,10 @@
 		<mesh>soldier</mesh>
 		<transform>
 			<scale>0.3</scale>
-      <rotation>180 90 0</rotation>
-    </transform>
+			<rotation>180 90 0</rotation>
+		</transform>
 	</object>
-  <object>
+	<object>
 		<name>guard</name>
 		<mesh>guard</mesh>
 		<transform>

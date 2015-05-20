@@ -46,7 +46,7 @@ void main() {
 	// -------------------------------------------------------------------------
 	// Random Noise vector
 	
-	vec2 noise_scale = resolution / 4.0;
+	vec2 noise_scale = resolution / 2.0;
 	vec3 fres = normalize(texture(Noise2, text_coord * noise_scale).xyz);
 
 	/////////////////////
@@ -60,8 +60,8 @@ void main() {
 	
 	// -------------------------------------------------------------------------
 	
-	const float strength = 0.8;
-	const float falloff = 0.01;
+	const float strength = 1;
+	const float falloff = 0.04;
 	float ao = 0.0;
  	
 	// -------------------------------------------------------------------------
@@ -74,7 +74,7 @@ void main() {
 		vec3 ray = u_rad * reflect(kernel[i], fres);
 		vec3 se = vPos + sign(dot(ray, vNormal)) * ray;
 		// se = tbn * pSphere[i];
-		// se = vPos + ray;
+		se = vPos + ray;
 		
 		// Compute clip space coordinates
 		vec4 sp = Projection * vec4(se, 1.0);

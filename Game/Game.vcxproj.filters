@@ -25,9 +25,6 @@
     <Filter Include="Source Files\Game\State">
       <UniqueIdentifier>{7e12767d-ec5f-4067-aa80-331aeb298889}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine">
-      <UniqueIdentifier>{dbd6d546-64dc-4de0-b5b4-54eddc1bf979}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\Game.cpp">
@@ -48,9 +45,6 @@
     <ClCompile Include="Source\Game\Input\GameInput.cpp">
       <Filter>Source Files\Game\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\ColorPicking\ColorPicking.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Input\AnimationInput.cpp">
       <Filter>Source Files\Game\Input</Filter>
     </ClCompile>
@@ -70,9 +64,6 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Input\GameInput.h">
       <Filter>Source Files\Game\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\ColorPicking\ColorPicking.h">
-      <Filter>Source Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Input\AnimationInput.h">
       <Filter>Source Files\Game\Input</Filter>
