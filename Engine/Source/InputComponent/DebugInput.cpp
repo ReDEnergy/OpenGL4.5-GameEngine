@@ -30,10 +30,6 @@ void DebugInput::OnKeyPress(int key, int mods) {
 				Manager::Event->EmitSync(EventType::SWITCH_CAMERA, nullptr);
 				return;
 
-			case GLFW_KEY_B:
-				Manager::Event->EmitSync(EventType::DEBUG_BARREL_SPAWN, nullptr);
-				return;
-
 			case GLFW_KEY_I:
 				printf("\n\nActive objects: %d\n\n", Manager::Scene->activeObjects.size());
 				return;
