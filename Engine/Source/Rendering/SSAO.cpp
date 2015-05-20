@@ -85,7 +85,7 @@ void SSAO::Update(const FrameBuffer *FBO, const Camera *camera) const
 	int WORK_GROUP_SIZE = 16;
 	auto res = ssaoFBO.GetResolution();
 
-	Shader *S = Manager::Shader->GetShader("compute");
+	Shader *S = Manager::Shader->GetShader("ssaoBlur");
 	S->Use();
 
 	// First Pass
