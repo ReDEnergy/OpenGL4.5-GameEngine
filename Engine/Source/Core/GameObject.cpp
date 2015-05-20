@@ -11,7 +11,7 @@
 
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
-#include <Manager/ColorPicking.h>
+#include <Manager/ColorManager.h>
 #include <Manager/ResourceManager.h>
 
 #ifdef PHYSICS_ENGINE
@@ -21,6 +21,7 @@
 
 GameObject::GameObject(const char *name)
 {
+	Clear();
 	if (name) {
 		refID = new char[strlen(name)];
 		refID = strcpy(refID, name);
@@ -31,6 +32,7 @@ GameObject::GameObject(const char *name)
 }
 
 GameObject::GameObject(const GameObject &obj) {
+	Clear();
 	refID	= obj.refID;
 	mesh	= obj.mesh;
 	shader	= obj.shader;
@@ -52,10 +54,23 @@ GameObject::~GameObject() {
 	Manager::Debug->Remove(this);
 }
 
+void GameObject::Clear() {
+	aabb = nullptr;
+	audioSource = nullptr;
+	input = nullptr;
+	mesh = nullptr;
+	renderer = nullptr;
+	shader = nullptr;
+	transform = nullptr;
+	#ifdef PHYSICS_ENGINE
+	physics = nullptr;
+	#endif
+}
+
 void GameObject::Init()
 {
 	instanceID = Manager::Resource->GetGameObjectUID(refID);
-	colorID = Manager::ColorPick->GetColorUID();
+	colorID = Manager::Color->GetColorUID();
 	SetDebugView(true);
 }
 

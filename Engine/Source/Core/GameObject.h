@@ -25,6 +25,7 @@ class DLLExport GameObject: virtual public Object
 		GameObject(const GameObject &obj);
 		virtual ~GameObject();
 
+		void Clear();
 		void Init();
 		bool ColidesWith(GameObject *object);
 		float DistTo(GameObject *object);
@@ -44,20 +45,20 @@ class DLLExport GameObject: virtual public Object
 	public:
 		glm::vec3 colorID;
 
-		AudioSource *audioSource = nullptr;
-		AABB		*aabb = nullptr;
-		Mesh		*mesh = nullptr;
-		ObjectInput	*input = nullptr;
-		Renderer	*renderer = nullptr;
-		Transform	*transform = nullptr;
-		Shader		*shader	= nullptr;
+		AudioSource *audioSource;
+		AABB		*aabb;
+		Mesh		*mesh;
+		ObjectInput	*input;
+		Renderer	*renderer;
+		Transform	*transform;
+		Shader		*shader;
 		#ifdef PHYSICS_ENGINE
-		Physics *physics = nullptr;
+		Physics		*physics;
 		#endif
 
 	protected:
-		char *refID = nullptr;
-		unsigned int instanceID = -1;
+		char *refID;
+		unsigned int instanceID;
 		bool debugView;
 };
 
