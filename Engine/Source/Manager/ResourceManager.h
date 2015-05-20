@@ -15,6 +15,7 @@ namespace RESOURCE_PATH {
 	const string AUDIO = ROOT + "Audio\\";
 	const string MODELS = ROOT + "Models\\";
 	const string TEXTURES = ROOT + "Textures\\";
+	const string PHYSICS = ROOT + "Physics\\";
 }
 
 class DLLExport ResourceManager

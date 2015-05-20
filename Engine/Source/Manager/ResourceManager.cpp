@@ -136,7 +136,7 @@ void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
 		#ifdef PHYSICS_ENGINE
 		if (physicsInfo) {
 			GO->physics = new Physics(GO);
-			GO->physics->LoadHavokFile(physicsInfo.child_value("file"));
+			GO->physics->LoadHavokFile(RESOURCE_PATH::PHYSICS + physicsInfo.child_value("file"));
 		}
 		#endif
 
