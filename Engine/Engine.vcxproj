@@ -232,7 +232,7 @@
     <ClCompile Include="Source\Lighting\PointLight.cpp" />
     <ClCompile Include="Source\Lighting\SpotLight.cpp" />
     <ClCompile Include="Source\Manager\AudioManager.cpp" />
-    <ClCompile Include="Source\Manager\ColorPicking.cpp" />
+    <ClCompile Include="Source\Manager\ColorManager.cpp" />
     <ClCompile Include="Source\Manager\ConfigFile.cpp" />
     <ClCompile Include="Source\Manager\DebugInfo.cpp" />
     <ClCompile Include="Source\Manager\EventSystem.cpp" />
@@ -263,6 +263,7 @@
     </ClCompile>
     <ClCompile Include="Source\Rendering\ShadowMapping.cpp" />
     <ClCompile Include="Source\Rendering\SSAO.cpp" />
+    <ClCompile Include="Source\UI\ColorPicking\ColorPicking.cpp" />
     <ClCompile Include="Source\UI\GameMenu.cpp" />
     <ClCompile Include="Source\UI\MenuSystem.cpp" />
     <ClCompile Include="Source\UI\Overlay.cpp" />
@@ -330,7 +331,7 @@
     <ClInclude Include="Source\Lighting\PointLight.h" />
     <ClInclude Include="Source\Lighting\SpotLight.h" />
     <ClInclude Include="Source\Manager\AudioManager.h" />
-    <ClInclude Include="Source\Manager\ColorPicking.h" />
+    <ClInclude Include="Source\Manager\ColorManager.h" />
     <ClInclude Include="Source\Manager\ConfigFile.h" />
     <ClInclude Include="Source\Manager\DebugInfo.h" />
     <ClInclude Include="Source\Manager\EventSystem.h" />
@@ -362,6 +363,7 @@
     <ClInclude Include="Source\Rendering\ShadowMapping.h" />
     <ClInclude Include="Source\Rendering\SSAO.h" />
     <ClInclude Include="Source\templates\singleton.h" />
+    <ClInclude Include="Source\UI\ColorPicking\ColorPicking.h" />
     <ClInclude Include="Source\UI\GameMenu.h" />
     <ClInclude Include="Source\UI\MenuSystem.h" />
     <ClInclude Include="Source\UI\Overlay.h" />

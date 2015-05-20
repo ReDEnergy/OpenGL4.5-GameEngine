@@ -195,9 +195,6 @@
     <ClCompile Include="Source\Manager\AudioManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Manager\ColorPicking.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Manager\ConfigFile.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -254,6 +251,12 @@
     </ClCompile>
     <ClCompile Include="Source\Component\AudioSource.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\ColorPicking\ColorPicking.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Manager\ColorManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -401,9 +404,6 @@
     <ClInclude Include="Source\Manager\AudioManager.h">
       <Filter>Source Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Manager\ColorPicking.h">
-      <Filter>Source Files\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Manager\ConfigFile.h">
       <Filter>Source Files\Managers</Filter>
     </ClInclude>
@@ -463,6 +463,12 @@
     </ClInclude>
     <ClInclude Include="Source\Component\AudioSource.h">
       <Filter>Source Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\ColorPicking\ColorPicking.h">
+      <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Manager\ColorManager.h">
+      <Filter>Source Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
