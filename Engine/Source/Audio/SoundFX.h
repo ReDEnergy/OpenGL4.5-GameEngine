@@ -27,7 +27,7 @@ class SoundFX :
 	public:
 		float offset;
 		float duration;
-		float volume = 100;
+		float volume;
 
 		sf::Sound sound;
 		sf::SoundBuffer buffer;

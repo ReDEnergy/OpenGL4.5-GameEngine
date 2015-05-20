@@ -21,5 +21,5 @@ class DLLExport AudioSource
 		virtual void SetPosition(glm::vec3 position) {};
 
 	public:
-		bool sound3D = false;
+		bool sound3D;
 };

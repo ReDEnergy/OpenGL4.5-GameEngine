@@ -4,7 +4,7 @@
 
 AudioSource::AudioSource()
 {
-
+	sound3D = false;
 }
 
 AudioSource::AudioSource(GameObject *obj)
