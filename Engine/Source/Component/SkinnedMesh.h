@@ -60,6 +60,7 @@ class DLLExport SkinnedMesh : public Mesh
 		void Render(const Shader* shader);
 		void Update();
 		void SetAnimationState(char *animationState);
+		void ScaleAnimationTime(const string &animation, float timeScale);
 
 	private:
 		bool InitFromScene(const aiScene* pScene);

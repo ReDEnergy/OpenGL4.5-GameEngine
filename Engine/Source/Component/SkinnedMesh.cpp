@@ -149,6 +149,11 @@ void SkinnedMesh::SetAnimationState(char *animationState)
 	}
 }
 
+void SkinnedMesh::ScaleAnimationTime(const string &animation, float timeScale)
+{
+	animations[animation]->mTicksPerSecond = timeScale * animations[animation]->mDuration;
+}
+
 void SkinnedMesh::UpdateAnimation(float timeInSeconds)
 {
 	float TimeInTicks = timeInSeconds * (float)animationState->mTicksPerSecond;
