@@ -2,6 +2,7 @@
 #include <list>
 #include <unordered_map>
 #include <array>
+#include <string>
 
 #include <include/dll_export.h>
 #include <include/gl.h>
