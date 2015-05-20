@@ -11,6 +11,9 @@ namespace _EventType {
 		LEVEL_TRANISTION_GATE,
 		EXIT_GAME,
 
+		// Animation
+		STOP_ANIMATION,
+
 		// Camera
 		GAME_CAMERA,
 		DEBUG_CAMERA,
@@ -19,9 +22,6 @@ namespace _EventType {
 		// Orbs
 		CREATE_ORB,
 		COLLECT_ORB,
-
-		// Debug
-		DEBUG_BARREL_SPAWN,
 
 		// Overlay
 		UPDATE_SCORE,
