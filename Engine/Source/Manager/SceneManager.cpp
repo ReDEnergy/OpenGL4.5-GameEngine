@@ -78,19 +78,13 @@ void SceneManager::LoadScene(const char *fileName) {
 
 	for (pugi::xml_node light: pointLights.children()) {
 		transformInfo = light.child("transform");
+		auto area = light.child("area").text().as_float();
 
 		auto *L = new PointLight();
-		Manager::Resource->SetTransform(transformInfo, *L->transform);
+		L->SetArea(area);
+		Manager::Resource->SetTransform(transformInfo, *L->light->transform);
 
 		this->lights.push_back(L);
-	}
-
-	// --- Load orbs --- //
-	Transform *T = new Transform();
-	pugi::xml_node orbs = doc.child("orbs");
-	for (pugi::xml_node orb: orbs.children()) {
-		Manager::Resource->SetTransform(orb, *T);
-		Manager::Event->EmitSync(EventType::CREATE_ORB, (Object*)T);
 	}
 }
 

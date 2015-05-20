@@ -37,13 +37,24 @@ CameraDirection cameraDirections[6] =
 PointLight::PointLight()
 	: GameObject("point-light")
 {
+	effectRadius = 10;
+}
+
+PointLight::PointLight(const GameObject &obj)
+	: GameObject(obj)
+{
+	effectRadius = 10;
 }
 
 void PointLight::RenderDeferred(Shader *shader) {
-	glUniform1f(shader->loc_light_radius, transform->scale.x / 2.0f);
+	glUniform1f(shader->loc_light_radius, effectRadius / 2);
 	glm::BindUniform3f(shader->loc_light_color, diffuseColor);
 	glm::BindUniform3f(shader->loc_light_pos, transform->position);
-	Render(shader);
+
+	glm::vec3 scale = transform->scale;
+	light->transform->SetScale(glm::vec3(effectRadius));
+	light->Render(shader);
+	light->transform->SetScale(scale);
 }
 
 void PointLight::CastShadows() {
@@ -98,4 +109,9 @@ void PointLight::BindForUse(const Shader *shader) const
 void PointLight::BindTexture(GLenum textureUnit) const {
 	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTexture->GetTextureID());
+}
+
+void PointLight::SetArea(float radius)
+{
+	effectRadius = radius;
 }

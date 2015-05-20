@@ -12,9 +12,18 @@ using namespace std;
 Light::Light()
 	: GameObject("light")
 {
-	GameObject *GO = Manager::Resource->GetGameObject("light-debug");
-	this->mesh = GO->mesh;
-	this->transform = new Transform();
+	light = Manager::Resource->GetGameObject("light-debug");
+	transform = light->transform;
+	bulbSize = glm::vec3(0.3f);
+	active = true;
+	RandomDiffuseColor();
+}
+
+Light::Light(const GameObject &gameObject)
+	: GameObject(gameObject)
+{
+	light = Manager::Resource->GetGameObject("light-debug");
+	light->transform = transform;
 	bulbSize = glm::vec3(0.3f);
 	active = true;
 	RandomDiffuseColor();
@@ -35,7 +44,7 @@ void Light::RenderDebug(const Shader *shader) const {
 	glm::vec3 sc = glm::vec3(transform->scale);
 	transform->scale = bulbSize;
 	transform->Update();
-	Render(shader);
+	light->Render(shader);
 	transform->scale = sc;
 	transform->Update();
 
