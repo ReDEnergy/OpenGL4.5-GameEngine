@@ -43,10 +43,18 @@ ColorPicking::~ColorPicking() {
 
 void ColorPicking::Init() {
 
+	selectedObject = NULL;
 	gizmo_isLocal = true;
-	pickEvent = false;
+	pickEvent = false; 
+	focus_event = false;
+	
+	focus_minSpeed = 1.0f;
+	focus_maxSpeed = 5.0f;
+	focus_accel = 0.25f;
+
 	gizmo_moveCameraAlong = false;
 	gizmo_action = Move;
+
 
 	glm::ivec2 resolution = Engine::Window->resolution;
 	
@@ -86,6 +94,9 @@ void ColorPicking::Update(const Camera* activeCamera){
 	camera = activeCamera;
 	//draw gizmo every frame
 	ColorPicking::DrawGizmo();
+
+	if (focus_event)
+		ColorPicking::FocusCamera();
 
 	if (pickEvent == false)
 		return;
@@ -206,6 +217,10 @@ void ColorPicking::OnKeyPress(int key, int mod)
 			gizmo_action = Rotate;
 		else if (key == GLFW_KEY_R)
 			gizmo_action = Scale;
+		else if (key == GLFW_KEY_F) {
+			focus_currentSpeed = focus_minSpeed;
+			focus_event = true;
+		}
 	}
 	if (key == GLFW_KEY_LEFT_CONTROL || key == GLFW_KEY_LEFT_CONTROL)
 		gizmo_moveCameraAlong = true;
@@ -215,6 +230,25 @@ void ColorPicking::OnKeyRelease(int key, int mod)
 {
 	if (key == GLFW_KEY_LEFT_CONTROL || key == GLFW_KEY_LEFT_CONTROL)
 		gizmo_moveCameraAlong = false;
+}
+
+void ColorPicking::FocusCamera() {
+
+	if (selectedObject == NULL || focus_event == false)
+		return;
+		
+	glm::vec3 AABB_Scale = selectedObject->aabb->transform->scale;
+	float focus_dist = 3 * max( AABB_Scale.x, max (AABB_Scale.y, AABB_Scale.z) );
+	glm::vec3 focus_position = selectedObject->transform->position - glm::normalize(camera->forward) * focus_dist;
+
+	glm::vec3 cameraPosition = camera->transform->position;
+	if (cameraPosition == focus_position)
+		focus_event = false;
+	else{
+		focus_currentSpeed = min(focus_maxSpeed, focus_currentSpeed + focus_accel);
+		camera->transform->SetPosition(cameraPosition + glm::normalize(focus_position - cameraPosition) * min(focus_currentSpeed, glm::distance(focus_position, cameraPosition)));
+	}
+		
 }
 
 void ColorPicking::DrawGizmo() {

@@ -29,6 +29,7 @@ public:
 	void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY);
 	void OnKeyPress(int key, int mod);
 	void OnKeyRelease(int key, int mod);
+	void FocusCamera();
 	void DrawGizmo();
 
 	FrameBuffer *FBO;
@@ -45,6 +46,11 @@ private:
 	bool gizmoEvent;
 	bool gizmo_isLocal;
 	bool gizmo_moveCameraAlong;
+	bool focus_event;
+	float focus_currentSpeed;
+	float focus_minSpeed;
+	float focus_maxSpeed;
+	float focus_accel;
 
 	glm::vec3 gizmoPosition;
 	glm::vec3 gizmoLocalRotation;
