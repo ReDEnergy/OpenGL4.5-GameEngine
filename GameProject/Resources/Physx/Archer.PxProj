@@ -1,0 +1,82 @@
+<PhysicsPlugin>
+    <ExporterSettings ExportPhysXScene="true" PhysXSceneFileFormat="xml" ExportAPEXClothing="false" APEXClothingFileFormat=".apx" APEXClothingExportCtp="true" APEXClothingExportCtw="true" APEXReverseWinding="true" APEXClothingAddHulls="true" APEXClothingOmitMeshSubpartName="true" />
+    <GraphicsExport File="" />
+    <PhysicsExport SDK="3.3.3" PhysXScene="Archer.xml" />
+    <ClothingTool SDK="1.3.3" CTP="" />
+    <SceneParameters>
+        <AnimationRange Start="0" End="0" FrameRate="60" FrameSubStepCount="0" />
+        <LengthUnit Type="centimeters" />
+        <GroundPlane Enabled="true" Direction="0 1 0" Height="0.000000" ContactShellDepth="0.025000" />
+        <Gravity Enabled="true" Value="0 -981 0" />
+        <Simulation SolverIteration="8" SimulationLoop="Reset Simulation" MomentumEnable="true" AnimationEnable="true" AnimationLoop="Continue Animation" />
+    </SceneParameters>
+    <SceneObjects>
+        <RigidBody Attach="groundPlane" Type="Static" Position="0 0 0" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="pCube1" Type="Dynamic" Position="49.7661 245.64 0.538437" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="Hips" Type="Kinematic" Position="2.38419e-007 113.285 -1.54972e-006" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="Spine" Type="Kinematic" Position="-0.140722 123.376 -0.967138" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightUpLeg" Type="Kinematic" Position="-9.82349 107.679 2.64568" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftUpLeg" Type="Kinematic" Position="9.76356 107.679 2.12897" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="Spine1" Type="Kinematic" Position="-0.306489 135.149 -2.09543" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftLeg" Type="Kinematic" Position="9.96512 61.2389 2.82849" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightLeg" Type="Kinematic" Position="-9.9969 61.215 2.59345" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightFoot" Type="Kinematic" Position="-9.79922 12.8858 -0.606833" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftFoot" Type="Kinematic" Position="9.79456 12.8885 -0.606643" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="Spine2" Type="Kinematic" Position="-0.495938 148.604 -3.3849" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftShoulder" Type="Kinematic" Position="5.61536 161.991 -4.77515" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftToeBase" Type="Kinematic" Position="11.6439 1.21136 14.9111" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightToeBase" Type="Kinematic" Position="-11.6454 1.20874 14.775" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightShoulder" Type="Kinematic" Position="-5.68425 161.99 -4.77515" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="Neck" Type="Kinematic" Position="-0.709951 167.684 -4.83554" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftArm" Type="Kinematic" Position="16.7853 162.633 -4.66824" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="Head" Type="Kinematic" Position="-0.711072 177.552 -0.57039" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightToe_End" Type="Kinematic" Position="-12.3721 0.980516 22.1382" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftToe_End" Type="Kinematic" Position="12.3707 0.98307 22.2451" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightArm" Type="Kinematic" Position="-16.8544 162.627 -4.66817" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="HeadTop_End" Type="Kinematic" Position="-0.713917 199.476 1.59196" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightForeArm" Type="Kinematic" Position="-46.0524 161.663 -2.44585" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftForeArm" Type="Kinematic" Position="45.9836 161.678 -2.44613" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHand" Type="Kinematic" Position="-75.3995 161.66 -0.212163" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHand" Type="Kinematic" Position="75.3308 161.686 -0.212539" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandRing1" Type="Kinematic" Position="86.1809 161.597 -1.5657" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandPinky1" Type="Kinematic" Position="-85.3683 161.403 -3.36351" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandPinky1" Type="Kinematic" Position="85.2996 161.432 -3.36412" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandRing1" Type="Kinematic" Position="-86.2496 161.567 -1.56508" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandIndex1" Type="Kinematic" Position="86.7354 161.37 2.61549" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandThumb1" Type="Kinematic" Position="80.0457 159.838 3.41588" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandMiddle1" Type="Kinematic" Position="86.3197 161.689 0.623633" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandIndex1" Type="Kinematic" Position="-86.8039 161.34 2.61613" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandMiddle1" Type="Kinematic" Position="-86.3884 161.659 0.624264" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandThumb1" Type="Kinematic" Position="-80.1137 159.811 3.41637" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandRing2" Type="Kinematic" Position="88.646 161.597 -1.37824" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandThumb2" Type="Kinematic" Position="-82.4029 158.424 4.9811" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandMiddle2" Type="Kinematic" Position="89.3738 161.689 0.856149" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandIndex2" Type="Kinematic" Position="89.2742 161.371 2.80866" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandPinky2" Type="Kinematic" Position="87.8733 161.432 -3.16814" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandIndex2" Type="Kinematic" Position="-89.3428 161.34 2.80951" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandPinky2" Type="Kinematic" Position="-87.942 161.402 -3.16777" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandThumb2" Type="Kinematic" Position="82.3353 158.452 4.98066" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandRing2" Type="Kinematic" Position="-88.7147 161.567 -1.37739" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandMiddle2" Type="Kinematic" Position="-89.4426 161.659 0.856771" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandMiddle3" Type="Kinematic" Position="-91.6023 161.659 1.02108" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandRing3" Type="Kinematic" Position="90.2775 161.598 -1.2542" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandPinky3" Type="Kinematic" Position="89.3857 161.433 -3.05305" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandThumb3" Type="Kinematic" Position="-84.7634 156.994 6.59483" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandRing3" Type="Kinematic" Position="-90.3462 161.567 -1.25313" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandIndex3" Type="Kinematic" Position="-91.8544 161.34 3.0006" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandMiddle3" Type="Kinematic" Position="91.5336 161.69 1.02057" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandIndex3" Type="Kinematic" Position="91.7859 161.371 2.99969" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandPinky3" Type="Kinematic" Position="-89.4544 161.402 -3.05263" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandThumb3" Type="Kinematic" Position="84.6964 157.023 6.59437" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandRing4" Type="Kinematic" Position="-93.0696 161.566 -1.04583" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandThumb4" Type="Kinematic" Position="86.4366 155.97 7.78356" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandPinky4" Type="Kinematic" Position="-91.1966 161.402 -2.91998" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandMiddle4" Type="Kinematic" Position="-94.5086 161.658 1.24222" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandIndex4" Type="Kinematic" Position="-94.3326 161.34 3.18927" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="RightHandThumb4" Type="Kinematic" Position="-86.5031 155.94 7.78397" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandPinky4" Type="Kinematic" Position="91.1278 161.434 -2.92043" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandRing4" Type="Kinematic" Position="93.0008 161.599 -1.04691" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandMiddle4" Type="Kinematic" Position="94.4398 161.691 1.2417" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+        <RigidBody Attach="LeftHandIndex4" Type="Kinematic" Position="94.2641 161.372 3.18828" SwitchEnabled="false" SwitchAtFrame="0" Velocity="0 0 0" Spin="0 0 0" />
+    </SceneObjects>
+</PhysicsPlugin>

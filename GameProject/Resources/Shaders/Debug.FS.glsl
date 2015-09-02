@@ -60,34 +60,34 @@ void main() {
 
 	switch(debug_id) {
 		case 1:
-			frag_color = texture(u_texture_0, text_coord);
-			break;
-		case 2:
 			frag_color = texture(u_texture_1, text_coord);
 			break;
-		case 3:
+		case 2:
 			frag_color = texture(u_texture_2, text_coord);
 			break;
-		case 4:
+		case 3:
 			frag_color = texture(u_texture_3, text_coord);
 			break;
-		case 5:
+		case 4:
 			frag_color = texture(u_texture_4, text_coord);
+			break;
+		case 5:
+			frag_color = texture(u_texture_5, text_coord);
 			break;
 		case 6:
 			frag_color = viewDepth(u_texture_6, text_coord);
 			break;
 		case 7:
-			frag_color = texture(u_texture_7, text_coord, 0);
+			frag_color = texture(u_texture_7, text_coord);
 			break;
 		case 8:
-			frag_color = component(u_texture_8, text_coord, 1);
+			frag_color = texture(u_texture_8, text_coord);
 			break;
 		case 9:
-			frag_color = component(u_texture_8, text_coord, 2);
+			frag_color = texture(u_texture_9, text_coord);
 			break;
 		case 10:
-			frag_color = component(u_texture_8, text_coord, 3);
+			frag_color = viewDepth(u_texture_10, text_coord);
 			break;
 		case 11:
 			vec4 wpos = texture(u_texture_1, text_coord);

@@ -9,5 +9,5 @@ newmtl wire_143225087
 	Kd 0.6400 0.6400 0.6400
 	Ks 0.5000 0.5000 0.5000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka grey.jpg
-	map_Kd grey.jpg
+	map_Ka wood-floor.jpg
+	map_Kd wood-floor.jpg
