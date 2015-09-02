@@ -22,16 +22,18 @@ Mesh::Mesh(const char* meshID)
 	useMaterial = true;
 	debugColor = glm::vec4(1);
 	glPrimitive = GL_TRIANGLES;
+	buffers = nullptr;
 }
 
 Mesh::~Mesh() {
 	Clear();
-	delete buffers;
+	SAFE_FREE(buffers);
 }
 
 
 void Mesh::Clear()
 {
+	loadState = LOG_MESH::SUCCESS;
 	for (unsigned int i = 0 ; i < materials.size() ; i++) {
 		SAFE_FREE(materials[i]);
 	}
@@ -170,22 +172,21 @@ bool Mesh::InitMaterials(const aiScene* pScene)
 			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
 				materials[i]->texture = Manager::Texture->LoadTexture(fileLocation, Path.data);
 			}
-
-			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_AMBIENT, &color) == AI_SUCCESS)
-				assimp::CopyColor(color, materials[i]->ambient);
-
-			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS)
-				assimp::CopyColor(color, materials[i]->diffuse);
-
-			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_SPECULAR, &color) == AI_SUCCESS)
-				assimp::CopyColor(color, materials[i]->specular);
-
-			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_EMISSIVE, &color) == AI_SUCCESS)
-				assimp::CopyColor(color, materials[i]->emissive);
-
-			unsigned int max;
-			aiGetMaterialFloatArray(pMaterial, AI_MATKEY_SHININESS, &materials[i]->shininess, &max);
 		}
+		if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_AMBIENT, &color) == AI_SUCCESS)
+			assimp::CopyColor(color, materials[i]->ambient);
+
+		if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS)
+			assimp::CopyColor(color, materials[i]->diffuse);
+
+		if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_SPECULAR, &color) == AI_SUCCESS)
+			assimp::CopyColor(color, materials[i]->specular);
+
+		if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_EMISSIVE, &color) == AI_SUCCESS)
+			assimp::CopyColor(color, materials[i]->emissive);
+
+		unsigned int max;
+		if (aiGetMaterialFloatArray(pMaterial, AI_MATKEY_SHININESS, &materials[i]->shininess, &max) == AI_SUCCESS);
 	}
 
 	CheckOpenGLError();
@@ -258,7 +259,7 @@ void Mesh::RenderInstanced(unsigned int instances)
 	glBindVertexArray(0);
 }
 
-void Mesh::RenderDebug()
+void Mesh::RenderDebug(const Shader *shader) const
 {
 
 }

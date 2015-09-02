@@ -24,6 +24,11 @@ enum class MeshType {
 	SKINNED
 };
 
+enum class LOG_MESH {
+	ERROR_MAX_INFLUENCE,
+	SUCCESS
+};
+
 struct MeshEntry {
 	MeshEntry()
 	{
@@ -65,15 +70,15 @@ class DLLExport Mesh {
 		virtual bool LoadMesh(const string& fileLocation, const string& fileName);
 		virtual void Render(const Shader *shader);
 		virtual void RenderInstanced(unsigned int instances);
-		virtual void RenderDebug();
+		virtual void RenderDebug(const Shader *shader) const;
 		virtual void UseMaterials(bool);
 
 		void SetGlPrimitive(unsigned int glPrimitive);
 
 	protected:
 		void Clear();
-		void InitMesh(const aiMesh* paiMesh);
-		bool InitMaterials(const aiScene* pScene);
+		virtual void InitMesh(const aiMesh* paiMesh);
+		virtual bool InitMaterials(const aiScene* pScene);
 		virtual bool InitFromScene(const aiScene* pScene);
 
 	private:
@@ -89,6 +94,7 @@ class DLLExport Mesh {
 		BoundingBox *bbox;
 
 	protected:
+		LOG_MESH loadState;
 		string fileLocation;
 
 		bool useMaterial;
