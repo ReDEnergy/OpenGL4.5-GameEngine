@@ -4,7 +4,7 @@
 
 class DLLExport ObjectInput : virtual public Object {
 	public:
-		ObjectInput(InputGroup GROUP);
+		ObjectInput(InputGroup GROUP = InputGroup::IG_GAMEPLAY);
 		virtual ~ObjectInput();
 		virtual void Update(float deltaTime, int mods) {};
 		virtual void OnKeyPress(int key, int mods) {};
