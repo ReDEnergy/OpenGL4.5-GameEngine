@@ -1,24 +1,8 @@
 #pragma once
+#include "pch.h"
 #include <vector>
 
 using namespace std;
-
-#include <Core/World.h>
-#include <Event/EventListener.h>
-
-class Camera;
-class CameraInput;
-class CameraDebugInput;
-class ColorPicking;
-class DirectionalLight;
-class SpotLight;
-class FrameBuffer;
-class GameObject;
-class Overlay;
-class Player;
-class SSAO;
-class CSM;
-class Texture;
 
 class Game : public World,
 			public EventListener
@@ -36,9 +20,6 @@ class Game : public World,
 		void OnEvent(const char* eventID, Object *data);
 		void InitSceneCameras();
 
-	public:
-		Camera				*activeCamera;
-
 	private:
 		Camera				*freeCamera;
 		Camera				*gameCamera;
@@ -53,12 +34,9 @@ class Game : public World,
 
 		GameObject			*ScreenQuad;
 		GameObject			*DebugPanel;
-		Player				*player;
 
 		SSAO				*ssao;
-		CSM					*csm;
-
-		ColorPicking		*colorPicking;
+		Texture				*ShadowMap;
 
 		vector<Camera*>		sceneCameras;
 		unsigned int		activeSceneCamera;

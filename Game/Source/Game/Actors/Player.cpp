@@ -1,12 +1,9 @@
 #include "Player.h"
 
-#include <include/utils.h>
-
-#include <Component/Transform.h>
+#include <Engine.h>
 
 #include <Game/Input/PlayerInput.h>
 
-#include <Manager/Manager.h>
 
 // #include <Manager/HavokCore.h>
 // #include <Component/Physics.h>

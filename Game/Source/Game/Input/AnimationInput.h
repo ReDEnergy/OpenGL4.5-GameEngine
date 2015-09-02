@@ -1,9 +1,6 @@
 #pragma once
-#include <Component/ObjectInput.h>
-#include <Event/EventListener.h>
-
+#include <PCH/pch.h>
 using namespace std;
-class GameObject;
 
 class AnimationInput : public ObjectInput, EventListener {
 

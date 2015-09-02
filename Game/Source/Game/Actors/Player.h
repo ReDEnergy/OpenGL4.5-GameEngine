@@ -1,5 +1,5 @@
 #pragma once
-#include <Core/GameObject.h>
+#include <Engine.h>
 
 class hkpCharacterRigidBody;
 class hkpCharacterContext;

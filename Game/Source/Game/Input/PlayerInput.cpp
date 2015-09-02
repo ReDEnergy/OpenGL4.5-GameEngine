@@ -1,12 +1,8 @@
 #include "PlayerInput.h"
 
-#include <Component/Transform.h>
-#include <Component/ObjectInput.h>
-#include <Core/InputSystem.h>
-
 #include <Game/Actors/Player.h>
 
-#include <Manager/Manager.h>
+#include <Engine.h>
 
 //#include <Manager/HavokCore.h>
 

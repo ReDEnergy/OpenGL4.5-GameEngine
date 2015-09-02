@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<resolution>1280 720</resolution>
-	<position>600 350</position>
+	<position>600 300</position>
 	<fullscreen>false</fullscreen>
+	<vsync>false</vsync>
+	<ssao>false</ssao>
 	<resource>Resources.xml</resource>
 	<shaders>Shaders.xml</shaders>
 	<scene>Scene.xml</scene>

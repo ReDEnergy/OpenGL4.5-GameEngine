@@ -1,5 +1,5 @@
 #pragma once
-#include <Component/ObjectInput.h>
+#include <PCH/pch.h>
 
 using namespace std;
 class Game;

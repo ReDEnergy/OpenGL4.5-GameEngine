@@ -92,6 +92,10 @@
 	<shader>
 		<name>r2tskinning</name>
 		<vertex>Skinning/R2T.VS</vertex>
-		<fragment>Skinning/R2T.FS</fragment>
+		<fragment>R2T.FS</fragment>
 	</shader>	
+	<shader>
+		<name>SoVInput</name>
+		<compute>SoV/SoVInput.CS</compute>
+	</shader>		
 </shaders>

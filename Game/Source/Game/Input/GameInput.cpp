@@ -1,24 +1,8 @@
+#include "pch.h"
+
 #include "GameInput.h"
 
-#include <include/gl.h>
-
-#include <Core/Engine.h>
-#include <Core/GameObject.h>
-#include <Core/Camera/Camera.h>
-#include <Core/WindowObject.h>
-#include <Core/InputSystem.h>
-
-#include <Component/Transform.h>
-
 #include <Game/Game.h>
-#include <Game/State/GameState.h>
-#include <Manager/AudioManager.h>
-#include <Manager/ResourceManager.h>
-#include <Manager/SceneManager.h>
-#include <Manager/EventSystem.h>
-#include <Manager/Manager.h>
-#include <Event/EventType.h>
-
 
 GameInput::GameInput(Game *game)
 	: ObjectInput(InputGroup::IG_GAMEPLAY), game(game)
@@ -28,16 +12,18 @@ GameInput::GameInput(Game *game)
 
 void GameInput::Update(float deltaTime, int mods) {
 
-	if (InputSystem::KeyHold(GLFW_KEY_RIGHT))
-		game->activeCamera->MoveRight(deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_UP))
-		game->activeCamera->MoveForward(deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_LEFT))
-		game->activeCamera->MoveRight(-deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_DOWN))
-		game->activeCamera->MoveBackward(deltaTime);
+	Camera *activeCamera = Manager::GetScene()->GetActiveCamera();
 
-	game->activeCamera->Update();
+	if (InputSystem::KeyHold(GLFW_KEY_RIGHT))
+		activeCamera->MoveRight(deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_UP))
+		activeCamera->MoveForward(deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_LEFT))
+		activeCamera->MoveRight(-deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_DOWN))
+		activeCamera->MoveBackward(deltaTime);
+
+	activeCamera->Update();
 }
 
 void GameInput::OnKeyPress(int key, int mods)
@@ -53,7 +39,7 @@ void GameInput::OnKeyPress(int key, int mods)
 			return;
 
 		case GLFW_KEY_F7:
-			Manager::GetAudio()->PlayStream("relax");
+			//Manager::GetAudio()->PlayStream("relax");
 			return;
 	}
 

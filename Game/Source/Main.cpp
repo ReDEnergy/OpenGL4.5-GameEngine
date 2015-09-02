@@ -1,16 +1,16 @@
+#include "pch.h"
+
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
 
-#include <Core/Engine.h>
 #include <Game/Game.h>
-#include <Manager/Manager.h>
 
 #undef DLLExport
 
 using namespace std;
 
-int main() {
+ int main() {
 
 	srand((unsigned int)time(NULL));
 
