@@ -4,7 +4,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\include;Source;GameEngine;$(IncludePath)</IncludePath>
+    <IncludePath>..\libs;Source;GameEngine;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <_PropertySheetDisplayName>include</_PropertySheetDisplayName>
   </PropertyGroup>
@@ -15,9 +15,6 @@
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

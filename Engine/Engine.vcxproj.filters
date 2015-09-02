@@ -61,9 +61,6 @@
     <Filter Include="Header Files\templates">
       <UniqueIdentifier>{23ca8049-16d2-4ab3-84a0-9fb415f1a0ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UI">
-      <UniqueIdentifier>{55c0e882-f3ee-4cd7-aac2-88032880cd0a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{33fc24f8-c636-4e05-800a-4dfde7bf73ca}</UniqueIdentifier>
     </Filter>
@@ -73,11 +70,23 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{f70d2ce1-295c-44a9-b5aa-4e046ea5b7b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Config">
+      <UniqueIdentifier>{3effb80d-a2c5-4166-bbac-3ac65937e3ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{55c0e882-f3ee-4cd7-aac2-88032880cd0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SkeletalSystem">
+      <UniqueIdentifier>{cc47dce4-5e4b-43ac-af92-45c68d7cedf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Transform">
+      <UniqueIdentifier>{f1490dc5-4eed-40aa-b58e-baa21faeee26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor">
+      <UniqueIdentifier>{7e946850-0513-41a3-9a58-59257a946b6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DLL\dllmain.cpp">
-      <Filter>DLL</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\AABB.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -91,9 +100,6 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\Text.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\Transform.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Engine.cpp">
@@ -163,9 +169,6 @@
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\MenuSystem.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\Overlay.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Rendering\ShadowMapping.cpp">
@@ -258,6 +261,30 @@
     <ClCompile Include="Source\Manager\ColorManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\DebugOverlayText.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DLL\dllmain.cpp">
+      <Filter>DLL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SkeletalSystem\SkeletalJoint.cpp">
+      <Filter>Source Files\SkeletalSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Transform\JointTransform.cpp">
+      <Filter>Source Files\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Transform\LimitedTransform.cpp">
+      <Filter>Source Files\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Transform\Transform.cpp">
+      <Filter>Source Files\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\OpenGL.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Gizmo.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\AABB.h">
@@ -273,9 +300,6 @@
       <Filter>Source Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Text.h">
-      <Filter>Source Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Transform.h">
       <Filter>Source Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Engine.h">
@@ -364,9 +388,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utils\3D.h">
       <Filter>Source Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\Overlay.h">
-      <Filter>Source Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\MenuSystem.h">
       <Filter>Source Files\UI</Filter>
@@ -469,6 +490,39 @@
     </ClInclude>
     <ClInclude Include="Source\Manager\ColorManager.h">
       <Filter>Source Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\DebugOverlayText.h">
+      <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\include\gl_utils.h">
+      <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\include\assimp.h">
+      <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Config\ResourcePath.h">
+      <Filter>Source Files\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SkeletalSystem\SkeletalJoint.h">
+      <Filter>Source Files\SkeletalSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Transform\JointTransform.h">
+      <Filter>Source Files\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Transform\LimitedTransform.h">
+      <Filter>Source Files\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Transform\Transform.h">
+      <Filter>Source Files\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\OpenGL.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Gizmo.h">
+      <Filter>Source Files\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
