@@ -4,6 +4,9 @@
 #include <include/glm_utils.h>
 #include <include/pugixml.h>
 
+#include <Manager/Manager.h>
+#include <Manager/RenderingSystem.h>
+
 static const string _PATH("Config/");
 
 pugi::xml_node *config;
@@ -24,6 +27,17 @@ void ConfigFile::Load(const char *fileName) {
 	resolution = glm::ExtractVector<glm::ivec2>(config->child_value("resolution"));
 	position = glm::ExtractVector<glm::ivec2>(config->child_value("position"));
 
+	ReadGraphicState("vsync", RenderState::VSYNC);
+	ReadGraphicState("ssao", RenderState::SS_AO);
+}
+
+void ConfigFile::ReadGraphicState(char* propertyName, RenderState STATE) {
+	const char *value = config->child_value("vsync");
+	bool state = false;
+	if (strcmp(value, "true") == 0)
+		state = true;
+
+	Manager::RenderSys->Set(STATE, state);
 }
 
 const char* ConfigFile::GetResourceFileLoc(const char *resourceID) {

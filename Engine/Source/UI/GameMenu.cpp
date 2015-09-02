@@ -6,7 +6,7 @@
 #include <Core/Engine.h>
 #include <Core/Camera/Camera.h>
 #include <Component/Text.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 
 #include <Event/EventType.h>
 
@@ -33,9 +33,9 @@ GameMenu::GameMenu()
 
 	HUDCamera = new Camera();
 	HUDCamera->SetPerspective(25.0f, aspectRation, 0.1f, 50.0f);
-	HUDCamera->SetDirection(glm::vec3(0, 0, -1));
 	//HUDCamera->SetOrthgraphic(10, 10, 0.1f, 50.0f);
 	HUDCamera->SetPosition(glm::vec3(0, 0, 10.0f));
+	HUDCamera->transform->SetWorldRotation(glm::vec3(0, 180, 0));
 	HUDCamera->Update();
 
 	for (auto &page : (Manager::GetMenu()->pages)) {
@@ -54,8 +54,7 @@ void GameMenu::SetPageLayout(MenuPage *page) {
 	float lineOffset = 0.25f;
 	float leftOffset = -3.20f; 
 	for (auto entry : page->entries) {
-		entry->text->transform->position += glm::vec3(leftOffset, offset, 0);
-		entry->text->transform->Update();
+		entry->text->transform->SetWorldPosition(entry->text->transform->GetWorldPosition() + glm::vec3(leftOffset, offset, 0));
 		offset -= lineOffset;
 	}
 }
@@ -76,6 +75,7 @@ void GameMenu::Render() const {
 	HUDCamera->BindProjectionMatrix(shader->loc_projection_matrix);
 	HUDCamera->BindViewMatrix(shader->loc_view_matrix);
 	glUniform3f(shader->text_color, 0.967f, 0.333f, 0.486f);
+
 	glDisable(GL_DEPTH_TEST);
 
 	for (unsigned int i = 0; i < activePage->entries.size(); i++) {
@@ -142,8 +142,10 @@ void GameMenu::OnKeyPress(int key, int mods) {
 			return;
 		
 		case GLFW_KEY_UP:
-			activeEntryIndex--;
-			activeEntryIndex %= activePage->entries.size();
+			if (activeEntryIndex == 0)
+				activeEntryIndex = activePage->entries.size() - 1;
+			else
+				activeEntryIndex--;
 			return;
 
 		case GLFW_KEY_ENTER:

@@ -27,14 +27,14 @@ void CameraDebugInput::Update(float deltaTime, int mods) {
 		camera->MoveUp(deltaTime);
 
 	if (InputSystem::KeyHold(GLFW_KEY_KP_MULTIPLY))
-		camera->IncreaseSpeed();
+		camera->UpdateSpeed();
 	if (InputSystem::KeyHold(GLFW_KEY_KP_DIVIDE))
-		camera->DecreaseSpeed();
+		camera->UpdateSpeed(-0.2f);
 
 	if (InputSystem::KeyHold(GLFW_KEY_KP_4))
-		camera->RotateOY(-500 * deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_KP_6))
 		camera->RotateOY( 500 * deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_KP_6))
+		camera->RotateOY(-500 * deltaTime);
 	if (InputSystem::KeyHold(GLFW_KEY_KP_8))
 		camera->RotateOX(-700 * deltaTime);
 	if (InputSystem::KeyHold(GLFW_KEY_KP_5))

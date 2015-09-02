@@ -32,8 +32,13 @@ void WindowObject::WindowMode() {
 	window = glfwCreateWindow(resolution.x, resolution.y, name, NULL, NULL);
 	glfwMakeContextCurrent(window);
 	glfwSetWindowPos(window, (int)position.x, (int)position.y);
+	//glfwHideWindow(window);
 	SetSize(resolution.x, resolution.y);
 	SetWindowCallbacks();
+
+	// Save native context data
+	nativeWGLContext = glfwGetWGLContext(window);
+	hdc = wglGetCurrentDC();
 }
 
 void WindowObject::SetWindowCallbacks() {
@@ -48,6 +53,14 @@ void WindowObject::SetSize(int width, int height) {
 	center = resolution / 2;
 	aspectRatio = float(width) / height;
 	glViewport(0, 0, width, height);
+}
+
+void WindowObject::SetContext()
+{
+	// WHY IS THIS NOT WORKING ?! Maybe because of HDC!
+	//	glfwMakeContextCurrent(window);
+
+	wglMakeCurrent(hdc, nativeWGLContext);
 }
 
 // Clip user cursor inside the Window

@@ -22,6 +22,11 @@ void Shader::BindTexturesUnits() {
 	}
 }
 
+GLint Shader::GetUniformLocation(const char *uniformName) const
+{
+	return glGetUniformLocation(program, uniformName);
+}
+
 void Shader::GetUniforms() {
 
 	// MVP
@@ -77,6 +82,7 @@ void Shader::GetUniforms() {
 		sprintf_s(buffer, "Bones[%d]", i);
 		loc_bones[i] = glGetUniformLocation(program, buffer);
 	}
+	loc_animated = glGetUniformLocation(program, "animated");
 
 	// Textures
 	for (int i = 0; i < MAX_2D_TEXTURES; i++) {

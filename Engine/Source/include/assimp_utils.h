@@ -1,9 +1,7 @@
 #pragma once
 #include <include/gl.h>
 #include <include/glm.h>
-
-#include <assimp/Importer.hpp>		// C++ importer interface
-#include <assimp/scene.h>			// Output data structure
+#include <include/assimp.h>
 
 using namespace std;
 

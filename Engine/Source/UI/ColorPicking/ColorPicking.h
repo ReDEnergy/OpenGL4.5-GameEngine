@@ -4,59 +4,81 @@
 
 #include <Component/ObjectInput.h>
 
-
 class Camera;
-class GameObject;
 class FrameBuffer;
+class Gizmo;
+class GameObject;
 class ObjectInput;
 class Shader;
 
-enum Gizmo_Action{
-	Move=0,
-	Rotate=1,
-	Scale=2
-};
+namespace ENUM_GIZMO_EVENT {
+	enum GE {
+		MOVE,
+		ROTATE,
+		SCALE,
+		ROTATE_LOCAL,
+		ROTATE_WORLD
+	};
+}
+typedef ENUM_GIZMO_EVENT::GE GIZMO_EVENT;
 
-class DLLExport ColorPicking : public ObjectInput {
 
-public:
-	ColorPicking();
-	~ColorPicking();
 
-	void Init();
-	void Update(const Camera* activeCamera);
-	void OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods);
-	void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY);
-	void OnKeyPress(int key, int mod);
-	void OnKeyRelease(int key, int mod);
-	void FocusCamera();
-	void DrawGizmo();
+class DLLExport ColorPicking
+	: public ObjectInput
+{
+	public:
+		ColorPicking();
+		~ColorPicking();
 
-	FrameBuffer *FBO;
-	FrameBuffer *FBO_Gizmo;
+		void Init();
+		void Update(const Camera* activeCamera);
+		void OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods);
+		void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY);
+		void OnKeyPress(int key, int mod);
 
-	GameObject	*selectedObject;
+		void FocusCamera();
+		void SetSelectedObject(GameObject *object);
+		GameObject* GetSelectedObject() const;
 
-private:
-	Shader *cpShader;
-	Shader *gizmoShader;
+	private:
+		void GetPickedObject();
+		void DrawSceneForPicking() const;
 
-	glm::ivec2 mousePosition;
-	bool pickEvent;
-	bool gizmoEvent;
-	bool gizmo_isLocal;
-	bool gizmo_moveCameraAlong;
-	bool focus_event;
-	float focus_currentSpeed;
-	float focus_minSpeed;
-	float focus_maxSpeed;
-	float focus_accel;
+		void UpdateGizmo(bool picking = false);
+		void UpdateGizmoPosition();
+		void UpdateGizmoRotation();
+		void UpdateGizmoScale();
+		void ResetGizmoRotation();
+		void DrawGizmo() const;
+		void RenderGizmo(const Shader * shader, bool picking = false) const;
 
-	glm::vec3 gizmoPosition;
-	glm::vec3 gizmoLocalRotation;
-	glm::vec3 currentAxis;
+	public:
+		FrameBuffer *FBO;
+		FrameBuffer *FBO_Gizmo;
 
-	const Camera *camera;
+	private:
+		Shader *cpShader;
+		Shader *gizmoShader;
 
-	enum Gizmo_Action gizmo_action;
+		glm::ivec2 mousePosition;
+
+		GIZMO_EVENT GEVENT;
+		Gizmo *gizmoObject;
+
+		bool pickEvent;
+		bool gizmoEvent;
+		bool gizmo_isLocal;
+		bool focusEvent;
+
+		float focus_currentSpeed;
+		float focus_minSpeed;
+		float focus_maxSpeed;
+		float focus_accel;
+
+		glm::vec3 currentAxis;
+
+		const Camera *activeCamera;
+		GameObject	*selectedObject;
+		GIZMO_EVENT rotateMode;
 };

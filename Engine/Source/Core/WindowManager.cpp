@@ -2,6 +2,8 @@
 #include "WindowManager.h"
 
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
+
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
 

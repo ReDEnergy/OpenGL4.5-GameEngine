@@ -6,17 +6,19 @@
 #include <include/utils.h>
 #include <sstream>
 
+#include <Config/ResourcePath.h>
+
+#include <Core/GameObject.h>
+#include <Component/Mesh.h>
+#include <Component/SkinnedMesh.h>
+#include <Component/Transform/Transform.h>
+#include <Component/Renderer.h>
+
 #include <Manager/Manager.h>
 #include <Manager/AudioManager.h>
 #include <Manager/SceneManager.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/DebugInfo.h>
-
-#include <Core/GameObject.h>
-#include <Component/Mesh.h>
-#include <Component/SkinnedMesh.h>
-#include <Component/Transform.h>
-#include <Component/Renderer.h>
 
 #ifdef PHYSICS_ENGINE
 #include <include/havok.h>
@@ -29,7 +31,7 @@ ResourceManager::ResourceManager() {
 ResourceManager::~ResourceManager() {
 	for (auto obj : _objects)
 		SAFE_FREE(obj.second);
-	for (auto obj : meshes)
+	for (auto obj : _meshes)
 		SAFE_FREE(obj.second);
 }
 
@@ -42,7 +44,6 @@ void ResourceManager::Load(const char* file) {
 	LoadMeshes(doc);
 	LoadGameObjects(doc);
 	LoadGameAudio(doc);
-
 }
 
 void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
@@ -69,7 +70,7 @@ void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
 			SAFE_FREE(M);
 			continue;
 		}
-		meshes[meshName] = M;
+		_meshes[meshName] = M;
 	}
 }
 
@@ -82,7 +83,7 @@ void ResourceManager::LoadGameAudio(const pugi::xml_document &doc)
 		cout << "Audio Type: " << audio.name() << endl;
 
 		audioName = audio.child_value("name");
-		string fileLocation = RESOURCE_PATH::AUDIO + audio.child_value("path") + '\\' + audio.child_value("file");
+		string fileLocation = RESOURCE_PATH::AUDIO + audio.child_value("path") + "\\" + audio.child_value("file");
 
 		if (strcmp(audio.name(), "music") == 0) {
 			Manager::Audio->LoadAudio(fileLocation, audioName, AUDIO_TYPE::MUSIC);
@@ -121,11 +122,13 @@ void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
 		physicsInfo = obj.child("physics");
 		transformInfo = obj.child("transform");
 		renderingInfo = obj.child("shadow");
+		bool createProp = obj.attribute("prop") ? true : false;
+
 
 		GameObject *GO = new GameObject(objName);
 		SetTransform(transformInfo, *GO->transform);
 		if (meshName) {
-			GO->mesh = meshes[meshName];
+			GO->mesh = _meshes[meshName];
 			GO->SetupAABB();
 		}
 
@@ -139,28 +142,49 @@ void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
 			GO->physics->LoadHavokFile(RESOURCE_PATH::PHYSICS + physicsInfo.child_value("file"));
 		}
 		#endif
-
 		if (renderingInfo) {
 			GO->renderer->SetCastShadow(true);
 		}
 
 		_objects[objName] = GO;
+
+		if (createProp)
+			_props[objName] = GO;
 	}
 }
 
-GameObject* ResourceManager::GetGameObject(const char *name) {
-	if (_objects[name])
-		return new GameObject(*_objects[name]);
+GameObject* ResourceManager::GetGameObject(const char *name) const
+{
+	if (_objects.find(name) != _objects.end())
+		return new GameObject(*_objects.at(name));
+	return nullptr;
+}
+
+GameObject * ResourceManager::GetPropObject(const char * name) const
+{
+	if (_props.find(name) != _props.end())
+		return _props.at(name);
+	return nullptr;
+}
+
+Mesh * ResourceManager::GetMesh(const char *name) const
+{
+	if (_meshes.find(name) != _meshes.end()) {
+		return _meshes.at(name);
+	}
 	return nullptr;
 }
 
 unsigned int ResourceManager::GetGameObjectUID(const char *name)
 {
-	if (name == nullptr) return -1;
+	if (name == nullptr)
+		return -1;
+	
 	if (_counter.find(name) == _counter.end()) {
 		_counter[name] = -1;
 	}
 	_counter[name]++;
+
 	return _counter[name];
 }
 
@@ -172,17 +196,15 @@ void ResourceManager::SetTransform(pugi::xml_node node, Transform &T) {
 
 	prop = node.child("position");
 	if (prop)
-		T.position = glm::ExtractVector<glm::vec3>(prop.text().get());
+		T.SetWorldPosition(glm::ExtractVector<glm::vec3>(prop.text().get()));
 
 	prop = node.child("rotation");
 	if (prop) {
 		glm::vec3 rotation = glm::ExtractVector<glm::vec3>(prop.text().get());
-		T.SetRotation(rotation);
+		T.SetWorldRotation(rotation);
 	}
 
 	prop = node.child("scale");
 	if (prop)
-		T.scale = glm::ExtractVector<glm::vec3>(prop.text().get());
-
-	T.Update();
+		T.SetScale(glm::ExtractVector<glm::vec3>(prop.text().get()));
 }

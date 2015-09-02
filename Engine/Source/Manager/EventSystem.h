@@ -29,7 +29,7 @@ class DLLExport EventSystem
 		~EventSystem();
 
 	public:
-		void Subscribe(EventListener *E, string eventID);
+		void Subscribe(EventListener *E, const string &eventID);
 		void EmitSync(string eventID, Object *data);
 
 		void Subscribe(EventType Event, EventListener *E);

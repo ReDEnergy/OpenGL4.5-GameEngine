@@ -3,7 +3,7 @@
 
 #include <Manager/Manager.h>
 #include <Manager/ResourceManager.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 #include <Component/Mesh.h>
 #include <GPU/Shader.h>
 
@@ -41,16 +41,13 @@ void Light::RandomDiffuseColor() {
 
 void Light::RenderDebug(const Shader *shader) const {
 	glUniform4fv(shader->loc_debug_color, 1, glm::value_ptr(diffuseColor)); 
-	glm::vec3 sc = glm::vec3(transform->scale);
-	transform->scale = bulbSize;
-	transform->Update();
+	glm::vec3 sc = glm::vec3(transform->GetScale());
+	transform->SetScale(bulbSize);
 	light->Render(shader);
-	transform->scale = sc;
-	transform->Update();
+	transform->SetScale(sc);
 
 }
 
 void Light::Move(const glm::vec3 dir, float deltaTime) {
-	transform->position += glm::normalize(dir) * deltaTime;
-	transform->Update();
+	transform->SetWorldPosition(transform->GetWorldPosition() + glm::normalize(dir) * deltaTime);
 }

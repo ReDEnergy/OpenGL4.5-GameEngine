@@ -11,7 +11,7 @@
 
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 
 
 AudioManager::AudioManager() {
@@ -60,8 +60,10 @@ AudioSource* AudioManager::GetAudioSource(const string &name)
 
 void AudioManager::Update(Camera *player)
 {
-	sf::Listener::setDirection(player->forward.x, player->forward.y, player->forward.z);
-	sf::Listener::setPosition(player->transform->position.x, player->transform->position.y, player->transform->position.z);
+	glm::vec3 pos = player->transform->GetWorldPosition();
+	glm::vec3 forward = player->transform->GetLocalOZVector();
+	sf::Listener::setDirection(forward.x, forward.y, forward.z);
+	sf::Listener::setPosition(pos.x, pos.y, pos.z);
 }
 
 void AudioManager::PlayStream(const char *streamUID) {

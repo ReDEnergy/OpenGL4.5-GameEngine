@@ -3,6 +3,16 @@
 
 using namespace std;
 
+Material::Material()
+{
+	texture = nullptr;
+	shader = nullptr;
+}
+
+Material::~Material()
+{
+}
+
 void Material::createUBO() {
 	glGenBuffers(1, &material_ubo);
 	glBindBuffer(GL_UNIFORM_BUFFER, material_ubo);

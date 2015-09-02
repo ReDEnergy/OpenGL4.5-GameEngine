@@ -1,7 +1,10 @@
 //#include <pch.h>
 #include "CameraInput.h"
 
+#include <Component/Transform/Transform.h>
+
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
 #include <Core/InputSystem.h>
 #include <Core/Camera/Camera.h>
 
@@ -28,14 +31,14 @@ void CameraInput::Update(float deltaTime, int mods) {
 		camera->MoveUp(deltaTime);
 
 	if (InputSystem::KeyHold(GLFW_KEY_KP_MULTIPLY))
-		camera->IncreaseSpeed();
+		camera->UpdateSpeed();
 	if (InputSystem::KeyHold(GLFW_KEY_KP_DIVIDE))
-		camera->DecreaseSpeed();
+		camera->UpdateSpeed(-0.2f);
 
 	if (InputSystem::KeyHold(GLFW_KEY_KP_4))
-		camera->RotateOY(-500 * deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_KP_6))
 		camera->RotateOY( 500 * deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_KP_6))
+		camera->RotateOY(-500 * deltaTime);
 	if (InputSystem::KeyHold(GLFW_KEY_KP_8))
 		camera->RotateOX(-700 * deltaTime);
 	if (InputSystem::KeyHold(GLFW_KEY_KP_5))
@@ -55,7 +58,7 @@ void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
 	if (((InputSystem::GetMods() == SPECIAL_KEY::ALT) && InputSystem::MouseHold(MOUSE_BUTTON::LEFT)) ||
 		InputSystem::MouseHold(MOUSE_BUTTON::RIGHT)) 
 	{
-		camera->RotateOY((float)deltaX);
+		camera->RotateOY(-(float)deltaX);
 		camera->RotateOX((float)deltaY);
 		camera->Update();
 	}
@@ -63,12 +66,17 @@ void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
 
 void CameraInput::OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods)
 {
-
-	if (action == 0 && (button == MOUSE_BUTTON::LEFT || button == MOUSE_BUTTON::RIGHT)) {
+	if (action == GLFW_RELEASE && button == MOUSE_BUTTON::LEFT && InputSystem::MouseHold(MOUSE_BUTTON::RIGHT) == false) {
 		Engine::Window->ClipPointer(false);
 		Engine::Window->HidePointer(false);
 	}
-	else if ((mods == SPECIAL_KEY::ALT && button == MOUSE_BUTTON::LEFT) || (button == MOUSE_BUTTON::RIGHT))
+
+	if (action == GLFW_RELEASE && button == MOUSE_BUTTON::RIGHT) {
+		Engine::Window->ClipPointer(false);
+		Engine::Window->HidePointer(false);
+	}
+
+	if (action == GLFW_PRESS && ((mods == SPECIAL_KEY::ALT && button == MOUSE_BUTTON::LEFT) || (button == MOUSE_BUTTON::RIGHT)))
 	{
 		Engine::Window->ClipPointer(true);
 		Engine::Window->HidePointer(true);

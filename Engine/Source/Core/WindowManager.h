@@ -2,7 +2,9 @@
 #include <vector>
 
 #include <include/gl.h>
-#include <Core/WindowObject.h>
+#include <include/glm.h>
+
+class WindowObject;
 
 using namespace std;
 

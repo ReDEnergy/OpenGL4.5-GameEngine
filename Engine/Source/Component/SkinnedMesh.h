@@ -18,18 +18,8 @@ using namespace std;
 #define NUM_BONES_PER_VEREX 4
 
 class Shader;
-
-struct BoneInfo
-{
-	glm::mat4 BoneOffset;
-	glm::mat4 FinalTransformation;
-
-	BoneInfo()
-	{
-		BoneOffset = glm::mat4(0);
-		FinalTransformation = glm::mat4(0);
-	}
-};
+class SkeletalJoint;
+class Transform;
 
 struct VertexBoneData
 {
@@ -47,27 +37,42 @@ struct VertexBoneData
 		ZERO_MEM(Weights);
 	}
 
-	void AddBoneData(uint BoneID, float Weight);
+	uint AddBoneData(uint BoneID, float Weight);
 };
 
 class DLLExport SkinnedMesh : public Mesh
 {
+	public:
+		enum class PLAYBACK {
+			PLAY,
+			PAUSE,
+			TOGGLE,
+		};
+
 	public:
 		SkinnedMesh(const char* meshID = NULL);
 		~SkinnedMesh();
 
 		bool LoadMesh(const std::string& fileLocation, const std::string& fileName);
 		void Render(const Shader* shader);
+		void RenderDebug(const Shader * shader) const;
+
 		void Update();
-		void SetAnimationState(char *animationState);
+		void SetAnimationState(const char *animationState);
+		bool ToggleAnimationPlayback(PLAYBACK state = PLAYBACK::TOGGLE);
 		void ScaleAnimationTime(const string &animation, float timeScale);
+		void DrawControlSkeleton();
 
 	private:
 		bool InitFromScene(const aiScene* pScene);
 		void InitMesh(const aiMesh* paiMesh, uint index);
+		void InitControlSkeleton();
 
-		void UpdateAnimation(float timeInSeconds);
-		void ReadNodeHeirarchy(float animationTime, const aiNode* pNode, const glm::mat4 &ParentTransform);
+		void UpdateGPUData();
+		void UpdateAnimation();
+		void UpdateAnimationNodesMapping();
+		void UpdateJointTransform(SkeletalJoint * joint, float animationTime);
+		void ReadNodeHierarchy(float animationTime, const aiNode* pNode, const glm::mat4 &ParentTransform);
 
 		void CalcInterpolatedPosition(aiVector3D& out, float animationTime, const aiNodeAnim* pNodeAnim);
 		void CalcInterpolatedRotation(aiQuaternion& out, float animationTime, const aiNodeAnim* pNodeAnim);
@@ -80,11 +85,15 @@ class DLLExport SkinnedMesh : public Mesh
 		const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
 
 	private:
-		unordered_map<string, uint> skeletalBones;
+		unordered_map<string, SkeletalJoint*> skeletalBones;
 		vector<VertexBoneData> boneData;
-		vector<BoneInfo> boneInfo;
 		vector<glm::mat4> boneTransform;
 		unsigned short nrBones;
+
+		// TODO - Support for multiple skinned meshes
+		// Right now only a single ROOT joint is considered
+		SkeletalJoint *rootJoint;
+		glm::mat4 rootTransform;
 		glm::mat4 globalInvTransform;
 
 		Assimp::Importer Importer;
@@ -92,5 +101,6 @@ class DLLExport SkinnedMesh : public Mesh
 
 		unordered_map<string, aiAnimation*> animations;
 		aiAnimation *animationState;
-
+		bool playbackState;
+		bool controlState;
 };

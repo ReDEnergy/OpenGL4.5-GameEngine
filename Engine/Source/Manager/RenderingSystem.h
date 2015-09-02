@@ -14,7 +14,8 @@ namespace ERenderState {
 			DEFERRED,
 			POST_PROCESS,
 			HIDE_POINTER,
-			CLIP_POINTER
+			CLIP_POINTER,
+			VSYNC
 	};
 }
 typedef ERenderState::RS RenderState;

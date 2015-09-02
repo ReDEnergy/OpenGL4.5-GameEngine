@@ -31,6 +31,9 @@ namespace _EventType {
 		PLAY_SOUND_FX,
 		STOP_SOUND_FX,
 
+		// Editor
+		EDITOR_OBJECT_SELECTED,
+
 		// SIZE
 		SIZE
 	};

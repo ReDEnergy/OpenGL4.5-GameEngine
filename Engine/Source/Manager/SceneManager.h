@@ -8,6 +8,7 @@
 class PointLight;
 class GameObject;
 class Camera;
+class DirectionalLight;
 
 using namespace std;
 
@@ -23,14 +24,21 @@ class DLLExport SceneManager
 			 
 		void Update();
 		void FrustumCulling(Camera *camera);
+		void LightSpaceCulling(Camera *camera, DirectionalLight *light);
 		void AddObject(GameObject *obj);
-		void RemoveObject(GameObject *obj);
-		GameObject* GetObjectW(char *refID, unsigned int instanceID);
+		void RemoveObject(GameObject *obj, bool destroy = false);
+		void FrameEnded();
+		GameObject* GetGameObject(char *refID, unsigned int instanceID);
+		Camera* GetActiveCamera();
+
+		void SetActiveCamera(Camera *camera);
 
 	private:
 		const char *sceneFile;
 		list<GameObject*> toAdd;
 		list<GameObject*> toRemove;
+		list<GameObject*> toDelete;
+		Camera *activeCamera;
 
 	public:
 		vector<PointLight*> lights;

@@ -5,7 +5,7 @@
 
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 #include <Component/Renderer.h>
 
 #include <GPU/Shader.h>
@@ -38,6 +38,7 @@ PointLight::PointLight()
 	: GameObject("point-light")
 {
 	effectRadius = 10;
+	SetDebugView(true);
 }
 
 PointLight::PointLight(const GameObject &obj)
@@ -49,9 +50,9 @@ PointLight::PointLight(const GameObject &obj)
 void PointLight::RenderDeferred(Shader *shader) {
 	glUniform1f(shader->loc_light_radius, effectRadius / 2);
 	glm::BindUniform3f(shader->loc_light_color, diffuseColor);
-	glm::BindUniform3f(shader->loc_light_pos, transform->position);
+	glm::BindUniform3f(shader->loc_light_pos, transform->GetWorldPosition());
 
-	glm::vec3 scale = transform->scale;
+	glm::vec3 scale = transform->GetScale();
 	light->transform->SetScale(glm::vec3(effectRadius));
 	light->Render(shader);
 	light->transform->SetScale(scale);
@@ -62,20 +63,23 @@ void PointLight::CastShadows() {
 	// Render pass
 	FBO->Bind();
 
-	Shader *CSHM = Manager::Shader->GetShader("VSM");
-	CSHM->Use();
+	Shader *VSM = Manager::Shader->GetShader("VSM");
+	VSM->Use();
 
 	for (unsigned int i = 0; i < 6; i++) {
 		cubeTexture->BindForWriting(cameraDirections[i].cubeMapFace);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		camera->Set(transform->position, cameraDirections[i].target, cameraDirections[i].up);
-		camera->BindViewMatrix(CSHM->loc_view_matrix);
-		camera->BindProjectionMatrix(CSHM->loc_projection_matrix);
+		// TODO 
+		camera->transform->SetWorldPosition(transform->GetWorldPosition());
+		camera->transform->SetWorldRotation(cameraDirections[i].target * 90.0f);
+		//camera->Set(transform->GetWorldPosition(), cameraDirections[i].target, cameraDirections[i].up);
+		camera->BindViewMatrix(VSM->loc_view_matrix);
+		camera->BindProjectionMatrix(VSM->loc_projection_matrix);
 
 		for (auto *obj : Manager::Scene->activeObjects) {
 			if (obj->renderer->CastShadow())
-				obj->Render(CSHM);
+				obj->Render(VSM);
 		}
 	}
 
@@ -99,7 +103,7 @@ void PointLight::BindForUse(const Shader *shader) const
 	camera->BindViewMatrix(shader->loc_view_matrix);
 	camera->BindProjectionMatrix(shader->loc_projection_matrix);
 	camera->BindProjectionDistances(shader);
-	glm::BindUniform3f(shader->loc_light_pos, transform->position);
+	glm::BindUniform3f(shader->loc_light_pos, transform->GetWorldPosition());
 	BindTexture(GL_TEXTURE2);
 
 	glm::ivec2 rez = FBO->GetResolution();

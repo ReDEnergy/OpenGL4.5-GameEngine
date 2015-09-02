@@ -6,9 +6,13 @@
 #include <string>
 
 #include <include/utils.h>
+#include <include/gl_utils.h>
 
 #include <Component/AABB.h>
+#include <Component/Transform/Transform.h>
+
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
 #include <GPU/FrameBuffer.h>
@@ -19,7 +23,7 @@
 #include <Manager/Manager.h>
 #include <Manager/RenderingSystem.h>
 
-#include <Utils/GPU.h>
+#include <Utils/OpenGL.h>
 
 DebugInfo::DebugInfo() {
 	debugMessages = false;
@@ -66,21 +70,14 @@ void DebugInfo::Render(const Camera *camera) const {
 	camera->BindViewMatrix(S->loc_view_matrix);
 	camera->BindProjectionMatrix(S->loc_projection_matrix);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glLineWidth(2);
 	for (auto obj: objects) {
 		obj->RenderDebug(S);
 	}
-
-	{
-		Manager::RenderSys->Set(RenderState::WIREFRAME, true);
-		glLineWidth(2);
-		for (auto *obj : Manager::Scene->frustumObjects) {
-			if (obj->aabb) {
-				obj->aabb->Render(S);
-			}
-		}
-		glLineWidth(1);
-		Manager::RenderSys->Revert(RenderState::WIREFRAME);
-	}
+	glLineWidth(1);
 
 	{
 		// Draw World AXIS
@@ -88,12 +85,14 @@ void DebugInfo::Render(const Camera *camera) const {
 		glLineWidth(4);
 		glUniformMatrix4fv(S->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 		glUniform4f(S->loc_debug_color, 0.92f, 0.15f, 0.15f, 1.0f);
-		UtilsGPU::DrawLine(glm::vec3(0, 0, 0), glm::vec3(size, 0, 0));
+		OpenGL::DrawLine(glm::vec3(0, 0, 0), glm::vec3(size, 0, 0));
 		glUniform4f(S->loc_debug_color, 0.19f, 0.92f, 0.15f, 1.0f);
-		UtilsGPU::DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, size, 0));
+		OpenGL::DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, size, 0));
 		glUniform4f(S->loc_debug_color, 0.15f, 0.59f, 0.92f, 1.0f);
-		UtilsGPU::DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, 0, size));
+		OpenGL::DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, 0, size));
 		glLineWidth(1);
 	}
 	FrameBuffer::Unbind();
+
+	glDisable(GL_CULL_FACE);
 }

@@ -5,7 +5,7 @@
 #include <Core/GameObject.h>
 #include <Component/AABB.h>
 #include <Component/Renderer.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 
 #include <GPU/FrameBuffer.h>
 #include <GPU/Shader.h>

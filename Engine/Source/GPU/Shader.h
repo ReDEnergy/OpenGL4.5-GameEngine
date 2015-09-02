@@ -22,6 +22,7 @@ class DLLExport Shader
 		void BindTexturesUnits();
 		void SetShaderFiles(vector <string> shaderFiles);
 		void Use() const;
+		GLint GetUniformLocation(const char * uniformName) const;
 
 	private:
 		void GetUniforms();
@@ -83,6 +84,7 @@ class DLLExport Shader
 
 		// Skinning
 		GLint loc_bones[MAX_BONES];
+		GLint loc_animated;
 
 		// Text
 		GLint text_color;

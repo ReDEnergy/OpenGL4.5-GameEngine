@@ -11,7 +11,7 @@
 #include <FreeType/ft2build.h>
 #include FT_FREETYPE_H
 
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 #include <Component/ObjectInput.h>
 
 #include <Manager/Manager.h>
@@ -25,8 +25,7 @@
 Text::Text() {
 	offset = new Transform();
 	transform = new Transform();
-	transform->scale = glm::vec3(0.005f);
-	transform->Update();
+	transform->SetScale(glm::vec3(0.005f));
 	atlasTextureID = Manager::Font->atlas->id;
 }
 
@@ -35,8 +34,12 @@ Text::~Text() {
 
 void Text::SetText(const char *text) {
 	/* Add text to the buffer (see demo-font.c for the add_text code) */
-	this->content.assign(text);
-	InitText(); 
+	if (text == NULL)
+		text = "_\0";
+	if (content.compare(text) == 0)
+		return;
+	content.assign(text);
+	InitText();
 }
 
 void Text::SetOffset(Transform offset) {
@@ -44,7 +47,7 @@ void Text::SetOffset(Transform offset) {
 }
 
 void Text::Render(Shader *shader) const {
-	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->model));
+	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, atlasTextureID);

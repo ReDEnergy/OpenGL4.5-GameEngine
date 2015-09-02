@@ -14,8 +14,8 @@ struct MaterialBlock {
 
 class Material : public MaterialBlock {
 	public:
-		Material() {};
-		~Material() {};
+		Material();
+		~Material();
 		void createUBO();
 		void bindUBO(GLuint location);
 		void linkShader(Shader* const S);

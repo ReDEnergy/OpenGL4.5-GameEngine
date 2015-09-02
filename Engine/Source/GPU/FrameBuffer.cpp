@@ -4,6 +4,8 @@
 #include <GPU/Shader.h>
 #include <GPU/Texture.h>
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
+
 #include <include/utils.h>
 
 FrameBuffer::FrameBuffer() {

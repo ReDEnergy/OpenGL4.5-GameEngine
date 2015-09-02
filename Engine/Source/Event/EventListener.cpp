@@ -10,7 +10,8 @@ EventListener::EventListener() {
 EventListener::~EventListener() {
 }
 
-void EventListener::SubscribeToEvent(string eventID) {
+void EventListener::SubscribeToEvent(const string & eventID)
+{
 	Manager::GetEvent()->Subscribe(this, eventID);
 }
 

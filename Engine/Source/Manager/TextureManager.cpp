@@ -3,6 +3,8 @@
 
 #include <include/utils.h>
 
+#include <Config/ResourcePath.h>
+
 #include <GPU/Texture.h>
 
 #include <Manager/Manager.h>

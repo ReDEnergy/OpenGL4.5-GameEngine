@@ -6,8 +6,8 @@
 #include <include/dll_export.h>
 #include <include/gl.h>
 
-#include <Core/WindowObject.h>
-#include <Core/World.h>
+class WindowObject;
+class World;
 
 using namespace std;
 

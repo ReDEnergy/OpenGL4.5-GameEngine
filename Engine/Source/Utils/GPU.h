@@ -1,7 +1,9 @@
 #pragma once
+#include <include/dll_export.h>
+
 #include <include/gl.h>
 #include <include/glm.h>
-#include <include/dll_export.h>
+#include <include/gl_utils.h>
 #include <include/utils.h>
 #include <vector>
 
@@ -31,7 +33,7 @@ namespace VERTEX_ATTRIBUTE_LOC {
 	};
 }
 
-class GPUBuffers
+class DLLExport GPUBuffers
 {
 	public:
 		GPUBuffers(unsigned int size)
@@ -47,6 +49,8 @@ class GPUBuffers
 			SAFE_FREE(VBO);
 		}
 
+		GLuint CreateNewVAO();
+
 	public:
 		const unsigned short size;
 		GLuint VAO;
@@ -55,15 +59,15 @@ class GPUBuffers
 
 namespace UtilsGPU {
 
-	GPUBuffers* UploadData(const vector<glm::vec3> &positions, 
+	DLLExport GPUBuffers* UploadData(const vector<glm::vec3> &positions,
 							const vector<glm::vec3> &normals,
 							const vector<unsigned short>& indices);
 
-	GPUBuffers* UploadData(const vector<glm::vec3> &positions,
+	DLLExport GPUBuffers* UploadData(const vector<glm::vec3> &positions,
 							const vector<glm::vec2> &text_coords,
 							const vector<unsigned short> &indices);
 
-	GPUBuffers* UploadData(const vector<glm::vec3> &positions,
+	DLLExport GPUBuffers* UploadData(const vector<glm::vec3> &positions,
 							const vector<glm::vec3> &normals,
 							const vector<glm::vec2> &text_coords,
 							const vector<unsigned short> &indices);
@@ -114,8 +118,4 @@ namespace UtilsGPU {
 
 		return buffers;
 	}
-
-
-	DLLExport void DrawLine(glm::vec3 posA, glm::vec3 posB);
-	DLLExport void DrawPolygon(vector<glm::vec3> &vertices);
 }

@@ -15,7 +15,7 @@ EventSystem::~EventSystem() {
 
 }
 
-void EventSystem::Subscribe(EventListener *E, const string eventID) {
+void EventSystem::Subscribe(EventListener *E, const string &eventID) {
 	 listeners[eventID].push_back(E);
 }
 

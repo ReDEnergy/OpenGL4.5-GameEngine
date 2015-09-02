@@ -22,8 +22,11 @@ class DLLExport WindowObject
 		void WindowMode();
 		void ClipPointer(bool state);
 		void HidePointer(bool state);
+
 		void SetPointerPosition(glm::ivec2 position);
 		void SetSize(int width, int height);
+		void SetContext();
+
 		void Init(char* name, glm::ivec2 resolution, glm::ivec2 position, bool reshapable);
 
 	private:
@@ -43,4 +46,9 @@ class DLLExport WindowObject
 		bool hiddenPointer;
 		bool cursorClip;
 		RECT WindowRECT;
+		
+		// Native Opengl context
+		HDC hdc;
+		HGLRC nativeWGLContext;
+
 };

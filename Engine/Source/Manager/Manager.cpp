@@ -31,12 +31,16 @@
 #include <Manager/PhysicsManager.h>
 #endif
 
+#include <UI/DebugOverlayText.h>
 #include <UI/MenuSystem.h>
+#include <UI/ColorPicking/ColorPicking.h>
 
 AudioManager*		Manager::Audio = nullptr;
 DebugInfo*			Manager::Debug = nullptr;
 ColorManager*		Manager::Color = nullptr;
+ColorPicking*		Manager::Picker = nullptr;
 ConfigFile*			Manager::Config = nullptr;
+DebugOverlayText*	Manager::DebugText = nullptr;
 EventSystem*		Manager::Event = nullptr;
 FontManager*		Manager::Font = nullptr;
 MenuSystem*			Manager::Menu = nullptr;
@@ -57,11 +61,14 @@ void Manager::Init() {
 	Debug = Singleton<DebugInfo>::Instance();
 	Debug->InitManager("Manager");
 
+	DebugText = Singleton<DebugOverlayText>::Instance();
+
 	InputRules::Init();
 	RenderSys = Singleton<RenderingSystem>::Instance();
 	Audio = Singleton<AudioManager>::Instance();
 	Event = Singleton<EventSystem>::Instance();
 	Color = Singleton<ColorManager>::Instance();
+	Picker = Singleton<ColorPicking>::Instance();
 	Config = Singleton<ConfigFile>::Instance();
 	Font = Singleton<FontManager>::Instance();
 
@@ -90,11 +97,10 @@ void Manager::Init() {
 // Load configuration file
 void Manager::LoadConfig() {
 
+	RenderSys->Init();
 	Config->Load("config.xml");
 
 	Engine::Window = WindowManager::NewWindow("Engine", Config->resolution, Config->position, true);
-
-	RenderSys->Init();
 
 	////////////////////////////////////////
 	// TODO inspect if I can move these
@@ -103,7 +109,7 @@ void Manager::LoadConfig() {
 	glewInit();
 
 	/* Force Vertical Sync */
-	wglSwapIntervalEXT(1);
+	wglSwapIntervalEXT(RenderSys->Is(RenderState::VSYNC));
 
 	////////////////////////////////////////
 
@@ -120,11 +126,17 @@ void Manager::LoadConfig() {
 	Scene->LoadScene(Config->GetResourceFileLoc("scene"));
 
 	AABB::Init();
+	Picker->Init();
 }
 
 DLLExport AudioManager* Manager::GetAudio()
 {
 	return Audio;
+}
+
+DLLExport ColorPicking * Manager::GetPicker()
+{
+	return Picker;
 }
 
 DebugInfo* Manager::GetDebug()
@@ -170,6 +182,11 @@ TextureManager* Manager::GetTexture()
 ConfigFile* Manager::GetConfig()
 {
 	return Config;
+}
+
+DLLExport DebugOverlayText * Manager::GetDebugText()
+{
+	return DebugText;
 }
 
 #ifdef PHYSICS_ENGINE

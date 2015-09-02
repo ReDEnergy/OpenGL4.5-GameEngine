@@ -3,8 +3,11 @@
 
 #include <Core/Engine.h>
 #include <Core/WindowManager.h>
+#include <Core/WindowObject.h>
 
+#include <include/glm.h>
 #include <include/pugixml.h>
+
 #include <Input/InputRules.h>
 #include <Manager/Manager.h>
 #include <Manager/EventSystem.h>
@@ -174,6 +177,7 @@ void InputSystem::NotifyObservers(int mouseX, int mouseY, int deltaX, int deltaY
 
 void InputSystem::MapKeys() {
 	string s;
+	// Mapping between GLFW and engine event keys
 	// Basic letter keys
 	for (unsigned int i = 0; i < 26; i++) {
 		s.clear();
@@ -188,7 +192,7 @@ void InputSystem::MapKeys() {
 		keyMapping.insert(std::make_pair(s, GLFW_KEY_0 + i));
 	}
 
-	// F keys
+	// F1-F12 keys
 	for (unsigned int i = 0; i < 12; i++) {
 		s.clear();
 		s.push_back('F');

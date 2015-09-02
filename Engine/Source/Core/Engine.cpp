@@ -2,6 +2,9 @@
 #include "Engine.h"
 #include <Core/InputSystem.h>
 #include <Core/WindowManager.h>
+#include <Core/WindowObject.h>
+#include <Core/World.h>
+
 
 // Engine
 double Engine::elapsedTime = 0;
@@ -33,6 +36,7 @@ void Engine::Run() {
 	Exit();
 }
 
+// TODO - add StartFrame / EndFrame
 void Engine::Update()
 {
 	/* Poll and process events */
@@ -41,8 +45,7 @@ void Engine::Update()
 	ComputeFrameDeltaTime();
 	if (paused) return;
 
-	/* Clear previous frame */
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	world->FrameStart();
 
 	/* Render Frame */
 	if (world)
@@ -54,6 +57,7 @@ void Engine::Update()
 	if (!paused)
 		glfwSwapBuffers(Window->window);
 
+	world->FrameEnd();
 }
 
 void Engine::Pause() {

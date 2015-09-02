@@ -5,7 +5,7 @@
 #include <Core/GameObject.h>
 #include <Component/AABB.h>
 #include <Component/Renderer.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 
 #include <GPU/FrameBuffer.h>
 #include <GPU/Shader.h>
@@ -32,8 +32,11 @@ void DirectionalLight::Init() {
 	FBO = new FrameBuffer();
 	FBO->Generate(2048, 2048, 1);
 
-	forward = glm::vec3(0.0f, -1.0f, 0.0f);
-	up = glm::cross(right, forward);
+	transform->SetWorldRotation(glm::vec3(45, 0, 0));
+
+	// TODO set forward
+	//forward = glm::vec3(0.0f, -1.0f, 0.0f);
+	//up = glm::cross(right, forward);
 	bulbSize = glm::vec3(5);
 	diffuseColor = glm::vec3(0.90f, 0.63f, 0.13f);
 

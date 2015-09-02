@@ -25,28 +25,3 @@ glm::vec3 ColorManager::GetColorUID()
 	glm::vec3 x = glm::vec3(colorID / 255.0f);
 	return x;
 }
-
-
-/*
-void World::pickObject(int x, int y) {
-
-	// get color information from frame buffer
-	unsigned char pixel[3];
-	GLint viewport[4];
-
-	glDisable(GL_LIGHTING);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	drawSelectable();
-
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	glReadPixels(x, viewport[3] - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
-
-	glEnable(GL_LIGHTING);
-
-	Vector3D color = Vector3D(pixel[0], pixel[1], pixel[2]);
-	getSelected(color);
-}
-*/

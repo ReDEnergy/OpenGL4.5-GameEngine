@@ -13,7 +13,7 @@ class DLLExport EventListener : virtual public Object {
 		virtual ~EventListener();
 
 		virtual void OnEvent(const char* eventID, Object *data) {};
-		void SubscribeToEvent(string eventID);
+		void SubscribeToEvent(const string &eventID);
 
 		virtual void OnEvent(EventType Event, Object *data) {};
 		void SubscribeToEvent(EventType Event);
