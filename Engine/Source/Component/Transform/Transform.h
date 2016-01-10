@@ -11,8 +11,8 @@ using namespace std;
 class DLLExport Transform: virtual public Object 
 {
 	friend class LimitedTransform;
-	friend class JointTransform;
 	friend class SkinningJointTransform;
+	friend class JointTransform;
 
 	public:
 		Transform();

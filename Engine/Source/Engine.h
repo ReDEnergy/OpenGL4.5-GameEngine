@@ -25,12 +25,15 @@
 #include <Core/GameObject.h>
 #include <Core/InputSystem.h>
 
+// Debugging
+#include <Debugging/TextureDebugger.h>
+
 // Components
 #include <Component/AABB.h>
 #include <Component/AudioSource.h>
+#include <Component/Animation/AnimationController.h>
 #include <Component/Transform/Transform.h>
 #include <Component/Transform/LimitedTransform.h>
-#include <Component/Transform/JointTransform.h>
 #include <Component/Mesh.h>
 #include <Component/ObjectInput.h>
 #include <Component/Text.h>

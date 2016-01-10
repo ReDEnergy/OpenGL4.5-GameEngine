@@ -16,3 +16,5 @@
 /GameProject/*.lnk
 /libs/Qt
 /Research
+/**/ipch
+/GameProject/Visual Studio/*.opendb
