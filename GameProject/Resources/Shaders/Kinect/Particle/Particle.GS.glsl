@@ -42,9 +42,13 @@ void main() {
 	
 	int index = int(info[0].x);
 	vec4 pos = data[index].position;
-	if (abs(pos.z) < 1.0) return;
+
+	// Discard Kinect errors 
+	// if (abs(pos.z) < 1.0) return;
+	// if (pos.x == 0 || pos.y == 0 || pos.z == 0) return;
 	
-	v_color = pos.a > 0.5 ? vec3(pos.z / (128)) : vec3(1.0, 0, 0);
+	// v_color = pos.a > 0.5 ? vec3(pos.z / (128)) : vec3(1.0, 0, 0);
+	v_color = data[index].stability.rgb;
 	
 	float ds = 0.1;
 	// Crate a box using triangle_strip

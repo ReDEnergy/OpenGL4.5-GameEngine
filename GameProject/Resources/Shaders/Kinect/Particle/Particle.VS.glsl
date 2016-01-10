@@ -18,6 +18,6 @@ void main()
 {
 	vec3 pos = data[gl_VertexID].position.xyz;
 
-	gl_Position = Model * vec4(pos, 1); 
+	gl_Position = Model * vec4(pos, 0); 
 	info.x = gl_VertexID;
 }

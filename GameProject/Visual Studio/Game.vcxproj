@@ -1,0 +1,463 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug-Physics|Win32">
+      <Configuration>Debug-Physics</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug-Physics|x64">
+      <Configuration>Debug-Physics</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-Physics|Win32">
+      <Configuration>Release-Physics</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-Physics|x64">
+      <Configuration>Release-Physics</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AB1CDB37-F8A9-4C4F-82CB-AA6FAF69F691}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Game</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property Sheets\MacrosDebug.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\pugixml.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property Sheets\MacrosRelease.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\pugixml.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property Sheets\MacrosDebug.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\pugixml.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property Sheets\MacrosRelease.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\pugixml.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
+    <Import Project="Property Sheets\MacrosRelease.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\PhysX.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\pugixml.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">
+    <Import Project="Property Sheets\MacrosRelease.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\pugixml.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
+    <Import Project="Property Sheets\MacrosDebug.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\PhysX.debug.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\pugixml.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+    <Import Project="Property Sheets\MacrosDebug.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\pugixml.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PHYSX_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PHYSX_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source\Game\Game.h" />
+    <ClInclude Include="..\Source\Game\Input\AnimationInput.h" />
+    <ClInclude Include="..\Source\Game\Input\GameInput.h" />
+    <ClInclude Include="..\Source\Game\Input\SimpleObjectControl.h" />
+    <ClInclude Include="..\Source\Kinect\Depth\KinectParticle.h" />
+    <ClInclude Include="..\Source\Kinect\Depth\KinectPointCloud.h" />
+    <ClInclude Include="..\Source\Kinect\KinectAPI.h" />
+    <ClInclude Include="..\Source\Kinect\KinectHelper.h" />
+    <ClInclude Include="..\Source\Kinect\KinectSensor.h" />
+    <ClInclude Include="..\Source\Kinect\KinectStreaming.h" />
+    <ClInclude Include="..\Source\Kinect\SkeletalTracking.h" />
+    <ClInclude Include="..\Source\Kinect\Smoothing\ExponentialJoint.h" />
+    <ClInclude Include="..\Source\Kinect\Smoothing\ExponentialRotation.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Source\Kinect\Smoothing\ExponentialSmoothing.h" />
+    <ClInclude Include="..\Source\PCH\pch.h" />
+    <ClInclude Include="..\Source\Physics\PhysX.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Source\Physics\PhysXManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Source\Physics\PhysXRagdoll.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Source\Prototyping\ToFSimulation.h" />
+    <ClInclude Include="..\Source\SkeletalSystem\SkeletalJoint.h" />
+    <ClInclude Include="..\Source\SkeletalSystem\SkeletalSystem.h" />
+    <ClInclude Include="..\Source\SkeletalSystem\Transform\JointTransform.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\Game\Game.cpp" />
+    <ClCompile Include="..\Source\Game\Input\AnimationInput.cpp" />
+    <ClCompile Include="..\Source\Game\Input\GameInput.cpp" />
+    <ClCompile Include="..\Source\Game\Input\SimpleObjectControl.cpp" />
+    <ClCompile Include="..\Source\Kinect\Depth\KinectParticle.cpp" />
+    <ClCompile Include="..\Source\Kinect\Depth\KinectPointCloud.cpp" />
+    <ClCompile Include="..\Source\Kinect\KinectSensor.cpp" />
+    <ClCompile Include="..\Source\Kinect\KinectStreaming.cpp" />
+    <ClCompile Include="..\Source\Kinect\SkeletalTracking.cpp" />
+    <ClCompile Include="..\Source\Kinect\Smoothing\ExponentialJoint.cpp" />
+    <ClCompile Include="..\Source\Kinect\Smoothing\ExponentialRotation.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\Smoothing\ExponentialSmoothing.cpp" />
+    <ClCompile Include="..\Source\Main.cpp" />
+    <ClCompile Include="..\Source\PCH\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\Source\Physics\PhysXManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Physics\PhysXRagdoll.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Prototyping\ToFSimulation.cpp" />
+    <ClCompile Include="..\Source\SkeletalSystem\SkeletalJoint.cpp" />
+    <ClCompile Include="..\Source\SkeletalSystem\SkeletalSystem.cpp" />
+    <ClCompile Include="..\Source\SkeletalSystem\Transform\JointTransform.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

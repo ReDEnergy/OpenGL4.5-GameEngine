@@ -1,37 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Meshes -->
 <meshes>
-	<!-- gizmo objects -->
-	<mesh material="no">
-		<name>gizmo_move</name>
-		<path>Gizmo</path>
-		<file>gizmo_move.obj</file>
-	</mesh>
-	<mesh material="no">
-		<name>gizmo_rotate</name>
-		<path>Gizmo</path>
-		<file>gizmo_rotate.obj</file>
-	</mesh>
-	<mesh material="no">
-		<name>gizmo_scale</name>
-		<path>Gizmo</path>
-		<file>gizmo_scale.obj</file>
-	</mesh>
-	<!-- end gizmo objects -->
-	<mesh skinned="true">
-		<name>soldier</name>
-		<path>Characters/Soldier</path>
-		<file>soldier.X</file>
-	</mesh>
-	<mesh skinned="true">
-		<name>guard</name>
-		<path>Characters/Guard</path>
-		<file>guard.md5mesh</file>
-	</mesh>
 	<mesh>
-		<name>player</name>
-		<path>Characters</path>
-		<file>Player.obj</file>
+		<name>oildrum_center</name>
+		<path>Props</path>
+		<file>oildrum_center.obj</file>
 	</mesh>
 	<mesh material="no">
 		<name>screen-quad</name>
@@ -47,6 +20,50 @@
 		<name>sphere</name>
 		<path>Primitives</path>
 		<file>sphere.obj</file>
+	</mesh>
+	<!-- gizmo objects -->
+	<mesh material="no">
+		<name>gizmo_move</name>
+		<path>Gizmo</path>
+		<file>gizmo_move.obj</file>
+	</mesh>
+	<mesh material="no">
+		<name>gizmo_rotate</name>
+		<path>Gizmo</path>
+		<file>rotate.fbx</file>
+	</mesh>
+	<mesh material="no">
+		<name>gizmo_scale</name>
+		<path>Gizmo</path>
+		<file>gizmo_scale.obj</file>
+	</mesh>
+	<!-- end gizmo objects -->
+<!--	
+	<mesh skinned="true">
+		<name>soldier</name>
+		<path>Characters/Soldier</path>
+		<file>soldier.X</file>
+	</mesh>
+	<mesh skinned="true">
+		<name>guard</name>
+		<path>Characters/Guard</path>
+		<file>guard.md5mesh</file>
+	</mesh>
+	<mesh skinned="true">
+		<name>Vanguard</name>
+		<path>Characters/Vanguard</path>
+		<file>vaguard2.dae</file>
+	</mesh>	
+-->
+	<mesh skinned="true">
+		<name>Archer2</name>
+		<path>Characters/Archer2</path>
+		<file>Archer.dae</file>
+	</mesh>		
+	<mesh>
+		<name>player</name>
+		<path>Characters</path>
+		<file>Player.obj</file>
 	</mesh>
 	<mesh>
 		<name>teapot</name>
@@ -93,6 +110,7 @@
 		<path>Path</path>
 		<file>block15-15.obj</file>
 	</mesh>
+	
 </meshes>
 
 <!-- Audio -->
@@ -159,7 +177,7 @@
 		<file>jump.wav</file>
 		<effects>
 			<fx>
-				<name>jump</name>
+				<name>bounce</name>
 				<start>0</start>
 				<end>0.5</end>
 			</fx>
@@ -183,11 +201,15 @@
 		<mesh>gizmo_scale</mesh>
 	</object>
 	<!-- end gizmo objects -->
-	<object>
+	
+	<object prop="">
 		<name>render-quad</name>
 		<mesh>screen-quad</mesh>
+		<rendering>
+			<culling>none</culling>
+		</rendering>
 	</object>
-	<object>
+	<object prop="">
 		<name>box</name>
 		<mesh>box</mesh>
 	</object>
@@ -195,10 +217,13 @@
 		<name>light-debug</name>
 		<mesh>sphere</mesh>
 	</object>
+	<object prop="">
+		<name>sphere</name>
+		<mesh>sphere</mesh>
+	</object>
 	<object>
 		<name>player</name>
 		<mesh>player</mesh>
-		<shadow>yes</shadow>
 	</object>
 	<object>
 		<name>ground</name>
@@ -210,12 +235,10 @@
 	<object>
 		<name>teapot</name>
 		<mesh>teapot</mesh>
-		<shadow>yes</shadow>
 	</object>
 	<object>
 		<name>bamboo</name>
 		<mesh>bamboo</mesh>
-		<shadow>yes</shadow>
 		<transform>
 			<scale>0.1</scale>
 		</transform>
@@ -232,7 +255,6 @@
 	<object>
 		<name>oildrum</name>
 		<mesh>oildrum</mesh>
-		<shadow>yes</shadow>
 		<physics>
 			<file>oildrum.hkt</file>
 		</physics>
@@ -240,7 +262,6 @@
 	<object>
 		<name>gate</name>
 		<mesh>gate</mesh>
-		<shadow>yes</shadow>
 		<transform>
 			<position>60 1.3 0.3</position>
 			<rotation>0 -90 0</rotation>
@@ -250,7 +271,6 @@
 	<object>
 		<name>block10-10</name>
 		<mesh>block10-10</mesh>
-		<shadow>yes</shadow>
 		<physics>
 			<file>Path/block10-10.hkt</file>
 		</physics>
@@ -258,7 +278,6 @@
 	<object>
 		<name>block10-15</name>
 		<mesh>block10-15</mesh>
-		<shadow>yes</shadow>
 		<physics>
 			<file>Path/block10-15.hkt</file>
 		</physics>
@@ -266,17 +285,17 @@
 	<object>
 		<name>block15-15</name>
 		<mesh>block15-15</mesh>
-		<shadow>yes</shadow>
 		<physics>
 			<file>Path/block15-15.hkt</file>
 		</physics>
 	</object>
+<!--	
 	<object>
 		<name>soldier</name>
 		<mesh>soldier</mesh>
 		<transform>
-			<scale>0.3</scale>
-			<rotation>180 90 0</rotation>
+			<scale>0.01</scale>
+			<rotation>0 90 0</rotation>
 		</transform>
 	</object>
 	<object>
@@ -284,7 +303,25 @@
 		<mesh>guard</mesh>
 		<transform>
 			<scale>0.025</scale>
-			<rotation>-90 90 0</rotation>
 		</transform>
 	</object>
+-->
+	<object>
+		<name>Vanguard</name>
+		<mesh>Vanguard</mesh>
+		<transform>
+			<scale>0.1</scale>
+		</transform>
+	</object>
+	<object>
+		<name>Archer2</name>
+		<mesh>Archer2</mesh>
+		<transform>
+			<scale>0.01</scale>
+		</transform>
+	</object>	
+	<object>
+		<name>oildrum_center</name>
+		<mesh>oildrum_center</mesh>
+	</object>	
 </objects>

@@ -2,21 +2,48 @@
 <!-- Scene -->
 <objects>
 	<!-- Animated -->
-  <object>
-    <ref>soldier</ref>
-    <transform>
-      <position>20 0 4</position>
-    </transform>
-  </object>
-
-  <object>
+	<!--
+	<object>
+		<ref>soldier</ref>
+		<transform>
+			<position>20 0 4</position>
+		</transform>
+	</object>
+	<object>
 		<ref>guard</ref>
 		<transform>
 			<position>20 0 2</position>
 		</transform>
 	</object>
-  
+	-->
+	<object>
+		<ref>oildrum_center</ref>
+		<transform>
+			<position>3 0 0</position>
+			<scale>100 100 100</scale>
+		</transform>
+	</object>	
+
+	<object>
+		<ref>Vanguard</ref>
+		<transform>
+			<position>-2 0 0</position>
+		</transform>
+	</object>	
+	
+	<object>
+		<ref>Archer2</ref>
+		<transform>
+			<position>0 0 0</position>
+		</transform>
+	</object>		
 	<!-- Scene objects -->
+	<object>
+		<ref>box</ref>
+		<transform>
+			<position>3 0 -3</position>
+		</transform>
+	</object>
 	<object>
 		<ref>ground</ref>
 		<transform>
@@ -33,7 +60,7 @@
 	<object>
 		<ref>oildrum</ref>
 		<transform>
-			<position>0 0 0</position>
+			<position>3 3 3</position>
 		</transform>
 		<audio loop="true">relaxMono</audio>
 	</object>	
@@ -73,30 +100,12 @@
 			<position>8 0 7</position>
 		</transform>
 	</object>	
-
-	
-	<!-- vegetation -->
-	<object><ref>bamboo</ref><transform><position>1 0 1</position></transform></object>	
-	<object><ref>bamboo</ref><transform><position>3 1 0.4</position></transform></object>	
-	<object><ref>bamboo</ref><transform><position>5 0 3.4</position></transform></object>	
-	<object><ref>bamboo</ref><transform><position>7.3 0 -1.6</position></transform></object>	
-	<object><ref>bamboo</ref><transform><position>4.1 0 -3.2</position></transform></object>	
-	<object><ref>bamboo</ref><transform><position>8.4 0 2.2</position></transform></object>	
-	<object><ref>bamboo</ref><transform><position>0.5 0 -2.4</position></transform></object>	
-
-	<object>
-		<ref>invwall</ref>
-		<transform>
-			<position>59.5 0 0</position>
-		</transform>
-	</object>
-	
 </objects>
 
 <lights>
 	<light>
 		<transform>
-			<position>0 3 1.2</position>
+			<position>7 3 1.2</position>
 		</transform>
 		<area>8</area>
 	</light>
@@ -108,7 +117,7 @@
 	</light>
 	<light>
 		<transform>
-			<position>2.5 2.1 3</position>
+			<position>7.5 3.1 8</position>
 		</transform>
 		<area>10</area>
 	</light>
@@ -120,7 +129,7 @@
 	</light>
 	<light>
 		<transform>
-			<position>-1.5 2.2 -0.5</position>
+			<position>-3.5 2.2 -5.5</position>
 		</transform>
 		<area>9</area>
 	</light>

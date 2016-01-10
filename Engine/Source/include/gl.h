@@ -19,8 +19,8 @@
 
 #ifdef _DEBUG
 #define CheckOpenGLError() OpenGL::CheckError(__FILE__, __LINE__)
-#elif
-#define CheckOpenGLError() ;
+#else
+#define CheckOpenGLError() NULL
 #endif
 
 

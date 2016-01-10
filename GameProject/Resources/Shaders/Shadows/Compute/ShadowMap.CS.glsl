@@ -1,13 +1,12 @@
 #version 430
-layout(local_size_x = 16, local_size_y = 16) in;
+layout(local_size_x = 32, local_size_y = 32) in;
 
-#define depthBuffer u_texture_1
+#define depthBuffer u_texture_0
 
 layout (binding = 0, rgba32f) uniform image2D diffuseMap;
 layout (binding = 1, rgba32f) readonly uniform image2D worldPosition;
-layout (binding = 2, rgba32f) uniform image2D shadowMaps;
 
-uniform sampler2D u_texture_1;
+uniform sampler2D u_texture_0;
 uniform samplerCube u_texture_cube_2;
 
 uniform int shadowID;
@@ -34,9 +33,6 @@ float ChebyshevUpperBound2();
 void main()
 {
 	pixel = ivec2(gl_GlobalInvocationID.xy);
-	// vec4 color = imageLoad(shadowMaps, pixel);
-	// color[shadowID] = EvalShadow();
-	// imageStore(shadowMaps, pixel, color);
 
 	float shadow = 1.0;
 	if (shadowID == 100) {

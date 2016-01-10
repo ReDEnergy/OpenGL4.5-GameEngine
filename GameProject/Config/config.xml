@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<resolution>1280 720</resolution>
-	<position>600 350</position>
-	<fullscreen>false</fullscreen>
+	<window>
+		<name>Engine</name>
+		<resolution>1280 720</resolution>
+		<fullscreen>false</fullscreen>
+		<position>50 50</position>
+		<centered>true</centered>
+		<hidden>false</hidden>
+	</window>
+
+	<vsync>false</vsync>
+	<ssao>false</ssao>
+
 	<resource>Resources.xml</resource>
 	<shaders>Shaders.xml</shaders>
 	<scene>Scene.xml</scene>
 	<menu>Menu.xml</menu>
+
 </config>

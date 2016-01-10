@@ -10,10 +10,15 @@ uniform sampler2D u_texture_4;	// Depth Scene
 uniform sampler2D u_texture_5;	// Debug View
 uniform sampler2D u_texture_6;	// Debug Debug
 uniform sampler2D u_texture_7;	// Gizmo
+uniform sampler2D u_texture_8;	// Kinect View Depth
+uniform sampler2D u_texture_9;	// Kinect View
+uniform sampler2D u_texture_10;	// Skeletal System View
+uniform sampler2D u_texture_11;	// Skeletal System View
 
 uniform vec2 resolution;
-uniform int active_ssao;
-uniform int active_deferred;
+uniform bool active_ssao;
+uniform bool active_deferred;
+uniform bool active_selection;
 uniform int debug_view;
 uniform float zFar;
 uniform float zNear;
@@ -35,9 +40,26 @@ vec4 component(sampler2D textureID, vec2 coord, int channel);
 vec4 DebugView(vec2 text_coord) {
 	float ds = texture(u_texture_4, text_coord).r;
 	float dd = texture(u_texture_6, text_coord).r;
-	if (dd < ds)
+	vec4 color = texture(u_texture_5, text_coord);
+	if (dd < ds || (dd == 1.0 && color != vec4(0)))
 		return texture(u_texture_5, text_coord);
-	return vec4(0, 0, 0, 0);
+	return vec4(0);
+}
+
+vec4 KinectView(vec2 text_coord) {
+	float ds = texture(u_texture_4, text_coord).r;
+	float dd = texture(u_texture_8, text_coord).r;
+	if (dd < ds)
+		return texture(u_texture_9, text_coord);
+	return vec4(0);
+}
+
+vec4 SkeletalView(vec2 text_coord) {
+	float ds = texture(u_texture_4, text_coord).r;
+	float dd = texture(u_texture_10, text_coord).r;
+	if (dd < ds)
+		return texture(u_texture_11, text_coord);
+	return vec4(0);
 }
 
 float SoftShadow(vec2 text_coord) {
@@ -76,7 +98,7 @@ void main() {
 	
 	///////////////////////////////////////////////////////////////////////////
 	// Bake Ambient Occlusion
-	if (active_ssao == 1) {
+	if (active_ssao) {
 		float ao = texture(u_texture_3, text_coord).x;
 		vec4 ssao = vec4(1.0) - vec4(ao, ao, ao, 1.0);
 		out_color = clamp((diffuse - ssao), 0.0, 1.0);
@@ -99,11 +121,16 @@ void main() {
 	if (debug_view == 1)
 		out_color += DebugView(text_coord);
 		
-	//Gizmo
-	vec4 gizmo_add = texture(u_texture_7, text_coord);
-	if ( gizmo_add != vec4(0.0, 0.0, 0.0, 0.0) ) 
-		if( gizmo_add != vec4(0.0, 0.0, 0.0, 1.0) )
-			out_color = gizmo_add;
+	out_color += KinectView(text_coord);
+	out_color += SkeletalView(text_coord);
+
+	//Gizmo - BUG - until not used final image is darker
+	if (active_selection)
+	{
+		vec4 gizmo_add = texture(u_texture_7, text_coord);
+		if (gizmo_add != vec4(0, 0, 0, 1))
+			out_color = gizmo_add + out_color * 0.5;
+	}	
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -126,7 +153,3 @@ vec4 component(sampler2D textureID, vec2 coord, int channel) {
 	float color = texture(textureID, coord)[channel];
 	return vec4(vec3(color), 1.0);
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-

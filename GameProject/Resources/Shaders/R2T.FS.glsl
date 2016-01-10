@@ -8,6 +8,7 @@ layout(location = 4) in vec4 view_normal;
 layout(location = 5) in vec4 frag_position;
 
 uniform sampler2D u_texture_0;	// Diffuse texture
+uniform float transparency;
 
 //  Output data
 layout(location = 0) out vec4 out_diffuse;
@@ -21,7 +22,8 @@ void main() {
 	vec4 diffuse = texture(u_texture_0, texture_coord);
 	if(diffuse.a < 0.9)
 		discard;
-	
+
+	diffuse.a *= transparency;
 	out_diffuse = diffuse;
 	out_world_position = world_position;
 	out_world_normal = normalize(world_normal);

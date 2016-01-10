@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+	Skeleton
+	------------
+	Bones
+		- size
+	Joint
+		- between 2 actors (bones)
+		- constraints
+	Body parts
+		- size (related to the corresponding bones)
+		- weight (proportional system based on body parts volumes?)
+-->
+
+<skelet>
+	<joints>
+		<!-- Root -->
+		<joint>
+			<name>Pelvis</name>
+			<pos>0 1.0 0</pos>
+			<kinectID>0</kinectID>
+		</joint>	
+		<!-- Spine -->
+		<!-- Kinect sensor has supports for only 1 intermediary spine bone / 
+			Solution: Interpolation if needed by a skeletal animated mesh
+		<joint>
+			<name>SpinBase</name>
+			<constraints>
+				<ox>-15 45</ox>
+				<oy>-90 90</oy>
+				<oz>-45 45</oz>
+			</constraints>
+			<pos>0 1.2 0</pos>
+			<parent>Pelvis</parent>
+			<kinectID>1</kinectID>
+		</joint>	
+		-->
+		<joint>
+			<name>SpinMid</name>
+			<constraints>
+				<dir> 0 1 0.3 </dir>
+				<angle>90</angle>
+			</constraints>
+			<pos>0 1.35 0</pos>
+			<parent>Pelvis</parent>
+			<kinectID>1</kinectID>
+		</joint>								
+		<joint>
+			<name>SpineShoulder</name>
+			<constraints>
+				<dir> 0 1 0 </dir>
+				<angle>50</angle>
+			</constraints>
+			<pos>0 1.5 0</pos>
+			<parent>SpinMid</parent>
+			<kinectID>20</kinectID>
+		</joint>
+		<!-- Head -->
+		<joint>
+			<name>Neck</name>
+			<constraints>
+				<dir> 0 1 0 </dir>
+				<angle>50</angle>
+			</constraints>
+			<pos>0 1.6 0</pos>
+			<parent>SpineShoulder</parent>
+			<kinectID>2</kinectID>
+		</joint>								
+		<joint>
+			<name>Head</name>
+			<pos>0 1.75 0</pos>
+			<parent>Neck</parent>
+			<kinectID>3</kinectID>
+			<constraints>
+				<dir> 0 1 0.3 </dir>
+				<angle>45</angle>
+			</constraints>
+		</joint>
+		<!-- Left Hand -->
+		<joint>
+			<name>ShoulderLeft</name>
+			<constraints>
+				<dir> 0 1 0 </dir>
+				<angle>90</angle>
+			</constraints>
+			<pos>-0.2 1.5 0</pos>
+			<parent>SpineShoulder</parent>
+			<kinectID>4</kinectID>
+		</joint>
+		<joint>
+			<name>ShoulderRight</name>
+			<constraints>
+				<dir> 0 1 0 </dir>
+				<angle>90</angle>
+			</constraints>
+			<pos>0.2 1.5 0</pos>
+			<parent>SpineShoulder</parent>
+			<kinectID>8</kinectID>
+		</joint>		
+		<joint>
+			<name>ElbowLeft</name>
+			<constraints>
+				<dir> 0.1 0.7 0.7 </dir>
+				<angle>80</angle>
+			</constraints>
+			<pos>-0.4 1.5 0</pos>
+			<parent>ShoulderLeft</parent>
+			<kinectID>5</kinectID>
+		</joint>
+		<joint>
+			<name>ElbowRight</name>
+			<constraints>
+				<dir> -0.1 0.7 0.7 </dir>
+				<angle>80</angle>
+			</constraints>
+			<pos>0.4 1.5 0</pos>
+			<parent>ShoulderRight</parent>
+			<kinectID>9</kinectID>
+		</joint>	
+		<joint>
+			<name>WristLeft</name>
+			<constraints>
+				<dir> 0 0 1 </dir>
+				<angle>90</angle>
+			</constraints>
+			<pos>-0.6 1.5 0</pos>
+			<parent>ElbowLeft</parent>
+			<kinectID>6</kinectID>
+		</joint>
+		<joint>
+			<name>WristRight</name>
+			<constraints>
+				<dir> 0 0 -1 </dir>
+				<angle>90</angle>
+			</constraints>
+			<pos>0.6 1.5 0</pos>
+			<parent>ElbowRight</parent>
+			<kinectID>10</kinectID>
+		</joint>				
+		<joint>
+			<name>HandLeft</name>
+			<constraints>
+				<dir> 0 1 0 </dir>
+				<angle>45</angle>
+			</constraints>
+			<pos>-0.8 1.5 0</pos>
+			<parent>WristLeft</parent>
+			<kinectID>7</kinectID>
+		</joint>
+		<joint>
+			<name>HandRight</name>
+			<constraints>
+				<dir> 0 1 0 </dir>
+				<angle>45</angle>
+			</constraints>
+			<pos>0.8 1.5 0</pos>
+			<parent>WristRight</parent>
+			<kinectID>11</kinectID>
+		</joint>
+
+		<!-- Legs -->
+		<joint>
+			<name>HipLeft</name>
+			<constraints>
+				<dir> 0 1 0 </dir>
+				<angle>50</angle>
+			</constraints>
+			<pos>-0.15 0.95 0</pos>
+			<parent>Pelvis</parent>
+			<kinectID>12</kinectID>
+		</joint>
+		<joint>
+			<name>HipRight</name>
+			<constraints>
+				<dir> 0 1 0 </dir>
+				<angle>50</angle>
+			</constraints>
+			<pos>0.15 0.95 0</pos>
+			<parent>Pelvis</parent>
+			<kinectID>16</kinectID>
+		</joint>
+		<joint>
+			<name>KneeLeft</name>
+			<constraints>
+				<dir> 0.5 0.7 0.1 </dir>
+				<angle>65</angle>
+			</constraints>
+			<pos>-0.15 0.5 0</pos>
+			<parent>HipLeft</parent>
+			<kinectID>13</kinectID>
+		</joint>
+		<joint>
+			<name>KneeRight</name>
+			<constraints>
+				<dir> -0.5 0.7 0.1 </dir>
+				<angle>65</angle>
+			</constraints>
+			<pos>0.15 0.5 0</pos>
+			<parent>HipRight</parent>
+			<kinectID>17</kinectID>
+		</joint>
+		<joint>
+			<name>AnkleLeft</name>
+			<constraints>
+				<dir> 0 0.7 -1 </dir>
+				<angle>65</angle>
+			</constraints>
+			<pos>-0.15 0.05 0</pos>
+			<parent>KneeLeft</parent>
+			<kinectID>14</kinectID>
+		</joint>
+		<joint>
+			<name>AnkleRight</name>
+			<constraints>
+				<dir> 0 0.7 -1 </dir>
+				<angle>65</angle>
+			</constraints>
+			<pos>0.15 0.05 0</pos>
+			<parent>KneeRight</parent>
+			<kinectID>18</kinectID>
+		</joint>
+		<joint>
+			<name>FootLeft</name>
+			<constraints>
+				<dir> 0 0.3 0.5 </dir>
+				<angle>40</angle>
+			</constraints>
+			<pos>-0.15 0.02 0.25</pos>
+			<parent>AnkleLeft</parent>
+			<kinectID>15</kinectID>
+		</joint>
+		<joint>
+			<name>FootRight</name>
+			<constraints>
+				<dir> 0 0.3 0.5 </dir>
+				<angle>40</angle>
+			</constraints>
+			<pos>0.15 0.02 0.25</pos>
+			<parent>AnkleRight</parent>
+			<kinectID>19</kinectID>
+		</joint>
+	</joints>
+</skelet>
+
+<!--
+	SkeletalJoint("Head");
+	SkeletalJoint("Neck");
+
+	// Torso/Body
+	SkeletalJoint("Pelvis");
+	SkeletalJoint("Spine0");
+	SkeletalJoint joint("Spine0");
+	SkeletalJoint joint("Spine1");
+	SkeletalJoint joint("Chest");
+	
+	// Left Arm
+	SkeletalJoint joint("LShoulder");
+	SkeletalJoint joint("LArm");
+	SkeletalJoint joint("LForearm");
+	SkeletalJoint joint("LHand");
+
+	// Left Hand
+	SkeletalJoint joint("LThumb");			// 0 1 2
+	SkeletalJoint joint("LIndexFinger");	// 0 1 2 3
+	SkeletalJoint joint("LMiddleFinger");	// 0 1 2 3
+	SkeletalJoint joint("LRingFinger");		// 0 1 2 3
+	SkeletalJoint joint("LLittleFinger");	// 0 1 2 3
+
+	// Left Leg
+	SkeletalJoint joint("LUpperLeg");
+	SkeletalJoint joint("LLowerLeg");
+	SkeletalJoint joint("LToes");
+	
+	JointType_SpineBase	= 0,
+	JointType_SpineMid	= 1,
+	JointType_Neck	= 2,
+	JointType_Head	= 3,
+	JointType_ShoulderLeft	= 4,
+	JointType_ElbowLeft	= 5,
+	JointType_WristLeft	= 6,
+	JointType_HandLeft	= 7,
+	JointType_ShoulderRight	= 8,
+	JointType_ElbowRight	= 9,
+	JointType_WristRight	= 10,
+	JointType_HandRight	= 11,
+	JointType_HipLeft	= 12,
+	JointType_KneeLeft	= 13,
+	JointType_AnkleLeft	= 14,
+	JointType_FootLeft	= 15,
+	JointType_HipRight	= 16,
+	JointType_KneeRight	= 17,
+	JointType_AnkleRight	= 18,
+	JointType_FootRight	= 19,
+	JointType_SpineShoulder	= 20,
+	JointType_HandTipLeft	= 21,
+	JointType_ThumbLeft	= 22,
+	JointType_HandTipRight	= 23,
+	JointType_ThumbRight	= 24,	
+-->

@@ -1,11 +1,10 @@
 #version 430
-layout(local_size_x = 16, local_size_y = 16) in;
+layout(local_size_x = 32, local_size_y = 32) in;
 
 #define depthBuffer u_texture_0
 
 layout (binding = 0, rgba32f) uniform image2D diffuseMap;
 layout (binding = 1, rgba32f) readonly uniform image2D worldPosition;
-layout (binding = 2, rgba32f) uniform image2D shadowMaps;
 
 uniform sampler2D u_texture_0;
 
@@ -41,9 +40,6 @@ void BakeShadow(ivec2 pixel, float value) {
 void main()
 {
 	pixel = ivec2(gl_GlobalInvocationID.xy);
-	// vec4 color = imageLoad(shadowMaps, pixel);
-	// color[shadowID] = EvalShadow();
-	// imageStore(shadowMaps, pixel, color);
 	BakeShadow(pixel, EvalShadow());
 }
 
@@ -54,7 +50,7 @@ void main()
 vec4 shp;
 int DEPTH_COMPONENT = 0;
 int cascadeID = 0;
-float shadow_bias[5] = {0.0001, 0.0002, 0.0003, 0.0006, 0.0013};
+float shadow_bias[5] = {0.00005, 0.00014, 0.0006, 0.0008, 0.0013};
 
 int IsLit(sampler2D DEPTH_TEXTURE, ivec2 offset) {
 	float depth = texture(DEPTH_TEXTURE, shp.xy + offset * shadow_texel_size)[DEPTH_COMPONENT];

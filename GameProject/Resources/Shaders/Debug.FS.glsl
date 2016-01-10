@@ -59,48 +59,43 @@ vec4 CSM() {
 void main() {
 
 	switch(debug_id) {
-		case 1:
-			frag_color = texture(u_texture_0, text_coord);
+		case 0:
+			frag_color = viewDepth(u_texture_0, text_coord);
 			break;
-		case 2:
+		case 1:
 			frag_color = texture(u_texture_1, text_coord);
 			break;
-		case 3:
+		case 2:
 			frag_color = texture(u_texture_2, text_coord);
 			break;
-		case 4:
+		case 3:
 			frag_color = texture(u_texture_3, text_coord);
 			break;
-		case 5:
+		case 4:
 			frag_color = texture(u_texture_4, text_coord);
 			break;
+		case 5:
+			frag_color = texture(u_texture_5, text_coord);
+			break;
 		case 6:
-			frag_color = viewDepth(u_texture_6, text_coord);
+			frag_color = texture(u_texture_6, text_coord);
 			break;
 		case 7:
-			frag_color = texture(u_texture_7, text_coord, 0);
+			frag_color = texture(u_texture_7, text_coord);
 			break;
 		case 8:
-			frag_color = component(u_texture_8, text_coord, 1);
+			frag_color = texture(u_texture_8, text_coord) * 4500 / 255;
 			break;
 		case 9:
-			frag_color = component(u_texture_8, text_coord, 2);
-			break;
-		case 10:
-			frag_color = component(u_texture_8, text_coord, 3);
-			break;
-		case 11:
-			vec4 wpos = texture(u_texture_1, text_coord);
-			vec3 dir = wpos.xyz - eye_position;
-			// frag_color = vec4(dir, 1.0);
-			frag_color = texture(u_texture_cube_14, dir);
-			break;
-		case 12:
-			frag_color = component(u_texture_12, text_coord, 2);
+			frag_color = texture(u_texture_9, text_coord) * 4500 / 255;
 			break;
 		default:
 			frag_color = texture(u_texture_0, text_coord);
 	}
+	// CubeMapping
+	// vec4 wpos = texture(u_texture_1, text_coord);
+	// vec3 dir = wpos.xyz - eye_position;
+	// frag_color = vec4(dir, 1.0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,7 +110,8 @@ float linearDepth(sampler2D depthTexture, vec2 coord) {
 
 vec4 viewDepth(sampler2D depthTexture, vec2 coord) {
 	float dist = texture(depthTexture, coord).x;
-	float d = pow(dist , 128);
+	float d = pow(dist , zFar);
+	// float d = pow(dist , pow(2, 12));
 	return vec4(d, d, d, 1.0);
 }
 

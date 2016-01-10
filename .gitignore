@@ -12,3 +12,7 @@
 /**/Release-Physics
 /**/Debug-Physics
 /**/*.opensdf
+/libs/PhysX
+/GameProject/*.lnk
+/libs/Qt
+/Research

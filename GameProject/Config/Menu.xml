@@ -19,8 +19,12 @@ TODO:
 				<name>Resume</name>
 			</entry>
 			<entry type="page">
-				<action>options</action>
-				<name>Options</name>
+				<action>graphics</action>
+				<name>Graphics</name>
+			</entry>
+			<entry type="page">
+				<action>audio-music</action>
+				<name>Music Settings</name>
 			</entry>
 			<entry type="page">
 				<action>debug</action>
@@ -33,8 +37,8 @@ TODO:
 		</entries>
 	</page>
 	<page>
-		<id>options</id>
-		<name>Options</name>
+		<id>graphics</id>
+		<name>Graphics</name>
 		<entries>
 			<entry type="toggle">
 				<action>ssao</action>
@@ -46,16 +50,29 @@ TODO:
 				<action>forward-rendering</action>
 				<value>false</value>
 			</entry>
+			<entry type="toggle">
+				<name>Vertical Sync</name>
+				<action>vsync-rendering</action>
+				<value>true</value>
+			</entry>
 		</entries>
 	</page>
 	<page>
 		<id>debug</id>
 		<name>Debug</name>
+	</page>
+	<page>
+		<id>audio-music</id>
+		<name>Music Options</name>
 		<entries>
 			<entry type="action">
-				<action>debug</action>
-				<name>Game Engine Prototype</name>
+				<action>volume-up</action>
+				<name>Volume Up</name>
+			</entry>
+			<entry type="action">
+				<action>volume-down</action>
+				<name>Volume Down</name>
 			</entry>
 		</entries>
-	</page>
+	</page>	
 </pages>
