@@ -29,6 +29,7 @@ class DLLExport Shader
 
 		void OnLoad(function<void()> onLoad);
 		void Use() const;
+		GLint GetUniformLocation(const char * uniformName) const;
 
 	private:
 		void GetUniforms();
