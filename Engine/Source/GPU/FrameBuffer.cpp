@@ -1,31 +1,38 @@
-//#include <pch.h>
 #include "FrameBuffer.h"
+
+#include <iostream>
+using namespace std;
 
 #include <GPU/Shader.h>
 #include <GPU/Texture.h>
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
+
 #include <include/utils.h>
 
-FrameBuffer::FrameBuffer() {
+FrameBuffer::FrameBuffer()
+{
 	FBO = 0; 
-	depthTexture = new Texture();
+	depthTexture = nullptr;
 	textures = nullptr;
 	DrawBuffers = nullptr;
 }
 
-FrameBuffer::~FrameBuffer() {
+FrameBuffer::~FrameBuffer()
+{
 	SAFE_FREE(depthTexture);
 }
 
-void FrameBuffer::Clean() {
+void FrameBuffer::Clean()
+{
 	if (FBO)
 		glDeleteFramebuffers(1, &FBO);
 	SAFE_FREE_ARRAY(textures);
 	SAFE_FREE_ARRAY(DrawBuffers)
 }
 
-void FrameBuffer::Generate(int width, int height, int nrTextures) {
-	
+void FrameBuffer::Generate(int width, int height, int nrTextures, bool attachDepthTexture)
+{
 	// clean previous FBO
 	Clean();
 
@@ -61,7 +68,10 @@ void FrameBuffer::Generate(int width, int height, int nrTextures) {
 	}
 
 	// Create depth texture
-	depthTexture->CreateDepthBufferTexture(width, height);
+	if (attachDepthTexture) {
+		depthTexture = new Texture();
+		depthTexture->CreateDepthBufferTexture(width, height);
+	}
 
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		cout << "FRAMEBUFFER NOT COMPLETE" << endl;
@@ -70,14 +80,16 @@ void FrameBuffer::Generate(int width, int height, int nrTextures) {
 	CheckOpenGLError();
 }
 
-void FrameBuffer::Bind(bool clearBuffer) const {
+void FrameBuffer::Bind(bool clearBuffer) const
+{
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	glViewport(0, 0, width, height);
 	if (clearBuffer)
 		FrameBuffer::Clear();
 }
 
-void FrameBuffer::SendResolution(Shader *shader) const {
+void FrameBuffer::SendResolution(Shader *shader) const
+{
 	glUniform2i(shader->loc_resolution, width, height);
 }
 
@@ -85,23 +97,48 @@ glm::ivec2 FrameBuffer::GetResolution() const {
 	return glm::ivec2(width, height);
 }
 
-void FrameBuffer::BindTexture(int textureID, GLenum TextureUnit) const {
-	textures[textureID].Bind(TextureUnit);
+unsigned int FrameBuffer::GetNumberOfRenderTargets() const
+{
+	return nrTextures;
 }
 
-void FrameBuffer::BindDepthTexture(GLenum TextureUnit) const {
-	depthTexture->Bind(TextureUnit);
+void FrameBuffer::BindTexture(int textureID, GLenum TextureUnit) const
+{
+	textures[textureID].BindToTextureUnit(TextureUnit);
 }
 
-void FrameBuffer::BindAllTextures() const{
+void FrameBuffer::BindDepthTexture(GLenum TextureUnit) const
+{
+	depthTexture->BindToTextureUnit(TextureUnit);
+}
+
+Texture* FrameBuffer::GetTexture(unsigned int index) const
+{
+	return &textures[index];
+}
+
+Texture * FrameBuffer::GetDepthTexture() const
+{
+	return depthTexture;
+}
+
+GLuint FrameBuffer::GetTextureID(unsigned int index) const
+{
+	return textures[index].GetTextureID();
+}
+
+void FrameBuffer::BindAllTextures() const
+{
 	for (unsigned int i=0; i<nrTextures; i++) {
-		textures[i].Bind(GL_TEXTURE0 + i);
+		textures[i].BindToTextureUnit(GL_TEXTURE0 + i);
 	}
 }
 
-void FrameBuffer::Unbind() {
+void FrameBuffer::Unbind()
+{
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, Engine::Window->resolution.x, Engine::Window->resolution.y);
+	CheckOpenGLError();
 }
 
 void FrameBuffer::Clear()

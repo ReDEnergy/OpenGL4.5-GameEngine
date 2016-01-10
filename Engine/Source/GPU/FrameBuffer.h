@@ -17,24 +17,28 @@ class DLLExport FrameBuffer
 		FrameBuffer();
 		~FrameBuffer();
 		void Clean();
-		void Generate(int width, int height, int nr_textures);
+		void Generate(int width, int height, int nr_textures, bool depthTexture = true);
 
 		void Bind(bool clearBuffer = true) const;
 		void BindTexture(int textureID, GLenum TextureUnit) const;
 		void BindAllTextures() const;
 		void BindDepthTexture(GLenum TextureUnit) const;
 
-		glm::ivec2 GetResolution() const;
+		Texture* GetTexture(unsigned int index) const;
+		Texture* GetDepthTexture() const;
+		GLuint GetTextureID(unsigned int index) const;
+		unsigned int GetNumberOfRenderTargets() const;
 
+		glm::ivec2 GetResolution() const;
 		void SendResolution(Shader *shader) const;
+
 		static void Unbind();
 		static void Clear();
 
-	public:
+	private:
 		Texture *textures;
 		Texture *depthTexture;
 
-	private:
 		GLuint FBO;
 		GLenum *DrawBuffers;		// TEST IF IS NECESSARY TO DECLARE
 		GLuint depthRenderbuffer;

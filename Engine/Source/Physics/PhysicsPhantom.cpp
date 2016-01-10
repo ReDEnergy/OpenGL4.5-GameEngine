@@ -38,7 +38,7 @@ void PhysicsPhantom::phantomEnterEvent(const hkpCollidable* phantomColl,
 								   const hkpCollisionInput& env)
 {
 	hkpRigidBody* owner = hkpGetRigidBody(otherColl);
-	Manager::Event->EmitSync(EventType::LEVEL_TRANISTION_GATE, nullptr);
+	//Manager::Event->EmitAsync(EventType::LEVEL_TRANISTION_GATE, nullptr);
 }
 
 void PhysicsPhantom::phantomLeaveEvent(const hkpCollidable* phantomColl,

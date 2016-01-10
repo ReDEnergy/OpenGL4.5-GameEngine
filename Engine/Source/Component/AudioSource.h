@@ -16,7 +16,7 @@ class DLLExport AudioSource
 		virtual void Play() {};
 		virtual void Stop() {};
 		virtual void SetLoop(bool value) {};
-		virtual void SetVolume(float value) {};
+		virtual void SetVolume(unsigned int value) {};
 
 		virtual void SetPosition(glm::vec3 position) {};
 

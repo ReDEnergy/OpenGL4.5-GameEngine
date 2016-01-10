@@ -1,22 +1,27 @@
-//#include <pch.h>
 #include "ResourceManager.h"
+
+#include <iostream>
+using namespace std;
 
 #include <include/glm.h>
 #include <include/glm_utils.h>
 #include <include/utils.h>
 #include <sstream>
 
+#include <Config/ResourcePath.h>
+
+#include <Core/GameObject.h>
+#include <Component/Mesh.h>
+#include <Component/SkinnedMesh.h>
+#include <Component/Transform/Transform.h>
+#include <Component/Renderer.h>
+
 #include <Manager/Manager.h>
 #include <Manager/AudioManager.h>
 #include <Manager/SceneManager.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/DebugInfo.h>
-
-#include <Core/GameObject.h>
-#include <Component/Mesh.h>
-#include <Component/SkinnedMesh.h>
-#include <Component/Transform.h>
-#include <Component/Renderer.h>
+#include <Utils/Serialization.h>
 
 #ifdef PHYSICS_ENGINE
 #include <include/havok.h>
@@ -27,9 +32,9 @@ ResourceManager::ResourceManager() {
 }
 
 ResourceManager::~ResourceManager() {
-	for (auto obj : _objects)
+	for (auto &obj : _objects)
 		SAFE_FREE(obj.second);
-	for (auto obj : meshes)
+	for (auto &obj : _meshes)
 		SAFE_FREE(obj.second);
 }
 
@@ -42,7 +47,6 @@ void ResourceManager::Load(const char* file) {
 	LoadMeshes(doc);
 	LoadGameObjects(doc);
 	LoadGameAudio(doc);
-
 }
 
 void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
@@ -50,7 +54,8 @@ void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
 	const char* meshName;
 	pugi::xml_node meshesXML = doc.child("meshes");
 
-	for (pugi::xml_node mesh : meshesXML.children()) {
+	for (pugi::xml_node mesh : meshesXML.children())
+	{
 		bool skinned = mesh.attribute("skinned").as_bool();
 		bool quad = mesh.attribute("quad").as_bool();
 		bool noMaterial = mesh.attribute("material") ? true : false;
@@ -59,17 +64,14 @@ void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
 
 		Mesh *M = skinned ? new SkinnedMesh(meshName) : new Mesh(meshName);
 
-		if (quad) {
-			M->SetGlPrimitive(GL_QUADS);
-		}
-		if (noMaterial) {
-			M->UseMaterials(false);
-		}
+		if (quad)			M->SetGlPrimitive(GL_QUADS);
+		if (noMaterial)		M->UseMaterials(false);
+
 		if (!M->LoadMesh(RESOURCE_PATH::MODELS + mesh.child_value("path"), mesh.child_value("file"))) {
 			SAFE_FREE(M);
 			continue;
 		}
-		meshes[meshName] = M;
+		_meshes[meshName] = M;
 	}
 }
 
@@ -78,22 +80,26 @@ void ResourceManager::LoadGameAudio(const pugi::xml_document &doc)
 	const char* audioName;
 	pugi::xml_node audiosXML = doc.child("audio");
 
-	for (pugi::xml_node audio : audiosXML.children()) {
+	for (pugi::xml_node audio : audiosXML.children())
+	{
 		cout << "Audio Type: " << audio.name() << endl;
 
 		audioName = audio.child_value("name");
-		string fileLocation = RESOURCE_PATH::AUDIO + audio.child_value("path") + '\\' + audio.child_value("file");
+		string fileLocation = RESOURCE_PATH::AUDIO + audio.child_value("path") + "\\" + audio.child_value("file");
 
-		if (strcmp(audio.name(), "music") == 0) {
+		if (strcmp(audio.name(), "music") == 0)
+		{
 			Manager::Audio->LoadAudio(fileLocation, audioName, AUDIO_TYPE::MUSIC);
 		}
 
-		if (strcmp(audio.name(), "soundfx") == 0) {
+		if (strcmp(audio.name(), "soundfx") == 0)
+		{
 			Manager::Audio->LoadAudio(fileLocation, audioName, AUDIO_TYPE::SOUND_FX_FILE);
 
 			pugi::xml_node effectsXML = audio.child("effects");
 
-			for (pugi::xml_node fx : effectsXML.children()) {
+			for (pugi::xml_node fx : effectsXML.children())
+			{
 				const char* effectName = fx.child_value("name");
 				float offset = fx.child("start").text().as_float();
 				float length = fx.child("end").text().as_float() - offset;
@@ -108,24 +114,28 @@ void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
 {
 	const char *objName;
 	const char* meshName;
-	pugi::xml_node shaderInfo;
-	pugi::xml_node physicsInfo;
-	pugi::xml_node transformInfo;
-	pugi::xml_node renderingInfo;
 	pugi::xml_node objects = doc.child("objects");
+	unordered_map<string, OpenGL::CULL> CullMap;
+	CullMap["front"] = OpenGL::CULL::FRONT;
+	CullMap["back"] = OpenGL::CULL::BACK;
+	CullMap["none"] = OpenGL::CULL::NONE;
+	CullMap["both"] = OpenGL::CULL::BOTH;
 
-	for (pugi::xml_node obj : objects.children()) {
+	for (pugi::xml_node obj : objects.children())
+	{
 		objName = obj.child_value("name");
 		meshName = obj.child_value("mesh");
-		shaderInfo = obj.child("shader");
-		physicsInfo = obj.child("physics");
-		transformInfo = obj.child("transform");
-		renderingInfo = obj.child("shadow");
+		auto shaderInfo = obj.child("shader");
+		auto physicsInfo = obj.child("physics");
+		auto transformInfo = obj.child("transform");
+		auto renderingInfo = obj.child("rendering");
+		bool createProp = obj.attribute("prop") ? true : false;
+
 
 		GameObject *GO = new GameObject(objName);
-		SetTransform(transformInfo, *GO->transform);
+		Serialization::ReadTransform(transformInfo, *GO->transform);
 		if (meshName) {
-			GO->mesh = meshes[meshName];
+			GO->mesh = _meshes[meshName];
 			GO->SetupAABB();
 		}
 
@@ -139,50 +149,57 @@ void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
 			GO->physics->LoadHavokFile(RESOURCE_PATH::PHYSICS + physicsInfo.child_value("file"));
 		}
 		#endif
-
 		if (renderingInfo) {
-			GO->renderer->SetCastShadow(true);
+			auto shadowInfo = renderingInfo.child("shadow");
+			if (shadowInfo)
+				GO->renderer->SetCastShadow(shadowInfo.text().as_bool());
+			auto cullingInfo = renderingInfo.child("culling");
+			if (cullingInfo) {
+				auto it = CullMap.find(cullingInfo.text().get());
+				if (it != CullMap.end()) {
+					GO->renderer->SetCulling(it->second);
+				}
+			}
 		}
 
 		_objects[objName] = GO;
+
+		if (createProp)
+			_props[objName] = GO;
 	}
 }
 
-GameObject* ResourceManager::GetGameObject(const char *name) {
-	if (_objects[name])
-		return new GameObject(*_objects[name]);
+GameObject* ResourceManager::GetGameObject(const char *name) const
+{
+	if (_objects.find(name) != _objects.end())
+		return new GameObject(*_objects.at(name));
+	return nullptr;
+}
+
+GameObject * ResourceManager::GetPropObject(const char * name) const
+{
+	if (_props.find(name) != _props.end())
+		return _props.at(name);
+	return nullptr;
+}
+
+Mesh * ResourceManager::GetMesh(const char *name) const
+{
+	if (_meshes.find(name) != _meshes.end()) {
+		return _meshes.at(name);
+	}
 	return nullptr;
 }
 
 unsigned int ResourceManager::GetGameObjectUID(const char *name)
 {
-	if (name == nullptr) return -1;
+	if (name == nullptr)
+		return -1;
+	
 	if (_counter.find(name) == _counter.end()) {
 		_counter[name] = -1;
 	}
 	_counter[name]++;
+
 	return _counter[name];
-}
-
-void ResourceManager::SetTransform(pugi::xml_node node, Transform &T) {
-	if (!node)
-		return;
-
-	pugi::xml_node prop;
-
-	prop = node.child("position");
-	if (prop)
-		T.position = glm::ExtractVector<glm::vec3>(prop.text().get());
-
-	prop = node.child("rotation");
-	if (prop) {
-		glm::vec3 rotation = glm::ExtractVector<glm::vec3>(prop.text().get());
-		T.SetRotation(rotation);
-	}
-
-	prop = node.child("scale");
-	if (prop)
-		T.scale = glm::ExtractVector<glm::vec3>(prop.text().get());
-
-	T.Update();
 }

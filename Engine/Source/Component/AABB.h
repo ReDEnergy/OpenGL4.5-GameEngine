@@ -21,14 +21,15 @@ class DLLExport AABB
 
 		static void Init();
 		void Render(const Shader *shader) const;
-		void Update();
-		void Update(glm::quat rotationQ);
-		void InitAABB();
+		void Update(glm::quat rotationQ = glm::quat(1.0f, 0, 0, 0));
 		bool Overlaps(AABB *aabb);
+
+	private:
+		void UpdateChildren(const glm::quat &rotationQ);
 
 	public:
 		Transform *transform;
-		GameObject *obj;
+		GameObject *gameObj;
 
 	private:
 		glm::vec3 center;

@@ -3,59 +3,57 @@
 	- when the window is resized a event is sent to the Game World
 	- the game decides how to use this information
 
-[DEBUG]
+[DEBUG]										DONE
 1. Create a generic DebugViewPanel
 	- add support for object registering
 		- objects decides what when and where to bind information
 		- channels based approach for textures binding
-
-[EDITOR][DEBUG][GAMEPLAY]
+		
+[EDITOR][DEBUG][GAMEPLAY]					
 1. Add support for multiple cameras
 	- manager for cameras
 	- key bindings for activating each cameras
 		- something like CTRL + SHIFT + CAMERA_NUMBER (0 - 9)
 		- 10 cameras should be more than enough
 
-[EDITOR][GAMEPLAY]
+[EDITOR][GAMEPLAY]							DONE
 1. Implement an object picking mechanism 
 	- based on unique color for perfect selection
 
-[ENGINE][GENERAL]
+[ENGINE][GENERAL]							PARTIALLY DONE
 1. Rendering features and techniques handled by the engine not the game
 	- lighting, shadows, ambient occlusion
 	- forward/deferred rendering
 	- automatic scene management/culling
 	- game loop must be used only for gameplay logic and mechanics
 
-2. Create the [GAME EDITOR]
+2. Create the [GAME EDITOR]					PARTIALLY STARTED
 	- use QT
 	
 3. Improve game menu with additional menu types
 	- sliders/drop-downs/etc
 	- see the Menu.xml file
 
-4. Move MenuSystem from Game to Engine
-
-5. Generic key-binding based on actions
+5. Generic key-binding based on actions		PARTIALLY FUNCTIONAL
 	- use actions for keyboard and mouse events
 	- keyboard/mouse -> action -> update registered action
 
-[ENGINE][PHYSICS]
+[ENGINE][PHYSICS]							PARTIALLY STARTED
 1. Swap Havok Physics with Nvidia Physics
 
-[ENGINE][BUILDING]
+[ENGINE][BUILDING]							PARTIALLY DONE
 1. Add support for x64 builds
 
 2. Add configuration for building the engine with Physics/No Physics support
 
-[ENGINE][BUILDING][GAMEPLAY]
+[ENGINE][BUILDING][GAMEPLAY]				PARTIALLY DONE
 1. Solve Release build crashes
 	- memory leaks
 	- incorrect access of memory from Game to Engine library
 		- static objects
 		- singleton objects
 
-[ENGINE][RENDERING]
+[ENGINE][RENDERING]							
 1. Add support for simple materials
 
 2. Implement bump mapping technique

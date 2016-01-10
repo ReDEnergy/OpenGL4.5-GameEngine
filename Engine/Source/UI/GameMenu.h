@@ -27,8 +27,8 @@ class GameMenu
 		void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {};
 
 		// Custom Events
-		void OnEvent(const char *eventID, Object *data);
-		void OnEvent(EventType Event, Object *data);
+		void OnEvent(const string& eventID, void * data);
+		void OnEvent(EventType Event, void *data);
 
 		void Render() const;
 

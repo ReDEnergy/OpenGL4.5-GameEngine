@@ -2,11 +2,12 @@
 #include <Core/Object.h>
 #include <Input/InputRules.h>
 
-class DLLExport ObjectInput : virtual public Object {
+class DLLExport ObjectInput : virtual public Object
+{
 	public:
-		ObjectInput(InputGroup GROUP);
+		ObjectInput(InputGroup GROUP = InputGroup::IG_GAMEPLAY);
 		virtual ~ObjectInput();
-		virtual void Update(float deltaTime, int mods) {};
+		virtual void OnInputUpdate(float deltaTime, int mods) {};
 		virtual void OnKeyPress(int key, int mods) {};
 		virtual void OnKeyRelease(int key, int mods) {};
 		virtual void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {};

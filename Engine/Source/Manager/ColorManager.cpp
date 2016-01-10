@@ -1,52 +1,63 @@
 //#include <pch.h>
 #include "ColorManager.h"
+#include <Core/GameObject.h>
 
+typedef unsigned int uint;
 
-ColorManager::ColorManager() {
+ColorManager::ColorManager()
+{
 	colorID = glm::ivec3(255, 255, 255);
+	offset = glm::ivec3(17, 17, 51);
+	invOffset = colorID / offset;
+
+	colorMap.resize(invOffset.x + invOffset.y * 16 + invOffset.z * 256);
 }
 
-ColorManager::~ColorManager() {
+ColorManager::~ColorManager()
+{
 }
 
-glm::vec3 ColorManager::GetColorUID()
+glm::vec3 ColorManager::GetColorUID(GameObject* object)
 {
 	if (colorID.z) {
-		colorID.z -= 1;
+		colorID.z -= offset.z;
 	} else {
 		colorID.z = 255;
 		if(colorID.y) {
-			colorID.y -= 1;
+			colorID.y -= offset.y;
 		} else {
 			colorID.y = 255;
-			colorID.x -= 1;
+			colorID.x -= offset.x;
 		}
 	}
-	glm::vec3 x = glm::vec3(colorID / 255.0f);
-	return x;
+
+	auto toIndex = colorID / offset;
+	auto uid = toIndex.x + toIndex.y * 16 + toIndex.z * 256;
+
+	colorMap[uid] = object;
+
+	return glm::vec3(colorID) / 255.0f;
 }
 
-
-/*
-void World::pickObject(int x, int y) {
-
-	// get color information from frame buffer
-	unsigned char pixel[3];
-	GLint viewport[4];
-
-	glDisable(GL_LIGHTING);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	drawSelectable();
-
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	glReadPixels(x, viewport[3] - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
-
-	glEnable(GL_LIGHTING);
-
-	Vector3D color = Vector3D(pixel[0], pixel[1], pixel[2]);
-	getSelected(color);
+glm::ivec3 ColorManager::GetColorOffset() const
+{
+	return offset;
 }
-*/
+
+GameObject * ColorManager::GetObjectByColor(const glm::vec3 & unitColor) const
+{
+	auto UID = GetUKeyFromColor(unitColor);
+	return colorMap[UID];
+}
+
+GameObject * ColorManager::GetObjectByID(unsigned int ID) const
+{
+	if (ID < colorMap.size())
+		return colorMap[ID];
+	return nullptr;
+}
+
+unsigned int ColorManager::GetUKeyFromColor(const glm::vec3 &unitColor) const
+{
+	return uint(unitColor.x * invOffset.x) + uint(unitColor.y * invOffset.y) * 16 + uint(unitColor.z * invOffset.z) * 256;
+}

@@ -1,11 +1,13 @@
 //#include <pch.h>
 #include "SpotLight.h"
 
+#include <include/math.h>
+
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
 #include <Component/AABB.h>
 #include <Component/Renderer.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 
 #include <GPU/FrameBuffer.h>
 #include <GPU/Shader.h>
@@ -26,7 +28,8 @@ SpotLight::~SpotLight()
 {
 }
 
-void SpotLight::Init() {
+void SpotLight::Init()
+{
 	FBO = new FrameBuffer();
 	FBO->Generate(2048, 2048, 1);
 
@@ -47,7 +50,13 @@ void SpotLight::SplitFrustum(unsigned int splits)
 	Camera::SplitFrustum(splits);
 }
 
-void SpotLight::Update() {
+void SpotLight::SetDebugView(bool value)
+{
+	GameObject::SetDebugView(value);
+}
+
+void SpotLight::Update()
+{
 	Camera::Update();
 	if (splits > 1) {
 		for (unsigned int i = 0; i < splits; i++) {
@@ -57,7 +66,8 @@ void SpotLight::Update() {
 	}
 };
 
-void SpotLight::CastShadows() {
+void SpotLight::CastShadows()
+{
 	// Render pass
 	FBO->Bind(false);
 
@@ -71,7 +81,7 @@ void SpotLight::CastShadows() {
 	BindViewMatrix(CSHM->loc_view_matrix);
 	BindProjectionMatrix(CSHM->loc_projection_matrix);
 
-	for (auto *obj : Manager::Scene->activeObjects) {
+	for (auto *obj : Manager::Scene->GetActiveObjects()) {
 		if (obj->renderer->CastShadow())
 			obj->Render(CSHM);
 	}
@@ -81,8 +91,38 @@ void SpotLight::CastShadows() {
 	FrameBuffer::Unbind();
 }
 
+void SpotLight::Render(const Shader * shader) const
+{
+	GameObject::Render(shader);
+}
+
 void SpotLight::RenderDebug(const Shader *shader) const {
 	Camera::RenderDebug(shader);
+}
+
+void SpotLight::RenderForPicking(const Shader * shader) const
+{
+	GameObject::RenderForPicking(shader);
+}
+
+void SpotLight::BakeShadows(const FrameBuffer * const sceneBuffer) const
+{
+	int WORKGROUP_SIZE = 32;
+
+	Shader *sha = Manager::GetShader()->GetShader("ShadowMap");
+	sha->Use();
+
+	sceneBuffer->BindDepthTexture(GL_TEXTURE0);
+	Manager::GetScene()->GetActiveCamera()->BindProjectionDistances(sha);
+
+	glBindImageTexture(0, sceneBuffer->GetTextureID(0), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+	glBindImageTexture(1, sceneBuffer->GetTextureID(1), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+
+	BindForUse(sha);
+	glUniform1i(sha->loc_shadowID, 100);
+
+	glDispatchCompute(GLuint(UPPER_BOUND(sceneBuffer->GetResolution().x, WORKGROUP_SIZE)), GLuint(UPPER_BOUND(sceneBuffer->GetResolution().y, WORKGROUP_SIZE)), 1);
+	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 }
 
 void SpotLight::BindForUse(const Shader *shader) const
@@ -91,7 +131,7 @@ void SpotLight::BindForUse(const Shader *shader) const
 	BindProjectionMatrix(shader->loc_projection_matrix);
 	BindProjectionDistances(shader);
 
-	FBO->BindTexture(0, GL_TEXTURE1);
+	FBO->BindTexture(0, GL_TEXTURE0);
 	glm::ivec2 rez = FBO->GetResolution();
 	glUniform2f(shader->loc_shadow_texel_size, 1.0f / rez.x, 1.0f / rez.y);
 }

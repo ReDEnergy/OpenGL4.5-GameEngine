@@ -1,9 +1,14 @@
-//#include <pch.h>
 #include "Shader.h"
 
+#include <fstream>
+#include <iostream>
 
-Shader::Shader() {
+using namespace std;
+
+Shader::Shader(const char & name)
+{
 	program = 0;
+	shaderName = string(&name);
 	shaderFiles.reserve(5);
 }
 
@@ -12,8 +17,8 @@ Shader::~Shader()
 	glDeleteProgram(program);
 }
 
-void Shader::BindTexturesUnits() {
-	glUseProgram(program);
+void Shader::BindTexturesUnits()
+{
 	for (int i = 0; i < MAX_2D_TEXTURES; i++) {
 		if (loc_textures[i] >= 0)
 			glUniform1i(loc_textures[i], i);
@@ -22,124 +27,154 @@ void Shader::BindTexturesUnits() {
 	}
 }
 
-void Shader::GetUniforms() {
+GLint Shader::GetUniformLocation(const char *uniformName) const
+{
+	return glGetUniformLocation(program, uniformName);
+}
 
+void Shader::OnLoad(function<void()> onLoad)
+{
+	loadObservers.push_back(onLoad);
+}
+
+void Shader::GetUniforms()
+{
 	// MVP
-	loc_model_matrix	= glGetUniformLocation(program, "Model");
-	loc_view_matrix		= glGetUniformLocation(program, "View");
-	loc_projection_matrix = glGetUniformLocation(program, "Projection");
+	loc_model_matrix	= GetUniformLocation("Model");
+	loc_view_matrix		= GetUniformLocation("View");
+	loc_projection_matrix = GetUniformLocation("Projection");
 
 	// Lighting and Shadow
-	loc_light_pos = glGetUniformLocation(program, "light_position");
-	loc_light_color = glGetUniformLocation(program, "light_color");
-	loc_light_radius = glGetUniformLocation(program, "light_radius");
-	loc_light_view_matrix = glGetUniformLocation(program, "LightView");
-	loc_light_projection_matrix = glGetUniformLocation(program, "LightProjection");
+	loc_light_pos = GetUniformLocation("light_position");
+	loc_light_color = GetUniformLocation("light_color");
+	loc_light_radius = GetUniformLocation("light_radius");
+	loc_light_direction = GetUniformLocation("light_direction");
+	loc_light_view_matrix = GetUniformLocation("LightView");
+	loc_light_projection_matrix = GetUniformLocation("LightProjection");
 
-	CSM_LightView  = glGetUniformLocation(program, "CSM_LightView");
-	CSM_LightProjection = glGetUniformLocation(program, "CSM_LightProjection");
-	CSM_SplitDistance = glGetUniformLocation(program, "CSM_split_distance");
-	CSM_cascadeID = glGetUniformLocation(program, "CSM_cascadeID");
+	CSM_LightView  = GetUniformLocation("CSM_LightView");
+	CSM_LightProjection = GetUniformLocation("CSM_LightProjection");
+	CSM_SplitDistance = GetUniformLocation("CSM_split_distance");
+	CSM_cascadeID = GetUniformLocation("CSM_cascadeID");
 
-	loc_shadowID = glGetUniformLocation(program, "shadowID");
-	loc_shadow_texel_size = glGetUniformLocation(program, "shadow_texel_size");
+	loc_shadowID = GetUniformLocation("shadowID");
+	loc_shadow_texel_size = GetUniformLocation("shadow_texel_size");
 
 	// Camera
-	loc_eye_pos = glGetUniformLocation(program, "eye_position");
-	loc_z_far = glGetUniformLocation(program, "zFar");
-	loc_z_near = glGetUniformLocation(program, "zNear");
+	loc_eye_pos = GetUniformLocation("eye_position");
+	loc_eye_forward = GetUniformLocation("eye_forward");
+	loc_z_far = GetUniformLocation("zFar");
+	loc_z_near = GetUniformLocation("zNear");
 
 	// General
-	loc_resolution = glGetUniformLocation(program, "resolution");
+	loc_resolution = GetUniformLocation("resolution");
 
 	// SSAO
-	loc_kernel_size = glGetUniformLocation(program, "kernel_size");	
-	loc_kernel = glGetUniformLocation(program, "kernel");	
-	loc_u_rad = glGetUniformLocation(program, "u_rad");	
+	loc_kernel_size = GetUniformLocation("kernel_size");	
+	loc_kernel = GetUniformLocation("kernel");	
+	loc_u_rad = GetUniformLocation("u_rad");	
 
 	// TESS
-	loc_lod_factor = glGetUniformLocation(program, "lod_factor");
-	loc_tess_inner_factor = glGetUniformLocation(program, "tess_inner_factor");
-	loc_tess_outer_factor = glGetUniformLocation(program, "tess_outer_factor");
-	loc_displacement_factor = glGetUniformLocation(program, "displacement_factor");
-
-	// Composition settings
-	active_ssao = glGetUniformLocation(program, "active_ssao");	
+	loc_lod_factor = GetUniformLocation("lod_factor");
+	loc_tess_inner_factor = GetUniformLocation("tess_inner_factor");
+	loc_tess_outer_factor = GetUniformLocation("tess_outer_factor");
+	loc_displacement_factor = GetUniformLocation("displacement_factor");
 
 	// Material Block
 	loc_material = glGetUniformBlockIndex(program, "Material");	
+	loc_transparency = GetUniformLocation("transparency");
 
 	char buffer[64];
 
 	// Skinning data
-	for (unsigned int i = 0; i < MAX_BONES; i++) {
-		memset(buffer, 0, sizeof(buffer));
-		sprintf_s(buffer, "Bones[%d]", i);
-		loc_bones[i] = glGetUniformLocation(program, buffer);
-	}
+	//for (unsigned int i = 0; i < MAX_BONES; i++)
+	//{
+	//	memset(buffer, 0, sizeof(buffer));
+	//	sprintf_s(buffer, "Bones[%d]", i);
+	//	loc_bones[i] = GetUniformLocation(buffer);
+	//}
+	loc_animated = GetUniformLocation("animated");
 
 	// Textures
 	for (int i = 0; i < MAX_2D_TEXTURES; i++) {
 		sprintf_s(buffer, "u_texture_%d", i);
-		loc_textures[i]	 = glGetUniformLocation(program, buffer);
+		loc_textures[i]	 = GetUniformLocation(buffer);
 
 		sprintf_s(buffer, "u_texture_cube_%d", i);
-		loc_cube_textures[i] = glGetUniformLocation(program, buffer);
+		loc_cube_textures[i] = GetUniformLocation(buffer);
 	}
-	loc_channel_mask = glGetUniformLocation(program, "channel_mask");
+	loc_channel_mask = GetUniformLocation("channel_mask");
 
 	// Text
-	text_color = glGetUniformLocation(program, "text_color");	
+	text_color = GetUniformLocation("text_color");	
 	
 	// Debugging
-	loc_debug_id = glGetUniformLocation(program, "debug_id");	
-	loc_debug_view = glGetUniformLocation(program, "debug_view");	
-	loc_debug_color = glGetUniformLocation(program, "debug_color");	
+	loc_debug_id = GetUniformLocation("debug_id");	
+	loc_debug_view = GetUniformLocation("debug_view");	
+	loc_debug_color = GetUniformLocation("debug_color");	
+
+	// Composition settings
+	active_ssao = GetUniformLocation("active_ssao");
+	active_deferred = GetUniformLocation("active_deferred");
+	active_shadows = GetUniformLocation("active_shadows");
+	active_selection = GetUniformLocation("active_selection");
 
 	BindTexturesUnits();
 
 	CheckOpenGLError();
 }
 
-
-void Shader::SetShaderFiles(vector <string> shaderFiles)
+void Shader::AddShader(const string & shaderFile, GLenum shaderType)
 {
-	this->shaderFiles = shaderFiles;
-	Reload();
+	ShaderFile S;
+	S.file = shaderFile;
+	S.type = shaderType;
+	shaderFiles.push_back(S);
 }
 
-void Shader::Reload() {
-	if (program)
-		glDeleteProgram(program);
-
+unsigned int Shader::CreateAndLink()
+{
 	vector<unsigned int> shaders;
 
-	switch (shaderFiles.size())
-	{
-		case 1:
-			shaders.push_back( Shader::CreateShader(shaderFiles[0], GL_COMPUTE_SHADER));
-			break;
-		case 2:
-			shaders.push_back( Shader::CreateShader(shaderFiles[0], GL_VERTEX_SHADER));
-			shaders.push_back( Shader::CreateShader(shaderFiles[1], GL_FRAGMENT_SHADER));
-			break;
-		case 3:
-			shaders.push_back( Shader::CreateShader(shaderFiles[0], GL_VERTEX_SHADER));
-			shaders.push_back( Shader::CreateShader(shaderFiles[1], GL_GEOMETRY_SHADER));
-			shaders.push_back( Shader::CreateShader(shaderFiles[2], GL_FRAGMENT_SHADER));
-			break;
-		case 4:
-			shaders.push_back( Shader::CreateShader(shaderFiles[0], GL_VERTEX_SHADER));
-			shaders.push_back( Shader::CreateShader(shaderFiles[1], GL_TESS_CONTROL_SHADER));
-			shaders.push_back( Shader::CreateShader(shaderFiles[2], GL_TESS_EVALUATION_SHADER));
-			shaders.push_back( Shader::CreateShader(shaderFiles[3], GL_FRAGMENT_SHADER));
-			break;
-		default:
-			break;
+	// Compile shaders
+	for (auto S : shaderFiles) {
+		auto shaderID = Shader::CreateShader(S.file, S.type);
+		if (shaderID) {
+			shaders.push_back(shaderID);
+		}
 	}
-	cout << "PROGRAM:" << endl;
-	program = Shader::CreateProgram(shaders);
-	GetUniforms();
+
+	// Create Program and Link
+	if (shaders.size()) {
+		program = Shader::CreateProgram(shaders);
+
+		if (program)
+		{
+			glUseProgram(program);
+			GetUniforms();
+			for (auto Observer : loadObservers) {
+				Observer();
+			}
+			return program;
+		}
+	}
+	return 0;
+}
+
+unsigned int Shader::Reload()
+{
+	if (program) {
+		glDeleteProgram(program);
+		program = 0;
+	}
+
+	auto rez = CreateAndLink();
+	return rez;
+}
+
+void Shader::ClearShaders()
+{
+	shaderFiles.clear();
 }
 
 unsigned int Shader::CreateShader(const string &shaderFile, GLenum shaderType) 
@@ -154,49 +189,49 @@ unsigned int Shader::CreateShader(const string &shaderFile, GLenum shaderType)
 
 	cout << "\tFILE = " << shaderFile;
 
+	// Get file content
 	file.seekg(0, ios::end);
 	shader_code.resize((unsigned int)file.tellg());
 	file.seekg(0, ios::beg);
 	file.read(&shader_code[0], shader_code.size());
 	file.close();
 
-	int info_log_length = 0;
-	int compile_result = 0;
-	unsigned int gl_shader_object;
+	int infoLogLength = 0;
+	int compileResult = 0;
+	unsigned int glShaderObject;
 			
-	// create new shader object
-	gl_shader_object = glCreateShader(shaderType);				
+	// Create new shader object
+	glShaderObject = glCreateShader(shaderType);				
+	if (glShaderObject == 0) {
+		cout << "\t ..... ERROR " << endl;
+		return 0;
+	}
+
 	const char *shader_code_ptr = shader_code.c_str();
 	const int shader_code_size = (int) shader_code.size();
 
-	glShaderSource(gl_shader_object, 1, &shader_code_ptr, &shader_code_size);	
-	glCompileShader(gl_shader_object);
-	glGetShaderiv(gl_shader_object, GL_COMPILE_STATUS, &compile_result);					
+	glShaderSource(glShaderObject, 1, &shader_code_ptr, &shader_code_size);	
+	glCompileShader(glShaderObject);
+	glGetShaderiv(glShaderObject, GL_COMPILE_STATUS, &compileResult);					
 			
 	// LOG COMPILE ERRORS
-	if(compile_result == GL_FALSE) {
-
+	if(compileResult == GL_FALSE)
+	{
 		string str_shader_type = "";
 
-		if(shaderType == GL_VERTEX_SHADER)
-			str_shader_type="vertex shader";
-		if(shaderType == GL_TESS_CONTROL_SHADER)
-			str_shader_type="tess control shader";
-		if(shaderType == GL_TESS_EVALUATION_SHADER)
-			str_shader_type="tess evaluation shader";
-		if(shaderType == GL_GEOMETRY_SHADER)
-			str_shader_type="geometry shader";
-		if(shaderType == GL_FRAGMENT_SHADER)
-			str_shader_type="fragment shader";
-		if(shaderType == GL_COMPUTE_SHADER)
-			str_shader_type="compute shader";
+		if(shaderType == GL_VERTEX_SHADER)				str_shader_type="VERTEX";
+		if(shaderType == GL_TESS_CONTROL_SHADER)		str_shader_type="TESS CONTROL";
+		if(shaderType == GL_TESS_EVALUATION_SHADER)		str_shader_type="TESS EVALUATION";
+		if(shaderType == GL_GEOMETRY_SHADER)			str_shader_type="GEOMETRY";
+		if(shaderType == GL_FRAGMENT_SHADER)			str_shader_type="FRAGMENT";
+		if(shaderType == GL_COMPUTE_SHADER)				str_shader_type="COMPUTE";
 
-		glGetShaderiv(gl_shader_object, GL_INFO_LOG_LENGTH, &info_log_length);		
-		vector<char> shader_log(info_log_length);
-		glGetShaderInfoLog(gl_shader_object, info_log_length, NULL, &shader_log[0]);	
+		glGetShaderiv(glShaderObject, GL_INFO_LOG_LENGTH, &infoLogLength);		
+		vector<char> shader_log(infoLogLength);
+		glGetShaderInfoLog(glShaderObject, infoLogLength, NULL, &shader_log[0]);	
 
 		cout << "\n-----------------------------------------------------\n";
-		cout << "\nERROR: " << str_shader_type << "\n\n";
+		cout << "\n[ERROR]: [" << str_shader_type << " SHADER]\n\n";
 		cout << &shader_log[0] << "\n";
 		cout << "-----------------------------------------------------" << endl;
 
@@ -205,29 +240,29 @@ unsigned int Shader::CreateShader(const string &shaderFile, GLenum shaderType)
 
 	cout << "\t ..... COMPILED " << endl;
 
-	return gl_shader_object;
+	return glShaderObject;
 }
 
 unsigned int Shader::CreateProgram(const vector<unsigned int> &shaderObjects)
 {
-	int info_log_length = 0;
-	int link_result = 0;
+	int infoLogLength = 0;
+	int linkResult = 0;
 
 	// build OpenGL program object and link all the OpenGL shader objects
-	unsigned int gl_program_object = glCreateProgram();
+	unsigned int glProgramObject = glCreateProgram();
 
 	for (auto shader: shaderObjects)
-		glAttachShader(gl_program_object, shader);
+		glAttachShader(glProgramObject, shader);
 
-	glLinkProgram(gl_program_object);												
-	glGetProgramiv(gl_program_object, GL_LINK_STATUS, &link_result);
+	glLinkProgram(glProgramObject);												
+	glGetProgramiv(glProgramObject, GL_LINK_STATUS, &linkResult);
 
 	// LOG LINK ERRORS
-	if(link_result == GL_FALSE) {														
+	if(linkResult == GL_FALSE) {														
 
-		glGetProgramiv(gl_program_object, GL_INFO_LOG_LENGTH, &info_log_length);		
-		vector<char> program_log(info_log_length);
-		glGetProgramInfoLog(gl_program_object, info_log_length, NULL, &program_log[0]);
+		glGetProgramiv(glProgramObject, GL_INFO_LOG_LENGTH, &infoLogLength);		
+		vector<char> program_log(infoLogLength);
+		glGetProgramInfoLog(glProgramObject, infoLogLength, NULL, &program_log[0]);
 
 		cout << "Shader Loader : LINK ERROR" << endl;
 		cout << &program_log[0] << endl;
@@ -239,7 +274,7 @@ unsigned int Shader::CreateProgram(const vector<unsigned int> &shaderObjects)
 	for (auto shader: shaderObjects)
 		glDeleteShader(shader);
 
-	return gl_program_object;
+	return glProgramObject;
 
 	CheckOpenGLError();
 }
@@ -247,4 +282,5 @@ unsigned int Shader::CreateProgram(const vector<unsigned int> &shaderObjects)
 void Shader::Use() const
 {
 	glUseProgram(program);
+	CheckOpenGLError();
 }

@@ -15,7 +15,7 @@ enum class ControlMode {
 class DLLExport ObjectControl : public ObjectInput {
 	public:
 		ObjectControl(Transform *transform);
-		void Update(float deltaTime, int mods);
+		void OnInputUpdate(float deltaTime, int mods);
 		void OnKeyPress(int key, int mods);
 
 	private:

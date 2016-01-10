@@ -5,7 +5,7 @@ AudioStream::AudioStream()
 
 }
 
-AudioStream::AudioStream(const string &file)
+AudioStream::AudioStream(const string& file)
 {
 	if (!music.openFromFile(file))
 		printf("Error opening music file: %s \n", file.c_str());
@@ -32,9 +32,9 @@ void AudioStream::SetLoop(bool state)
 	music.setLoop(state);
 }
 
-void AudioStream::SetVolume(float value)
+void AudioStream::SetVolume(unsigned int value)
 {
-	music.setVolume(value);
+	music.setVolume((float)value);
 }
 
 void AudioStream::SetStatus(bool status)

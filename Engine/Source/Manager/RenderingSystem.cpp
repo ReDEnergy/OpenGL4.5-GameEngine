@@ -3,10 +3,6 @@
 
 #include <include/gl.h>
 
-//bool* RenderingSystem::states = nullptr;
-//bool* RenderingSystem::prevStates = nullptr;
-//int RenderingSystem::debugParam = 0;
-
 void RenderingSystem::Init() {
 	debugParam = 0;
 	states = new bool[10]();
@@ -16,6 +12,14 @@ void RenderingSystem::Init() {
 	Set(RenderState::SS_AO, false);
 	Set(RenderState::HIDE_POINTER, true);
 	Set(RenderState::CLIP_POINTER, true);
+
+	culling = OpenGL::CULL::NONE;
+	globalCulling = false;
+
+	// glLineWidth
+	lineWidth = 1;
+
+	glEnable(GL_LINE_SMOOTH);
 }
 
 bool RenderingSystem::Is(RenderState STATE) {
@@ -40,6 +44,58 @@ bool RenderingSystem::Toggle(RenderState STATE) {
 	states[STATE] = !states[STATE];
 	UpdateGlobalState();
 	return states[STATE];
+}
+
+void RenderingSystem::SetGlobalCulling(OpenGL::CULL faces)
+{
+	globalCulling = false;
+	CullFace(faces);
+	globalCulling = true;
+}
+
+void RenderingSystem::DisableGlobalCulling()
+{
+	globalCulling = false;
+	RevertPreviousCulling();
+}
+
+void RenderingSystem::CullFace(OpenGL::CULL state)
+{
+	if (globalCulling || culling == state)
+		return;
+
+	if (state == OpenGL::CULL::NONE) {
+		glDisable(GL_CULL_FACE);
+	}
+	else {
+		if (culling == OpenGL::CULL::NONE)
+			glEnable(GL_CULL_FACE);
+
+		if (state == OpenGL::CULL::FRONT)
+			glCullFace(GL_FRONT);
+		else if (state == OpenGL::CULL::BACK)
+			glCullFace(GL_BACK);
+		else
+			glCullFace(GL_FRONT_AND_BACK);
+	}
+
+	prevCulling = culling;
+	culling = state;
+	CheckOpenGLError();
+}
+
+void RenderingSystem::RevertPreviousCulling()
+{
+	CullFace(prevCulling);
+}
+
+void RenderingSystem::SetLineWidth(float width)
+{
+	if (lineWidth != width)
+	{
+		glLineWidth(width);
+		lineWidth = width;
+	}
 }
 
 void RenderingSystem::UpdateGlobalState() {

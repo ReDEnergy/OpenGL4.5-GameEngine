@@ -6,8 +6,8 @@
 #include <include/dll_export.h>
 #include <include/gl.h>
 
-#include <Core/WindowObject.h>
-#include <Core/World.h>
+class WindowObject;
+class World;
 
 using namespace std;
 
@@ -22,6 +22,9 @@ class DLLExport Engine {
 		static void Exit();
 		static void SetWorldInstance(World *world);
 
+		static float GetLastFrameTime();
+		static double GetElapsedTime();
+
 	public:
 		static WindowObject *Window;
 
@@ -31,7 +34,7 @@ class DLLExport Engine {
 
 	private:
 		static double elapsedTime;
-		static double deltaTime;
+		static float deltaTime;
 		static bool paused;
 		static World *world;
 };

@@ -9,6 +9,7 @@
 #include <Manager/Manager.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/SceneManager.h>
+#include <Manager/RenderingSystem.h>
 
 ShadowMapping::ShadowMapping() {
 	FBO = new FrameBuffer();
@@ -25,7 +26,7 @@ void ShadowMapping::Update(DirectionalLight *lightSource) {
 
 	FBO->Bind();
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	glCullFace(GL_FRONT);
+	Manager::GetRenderSys()->CullFace(OpenGL::CULL::FRONT);
 
 	Shader *SHM = Manager::Shader->GetShader("shadow");
 	SHM->Use();
@@ -33,13 +34,13 @@ void ShadowMapping::Update(DirectionalLight *lightSource) {
 	lightSource->BindViewMatrix(SHM->loc_view_matrix);
 	lightSource->BindProjectionMatrix(SHM->loc_projection_matrix);
 
-	for (auto *obj: Manager::Scene->frustumObjects) {
+	for (auto *obj: Manager::Scene->GetFrustrumObjects()) {
 		if (obj->renderer->CastShadow())
 			obj->Render(SHM);
 	}
 
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	glCullFace(GL_BACK);
+	Manager::GetRenderSys()->CullFace(OpenGL::CULL::BACK);
 	FrameBuffer::Unbind();
 }
 

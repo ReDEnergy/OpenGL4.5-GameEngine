@@ -3,23 +3,32 @@
 #include <list>
 #include <unordered_map>
 #include <string>
+#include <vector>
 
 #include <Event/EventType.h>
+#include <Event/TimerEvent.h>
 #include <Event/EventListener.h>
+#include <Event/SimpleTimer.h>
 
 using namespace std;
 
-class TimedEvent
+
+template <class T>
+class EventQueueElem
 {
 	public:
-		TimedEvent(EventListener *E, EventType Event, Object *data, float delaySeconds);
-		bool Update();
+		EventQueueElem(EventListener *E, T channel, void *data)
+			: listener(E), channel(channel), data(data)
+		{};
+
+		void Process() {
+			listener->OnEvent(channel, data);
+		};
 
 	private:
-		EventListener *event;
-		EventType type;
-		Object *data;
-		float triggerTime;
+		EventListener *listener;
+		T channel;
+		void *data;
 };
 
 class DLLExport EventSystem
@@ -29,18 +38,36 @@ class DLLExport EventSystem
 		~EventSystem();
 
 	public:
-		void Subscribe(EventListener *E, string eventID);
-		void EmitSync(string eventID, Object *data);
+		void Subscribe(EventListener *E, const string& eventID);
+		void UnSubscribe(EventListener *E, const string& eventID);
+		void EmitAsync(const string eventID, void *data = nullptr);
+		void EmitSync(const string eventID, void *data = nullptr);
 
-		void Subscribe(EventType Event, EventListener *E);
-		void EmitSync(EventType Event, Object *data);
+		void Subscribe(EventListener *E, EventType Event);
+		void UnSubscribe(EventListener *E, EventType Event);
+		void EmitAsync(EventType Event, void *data = nullptr);
+		void EmitSync(EventType Event, void *data = nullptr);
+
+		void UnSubscribe(EventListener *E);
 
 		void Update();
-		void TriggerEvent(EventListener *E, EventType Event, Object *data, float delaySeconds);
 		void Clear();
+
+		// Timer Events
+		TimerManager<string>* GetDynamicTimers() const;
+		TimerManager<EventType>* GetStandardTimers() const;
+
+	private:
+		void ProcessEvents();
+
+	public:
+		TimerManager<string> *dynamicTimers;
+		TimerManager<EventType> *standardTimers;
 
 	private:
 		unordered_map<string, list<EventListener*>> listeners;
-		list<TimedEvent*> timedEvents;
 		list<EventListener*> listenersEnum[EventType::SIZE];
+
+		vector<EventQueueElem<EventType>> eventQueueEnum;
+		vector<EventQueueElem<string>> eventQueueString;
 };

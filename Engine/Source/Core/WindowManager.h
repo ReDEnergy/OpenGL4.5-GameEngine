@@ -2,7 +2,10 @@
 #include <vector>
 
 #include <include/gl.h>
-#include <Core/WindowObject.h>
+#include <include/glm.h>
+
+class WindowObject;
+struct WindowProperties;
 
 using namespace std;
 
@@ -15,7 +18,7 @@ class WindowManager
 	public:
 		static void Init();
 		static void OnResize(GLFWwindow *W, int width, int height);
-		static WindowObject* NewWindow(char* name, glm::ivec2 resolution, glm::ivec2 position, bool reshapable);
+		static WindowObject* Create(WindowProperties & properties);
 		static WindowObject* GetWindowObject(GLFWwindow *W);
 
 	private:

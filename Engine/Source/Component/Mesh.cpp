@@ -10,6 +10,7 @@
 
 #include <Manager/Manager.h>
 #include <Manager/ResourceManager.h>
+#include <Manager/RenderingSystem.h>
 #include <Manager/TextureManager.h>
 
 #include <Utils/GPU.h>
@@ -22,25 +23,32 @@ Mesh::Mesh(const char* meshID)
 	useMaterial = true;
 	debugColor = glm::vec4(1);
 	glPrimitive = GL_TRIANGLES;
+	buffers = nullptr;
+	bbox = nullptr;
 }
 
 Mesh::~Mesh() {
-	Clear();
-	delete buffers;
+	ClearData();
+	SAFE_FREE(buffers);
 }
 
 
-void Mesh::Clear()
+void Mesh::ClearData()
 {
+	loadState = LOG_MESH::SUCCESS;
 	for (unsigned int i = 0 ; i < materials.size() ; i++) {
 		SAFE_FREE(materials[i]);
 	}
+	positions.clear();
+	texCoords.clear();
+	indices.clear();
+	normals.clear();
 }
 
 
 bool Mesh::LoadMesh(const string& fileLocation, const string& fileName)
 {
-	Clear();
+	ClearData();
 	this->fileLocation = fileLocation;
 	string file = (fileLocation + '\\' + fileName).c_str();
 
@@ -55,20 +63,28 @@ bool Mesh::LoadMesh(const string& fileLocation, const string& fileName)
 		return InitFromScene(pScene);
 	}
 
+	// pScene is freed when returning because of Importer
+
 	printf("Error parsing '%s': '%s'\n", file, Importer.GetErrorString());
 	return false;
 }
 
-bool Mesh::InitFromData() {
+bool Mesh::InitFromData()
+{
 	MeshEntry *M = new MeshEntry();
 	M->nrIndices = this->indices.size();
 	meshEntries.clear();
 	meshEntries.push_back(M);
 
-	if (texCoords.size())
+	if (texCoords.size()) {
 		buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
-	else
+	}
+	else {
 		buffers = UtilsGPU::UploadData(positions, normals, indices);
+	}
+
+	SAFE_FREE(bbox);
+	bbox = new BoundingBox(positions);
 
 	return buffers->VAO != -1;
 }
@@ -83,7 +99,6 @@ bool Mesh::InitFromData(vector<glm::vec3>& positions,
 	this->texCoords = texCoords;
 	this->indices = indices;
 
-	bbox = new BoundingBox(positions);
 	return InitFromData();
 }
 
@@ -170,22 +185,21 @@ bool Mesh::InitMaterials(const aiScene* pScene)
 			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
 				materials[i]->texture = Manager::Texture->LoadTexture(fileLocation, Path.data);
 			}
-
-			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_AMBIENT, &color) == AI_SUCCESS)
-				assimp::CopyColor(color, materials[i]->ambient);
-
-			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS)
-				assimp::CopyColor(color, materials[i]->diffuse);
-
-			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_SPECULAR, &color) == AI_SUCCESS)
-				assimp::CopyColor(color, materials[i]->specular);
-
-			if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_EMISSIVE, &color) == AI_SUCCESS)
-				assimp::CopyColor(color, materials[i]->emissive);
-
-			unsigned int max;
-			aiGetMaterialFloatArray(pMaterial, AI_MATKEY_SHININESS, &materials[i]->shininess, &max);
 		}
+		if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_AMBIENT, &color) == AI_SUCCESS)
+			assimp::CopyColor(color, materials[i]->ambient);
+
+		if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_DIFFUSE, &color) == AI_SUCCESS)
+			assimp::CopyColor(color, materials[i]->diffuse);
+
+		if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_SPECULAR, &color) == AI_SUCCESS)
+			assimp::CopyColor(color, materials[i]->specular);
+
+		if (aiGetMaterialColor(pMaterial, AI_MATKEY_COLOR_EMISSIVE, &color) == AI_SUCCESS)
+			assimp::CopyColor(color, materials[i]->emissive);
+
+		//unsigned int max;
+		//if (aiGetMaterialFloatArray(pMaterial, AI_MATKEY_SHININESS, &materials[i]->shininess, &max) == AI_SUCCESS) { };
 	}
 
 	CheckOpenGLError();
@@ -202,6 +216,11 @@ void Mesh::SetGlPrimitive(unsigned int glPrimitive)
 	this->glPrimitive = glPrimitive;
 }
 
+const char * Mesh::GetMeshID() const
+{
+	return meshID.c_str();
+}
+
 void Mesh::Render(const Shader *shader)
 {
 	glBindVertexArray(buffers->VAO);
@@ -210,11 +229,12 @@ void Mesh::Render(const Shader *shader)
 		if (useMaterial) {
 			const unsigned int materialIndex = meshEntries[i]->materialIndex;
 			if (materialIndex != INVALID_MATERIAL && materials[materialIndex]->texture) {
-				(materials[materialIndex]->texture)->Bind(GL_TEXTURE0);
-				glBindBufferBase(GL_UNIFORM_BUFFER, 0, materials[materialIndex]->material_ubo);
+				(materials[materialIndex]->texture)->BindToTextureUnit(GL_TEXTURE0);
+				// TODO: RenderDoc will crash here
+				//glBindBufferBase(GL_UNIFORM_BUFFER, 0, materials[materialIndex]->material_ubo);
 			}
 			else {
-				Manager::Texture->GetTexture(unsigned int(0))->Bind(GL_TEXTURE0);
+				Manager::Texture->GetTexture(unsigned int(0))->BindToTextureUnit(GL_TEXTURE0);
 			}
 		}
 
@@ -238,11 +258,11 @@ void Mesh::RenderInstanced(unsigned int instances)
 		if (useMaterial) {
 			const unsigned int materialIndex = meshEntries[i]->materialIndex;
 			if (materialIndex != INVALID_MATERIAL && materials[materialIndex]->texture) {
-				(materials[materialIndex]->texture)->Bind(GL_TEXTURE0);
+				(materials[materialIndex]->texture)->BindToTextureUnit(GL_TEXTURE0);
 				glBindBufferBase(GL_UNIFORM_BUFFER, 0, materials[materialIndex]->material_ubo);
 			}
 			else {
-				Manager::Texture->GetTexture(unsigned int(0))->Bind(GL_TEXTURE0);
+				Manager::Texture->GetTexture(unsigned int(0))->BindToTextureUnit(GL_TEXTURE0);
 			}
 		}
 
@@ -258,7 +278,7 @@ void Mesh::RenderInstanced(unsigned int instances)
 	glBindVertexArray(0);
 }
 
-void Mesh::RenderDebug()
+void Mesh::RenderDebug(const Shader *shader) const
 {
 
 }

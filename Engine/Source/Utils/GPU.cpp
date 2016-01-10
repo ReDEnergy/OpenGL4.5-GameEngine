@@ -27,7 +27,7 @@ namespace UtilsGPU {
 		// Make sure the VAO is not changed from the outside
 		glBindVertexArray(0);
 
-		assert(CheckOpenGLError() == GL_NO_ERROR);
+		CheckOpenGLError();
 
 		return buffers;
 	}
@@ -57,7 +57,8 @@ namespace UtilsGPU {
 		// Make sure the VAO is not changed from the outside
 		glBindVertexArray(0);
 
-		assert(CheckOpenGLError() == GL_NO_ERROR);
+		// TODO: uncomment
+		// CheckOpenGLError();
 
 		return buffers;
 	}
@@ -92,29 +93,25 @@ namespace UtilsGPU {
 
 		// Make sure the VAO is not changed from the outside
 		glBindVertexArray(0);
-
-		assert(CheckOpenGLError() == GL_NO_ERROR);
+		CheckOpenGLError();
 
 		return buffers;
 	}
+}
 
-	// TODO return BUFFERS reference in order to free memory
+GLuint GPUBuffers::CreateNewVAO()
+{
+	GLuint newVAO;
+	glGenVertexArrays(1, &newVAO);
+	glBindVertexArray(newVAO);
 
-	DLLExport void DrawLine(glm::vec3 posA, glm::vec3 posB) {
-		glBegin(GL_LINES);
-			glVertex3f(posA.x, posA.y, posA.z);
-			glVertex3f(posB.x, posB.y, posB.z);
-		glEnd();
-	}
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+	glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::POS);
 
-	DLLExport void DrawPolygon(vector<glm::vec3> &vertices) {
-		glBegin(GL_LINES);
-			// Draw polygon edges
-			for (auto vertex: vertices)
-				glVertex3f(vertex.x, vertex.y, vertex.z);
-			// Close polygon
-			glVertex3f(vertices[0].x, vertices[0].y, vertices[0].z);
-		glEnd();
-	}
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+	glEnableVertexAttribArray(VERTEX_ATTRIBUTE_LOC::TEX_COORD);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO[2]);
+
+	return GLuint();
 }

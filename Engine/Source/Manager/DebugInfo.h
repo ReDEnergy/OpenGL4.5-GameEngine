@@ -15,15 +15,22 @@ class DLLExport DebugInfo
 
 	public:
 		void Init();
+		void InitManager(const char *info);
+
 		void Add(GameObject *obj);
 		void Remove(GameObject *obj);
-		void InitManager(const char *info);
+		void Update(const Camera *camera);
+		bool Toggle();
+
+		bool GetActiveState() const;
+
+	private:
 		void Render(const Camera *camera) const;
-		void BindForRendering(const Camera *camera) const;
 
 	public:
-		bool debugView;
-		bool debugMessages;
 		FrameBuffer *FBO;
+
+	private:
+		bool debugView;
 		std::list<GameObject*> objects;
 };

@@ -4,14 +4,28 @@
 
 using namespace std;
 
+enum class WRAPPING_MODE : UINT32
+{
+	REPEAT = GL_REPEAT,
+	CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+	MIRRORED_REPEAT = GL_MIRRORED_REPEAT
+};
+
+enum class TEXTURE_TYPE {
+	NORMAL_TEXTURE,
+	CUBE_TEXTURE
+};
+
 class DLLExport Texture
 {
 	public:
 		Texture();
 		~Texture();
 
-		void Bind(GLenum TextureUnit) const;
+		void Bind() const;
+		void BindToTextureUnit(GLenum TextureUnit) const;
 		void BindForWriting(GLenum textureTarget) const;
+		void UnBind() const;
 
 		void Create2DTexture(const unsigned char* img, int width, int height, int chn);
 		void Create2DTexture(const unsigned short* img, int width, int height, int chn);
@@ -20,40 +34,29 @@ class DLLExport Texture
 		void CreateFrameBufferTexture(int width, int height, int target_id);
 		void CreateDepthBufferTexture(int width, int height);
 
-		void GetSize(unsigned int &width,unsigned int &height) const;
-		bool Load2D(const char* file_name, GLenum wrapping_mode = GL_REPEAT);
-		GLuint GetTextureID();
+		bool Load2D(const char* fileName, GLenum wrappingMode = GL_REPEAT);
+		void SaveToFile(const char* fileName) const;
+
+		unsigned int GetWidth() const;
+		unsigned int GetHeight() const;
+		void GetSize(unsigned int &width, unsigned int &height) const;
+
+		void SetWrappingMode(GLenum mode);
+		void SetFiltering(GLenum filtering);
+		void SetTextureData(const unsigned char* img) const;
+
+		GLuint GetTextureID() const;
 
 	private:
-		void Init2DTexture(unsigned int width, unsigned int height);
+		void Init2DTexture(unsigned int width, unsigned int height, unsigned int channels);
 		void SetParameters(GLenum mag_filter, GLenum min_filter, GLenum wrapping_mode);
+
 	private:
 		unsigned int width;
 		unsigned int height;
+		unsigned int channels;
+		GLuint targetType;
 		GLuint textureID;
-};
-
-enum MIN_FILTER {
-	MIN_NEAREST = GL_NEAREST,
-	MIN_LINEAR = GL_LINEAR,
-	MIN_NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
-	MIN_NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
-	MIN_LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
-	MIN_LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
-};
-
-enum MAG_FILTER {
-	MAG_NEAREST = GL_NEAREST,
-	MAG_LINEAR = GL_LINEAR
-};
-
-enum WRAPPING_MODE {
-	WM_REPEAT = GL_REPEAT,
-	WM_CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
-	WM_MIRRORED_REPEAT = GL_MIRRORED_REPEAT
-};
-
-enum TEXTURE_TYPE {
-	NORMAL_TEXTURE,
-	CUBE_TEXTURE
+		GLenum wrappingMode;
+		GLenum textureFiltering;
 };

@@ -13,11 +13,23 @@ class DLLExport DirectionalLight : public Light, public Camera
 
 		void Init();
 		void Update();
-		void CastShadows(const Camera *camera);
+		void SetCamera(const Camera* camera);
+		void CastShadows();
+
+		void Render(const Shader *shader) const;
 		void RenderDebug(const Shader *shader) const;
-		void BindForUse(const Shader *shader, Camera *camera) const;
+		void RenderForPicking(const Shader *shader) const;
+
+		void BakeShadows(const FrameBuffer * const sceneBuffer) const;
+
+		// Gameobject
+		void SetDebugView(bool value);
+
+	private:
+		void BindForUse(const Shader *shader) const;
 
 	public:
+		const Camera* viewCamera;
 		FrameBuffer *FBO;
 		float distanceTo;
 		vector<glm::mat4> lightProjections;

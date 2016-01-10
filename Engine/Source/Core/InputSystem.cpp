@@ -3,8 +3,11 @@
 
 #include <Core/Engine.h>
 #include <Core/WindowManager.h>
+#include <Core/WindowObject.h>
 
+#include <include/glm.h>
 #include <include/pugixml.h>
+
 #include <Input/InputRules.h>
 #include <Manager/Manager.h>
 #include <Manager/EventSystem.h>
@@ -15,11 +18,13 @@ static const int MAX_KEYS = 384;
 
 list<ObjectInput*> InputSystem::observers;
 list<ObjectInput*> InputSystem::activeObserver;
+
 unordered_map<string, int> InputSystem::keyMapping;
 unordered_map<string, int> InputSystem::mouseMapping;
+unordered_map<string, bool> InputSystem::eventState;
+
 string InputSystem::keyInputEvents[16][384][3];
 string InputSystem::mouseInputEvents[16][8][3];
-unordered_map<string, bool> InputSystem::eventState;
 
 bool* InputSystem::keyStates = new bool[MAX_KEYS];
 bool* InputSystem::mouseStates = new bool[10];
@@ -29,20 +34,22 @@ int InputSystem::mods = GLFW_KEY_UNKNOWN;
 
 bool InputSystem::ruleChanged = false;
 
-void InputSystem::KeyCallback(GLFWwindow *W, int key, int scancode, int action, int mods) {
+void InputSystem::KeyCallback(GLFWwindow *W, int key, int scancode, int action, int mods)
+{
 	keyStates[key] = action ? true : false;
 	InputSystem::scancode = scancode;
 	InputSystem::mods = mods;
 	NotifyObservers(key, action, mods);
-	if (action == GLFW_PRESS) {
+	if (action == GLFW_PRESS)
+	{
 		int currentInputRule = InputRules::GetActiveRule();
 		string eventToEmit = keyInputEvents[currentInputRule][key][mods];
 		if ( !eventToEmit.empty() ) {
 			eventState[eventToEmit] = true;
 		}
 	}
-
-	else if (action == GLFW_RELEASE) {
+	else if (action == GLFW_RELEASE)
+	{
 		int currentInputRule = InputRules::GetActiveRule();
 		if (key == GLFW_KEY_LEFT_SHIFT) mods += 1;
 		if (key == GLFW_KEY_LEFT_CONTROL) mods += 2;
@@ -54,7 +61,8 @@ void InputSystem::KeyCallback(GLFWwindow *W, int key, int scancode, int action, 
 	}
 }
 
-bool InputSystem::KeyHold(int keyCode) {
+bool InputSystem::KeyHold(int keyCode)
+{
 	return keyStates[keyCode];
 }
 
@@ -63,7 +71,8 @@ bool InputSystem::MouseHold(int button)
 	return mouseStates[button];
 }
 
-void InputSystem::Init() {
+void InputSystem::Init()
+{
 	for (int i=0; i<MAX_KEYS; i++)
 		keyStates[i] = GLFW_RELEASE;
 
@@ -80,7 +89,8 @@ int InputSystem::GetMods()
 	return mods;
 }
 
-void InputSystem::CursorMove(GLFWwindow *W, double posX, double posY) {
+void InputSystem::CursorMove(GLFWwindow *W, double posX, double posY)
+{
 	WindowObject *Wobj = WindowManager::GetWindowObject(W);
 
 	glm::ivec2 mousePos = glm::ivec2(posX, posY);
@@ -92,23 +102,21 @@ void InputSystem::CursorMove(GLFWwindow *W, double posX, double posY) {
 
 void InputSystem::MouseClick(GLFWwindow *W, int button, int action, int mods)
 {
-	mouseStates[button] = action ? true : false;
-	InputSystem::mods = mods;
 	double posX, posY;
 	glfwGetCursorPos(W, &posX, &posY);
-	for (auto obs : activeObserver) {
-		if (obs->IsActive())
-			obs->OnMouseBtnEvent((int)posX, (int)posY, button, action, mods);
-	}
+	
+	MouseClick(button, action, (int)posX, (int)posY, mods);
 
-	if (action == GLFW_PRESS) {
+	// Event Based Methods
+
+	if (action == GLFW_PRESS)
+	{
 		int currentInputRule = InputRules::GetActiveRule();
 		string eventToEmit = mouseInputEvents[currentInputRule][button][mods];
 		if (!eventToEmit.empty()) {
 			eventState[eventToEmit] = true;
 		}
 	}
-
 	else {
 		int currentInputRule = InputRules::GetActiveRule();
 		if (button == GLFW_KEY_LEFT_SHIFT) mods += 1;
@@ -121,21 +129,41 @@ void InputSystem::MouseClick(GLFWwindow *W, int button, int action, int mods)
 	}
 }
 
-void InputSystem::Subscribe(ObjectInput *IC) {
+void InputSystem::MouseMove(int posX, int posY, int deltaX, int deltaY)
+{
+	NotifyObservers(posX, posX, deltaX, deltaY);
+}
+
+void InputSystem::MouseClick(int button, int action, int posX, int posY, int mods)
+{
+	InputSystem::mods = mods;
+	mouseStates[button] = action ? true : false;
+	for (auto obs : activeObserver)
+	{
+		if (obs->IsActive())
+			obs->OnMouseBtnEvent(posX, posY, button, action, mods);
+	}
+}
+
+void InputSystem::Subscribe(ObjectInput *IC)
+{
 	observers.push_back(IC);
 	if (IC->IsActive())
 		activeObserver.push_back(IC);
 }
 
-void InputSystem::RemoveSubscription(ObjectInput *IC) {
+void InputSystem::RemoveSubscription(ObjectInput *IC)
+{
 	// TODO - a linked list is better for observer not vector
 }
 
-void InputSystem::RuleUpdate() {
+void InputSystem::RuleUpdate()
+{
 	ruleChanged = true;
 }
 
-void InputSystem::EndFrame() {
+void InputSystem::EndFrame()
+{
 	if (ruleChanged) {
 		activeObserver.clear();
 		for (auto obs:observers) {
@@ -146,14 +174,16 @@ void InputSystem::EndFrame() {
 	}
 }
 
-void InputSystem::UpdateObservers(float deltaTime) {
+void InputSystem::UpdateObservers(float deltaTime)
+{
 	for (auto obs:activeObserver) {
 		if (obs->IsActive())
-			obs->Update(deltaTime, mods);
+			obs->OnInputUpdate(deltaTime, mods);
 	}
 }
 
-void InputSystem::NotifyObservers(int key, int action, int mods) {
+void InputSystem::NotifyObservers(int key, int action, int mods)
+{
 	if (action == GLFW_PRESS) {
 		for (auto obs:activeObserver)
 			if (obs->IsActive())
@@ -167,29 +197,35 @@ void InputSystem::NotifyObservers(int key, int action, int mods) {
 	}
 }
 
-void InputSystem::NotifyObservers(int mouseX, int mouseY, int deltaX, int deltaY) {
+void InputSystem::NotifyObservers(int mouseX, int mouseY, int deltaX, int deltaY)
+{
 	for (auto obs:activeObserver)
 		obs->OnMouseMove(mouseX, mouseY, deltaX, deltaY);
 }
 
-void InputSystem::MapKeys() {
+void InputSystem::MapKeys()
+{
 	string s;
+	// Mapping between GLFW and engine event keys
 	// Basic letter keys
-	for (unsigned int i = 0; i < 26; i++) {
+	for (unsigned int i = 0; i < 26; i++)
+	{
 		s.clear();
 		s.push_back('A' + i);
 		keyMapping.insert(std::make_pair(s, GLFW_KEY_A + i));
 	}
 
 	// Basic number keys
-	for (unsigned int i = 0; i < 10; i++) {
+	for (unsigned int i = 0; i < 10; i++)
+	{
 		s.clear();
 		s.push_back('0' + i);
 		keyMapping.insert(std::make_pair(s, GLFW_KEY_0 + i));
 	}
 
-	// F keys
-	for (unsigned int i = 0; i < 12; i++) {
+	// F1-F12 keys
+	for (unsigned int i = 0; i < 12; i++)
+	{
 		s.clear();
 		s.push_back('F');
 		s.push_back('1' + i);
@@ -212,7 +248,8 @@ void InputSystem::MapKeys() {
 	keyMapping.insert(std::make_pair("TAB", GLFW_KEY_TAB));
 }
 
-void InputSystem::MapMouse() {
+void InputSystem::MapMouse()
+{
 	// Left, right and middle buttons (same thing as buttons 1,2 and 3)
 	mouseMapping.insert(std::make_pair("LEFT", GLFW_MOUSE_BUTTON_LEFT));
 	mouseMapping.insert(std::make_pair("RIGHT", GLFW_MOUSE_BUTTON_RIGHT));
@@ -220,22 +257,25 @@ void InputSystem::MapMouse() {
 
 	// Buttons 4-8
 	string s;
-	for (unsigned int i = 0; i < 5; i++) {
+	for (unsigned int i = 0; i < 5; i++)
+	{
 		s.clear();
 		s.push_back('4' + i);
 		mouseMapping.insert(std::make_pair(s, GLFW_MOUSE_BUTTON_4 + i));
 	}
 }
 
-void InputSystem::Load(const char* file) {
+void InputSystem::Load(const char* file)
+{
 	// TODO:
 	//  - left control and right control? should find a solution for stuff like that
 	pugi::xml_document *doc = pugi::LoadXML(file);
 	pugi::xml_node statesXML = doc->child("states");
 	int current_state = 0;
-	for (pugi::xml_node stateXML : statesXML.children()) {
-		for (pugi::xml_node actionXML : stateXML.children()) {
-
+	for (pugi::xml_node stateXML : statesXML.children())
+	{
+		for (pugi::xml_node actionXML : stateXML.children())
+		{
 			// Get a key or mouse button
 			int key = 0, mouse = 0;
 			if (actionXML.child("key")) key = keyMapping[actionXML.child_value("key")];

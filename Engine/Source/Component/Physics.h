@@ -24,7 +24,9 @@ class DLLExport Physics: virtual public Object {
 		virtual void AddToWorld();
 		virtual void RemoveFromWorld();
 		virtual void Deactivate();
-		virtual void SetPosition(glm::vec3 pos);
+
+		void UpdatePhysicsEngine();
+		void SetLinearVelocity(glm::vec3 velocity);
 
 	protected:
 		GameObject *parent;

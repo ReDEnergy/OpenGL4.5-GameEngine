@@ -8,12 +8,25 @@ EventListener::EventListener() {
 }
 
 EventListener::~EventListener() {
+	Manager::GetEvent()->UnSubscribe(this);
 }
 
-void EventListener::SubscribeToEvent(string eventID) {
+void EventListener::SubscribeToEvent(const string & eventID)
+{
 	Manager::GetEvent()->Subscribe(this, eventID);
 }
 
-void EventListener::SubscribeToEvent(EventType Event) {
-	Manager::GetEvent()->Subscribe(Event, this);
+void EventListener::UnsubscribeFrom(const string & eventID)
+{
+	Manager::GetEvent()->UnSubscribe(this, eventID);
+}
+
+void EventListener::SubscribeToEvent(EventType Event)
+{
+	Manager::GetEvent()->Subscribe(this, Event);
+}
+
+void EventListener::UnsubscribeFrom(EventType Event)
+{
+	Manager::GetEvent()->UnSubscribe(this, Event);
 }

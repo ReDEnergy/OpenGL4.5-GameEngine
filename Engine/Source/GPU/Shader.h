@@ -1,7 +1,8 @@
 #pragma once
-#include <fstream>
 #include <string>
 #include <vector>
+#include <list>
+#include <functional>
 
 #include <include/dll_export.h>
 #include <include/gl.h>
@@ -15,17 +16,23 @@ using namespace std;
 class DLLExport Shader
 {
 	public:
-		Shader();
+		Shader(const char &name);
 		~Shader();
 
-		void Reload();
+		unsigned int Reload();
+		void ClearShaders();
+		void AddShader(const string &shaderFile, GLenum shaderType);
+		unsigned int CreateAndLink();
+
 		void BindTexturesUnits();
-		void SetShaderFiles(vector <string> shaderFiles);
+		GLint GetUniformLocation(const char * uniformName) const;
+
+		void OnLoad(function<void()> onLoad);
 		void Use() const;
 
 	private:
 		void GetUniforms();
-		static unsigned int CreateShader(const string &shaderFile, GLenum shader_type);
+		static unsigned int CreateShader(const string &shaderFile, GLenum shaderType);
 		static unsigned int CreateProgram(const vector<unsigned int> &shaderObjects);
 
 	public:
@@ -34,8 +41,11 @@ class DLLExport Shader
 		// Textures
 		GLint loc_textures[MAX_2D_TEXTURES];
 		GLint loc_cube_textures[MAX_2D_TEXTURES];
-		GLint loc_material;
 		GLint loc_channel_mask;
+
+		// Material
+		GLint loc_material;
+		GLint loc_transparency;
 
 		// MVP
 		GLint loc_model_matrix;
@@ -46,6 +56,7 @@ class DLLExport Shader
 		GLint loc_light_pos;
 		GLint loc_light_color;
 		GLint loc_light_radius;
+		GLint loc_light_direction;
 		GLint loc_light_view_matrix;
 		GLint loc_light_projection_matrix;
 		GLint loc_shadow_texel_size;
@@ -59,6 +70,7 @@ class DLLExport Shader
 
 		// Camera
 		GLint loc_eye_pos;
+		GLint loc_eye_forward;
 		GLint loc_z_far;
 		GLint loc_z_near;
 
@@ -79,10 +91,12 @@ class DLLExport Shader
 		// Rendering
 		GLint active_ssao;
 		GLint active_deferred;
-		GLint active_shadow;
+		GLint active_shadows;
+		GLint active_selection;
 
 		// Skinning
 		GLint loc_bones[MAX_BONES];
+		GLint loc_animated;
 
 		// Text
 		GLint text_color;
@@ -93,5 +107,16 @@ class DLLExport Shader
 		GLint loc_debug_color;
 
 	private:
-		vector<string> shaderFiles;
+
+		struct ShaderFile {
+			string file;
+			GLenum type;
+		};
+
+		string shaderName;
+		vector<ShaderFile> shaderFiles;
+		list<function<void()>> loadObservers;
+
+		// TODO - add support for user defined uniforms
+		// unordered_map<string, GLint> uniforms;
 };

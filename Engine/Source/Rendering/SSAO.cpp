@@ -70,8 +70,8 @@ void SSAO::Update(const FrameBuffer *FBO, const Camera *camera) const
 	FBO->BindTexture(3, GL_TEXTURE0);
 	FBO->BindTexture(4, GL_TEXTURE1);
 	FBO->BindDepthTexture(GL_TEXTURE2);
-	RandomNoise1->Bind(GL_TEXTURE3);
-	RandomNoise2->Bind(GL_TEXTURE4);
+	RandomNoise1->BindToTextureUnit(GL_TEXTURE3);
+	RandomNoise2->BindToTextureUnit(GL_TEXTURE4);
 
 	ScreenQuad->Render(ssao);
 
@@ -93,12 +93,10 @@ void SSAO::Update(const FrameBuffer *FBO, const Camera *camera) const
 	
 	glBindImageTexture(1, computeTexture->GetTextureID(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
 	glDispatchCompute(GLuint(UPPER_BOUND(res.x, WORK_GROUP_SIZE)), GLuint(UPPER_BOUND(res.y, WORK_GROUP_SIZE)), 1);
-
-	glFinish();
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 }
 
 void SSAO::BindTexture(GLenum TextureUnit) {
-	computeTexture->Bind(TextureUnit);
+	computeTexture->BindToTextureUnit(TextureUnit);
 }

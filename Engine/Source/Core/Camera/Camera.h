@@ -17,6 +17,17 @@ enum class CameraType {
 class AABB;
 class DirectionalLight;
 
+struct ProjectionInfo
+{
+	float FoV;
+	float zNear;
+	float zFar;
+	float aspectRatio;
+	float width;
+	float height;
+	bool isPerspective;
+};
+
 class DLLExport Camera: virtual public GameObject {
 	public:
 		Camera();
@@ -26,24 +37,19 @@ class DLLExport Camera: virtual public GameObject {
 		void Log() const;
 		virtual void Update();
 
-		// FPS Rotation Mode
-		void UpdatePitch(float deltaAngle);
-		void SetYaw(float deltaAngle);
-		void UpdateRoll(float deltaAngle);
+	public:
+
+		glm::mat4 GetViewMatrix() const;
 
 		// Rotation
 		void RotateOX(float deltaTime);
 		void RotateOY(float deltaTime);
 		void RotateOZ(float deltaTime);
 
-		void SetDirection(glm::vec3 direction);
-
 		// Speed
-		void IncreaseSpeed();
-		void DecreaseSpeed();
+		void UpdateSpeed(float offset = 0.2f);
 
 		// Translate Camera - local axis
-		void Set(glm::vec3 position, glm::vec3 target, glm::vec3 up);
 		void SetPosition(glm::vec3 position);
 
 		// Translate Camera - world axis
@@ -61,12 +67,11 @@ class DLLExport Camera: virtual public GameObject {
 		void BindProjectionMatrix(GLint location) const;
 		void BindProjectionDistances(const Shader *shader) const;
 
-		void UpdateBoundingBox(DirectionalLight *Ref);
-		void UpdateDebug();
-
+		// TODO - Move this to DirectionalLight because it's related to CSM not to this implementation
 		void ComputeFrustum();
 		void ComputePerspectiveSection(float distance, vector<glm::vec3>::iterator it) const;
 		void SplitFrustum(unsigned int splits);
+		void UpdateBoundingBox(DirectionalLight * Ref) const;
 		void RenderDebug(const Shader *shader) const;
 
 		// Perspective projection
@@ -75,38 +80,48 @@ class DLLExport Camera: virtual public GameObject {
 		// Orthogonal projection
 		void SetOrthgraphic(float width, float height, float zNear, float zFar);
 
+		void SetProjection(const ProjectionInfo &PI);
+		ProjectionInfo GetProjectionInfo() const;
+
+		// Gameobject
+		void SetDebugView(bool value);
+
+	protected:
+		// FPS Rotation Mode
+		void UpdatePitch(float deltaAngle);
+		void SetYaw(float deltaAngle);
+		void UpdateRoll(float deltaAngle);
+
 	public:
 		// Camera Type
 		CameraType type;
-
-		// Rotation OX constrains
-		float limitUp;
-		float limitDown;
-
-		// Speed
-		float minSpeed;
-		float maxSpeed;
-		float sensitivityOX;
-		float sensitivityOY;
 
 		GameObject *frustum;
 		GameObject *physicalDevice;
 
 		glm::mat4 View;
 		glm::mat4 Projection;
-		glm::vec3 forward;
 
+		unsigned int splits;
+		vector<float> splitDistances;
+		vector<GameObject*> zones;
+
+	protected:
+		// Controll settings
+		float minSpeed;
+		float maxSpeed;
+		float sensitivityOX;
+		float sensitivityOY;
+
+		// Rotation OX constrains
+		float limitUp;
+		float limitDown;
+
+		// Perspective properties
 		float zNear;
 		float zFar;
 		float FOV;
 		float aspectRatio;
-
-	protected:
-		glm::vec3 right;
-		glm::vec3 up;
-
-	public:
-		unsigned int splits;
-		vector<float> splitDistances;
-		vector<GameObject*> zones;
+		bool isPerspective;
+		float ortographicWidth;
 };

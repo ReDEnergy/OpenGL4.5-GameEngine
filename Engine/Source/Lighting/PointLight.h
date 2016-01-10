@@ -20,6 +20,9 @@ class DLLExport PointLight : public Light
 		void BindTexture(GLenum textureUnit) const;
 		void SetArea(float radius);
 
+		// Gameobject
+		void SetDebugView(bool value);
+
 	public:
 		float effectRadius;
 

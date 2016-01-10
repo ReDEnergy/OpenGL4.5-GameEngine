@@ -1,3 +1,2 @@
 New Components:
-	AudioSource
 	ParticleEffect

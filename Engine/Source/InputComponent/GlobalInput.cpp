@@ -18,8 +18,3 @@ void GlobalInput::OnKeyPress(int key, int mods)
 		return;
 	}
 }
-
-void GlobalInput::OnEvent(const char* eventID, Object *data)
-{
-
-}

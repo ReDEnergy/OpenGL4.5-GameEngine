@@ -13,4 +13,7 @@
 // "if you are deriving from a type in the Standard C++ Library"
 #pragma warning( push )
 #pragma warning( disable : 4251 )
+
+// Disable C4250 - inheritance via dominance
+#pragma warning( disable : 4250 )
 #endif

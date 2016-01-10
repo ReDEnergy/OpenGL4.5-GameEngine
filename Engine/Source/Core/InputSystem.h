@@ -49,6 +49,8 @@ class DLLExport InputSystem
 		// Mouse
 		static void CursorMove(GLFWwindow *W, double posX, double posY);
 		static void MouseClick(GLFWwindow *W, int button, int action, int mods);
+		static void MouseMove(int posX, int posY, int deltaX, int deltaY);
+		static void MouseClick(int button, int action, int posX, int posY, int mods);
 
 		// Event Dispatch
 		static void Subscribe(ObjectInput* O);

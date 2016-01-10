@@ -4,7 +4,8 @@
 #include <GPU/Shader.h>
 #include <GPU/Texture.h>
 
-struct MaterialBlock {
+struct MaterialBlock
+{
 	glm::vec4 ambient;
 	glm::vec4 diffuse;
 	glm::vec4 specular;
@@ -14,14 +15,13 @@ struct MaterialBlock {
 
 class Material : public MaterialBlock {
 	public:
-		Material() {};
-		~Material() {};
+		Material();
+		~Material();
 		void createUBO();
-		void bindUBO(GLuint location);
-		void linkShader(Shader* const S);
+		void BindUBO(GLuint location);
+		void LinkShader(Shader* const S);
 
 	public:
-
 		Shader *shader;
 		GLuint material_ubo;
 		Texture* texture;

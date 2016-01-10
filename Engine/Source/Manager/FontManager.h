@@ -1,7 +1,9 @@
 #pragma once
+#ifdef ENGINE_DLL_EXPORTS
 #include <freetype-gl/freetype-gl.h>
 #include <freetype-gl/text-buffer.h>
 #include <freetype-gl/texture-font.h>
+#endif
 
 using namespace std;
 
@@ -20,6 +22,8 @@ class FontManager
 		unsigned int GetId() const;
 
 	public:
+		#ifdef ENGINE_DLL_EXPORTS
 		texture_atlas_t *atlas;
 		texture_font_t *font;
+		#endif
 };

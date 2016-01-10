@@ -10,7 +10,8 @@ CameraDebugInput::CameraDebugInput(Camera *camera)
 	this->camera = camera;
 }
 
-void CameraDebugInput::Update(float deltaTime, int mods) {
+void CameraDebugInput::OnInputUpdate(float deltaTime, int mods)
+{
 	if (mods != GLFW_MOD_ALT) return;
 
 	if (InputSystem::KeyHold(GLFW_KEY_W))
@@ -27,18 +28,18 @@ void CameraDebugInput::Update(float deltaTime, int mods) {
 		camera->MoveUp(deltaTime);
 
 	if (InputSystem::KeyHold(GLFW_KEY_KP_MULTIPLY))
-		camera->IncreaseSpeed();
+		camera->UpdateSpeed();
 	if (InputSystem::KeyHold(GLFW_KEY_KP_DIVIDE))
-		camera->DecreaseSpeed();
+		camera->UpdateSpeed(-0.2f);
 
 	if (InputSystem::KeyHold(GLFW_KEY_KP_4))
-		camera->RotateOY(-500 * deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_KP_6))
 		camera->RotateOY( 500 * deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_KP_6))
+		camera->RotateOY(-500 * deltaTime);
 	if (InputSystem::KeyHold(GLFW_KEY_KP_8))
-		camera->RotateOX(-700 * deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_KP_5))
 		camera->RotateOX( 700 * deltaTime);
+	if (InputSystem::KeyHold(GLFW_KEY_KP_5))
+		camera->RotateOX(-700 * deltaTime);
 
 	camera->Update();
 }

@@ -13,6 +13,5 @@ class DLLExport DebugInput
 	public:
 		DebugInput();
 		void OnKeyPress(int key, int mods);
-		void OnEvent(const char* eventID, Object *data);
 };
 

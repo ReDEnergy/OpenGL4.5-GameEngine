@@ -1,7 +1,8 @@
-//#include <pch.h>
 #include "AudioManager.h"
 
 #include <string>
+#include <iostream>
+using namespace std;
 
 #include <include/gl.h>
 #include <include/utils.h>
@@ -11,7 +12,7 @@
 
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 
 
 AudioManager::AudioManager() {
@@ -53,15 +54,28 @@ void AudioManager::InitSoundFX(const string &buffer, const string &name, float s
 	soundEffects[name] = new SoundFX(*sb, startTime, duration);
 }
 
-AudioSource* AudioManager::GetAudioSource(const string &name)
+AudioSource* AudioManager::GetAudioSource(const string &name) const
 {
-	return audioStreams[name];
+	auto it = audioStreams.find(name);
+	if (it != audioStreams.end())
+		return it->second;
+	return nullptr;
+}
+
+SoundFX* AudioManager::GetSoundEffect(const string &name) const
+{
+	auto it = soundEffects.find(name);
+	if (it != soundEffects.end())
+		return it->second;
+	return nullptr;
 }
 
 void AudioManager::Update(Camera *player)
 {
-	sf::Listener::setDirection(player->forward.x, player->forward.y, player->forward.z);
-	sf::Listener::setPosition(player->transform->position.x, player->transform->position.y, player->transform->position.z);
+	glm::vec3 pos = player->transform->GetWorldPosition();
+	glm::vec3 forward = player->transform->GetLocalOZVector();
+	sf::Listener::setDirection(forward.x, forward.y, forward.z);
+	sf::Listener::setPosition(pos.x, pos.y, pos.z);
 }
 
 void AudioManager::PlayStream(const char *streamUID) {

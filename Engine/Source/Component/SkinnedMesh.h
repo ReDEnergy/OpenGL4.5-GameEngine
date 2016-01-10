@@ -1,10 +1,9 @@
 #pragma once
 #include <vector>
 
-#include <assimp/Importer.hpp>		// C++ importer interface
-#include <assimp/scene.h>			// Output data structure
-#include <assimp/postprocess.h>		// Post processing flags
-
+#ifdef ENGINE_DLL_EXPORTS
+#include <include/assimp.h>
+#endif
 #include <include/gl.h>
 #include <include/glm.h>
 #include <include/utils.h>
@@ -18,18 +17,8 @@ using namespace std;
 #define NUM_BONES_PER_VEREX 4
 
 class Shader;
-
-struct BoneInfo
-{
-	glm::mat4 BoneOffset;
-	glm::mat4 FinalTransformation;
-
-	BoneInfo()
-	{
-		BoneOffset = glm::mat4(0);
-		FinalTransformation = glm::mat4(0);
-	}
-};
+class SkeletalJoint;
+class Transform;
 
 struct VertexBoneData
 {
@@ -47,8 +36,14 @@ struct VertexBoneData
 		ZERO_MEM(Weights);
 	}
 
-	void AddBoneData(uint BoneID, float Weight);
+	uint AddBoneData(uint BoneID, float Weight);
 };
+
+
+// TODO
+// Move the aniamtion logic from the class to an animation class - that's rated to a game object
+// Problem: Instantiating the same mesh with different animations is not possible right know
+// Animation logic is liked to the SkinnedMesh - It shouldn't
 
 class DLLExport SkinnedMesh : public Mesh
 {
@@ -57,40 +52,42 @@ class DLLExport SkinnedMesh : public Mesh
 		~SkinnedMesh();
 
 		bool LoadMesh(const std::string& fileLocation, const std::string& fileName);
-		void Render(const Shader* shader);
-		void Update();
-		void SetAnimationState(char *animationState);
 		void ScaleAnimationTime(const string &animation, float timeScale);
+		
+		// Return a new copy of the Skeleton
+		SkeletalJoint* GetSkeletonInfo(unordered_map<string, SkeletalJoint*> &joints) const;
+
+		#ifdef ENGINE_DLL_EXPORTS
+		aiAnimation * GetAnimation(const char *name) const;
+		#endif
+
+		uint GetNumberOfBones() const;
+		glm::mat4 GetRootTransform() const;
+		glm::mat4 GetGlobalInverse() const;
 
 	private:
+		#ifdef ENGINE_DLL_EXPORTS
 		bool InitFromScene(const aiScene* pScene);
 		void InitMesh(const aiMesh* paiMesh, uint index);
-
-		void UpdateAnimation(float timeInSeconds);
-		void ReadNodeHeirarchy(float animationTime, const aiNode* pNode, const glm::mat4 &ParentTransform);
-
-		void CalcInterpolatedPosition(aiVector3D& out, float animationTime, const aiNodeAnim* pNodeAnim);
-		void CalcInterpolatedRotation(aiQuaternion& out, float animationTime, const aiNodeAnim* pNodeAnim);
-		void CalcInterpolatedScaling(aiVector3D& out, float animationTime, const aiNodeAnim* pNodeAnim);
-
-		uint FindPositionKeyID(float animationTime, const aiNodeAnim* pNodeAnim);
-		uint FindRotationKeyID(float animationTime, const aiNodeAnim* pNodeAnim);
-		uint FindScalingKeyID(float animationTime, const aiNodeAnim* pNodeAnim);
-
-		const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
+		#endif
 
 	private:
-		unordered_map<string, uint> skeletalBones;
+		unordered_map<string, SkeletalJoint*> skeletalJoints;
 		vector<VertexBoneData> boneData;
-		vector<BoneInfo> boneInfo;
 		vector<glm::mat4> boneTransform;
 		unsigned short nrBones;
+
+		// TODO - Support for multiple skinned meshes
+		// Right now only a single ROOT joint is considered
+		SkeletalJoint *rootJoint;
+		glm::mat4 rootTransform;
 		glm::mat4 globalInvTransform;
 
+		#ifdef ENGINE_DLL_EXPORTS
 		Assimp::Importer Importer;
 		const aiScene* pScene;
 
 		unordered_map<string, aiAnimation*> animations;
 		aiAnimation *animationState;
-
+		#endif
 };

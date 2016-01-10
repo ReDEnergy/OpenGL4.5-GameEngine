@@ -10,9 +10,8 @@ class DLLExport GlobalInput
 	: public ObjectInput,
 	public EventListener
 {
-public:
-	GlobalInput();
-	void OnKeyPress(int key, int mods);
-	void OnEvent(const char* eventID, Object *data);
+	public:
+		GlobalInput();
+		void OnKeyPress(int key, int mods);
 };
 

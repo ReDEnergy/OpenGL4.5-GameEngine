@@ -18,15 +18,20 @@ class DLLExport Light: virtual public GameObject
 		Light(const GameObject &gameObject);
 		virtual ~Light();
 
+		void Init();
 		void Move(const glm::vec3 dir, float delta_time);
 		void RandomDiffuseColor();
+		virtual void Render(const Shader * shader) const;
+		virtual void RenderForPicking(const Shader * shader) const;
 		virtual void RenderDebug(const Shader *shader) const;
+
+		// Gameobject
+		void SetDebugView(bool value) = 0;
 
 	protected:
 		bool active;	
 
 	public:
-		GameObject *light;
 		glm::vec3 diffuseColor;
 		glm::vec3 bulbSize;
 		LightType type;

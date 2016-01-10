@@ -81,6 +81,10 @@ using namespace std;
 HavokCore::HavokCore()
 {
 	_vdbEnabled = false;
+
+	#ifdef _DEBUG
+	_vdbEnabled = true;
+	#endif
 }
 
 HavokCore::~HavokCore()

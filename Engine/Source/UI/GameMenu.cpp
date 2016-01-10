@@ -1,12 +1,15 @@
 #include "GameMenu.h"
 
+#include <iostream>
+using namespace std;
+
 #include <include/gl.h>
 #include <include/glm.h>
 
 #include <Core/Engine.h>
 #include <Core/Camera/Camera.h>
 #include <Component/Text.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 
 #include <Event/EventType.h>
 
@@ -29,13 +32,13 @@ GameMenu::GameMenu()
 	activePage = Manager::GetMenu()->pages["in_game_menu"];
 	activeEntryIndex = 0;
 
-	float aspectRation = (float)Manager::GetConfig()->resolution.x / Manager::GetConfig()->resolution.y;
+	float aspectRation = (float)Engine::Window->resolution.x / Engine::Window->resolution.y;
 
 	HUDCamera = new Camera();
 	HUDCamera->SetPerspective(25.0f, aspectRation, 0.1f, 50.0f);
-	HUDCamera->SetDirection(glm::vec3(0, 0, -1));
 	//HUDCamera->SetOrthgraphic(10, 10, 0.1f, 50.0f);
 	HUDCamera->SetPosition(glm::vec3(0, 0, 10.0f));
+	HUDCamera->transform->SetWorldRotation(glm::vec3(0, 0, 0));
 	HUDCamera->Update();
 
 	for (auto &page : (Manager::GetMenu()->pages)) {
@@ -54,8 +57,7 @@ void GameMenu::SetPageLayout(MenuPage *page) {
 	float lineOffset = 0.25f;
 	float leftOffset = -3.20f; 
 	for (auto entry : page->entries) {
-		entry->text->transform->position += glm::vec3(leftOffset, offset, 0);
-		entry->text->transform->Update();
+		entry->text->transform->SetWorldPosition(entry->text->transform->GetWorldPosition() + glm::vec3(leftOffset, offset, 0));
 		offset -= lineOffset;
 	}
 }
@@ -63,8 +65,8 @@ void GameMenu::SetPageLayout(MenuPage *page) {
 GameMenu::~GameMenu() {
 }
 
-void GameMenu::Render() const {
-
+void GameMenu::Render() const
+{
 	if (!InputRules::IsActiveRule(InputRule::R_IN_GAME_MENU))
 		return;
 
@@ -76,16 +78,18 @@ void GameMenu::Render() const {
 	HUDCamera->BindProjectionMatrix(shader->loc_projection_matrix);
 	HUDCamera->BindViewMatrix(shader->loc_view_matrix);
 	glUniform3f(shader->text_color, 0.967f, 0.333f, 0.486f);
+
 	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
 
 	for (unsigned int i = 0; i < activePage->entries.size(); i++) {
-		glUniform3f(shader->text_color, color.r, color.g, color.b);
-		if (i == activeEntryIndex)
-			glUniform3f(shader->text_color, selectColor.r, selectColor.g, selectColor.b);
-		activePage->entries[i]->text->Render(shader);
+		auto text = activePage->entries[i]->text;
+		(i == activeEntryIndex) ? text->SetColor(selectColor) : text->SetColor(color);
+		text->Render(shader);
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
 }
 
 void GameMenu::Open() {
@@ -94,7 +98,7 @@ void GameMenu::Open() {
 
 void GameMenu::Close() {
 	InputRules::PopRule();
-	Manager::GetEvent()->EmitSync(EventType::CLOSE_MENU, nullptr);
+	Manager::GetEvent()->EmitAsync(EventType::CLOSE_MENU, nullptr);
 }
 
 void GameMenu::PreviousPage() {
@@ -108,18 +112,19 @@ void GameMenu::PreviousPage() {
 	topPages.pop();
 }
 
-void GameMenu::OnEvent(const char *eventID, Object *data) {
-	if (strcmp(eventID, "resume") == 0) {
+void GameMenu::OnEvent(const string& eventID, void *data)
+{
+	if (eventID.compare("resume") == 0) {
 		Close();
 		return;
 	}
-	if (strcmp(eventID, "exit") == 0) {
+	if (eventID.compare("exit") == 0) {
 		Engine::Exit();
 		return;
 	}
 }
 
-void GameMenu::OnEvent(EventType Event, Object *data)
+void GameMenu::OnEvent(EventType Event, void *data)
 {
 	switch (Event)
 	{
@@ -142,8 +147,10 @@ void GameMenu::OnKeyPress(int key, int mods) {
 			return;
 		
 		case GLFW_KEY_UP:
-			activeEntryIndex--;
-			activeEntryIndex %= activePage->entries.size();
+			if (activeEntryIndex == 0)
+				activeEntryIndex = activePage->entries.size() - 1;
+			else
+				activeEntryIndex--;
 			return;
 
 		case GLFW_KEY_ENTER:
@@ -154,7 +161,7 @@ void GameMenu::OnKeyPress(int key, int mods) {
 					activeEntry->Trigger();
 					break;
 				case MenuEntryType::ACTION:
-					Manager::GetEvent()->EmitSync(activeEntry->actionID.c_str(), nullptr); 
+					Manager::GetEvent()->EmitAsync(activeEntry->actionID.c_str(), nullptr); 
 					break;
 
 				case MenuEntryType::PAGE:

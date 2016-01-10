@@ -5,6 +5,18 @@
 #include <include/gl.h>
 #include <include/glm.h>
 
+
+struct WindowProperties
+{
+	const char* name;
+	glm::ivec2 resolution;
+	glm::ivec2 position;
+	bool resizable;
+	bool hidden;
+	bool fullScreen;
+	bool centered;
+};
+
 /*
  * Class WindowObject
  */
@@ -14,17 +26,23 @@ class DLLExport WindowObject
 	friend class WindowManager;
 
 	public:
-		WindowObject();
-		WindowObject(char* name, glm::ivec2 resolution, glm::ivec2 position, bool reshapable);
+		WindowObject(WindowProperties &properties);
 		~WindowObject();
 
 		void FullScreen();
 		void WindowMode();
 		void ClipPointer(bool state);
 		void HidePointer(bool state);
+		void AllowControl(bool control);
+
 		void SetPointerPosition(glm::ivec2 position);
 		void SetSize(int width, int height);
-		void Init(char* name, glm::ivec2 resolution, glm::ivec2 position, bool reshapable);
+		void SetContext();
+
+		bool IsCoreContext() const;
+
+		// Returns the total number of pixels
+		unsigned int GetResolution() const;
 
 	private:
 		void SetWindowCallbacks();
@@ -36,11 +54,18 @@ class DLLExport WindowObject
 		GLFWwindow* window;
 
 	private:
-		char* name;
-		glm::ivec2 position;
+		unsigned int totalPixels;
+
+		WindowProperties prop;
 		glm::ivec2 center;
-		bool reshapable;
+		bool coreContext;
+		bool allowedControl;
 		bool hiddenPointer;
 		bool cursorClip;
 		RECT WindowRECT;
+		
+		// Native Opengl context
+		HDC hdc;
+		HGLRC nativeWGLContext;
+
 };

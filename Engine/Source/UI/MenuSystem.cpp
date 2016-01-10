@@ -57,7 +57,8 @@ MenuPage::MenuPage(pugi::xml_node &pageXML)
 	}
 }
 
-PageEntry::PageEntry(pugi::xml_node &entryXML) {
+PageEntry::PageEntry(pugi::xml_node &entryXML)
+{
 	const char *name = entryXML.child_value("name");
 	text = new Text();
 	text->SetText(name);
@@ -102,7 +103,7 @@ ToggleEntry::~ToggleEntry() {
 
 void ToggleEntry::Trigger() {
 	state = !state;
-	Manager::Event->EmitSync(actionID.c_str(), (Object*) this);
+	Manager::Event->EmitAsync(actionID.c_str(), this);
 }
 
 bool ToggleEntry::GetState() {

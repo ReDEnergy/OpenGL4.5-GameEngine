@@ -1,3 +1,5 @@
+#include "Camera.h"
+#include "Camera.h"
 //#include <pch.h>
 #include "Camera.h"
 #include <iostream>
@@ -10,18 +12,17 @@
 #include <Component/AABB.h>
 #include <Component/Mesh.h>
 #include <Component/ObjectInput.h>
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 
 #include <GPU/Shader.h>
 
 #include <Lighting/DirectionalLight.h>
 
 #include <Manager/Manager.h>
-#include <Manager/DebugInfo.h>
 #include <Manager/ResourceManager.h>
 #include <Manager/RenderingSystem.h>
 
-#include <Utils/GPU.h>
+#include <Utils/OpenGL.h>
 #include <Utils/3D.h>
 
 Camera::Camera()
@@ -34,22 +35,18 @@ Camera::~Camera() {}
 
 void Camera::Init()
 {
-	forward	= glm::vec3(1.0f, 0.0f, 0.0f);
-	right	= glm::vec3(0.0f, 0.0f, 1.0f);
-	up		= glm::cross(right, forward);
+	type = CameraType::FirstPerson;
 
 	// Default perspective
-	zNear = 0.1f;
+	zNear = 0.01f;
 	zFar = 50;
 	FOV = 40;
 	aspectRatio = 1.6f;
 	splits = 1;
 
 	// not used for now
-	limitUp = -0.95f * (float) M_PI / 2;
-	limitDown = -0.95f * (float) M_PI / 2;
-
-	type = CameraType::FirstPerson;
+	limitUp = float(RADIANS(-95));
+	limitDown = float(RADIANS(-95));
 
 	minSpeed = 0.1f;
 	maxSpeed = 100.0f;
@@ -57,77 +54,68 @@ void Camera::Init()
 	sensitivityOX = 0.002f;
 	sensitivityOY = 0.002f;
 
-	transform->moveSpeed = 20.0f;
+	transform->SetMoveSpeed(20.0f);
+	transform->SetRotationSpeed(50);
+
+	// Default camera forward set to -Z axis
+	transform->SetWorldRotation(glm::vec3(0, 180, 0));
 
 	frustum = nullptr;
 	physicalDevice = Manager::Resource->GetGameObject("light-debug");
 	physicalDevice->transform = transform;
+
+	Update();
+	SplitFrustum(1);
 }
 
 void Camera::Update()
 {
-	glm::vec3 target = transform->position + forward;
-	View = glm::lookAt(transform->position, target, up);
+	GameObject::Update();
+
+	if (transform->GetMotionState())
+	{
+		glm::vec3 target = transform->GetWorldPosition() - transform->GetLocalOZVector();
+		View = glm::lookAt(transform->GetWorldPosition(), target, transform->GetLocalOYVector());
+	}
 }
 
-/*
- *	Glut Camera Render
- */
-
-void Camera::IncreaseSpeed()
+void Camera::UpdateSpeed(float offset)
 {
-	if (transform->moveSpeed > maxSpeed)
+	float speed = transform->GetMoveSpeed() + offset;
+	if (speed <= minSpeed || speed >= maxSpeed)
 		return;
-	transform->moveSpeed += 0.2f;
-}
-
-void Camera::DecreaseSpeed()
-{
-	if (transform->moveSpeed <= minSpeed)
-		return;
-	transform->moveSpeed -= 0.2f;
+	transform->SetMoveSpeed(speed);
 }
 
 /*
  * First Person Camera View
  */
-// Must switch to eulerAngles and quaternion based rotation
 void Camera::SetYaw(float deltaAngle)
 {
-	forward = glm::normalize(glm::RotateOY(forward, deltaAngle));
-	right = glm::normalize(glm::RotateOY(right, deltaAngle));
-	up = glm::normalize(glm::RotateOY(up, deltaAngle));
-
-	transform->eulerAngles.y = -atan2(forward.z, forward.x) - float(M_PI_2);
-	transform->SetRotationRadians(transform->eulerAngles);
+	transform->RotateWorldOY(deltaAngle);
 }
 
+// TODO - limit PITCH
 void Camera::UpdatePitch(float deltaAngle)
 {
-	transform->eulerAngles.x -= deltaAngle;
-	if (transform->eulerAngles.x > M_PI_2 ||
-		transform->eulerAngles.x < -M_PI_2) {
-		transform->eulerAngles.x += deltaAngle;
-		return;
-	}
-
-	up = up * cos(deltaAngle) + forward * sin(deltaAngle);
-	forward = glm::cross(up, right);
-
-	transform->SetRotationRadians(transform->eulerAngles);
+	transform->RotateLocalOX(deltaAngle);
 }
 
 void Camera::UpdateRoll(float deltaAngle)
 {
-	right = right * cos(deltaAngle) + up * sin(deltaAngle);
-	up = glm::cross(right, forward);
+	transform->RotateLocalOZ(deltaAngle);
+}
+
+glm::mat4 Camera::GetViewMatrix() const
+{
+	return View;
 }
 
 void Camera::RotateOX(float deltaTime)
 {
 	if (deltaTime == 0)
 		return;
-	 UpdatePitch(deltaTime * sensitivityOX);
+	UpdatePitch(deltaTime * sensitivityOX);
 }
 
 void Camera::RotateOY(float deltaTime)
@@ -147,6 +135,7 @@ void Camera::RotateOZ(float deltaTime) {
 
 void Camera::MoveForward(float deltaTime)
 {
+	glm::vec3 forward = -transform->GetLocalOZVector();
 	glm::vec3 front = glm::normalize(glm::vec3(forward.x, 0, forward.z));
 	transform->Move(front, deltaTime);
 }
@@ -156,15 +145,14 @@ void Camera::MoveBackward(float deltaTime)
 	MoveForward(-deltaTime);
 }
 
-void Camera::MoveRight(float deltaTime)
-{
-	glm::vec3 side = glm::normalize(glm::vec3(right.x, 0, right.z));
-	transform->Move(side, deltaTime);
-}
-
 void Camera::MoveLeft(float deltaTime)
 {
-	MoveRight(-deltaTime);
+	transform->Move(-transform->GetLocalOXVector(), deltaTime);
+}
+
+void Camera::MoveRight(float deltaTime)
+{
+	transform->Move(transform->GetLocalOXVector(), deltaTime);
 }
 
 void Camera::MoveUp(float deltaTime)
@@ -182,53 +170,28 @@ void Camera::MoveInDirection(glm::vec3 dir, float deltaTime)
 	transform->Move(dir, deltaTime);
 }
 
-void Camera::Set(glm::vec3 position, glm::vec3 target, glm::vec3 up)
-{
-	transform->position = position;
-	this->forward = target;
-	this->up = up;
-	Update();
-}
-
 // Move camera to a certain position
 void Camera::SetPosition(glm::vec3 pos) {
-	transform->position = pos;
-	transform->Update();
-	Update();
+	transform->SetWorldPosition(pos);
+	Camera::Update();
 }
-
-void Camera::SetDirection(glm::vec3 direction)
-{
-	direction = glm::normalize(direction);
-	float rotateOY = atan2(direction.x, direction.z);
-	transform->eulerAngles.y = -rotateOY;
-	transform->SetRotationRadians(transform->eulerAngles);
-	forward = glm::vec3(direction.x, 0, direction.z);
-	up = glm::vec3(0, 1, 0);
-	right = glm::cross(forward, up);
-	Update();
-}
-
 
 // Print information about camera
 void Camera::Log() const
 {
 	cout.precision(2);
 	cout << "Camera =>" << endl;
-	cout << "Rotation: " << transform->eulerAngles << endl;
-	cout << "Position: " << transform->position << endl;
-	cout << "Forward: " << forward << endl;
-	cout << "tForward: " << transform->GetRotationVector() << endl;
-	cout << "Up: " << up << endl;
-
-	float rotateOY = atan2(forward.z, forward.x);
-	cout << "rotateOY: " << rotateOY << endl;
+	cout << "Rotation: " << transform->GetRotationEuler() << endl;
+	cout << "Position: " << transform->GetWorldPosition() << endl;
+	cout << "Forward : " << -transform->GetLocalOZVector() << endl;
+	cout << "Up      : " << transform->GetLocalOYVector() << endl;
 	cout << "--------------------------------------------------" << endl;
 }
 
 void Camera::BindPosition(GLint location) const
 {
-	glUniform3f(location, transform->position.x, transform->position.y, transform->position.z);
+	glm::vec3 pos = transform->GetWorldPosition();
+	glUniform3f(location, pos.x, pos.y, pos.z);
 };
 
 void Camera::BindViewMatrix(GLint location) const
@@ -246,25 +209,59 @@ void Camera::BindProjectionMatrix(GLint location) const
 
 void Camera::SetPerspective(float FOV, float aspectRatio, float zNear, float zFar)
 {
+	isPerspective = true;
 	this->zFar = zFar;
 	this->zNear = zNear;
 	this->aspectRatio = aspectRatio;
 	this->FOV = FOV;
-	this->Projection = glm::perspective(FOV, aspectRatio, zNear, zFar);
+	Projection = glm::perspective(FOV, aspectRatio, zNear, zFar);
 }
 
 void Camera::SetOrthgraphic(float width, float height, float zNear, float zFar)
 {
+	isPerspective = false;
 	this->zFar = zFar;
 	this->zNear = zNear;
 	this->aspectRatio = width / height;
-	this->Projection = glm::ortho(-width/2, width/2, -height/2, height/2, zNear, zFar);
+	this->ortographicWidth = width;
+	Projection = glm::ortho(-width/2, width/2, -height/2, height/2, zNear, zFar);
+}
+
+void Camera::SetProjection(const ProjectionInfo & PI)
+{
+	if (PI.isPerspective) {
+		SetPerspective(PI.FoV, PI.aspectRatio, PI.zNear, PI.zFar);
+	}
+	else {
+		SetOrthgraphic(PI.width, PI.height, PI.zNear, PI.zFar);
+	}
+}
+
+ProjectionInfo Camera::GetProjectionInfo() const
+{
+	ProjectionInfo P;
+	P.FoV = FOV;
+	P.aspectRatio = aspectRatio;
+	P.zFar = zFar;
+	P.zNear = zNear;
+	P.isPerspective = isPerspective;
+	P.width = ortographicWidth;
+	P.height = ortographicWidth / aspectRatio;
+	return P;
+}
+
+void Camera::SetDebugView(bool value)
+{
+	GameObject::SetDebugView(value);
+	for (auto &zone : zones) {
+		zone->SetDebugView(value);
+	}
 }
 
 // Plane points in world space
 void Camera::ComputePerspectiveSection(float distance, vector<glm::vec3>::iterator it) const
 {
-	glm::vec3 f = glm::vec3(0, 0, -1.0f);
+	glm::vec3 f = -glm::vec3(0, 0, 1.0f);
 	glm::vec3 u = glm::vec3_up;
 	glm::vec3 r = glm::vec3_right;
 
@@ -363,7 +360,6 @@ void Camera::SplitFrustum(unsigned int splits)
 			fz->SetupAABB();
 
 			zones.push_back(fz);
-			Manager::Debug->Add(fz);
 		}
 	}
 	///////////////////////////////////////////////////////////////////////////
@@ -371,26 +367,27 @@ void Camera::SplitFrustum(unsigned int splits)
 
 
 // Compute bounding light space aligned AABB
-void Camera::UpdateBoundingBox(DirectionalLight *Ref)
+void Camera::UpdateBoundingBox(DirectionalLight *Ref) const
 {
-	// TODO - move this to DirectionalLight inclusive zones - because they are light space aligned so not related at all with the gameCamera, except camera properties
+	// TODO - move this to DirectionalLight (inclusive zones) - because they are light space aligned so not related at all with the gameCamera, except camera properties
 	for (unsigned int i = 0; i < splits; i++) {
-		zones[i]->aabb->Update(Ref->transform->rotationQ);
+		zones[i]->aabb->Update(Ref->transform->GetWorldRotation());
 		Transform *T = zones[i]->aabb->transform;
-		float size = max(T->scale.x, T->scale.y);
+		float size = max(T->GetScale().x, T->GetScale().y);
+
+		// Change frustum area ViewProjection matrixes
 		Ref->SetOrthgraphic(size, size, Ref->zNear, Ref->zFar);
-		Ref->SetPosition(T->position - Ref->forward * Ref->distanceTo);
+		Ref->SetPosition(T->GetWorldPosition() + Ref->transform->GetLocalOZVector() * Ref->distanceTo);
 		Ref->lightViews[i] = Ref->View;
 		Ref->lightProjections[i] = Ref->Projection;
 	}
 
-	aabb->Update(Ref->transform->rotationQ);
+	aabb->Update(Ref->transform->GetWorldRotation());
 	Transform *T = aabb->transform;
-	float size = max(T->scale.x, T->scale.z);
+	float size = max(T->GetScale().x, T->GetScale().z);
 	Ref->SetOrthgraphic(size, size, Ref->zNear, Ref->zFar);
-	Ref->SetPosition(T->position - Ref->forward * Ref->distanceTo);
+	Ref->SetPosition(T->GetWorldPosition() + Ref->transform->GetLocalOZVector() * Ref->distanceTo);
 }
-
 
 void Camera::RenderDebug(const Shader *shader) const
 {
@@ -398,7 +395,9 @@ void Camera::RenderDebug(const Shader *shader) const
 	glUniform4fv(shader->loc_debug_color, 1, glm::value_ptr(glm::color<glm::vec4>(255, 100, 65)));
 
 	Manager::RenderSys->Set(RenderState::WIREFRAME, true);
+	Manager::RenderSys->SetGlobalCulling(OpenGL::CULL::NONE);
 
+		physicalDevice->transform->SetScale(glm::vec3(0.1f));
 		physicalDevice->Render(shader);
 		Render(shader);
 		for (auto zone : zones) {
@@ -406,13 +405,13 @@ void Camera::RenderDebug(const Shader *shader) const
 				zone->aabb->Render(shader);
 			glLineWidth(3);
 			glUniform4f(shader->loc_debug_color, 0.96f, 0.47f, 0.84f, 1);
-			glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->model));
-			UtilsGPU::DrawPolygon(zone->mesh->positions);
+			glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
+			OpenGL::DrawPolygon(zone->mesh->positions);
 		}
 
 	glLineWidth(1);
 	Manager::RenderSys->Revert(RenderState::WIREFRAME);
-
+	Manager::RenderSys->DisableGlobalCulling();
 }
 
 void Camera::BindProjectionDistances(const Shader *shader) const

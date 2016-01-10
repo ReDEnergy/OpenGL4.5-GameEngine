@@ -3,13 +3,14 @@
 
 #include <include/math.h>
 
-#include <Component/Transform.h>
+#include <Component/Transform/Transform.h>
 #include <Component/Mesh.h>
 
 
 ThirdPersonCamera::ThirdPersonCamera()
 	: GameObject("3rd-camera")
 {
+	targetDist = 20.f;
 	targetMaxDist = 200.0f;	
 	limitUpTPS =  0.95f * (float) M_PI / 2;
 }
@@ -28,6 +29,18 @@ void ThirdPersonCamera::RotateOZ(float deltaTime) {
 
 }
 
+void ThirdPersonCamera::RotateXTo(float angle)
+{
+}
+
+void ThirdPersonCamera::RotateYTo(float angle)
+{
+}
+
+void ThirdPersonCamera::RotateZTo(float angle)
+{
+}
+
 void ThirdPersonCamera::MoveCloser(float add) {
 	if (type == CameraType::FirstPerson)	
 		return;
@@ -39,7 +52,7 @@ void ThirdPersonCamera::MoveCloser(float add) {
 		return;
 
 	targetDist += add;
-	transform->position -= forward * add;
+	transform->SetWorldPosition(transform->GetWorldPosition() + transform->GetLocalOZVector() * add);
 }
 
 void ThirdPersonCamera::SwitchView(CameraType cameraType)
@@ -47,8 +60,8 @@ void ThirdPersonCamera::SwitchView(CameraType cameraType)
 	// Switch to FirstPerson
 	if (type == CameraType::ThirdPerson) {
 		type = CameraType::FirstPerson;
-		transform->position = transform->position + forward * targetDist;
-		UpdatePitch(-transform->eulerAngles.x);
+		transform->SetWorldPosition(transform->GetWorldPosition() - transform->GetLocalOZVector() * targetDist);
+		UpdatePitch(-transform->GetRotationEuler().x);
 		return;
 	}
 }

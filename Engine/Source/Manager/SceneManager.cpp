@@ -1,32 +1,45 @@
-//#include <pch.h>
 #include "SceneManager.h"
 
 #include <iostream>
+#include <memory>
 
 #ifdef PHYSICS_ENGINE
 #include <Component/Physics.h>
 #endif
+#include <Component/AABB.h>
 #include <Component/AudioSource.h>
-#include <Component/Transform.h>
+#include <Component/Mesh.h>
+#include <Component/Renderer.h>
+#include <Component/Transform/Transform.h>
+#include <GPU/Shader.h>
 
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
 
 #include <Lighting/PointLight.h>
+#include <Lighting/DirectionalLight.h>
 
 #include <Manager/Manager.h>
 #include <Manager/AudioManager.h>
-#include <Manager/ResourceManager.h>
 #include <Manager/DebugInfo.h>
 #include <Manager/EventSystem.h>
+#include <Manager/ResourceManager.h>
+#include <Manager/RenderingSystem.h>
+#include <Manager/ShaderManager.h>
 
-SceneManager::SceneManager() {
+#include <UI/ColorPicking/ColorPicking.h>
+#include <Utils/Serialization.h>
+
+SceneManager::SceneManager()
+{
+	activeCamera = nullptr;
 }
 
 SceneManager::~SceneManager() {
 }
 
-void SceneManager::LoadScene(const char *fileName) {
+void SceneManager::LoadScene(const char *fileName)
+{
 	Manager::Debug->InitManager("Scene");
 	sceneFile = fileName;
 
@@ -59,7 +72,7 @@ void SceneManager::LoadScene(const char *fileName) {
 			cout << "Error: Resource game-object not found => '" << refID << "'" << endl;
 			continue;
 		}
-		Manager::Resource->SetTransform(transformInfo, *GO->transform);
+		Serialization::ReadTransform(transformInfo, *GO->transform);
 
 		if (audioInfo) {
 			bool loop = audioInfo.attribute("loop").as_bool();
@@ -67,7 +80,7 @@ void SceneManager::LoadScene(const char *fileName) {
 			GO->SetAudioSource(Manager::Audio->GetAudioSource(audioInfo.text().get()));
 			GO->audioSource->SetLoop(loop);
 			if (!att.empty())
-				GO->audioSource->SetVolume(att.as_float());
+				GO->audioSource->SetVolume(att.as_uint());
 		}
 
 		AddObject(GO);
@@ -82,10 +95,13 @@ void SceneManager::LoadScene(const char *fileName) {
 
 		auto *L = new PointLight();
 		L->SetArea(area);
-		Manager::Resource->SetTransform(transformInfo, *L->light->transform);
+		Serialization::ReadTransform(transformInfo, *L->transform);
 
 		this->lights.push_back(L);
+		AddObject(L);
 	}
+
+	Update();
 }
 
 // TODO - bug clear Physics World... just loaded objects
@@ -93,7 +109,8 @@ void SceneManager::ReloadScene() {
 	LoadScene(sceneFile);
 }
 
-void SceneManager::Update() {
+void SceneManager::Update()
+{
 	bool shouldAdd = !toAdd.empty();
 	bool shouldRemove = !toRemove.empty();
 
@@ -101,25 +118,37 @@ void SceneManager::Update() {
 		if (shouldAdd) {
 			for (auto obj: toAdd) {
 				activeObjects.push_back(obj);
+				obj->SetDebugView(true);
 			}
 			toAdd.clear();
 		}
 
 		if (shouldRemove) {
 			for (auto obj: toRemove) {
-				auto elem = find(activeObjects.begin(), activeObjects.end(), obj);
 				activeObjects.remove(obj);
+				obj->SetDebugView(false);
 			}
 			toRemove.clear();
 		}
 	}
 
+	for (auto &obj : toDelete) {
+		SAFE_FREE(obj);
+	}
+	toDelete.clear();
+
 	for (auto obj : activeObjects) {
 		obj->Update();
 	}
+
+	if (activeCamera)
+		activeCamera->Update();
 }
 
-void SceneManager::AddObject(GameObject *obj) {
+void SceneManager::AddObject(GameObject *obj)
+{
+	if (obj == nullptr) return;
+
 	toAdd.push_back(obj);
 	#ifdef PHYSICS_ENGINE
 	if (obj->physics)
@@ -127,28 +156,161 @@ void SceneManager::AddObject(GameObject *obj) {
 	#endif
 }
 
-void SceneManager::RemoveObject(GameObject *obj) {
-	toRemove.push_back(obj);
-	#ifdef PHYSICS_ENGINE
-	if (obj->physics)
-		obj->physics->RemoveFromWorld();
-	#endif
+void SceneManager::AddPointLight(PointLight * light)
+{
+	lights.push_back(light);
 }
 
-GameObject* SceneManager::GetObject(char *refID, unsigned int instanceID)
+void SceneManager::RemoveObject(GameObject * obj, bool destroy)
+{
+	// TODO - investigate if this can be treated by the PickerClass
+	if (Manager::Picker->GetSelectedObject() == obj) {
+		Manager::Picker->ClearSelection();
+	}
+
+	if (destroy) {
+		toDelete.push_back(obj);
+	}
+
+	toRemove.push_back(obj);
+
+#ifdef PHYSICS_ENGINE
+	if (obj->physics)
+		obj->physics->RemoveFromWorld();
+#endif
+}
+
+void SceneManager::FrameEnded()
+{
+	for (auto obj : activeObjects) {
+		obj->transform->ClearMotionState();
+	}
+
+	activeCamera->transform->ClearMotionState();
+}
+
+GameObject* SceneManager::GetGameObject(char *refID, unsigned int instanceID)
 {
 	for (auto obj : activeObjects) {
 		if (obj->instanceID == instanceID &&
-			strcmp(obj->refID, refID) == 0)
+			strcmp(obj->referenceName, refID) == 0)
 			return obj;
 	}
 	return nullptr;
 }
 
-void SceneManager::FrustumCulling(Camera *camera) {
+const list<GameObject*>& SceneManager::GetActiveObjects() const
+{
+	return activeObjects;
+}
+
+const list<GameObject*>& SceneManager::GetFrustrumObjects() const
+{
+	return frustumObjects;
+}
+
+const vector<PointLight*>& SceneManager::GetPointLights() const
+{
+	return lights;
+}
+
+Camera * SceneManager::GetActiveCamera()
+{
+	return activeCamera;
+}
+
+void SceneManager::SetActiveCamera(Camera * camera)
+{
+	activeCamera = camera;
+}
+
+void SceneManager::Render(Camera * camera)
+{
+	Shader *R2T = Manager::Shader->GetShader("rendertargets");
+	R2T->Use();
+	camera->BindPosition(R2T->loc_eye_pos);
+	camera->BindViewMatrix(R2T->loc_view_matrix);
+	camera->BindProjectionMatrix(R2T->loc_projection_matrix);
+
+	glUniform1f(R2T->loc_transparency, 1);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
+
+	list<GameObject*> transparentObjects;
+
+	for (auto *obj : frustumObjects) {
+		if (obj->mesh && obj->mesh->meshType == MeshType::STATIC)
+		{
+			if (obj->renderer->IsTransparent()) {
+				transparentObjects.push_back(obj);
+			} else {
+				obj->Render(R2T);
+			}
+		}
+	}
+
+	// Render transparent objects
+	glEnable(GL_BLEND);
+	glBlendEquationi(0, GL_FUNC_ADD);
+	glBlendFunci(0, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	for (auto *obj : transparentObjects) {
+		if (obj->mesh && obj->mesh->meshType == MeshType::STATIC)
+		{
+			glUniform1f(R2T->loc_transparency, obj->renderer->GetOpacity());
+			obj->Render(R2T);
+		}
+	}
+
+	glUniform1f(R2T->loc_transparency, 0.3f);
+	for (auto *obj : lights) {
+		obj->Render(R2T);
+	}
+	glDisable(GL_BLEND);
+
+	// Render Skinned meshes
+	Shader *R2TSk = Manager::Shader->GetShader("r2tskinning");
+	if (R2TSk) {
+		R2TSk->Use();
+		camera->BindPosition(R2TSk->loc_eye_pos);
+		camera->BindViewMatrix(R2TSk->loc_view_matrix);
+		camera->BindProjectionMatrix(R2TSk->loc_projection_matrix);
+
+		for (auto *obj : frustumObjects) {
+			if (obj->mesh && obj->mesh->meshType == MeshType::SKINNED) {
+				obj->Render(R2TSk);
+			}
+		}
+	}
+}
+
+void SceneManager::FrustumCulling(Camera *camera)
+{
 	frustumObjects.clear();
 	for (auto obj: activeObjects) {
 		if (camera->ColidesWith(obj))
 			frustumObjects.push_back(obj);
 	}
+}
+
+void SceneManager::LightSpaceCulling(Camera * camera, DirectionalLight * light)
+{
+	bool sunMotion = light->transform->GetMotionState();
+	// Update Camera BoundingBox if camera has moved or the sun direction is changed
+	bool change = camera->transform->GetMotionState() || sunMotion;
+	if (change) {
+		camera->UpdateBoundingBox(light);
+	}
+
+	for (auto obj : activeObjects) {
+		if (obj->aabb && (sunMotion || obj->transform->GetMotionState())) {
+			obj->aabb->Update(light->transform->GetWorldRotation());
+		}
+	}
+
+	FrustumCulling(camera);
+
+	// TODO - should move this somwhere else
+	// Keep tracking of lighting object in scene somewhere ?!
+	light->transform->ClearMotionState();
 }

@@ -1,38 +1,57 @@
-//#include <pch.h>
 #include "Engine.h"
+
+#include <iostream>
+using namespace std;
+
 #include <Core/InputSystem.h>
 #include <Core/WindowManager.h>
+#include <Core/WindowObject.h>
+#include <Core/World.h>
 
 // Engine
 double Engine::elapsedTime = 0;
-double Engine::deltaTime = 0;
+float Engine::deltaTime = 0;
 bool Engine::paused = false;
 World* Engine::world = nullptr;
 WindowObject* Engine::Window = nullptr;
 
 /* Get elapsed time in seconds from when engine start */
-void Engine::ComputeFrameDeltaTime() {
+void Engine::ComputeFrameDeltaTime()
+{
 	static double lastTime = glfwGetTime() - 60.0/1000;
 
 	elapsedTime = glfwGetTime();
-	deltaTime =  elapsedTime - lastTime;
+	deltaTime =  float(elapsedTime - lastTime);
 	lastTime = elapsedTime;
 }
 
-void Engine::SetWorldInstance(World *world_instance) {
+void Engine::SetWorldInstance(World *world_instance)
+{
 	world = world_instance;
 }
 
-void Engine::Run() {
+float Engine::GetLastFrameTime()
+{
+	return deltaTime;
+}
 
+double Engine::GetElapsedTime()
+{
+	return elapsedTime;
+}
+
+void Engine::Run()
+{
 	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(Window->window)) {
+	while (!glfwWindowShouldClose(Window->window))
+	{
 		Update();
 	}
 
 	Exit();
 }
 
+// TODO - add StartFrame / EndFrame
 void Engine::Update()
 {
 	/* Poll and process events */
@@ -41,8 +60,7 @@ void Engine::Update()
 	ComputeFrameDeltaTime();
 	if (paused) return;
 
-	/* Clear previous frame */
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	world->FrameStart();
 
 	/* Render Frame */
 	if (world)
@@ -50,19 +68,22 @@ void Engine::Update()
 
 	InputSystem::EndFrame();
 
+	world->FrameEnd();
+
 	/* Swap front and back buffers */
 	if (!paused)
 		glfwSwapBuffers(Window->window);
-
 }
 
-void Engine::Pause() {
+void Engine::Pause()
+{
 	paused = !paused;
 	cout << "RENDERING: " << paused << endl;
 }
 
 void Engine::Exit() {
-	if (!glfwWindowShouldClose(Window->window)) {
+	if (!glfwWindowShouldClose(Window->window))
+	{
 		glfwSetWindowShouldClose(Window->window, 1);
 		return;
 	}
@@ -74,11 +95,13 @@ void Engine::Exit() {
 // -------------------------------------------------------------------------
 // DEBUGGING AND LOGGING FUNCTIONS
 // -------------------------------------------------------------------------
-void ErrorCallback(int error, const char* description) {
-	cout << error << " " << description;
+void ErrorCallback(int error, const char* description)
+{
+	cout << "[GLFW ERROR]\t" << error << " " << description;
 }
 
-void Engine::Init() {
+void Engine::Init()
+{
 
 	/* Initialize the library */
 	if (!glfwInit())

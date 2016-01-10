@@ -14,9 +14,19 @@ class DLLExport SpotLight : public Light, public Camera
 		void Init();
 		void Update();
 		void CastShadows();
+		void Render(const Shader *shader) const;
 		void RenderDebug(const Shader *shader) const;
-		void BindForUse(const Shader *shader) const;
+		void RenderForPicking(const Shader *shader) const;
+
 		void SplitFrustum(unsigned int splits);
+
+		void BakeShadows(const FrameBuffer * const sceneBuffer) const;
+
+		// Gameobject
+		void SetDebugView(bool value);
+
+	private:
+		void BindForUse(const Shader *shader) const;
 
 	public:
 		FrameBuffer *FBO;

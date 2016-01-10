@@ -7,15 +7,21 @@
 
 using namespace std;
 
-class DLLExport EventListener : virtual public Object {
+class DLLExport EventListener :
+	virtual public Object
+{
+	friend class EventSystem;
+
 	public:
 		EventListener();
 		virtual ~EventListener();
 
-		virtual void OnEvent(const char* eventID, Object *data) {};
-		void SubscribeToEvent(string eventID);
+		virtual void OnEvent(const string& eventID, void *data) {};
+		void SubscribeToEvent(const string& eventID);
+		void UnsubscribeFrom(const string& eventID);
 
-		virtual void OnEvent(EventType Event, Object *data) {};
+		virtual void OnEvent(EventType Event, void *data) {};
 		void SubscribeToEvent(EventType Event);
+		void UnsubscribeFrom(EventType Event);
 };
 

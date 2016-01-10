@@ -2,22 +2,22 @@
 #include "WindowManager.h"
 
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
+
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
 
 vector<WindowObject*> *WindowManager::windows = nullptr;
 
-WindowObject* WindowManager::NewWindow(char* name, glm::ivec2 resolution, glm::ivec2 position, bool reshapable)
+WindowObject* WindowManager::Create(WindowProperties &properties)
 {
-	WindowObject *W = new WindowObject();
-	W->Init(name, resolution, position, reshapable);
-	W->WindowMode();
-
+	auto W = new WindowObject(properties);
 	windows->push_back(W);
 	return W;
 }
 
-void WindowManager::Init() {
+void WindowManager::Init()
+{
 	Manager::Debug->InitManager("WindowManager");
 	WindowManager::windows = new vector<WindowObject*>;
 }
