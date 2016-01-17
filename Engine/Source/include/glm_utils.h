@@ -5,6 +5,11 @@
 
 #include <sstream>
 
+// TODO
+//#define CONCAT_I(a,b) a##b
+//#define CONCAT(a,b) CONCAT_I(a, b)
+//#define SEND_UNIFORM(TYPE) glUniform3##TYPE
+
 typedef unsigned char uchar;
 using namespace std;
 
@@ -26,9 +31,9 @@ namespace glm {
 		return (s > 0) ? 1 : -1;
 	}
 
-	inline glm::quat AxisAngle(const float xx, const float yy, const float zz, const float angle)
+	inline glm::quat AxisAngle(const float xx, const float yy, const float zz, const float angle360)
 	{
-		float t = float(RADIANS(angle) / 2.0);
+		float t = float(RADIANS(angle360) / 2.0);
 
 		// Precompute the sin( theta / 2) once for optimization
 		float sinT = sin(t);
@@ -107,12 +112,16 @@ namespace glm {
 		return T(glm::vec4(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f));
 	}
 
-	inline void BindUniform4f(GLint location, glm::vec4 vec) {
+	inline void BindUniform4f(GLint location, const glm::vec4 &vec) {
 		glUniform4f(location, vec.x, vec.y, vec.z, vec.t);
 	};
 
-	inline void BindUniform3f(GLint location, glm::vec3 vec) {
+	inline void BindUniform3f(GLint location, const glm::vec3 &vec) {
 		glUniform3f(location, vec.x, vec.y, vec.z);
+	};
+
+	inline void BindUniform2f(GLint location, const glm::vec2 &vec) {
+		glUniform2f(location, vec.x, vec.y);
 	};
 
 	template<class T>
