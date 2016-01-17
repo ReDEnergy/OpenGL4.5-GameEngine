@@ -2,6 +2,9 @@
 #include "Texture.h"
 
 #include <thread>
+#include <iostream>
+
+using namespace std;
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -28,7 +31,8 @@ Texture::Texture()
 	textureID = 0;
 	targetType = GL_TEXTURE_2D;
 	wrappingMode = GL_REPEAT;
-	textureFiltering = GL_LINEAR;
+	textureMinFilter = GL_LINEAR;
+	textureMagFilter = GL_LINEAR;
 }
 
 Texture::~Texture() {
@@ -56,13 +60,14 @@ bool Texture::Load2D(const char* fileName, GLenum wrapping_mode)
 	cout << width << " * " << height << " channels: " << chn << endl << endl;
 	#endif
 
-	textureFiltering = GL_LINEAR_MIPMAP_LINEAR;
+	textureMinFilter = GL_LINEAR_MIPMAP_LINEAR;
+	wrappingMode = wrapping_mode;
 
 	Init2DTexture(width, height, chn);
-	SetParameters(textureFiltering, textureFiltering, wrapping_mode);
-	glTexImage2D(targetType, 0, internalFormat[0][chn], width, height, 0, pixelFormat[chn], GL_UNSIGNED_BYTE, (void*)data);
+	glTexImage2D(targetType, 0, internalFormat[0][chn], width, height, 0, pixelFormat[chn], GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(targetType);
 	glBindTexture(targetType, 0);
+	CheckOpenGLError();
 
 	stbi_image_free(data);
 	return true;
@@ -124,8 +129,8 @@ void Texture::CreateCubeTexture(const float* data, int width, int height, int ch
 	glGenTextures(1, &textureID);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	glBindTexture(targetType, textureID);
-	glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, textureMinFilter);
+	glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, textureMagFilter);
 	glTexParameteri(targetType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(targetType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(targetType, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -180,12 +185,12 @@ void Texture::BindForWriting(GLenum textureTarget) const
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 }
 
-void Texture::SetParameters(GLenum mag_filter, GLenum min_filter, GLenum wrapping_mode)
+void Texture::SetTextureParameters()
 {
-	glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, mag_filter);
-	glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, min_filter); 
-	glTexParameteri(targetType, GL_TEXTURE_WRAP_S, wrapping_mode);
-	glTexParameteri(targetType, GL_TEXTURE_WRAP_T, wrapping_mode);
+	glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, textureMinFilter);
+	glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, textureMagFilter);
+	glTexParameteri(targetType, GL_TEXTURE_WRAP_S, wrappingMode);
+	glTexParameteri(targetType, GL_TEXTURE_WRAP_T, wrappingMode);
 	glTexParameterf(targetType, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
 }
 
@@ -221,24 +226,27 @@ void Texture::SetWrappingMode(GLenum mode)
 	}
 }
 
-void Texture::SetFiltering(GLenum filtering)
+void Texture::SetFiltering(GLenum minFilter, GLenum magFilter)
 {
-	if (textureFiltering == filtering)
-		return;
-
-	textureFiltering = filtering;
-
 	if (textureID)
 	{
 		glBindTexture(targetType, textureID);
-		glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, filtering);
-		glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, filtering);
+
+		if (textureMinFilter != minFilter) {
+			glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, minFilter);
+			textureMinFilter = minFilter;
+		}
+
+		if (textureMagFilter != magFilter) {
+			glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, magFilter);
+			textureMagFilter = magFilter;
+		}
 	}
 }
 
 void Texture::SetTextureData(const unsigned char * img) const
 {
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(targetType, textureID);
 	glTexImage2D(targetType, 0, internalFormat[0][channels], width, height, 0, pixelFormat[channels], GL_UNSIGNED_BYTE, (void*)img);
 	UnBind();
 }
@@ -252,8 +260,8 @@ void Texture::Init2DTexture(unsigned int width, unsigned int height, unsigned in
 	if (textureID)
 		glDeleteTextures(1, &textureID);
 	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	SetParameters(textureFiltering, textureFiltering, wrappingMode);
+	glBindTexture(targetType, textureID);
+	SetTextureParameters();
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	CheckOpenGLError();
 }

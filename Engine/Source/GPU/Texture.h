@@ -42,14 +42,14 @@ class DLLExport Texture
 		void GetSize(unsigned int &width, unsigned int &height) const;
 
 		void SetWrappingMode(GLenum mode);
-		void SetFiltering(GLenum filtering);
+		void SetFiltering(GLenum minFilter, GLenum magFilter = GL_LINEAR);
 		void SetTextureData(const unsigned char* img) const;
 
 		GLuint GetTextureID() const;
 
 	private:
+		void SetTextureParameters();
 		void Init2DTexture(unsigned int width, unsigned int height, unsigned int channels);
-		void SetParameters(GLenum mag_filter, GLenum min_filter, GLenum wrapping_mode);
 
 	private:
 		unsigned int width;
@@ -58,5 +58,6 @@ class DLLExport Texture
 		GLuint targetType;
 		GLuint textureID;
 		GLenum wrappingMode;
-		GLenum textureFiltering;
+		GLenum textureMinFilter;
+		GLenum textureMagFilter;
 };
