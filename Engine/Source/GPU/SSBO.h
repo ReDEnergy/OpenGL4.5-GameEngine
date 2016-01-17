@@ -4,6 +4,7 @@
 
 #include <include/gl.h>
 #include <include/utils.h>
+#include <string>
 
 template <class StorageEntry>
 class SSBO
@@ -11,10 +12,12 @@ class SSBO
 	public:
 		SSBO(unsigned int size)
 		{
+			auto size_of = sizeof(StorageEntry);
 			this->size = size;
-			auto entrySize = sizeof(StorageEntry);
-			auto totalSize = size * sizeof(StorageEntry);
+			auto entrySize = size_of;
+			auto totalSize = size * size_of;
 			data = new StorageEntry[size];
+			memset(&clearValue, 0, size_of);
 
 			#ifdef GLEW_ARB_shader_storage_buffer_object
 			{
@@ -39,7 +42,7 @@ class SSBO
 			Unbind();
 		}
 
-		void BindBuffer(GLuint index)
+		void BindBuffer(GLuint index) const
 		{
 			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, ssbo);
 		}
@@ -55,7 +58,7 @@ class SSBO
 			Unbind();
 		}
 
-		const StorageEntry* GetBuffer()
+		const StorageEntry* GetBuffer() const
 		{
 			return data;
 		}
@@ -67,7 +70,6 @@ class SSBO
 
 		void ClearBuffer() const
 		{
-			Bind();
 			// Clear Buffer Object using a compute shader
 			// Better should clear by setting null data
 			// Reason: Intel HD4000 OpenGL glClearBufferdata (Surface PRO) will crash the program
@@ -75,13 +77,16 @@ class SSBO
 			{
 				Shader *S = Manager::GetShader()->GetShader("ClearBuffer");
 				S->Use();
+				BindBuffer(0);
 				glDispatchCompute(size, 1, 1);
 				glMemoryBarrier(GL_ALL_BARRIER_BITS);
 			}
 			#else
+			Bind();
 			glClearBufferData(GL_SHADER_STORAGE_BUFFER, GL_R32UI, GL_RED, GL_UNSIGNED_INT, NULL);
-			CheckOpenGLError();
+			Unbind();
 			#endif
+			CheckOpenGLError();
 		}
 
 	private:
@@ -100,5 +105,6 @@ class SSBO
 	private:
 		unsigned int ssbo;
 		unsigned int size;
+		StorageEntry clearValue;
 		StorageEntry *data;
 };
