@@ -30,7 +30,8 @@ class SoundFX :
 		void Play();
 		void Pause();
 		void OnEvent(EventType Event, void *data);
-		void SetVolume(float volume);
+		void SetVolume(unsigned int value);
+		float GetVolume() const;
 
 	public:
 		float offset;

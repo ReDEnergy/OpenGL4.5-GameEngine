@@ -33,9 +33,14 @@ SoundFX::~SoundFX()
 {
 }
 
-void SoundFX::SetVolume(float volume)
+void SoundFX::SetVolume(unsigned int volume)
 {
 	sound.setVolume((float)volume);
+}
+
+float SoundFX::GetVolume() const
+{
+	return volume;
 }
 
 void SoundFX::Play()
