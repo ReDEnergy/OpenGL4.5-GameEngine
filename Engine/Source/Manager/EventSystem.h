@@ -5,13 +5,13 @@
 #include <string>
 #include <vector>
 
-#include <Event/EventType.h>
-#include <Event/TimerEvent.h>
-#include <Event/EventListener.h>
-#include <Event/SimpleTimer.h>
-
 using namespace std;
 
+#include <Event/EventType.h>
+#include <Event/EventListener.h>
+
+template <class T>
+class TimerManager;
 
 template <class T>
 class EventQueueElem
