@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <iostream>
 
 #include <Core/Engine.h>
 #include <Manager/Manager.h>
@@ -25,6 +26,7 @@ class TimerEvent
 			this->channel = channel;
 			this->data = data;
 			this->triggerInterval = triggerInterval;
+			paused = false;
 			timePassed = 0;
 		}
 
@@ -54,22 +56,40 @@ class TimerEvent
 			timePassed = 0;
 		}
 
+		void Pause() {
+			paused = true;
+		}
+
+		void Resume() {
+			paused = false;
+		}
+
 		bool Update(float frameTime)
 		{
+			if (paused) return false;
 			timePassed += frameTime;
 			if (timePassed > triggerInterval) {
 				timePassed = 0;
 				Manager::Event->EmitAsync(channel, data);
+				for (auto &listener : listeners) {
+					listener();
+				}
 				return true;
 			}
 			return false;
 		}
 
+		void OnTrigger(function<void()> onUpdate) {
+			listeners.push_back(onUpdate);
+		}
+
 	private:
 		T channel;
 		void *data;
+		float paused;
 		float timePassed;
 		float triggerInterval;
+		list<function<void()>> listeners;
 };
 
 template <class ChannelType>
