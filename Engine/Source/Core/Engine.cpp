@@ -35,9 +35,9 @@ float Engine::GetLastFrameTime()
 	return deltaTime;
 }
 
-double Engine::GetElapsedTime()
+float Engine::GetElapsedTime()
 {
-	return elapsedTime;
+	return (float)glfwGetTime();
 }
 
 void Engine::Run()

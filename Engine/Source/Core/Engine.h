@@ -23,7 +23,7 @@ class DLLExport Engine {
 		static void SetWorldInstance(World *world);
 
 		static float GetLastFrameTime();
-		static double GetElapsedTime();
+		static float GetElapsedTime();
 
 	public:
 		static WindowObject *Window;
