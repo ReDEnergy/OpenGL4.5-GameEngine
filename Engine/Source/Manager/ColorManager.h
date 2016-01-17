@@ -15,7 +15,8 @@ class DLLExport ColorManager
 
 	public:
 		glm::vec3 GetColorUID(GameObject* object);
-		glm::ivec3 GetColorOffset() const;
+		glm::ivec3 GetOffsetID() const;
+		glm::ivec3 GetChannelsEncodeSize() const;
 		GameObject* GetObjectByColor(const glm::vec3 &unitColor) const;
 		GameObject* GetObjectByID(unsigned int ID) const;
 

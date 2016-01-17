@@ -39,9 +39,14 @@ glm::vec3 ColorManager::GetColorUID(GameObject* object)
 	return glm::vec3(colorID) / 255.0f;
 }
 
-glm::ivec3 ColorManager::GetColorOffset() const
+glm::ivec3 ColorManager::GetOffsetID() const
 {
 	return offset;
+}
+
+glm::ivec3 ColorManager::GetChannelsEncodeSize() const
+{
+	return glm::ivec3(255 / offset.x, 255 / offset.y, 255 / offset.z);
 }
 
 GameObject * ColorManager::GetObjectByColor(const glm::vec3 & unitColor) const
