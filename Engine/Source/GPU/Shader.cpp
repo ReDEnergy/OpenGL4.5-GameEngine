@@ -87,12 +87,7 @@ void Shader::GetUniforms()
 	char buffer[64];
 
 	// Skinning data
-	//for (unsigned int i = 0; i < MAX_BONES; i++)
-	//{
-	//	memset(buffer, 0, sizeof(buffer));
-	//	sprintf_s(buffer, "Bones[%d]", i);
-	//	loc_bones[i] = GetUniformLocation(buffer);
-	//}
+	loc_bones = GetUniformLocation("Bones[0]");
 	loc_animated = GetUniformLocation("animated");
 
 	// Textures

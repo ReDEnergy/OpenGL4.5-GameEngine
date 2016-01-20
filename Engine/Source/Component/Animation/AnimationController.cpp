@@ -143,8 +143,10 @@ void AnimationController::UpdateJointTransform(SkeletalJoint* joint, float anima
 
 void AnimationController::Render(const Shader *shader)
 {
+	CheckOpenGLError();
 	glUniform1f(shader->loc_animated, currentAnimation ? true : false);
 	if (nrBones)
-		glUniformMatrix4fv(shader->loc_bones[0], nrBones, GL_FALSE, glm::value_ptr(boneTransform[0]));
+		glUniformMatrix4fv(shader->loc_bones, nrBones, GL_FALSE, glm::value_ptr(boneTransform[0]));
 	skinnedMesh->Mesh::Render(shader);
+	CheckOpenGLError();
 }

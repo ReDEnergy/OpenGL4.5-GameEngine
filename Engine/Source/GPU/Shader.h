@@ -95,7 +95,7 @@ class DLLExport Shader
 		GLint active_selection;
 
 		// Skinning
-		GLint loc_bones[MAX_BONES];
+		GLint loc_bones;
 		GLint loc_animated;
 
 		// Text
