@@ -102,12 +102,12 @@ void Text::InitText()
 
 	for(i=0; i<len; i++)
 	{
-		texture_glyph_t *glyph = texture_font_get_glyph( font, content[i] );
+		texture_glyph_t *glyph = texture_font_get_glyph( font, &content[i] );
 		if( glyph != NULL )
 		{
 			float kerning = 0.0f;
 			if( i > 0) {
-				kerning = texture_glyph_get_kerning(glyph, content[i-1]);
+				kerning = texture_glyph_get_kerning(glyph, &content[i]);
 			}
 			cue.x += kerning;
 			int x0  = (int)( cue.x + glyph->offset_x );

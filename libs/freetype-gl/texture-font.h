@@ -1,7 +1,7 @@
 /* ============================================================================
  * Freetype GL - A C OpenGL Freetype engine
  * Platform:    Any
- * WWW:         http://code.google.com/p/freetype-gl/
+ * WWW:         https://github.com/rougier/freetype-gl
  * ----------------------------------------------------------------------------
  * Copyright 2011,2012 Nicolas P. Rougier. All rights reserved.
  *
@@ -35,6 +35,7 @@
 #define __TEXTURE_FONT_H__
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,6 +43,10 @@ extern "C" {
 
 #include "vector.h"
 #include "texture-atlas.h"
+
+#ifdef __cplusplus
+namespace ftgl {
+#endif
 
 /**
  * @file   texture-font.h
@@ -75,10 +80,10 @@ extern "C" {
 typedef struct kerning_t
 {
     /**
-     * Left character code in the kern pair.
+     * Left character code in the kern pair in UTF-32 LE encoding.
      */
-    wchar_t charcode;
-    
+    uint32_t charcode;
+
     /**
      * Kerning value (in fractional pixels).
      */
@@ -96,26 +101,26 @@ typedef struct kerning_t
  *                       xmin                     xmax
  *                        |                         |
  *                        |<-------- width -------->|
- *                        |                         |    
+ *                        |                         |
  *              |         +-------------------------+----------------- ymax
  *              |         |    ggggggggg   ggggg    |     ^        ^
- *              |         |   g:::::::::ggg::::g    |     |        | 
- *              |         |  g:::::::::::::::::g    |     |        | 
- *              |         | g::::::ggggg::::::gg    |     |        | 
- *              |         | g:::::g     g:::::g     |     |        | 
- *    offset_x -|-------->| g:::::g     g:::::g     |  offset_y    | 
- *              |         | g:::::g     g:::::g     |     |        | 
- *              |         | g::::::g    g:::::g     |     |        | 
- *              |         | g:::::::ggggg:::::g     |     |        |  
+ *              |         |   g:::::::::ggg::::g    |     |        |
+ *              |         |  g:::::::::::::::::g    |     |        |
+ *              |         | g::::::ggggg::::::gg    |     |        |
+ *              |         | g:::::g     g:::::g     |     |        |
+ *    offset_x -|-------->| g:::::g     g:::::g     |  offset_y    |
+ *              |         | g:::::g     g:::::g     |     |        |
+ *              |         | g::::::g    g:::::g     |     |        |
+ *              |         | g:::::::ggggg:::::g     |     |        |
  *              |         |  g::::::::::::::::g     |     |      height
- *              |         |   gg::::::::::::::g     |     |        | 
+ *              |         |   gg::::::::::::::g     |     |        |
  *  baseline ---*---------|---- gggggggg::::::g-----*--------      |
- *            / |         |             g:::::g     |              | 
- *     origin   |         | gggggg      g:::::g     |              | 
- *              |         | g:::::gg   gg:::::g     |              | 
- *              |         |  g::::::ggg:::::::g     |              | 
- *              |         |   gg:::::::::::::g      |              | 
- *              |         |     ggg::::::ggg        |              | 
+ *            / |         |             g:::::g     |              |
+ *     origin   |         | gggggg      g:::::g     |              |
+ *              |         | g:::::gg   gg:::::g     |              |
+ *              |         |  g::::::ggg:::::::g     |              |
+ *              |         |   gg:::::::::::::g      |              |
+ *              |         |     ggg::::::ggg        |              |
  *              |         |         gggggg          |              v
  *              |         +-------------------------+----------------- ymin
  *              |                                   |
@@ -128,9 +133,9 @@ typedef struct kerning_t
 typedef struct texture_glyph_t
 {
     /**
-     * Wide character this glyph represents
+     * Character this glyph represents in UTF-32 LE encoding.
      */
-    wchar_t charcode;
+    uint32_t charcode;
 
     /**
      * Glyph id (used for display lists)
@@ -227,7 +232,7 @@ typedef struct texture_font_t
      * Atlas structure to store glyphs data.
      */
     texture_atlas_t * atlas;
-    
+
     /**
      * font location
      */
@@ -255,7 +260,7 @@ typedef struct texture_font_t
      * Font size
      */
     float size;
-    
+
     /**
      * Whether to use autohint when rendering font
      */
@@ -271,7 +276,7 @@ typedef struct texture_font_t
      */
     float outline_thickness;
 
-    /** 
+    /**
      * Whether to use our own lcd filter.
      */
     int filtering;
@@ -392,7 +397,7 @@ typedef struct texture_font_t
 
 /**
  * Request a new glyph from the font. If it has not been created yet, it will
- * be. 
+ * be.
  *
  * @param self     A valid texture font
  * @param charcode Character codepoint to be loaded.
@@ -403,33 +408,33 @@ typedef struct texture_font_t
  */
   texture_glyph_t *
   texture_font_get_glyph( texture_font_t * self,
-                          wchar_t charcode );
+                          const char * charcode );
 
 
 /**
  * Request the loading of several glyphs at once.
  *
  * @param self      a valid texture font
- * @param charcodes character codepoints to be loaded.
+ * @param charcodes UTF-8 encoded character codepoints to be loaded.
  *
  * @return Number of missed glyph if the texture is not big enough to hold
  *         every glyphs.
  */
   size_t
   texture_font_load_glyphs( texture_font_t * self,
-                            const wchar_t * charcodes );
+                            const char * charcodes );
 
 /**
  * Get the kerning between two horizontal glyphs.
  *
  * @param self      a valid texture glyph
  * @param charcode  codepoint of the peceding glyph
- * 
+ *
  * @return x kerning value
  */
-float 
+float
 texture_glyph_get_kerning( const texture_glyph_t * self,
-                           const wchar_t charcode );
+                           const char * charcode );
 
 
 /**
@@ -445,7 +450,7 @@ texture_glyph_new( void );
 
 #ifdef __cplusplus
 }
+}
 #endif
 
 #endif /* __TEXTURE_FONT_H__ */
-

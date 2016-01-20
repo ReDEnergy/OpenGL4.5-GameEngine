@@ -1,7 +1,7 @@
 /* ============================================================================
  * Freetype GL - A C OpenGL Freetype engine
  * Platform:    Any
- * WWW:         http://code.google.com/p/freetype-gl/
+ * WWW:         https://github.com/rougier/freetype-gl
  * ----------------------------------------------------------------------------
  * Copyright 2011,2012 Nicolas P. Rougier. All rights reserved.
  *
@@ -43,6 +43,9 @@ extern "C" {
 #include "markup.h"
 #include "shader.h"
 
+#ifdef __cplusplus
+namespace ftgl {
+#endif
 
 /**
  * Use LCD filtering
@@ -80,12 +83,12 @@ extern "C" {
  */
 typedef struct  text_buffer_t {
     /**
-     * Vertex buffer 
+     * Vertex buffer
      */
     vertex_buffer_t *buffer;
 
     /**
-     * Font manager 
+     * Font manager
      */
     font_manager_t *manager;
 
@@ -198,24 +201,41 @@ typedef struct glyph_vertex_t {
 
 
 /**
- * Creates a new empty text buffer.
+ * Creates a new empty text buffer using custom shaders.
  *
- * @param depth  Underlying atlas bit depth (1 or 3)
+ * @param depth          Underlying atlas bit depth (1 or 3)
+ * @param vert_filename  Path to vertex shader
+ * @param frag_filename  Path to fragment shader
  *
  * @return  a new empty text buffer.
  *
  */
   text_buffer_t *
-  text_buffer_new( size_t depth );
+  text_buffer_new( size_t depth,
+                   const char * vert_filename,
+                   const char * frag_filename );
 
-  /**
-  * Deletes texture buffer and its associated shader and vertex buffer.
-  *
-  * @param  self  texture buffer to delete
-  *
-  */
-void
-text_buffer_delete( text_buffer_t * self );
+/**
+ * Creates a new empty text buffer using custom shaders.
+ *
+ * @param depth          Underlying atlas bit depth (1 or 3)
+ * @param program        Shader program
+ *
+ * @return  a new empty text buffer.
+ *
+ */
+  text_buffer_t *
+  text_buffer_new_with_program( size_t depth,
+                                GLuint program );
+
+/**
+ * Deletes texture buffer and its associated shader and vertex buffer.
+ *
+ * @param  self  texture buffer to delete
+ *
+ */
+  void
+  text_buffer_delete( text_buffer_t * self );
 
 /**
  * Render a text buffer.
@@ -232,7 +252,7 @@ text_buffer_delete( text_buffer_t * self );
   *
   * @param self a text buffer
   * @param pen  position of text start
-  * @param ...  a series of markup_t *, wchar_t * ended by NULL
+  * @param ...  a series of markup_t *, char * ended by NULL
   *
   */
   void
@@ -251,7 +271,7 @@ text_buffer_delete( text_buffer_t * self );
   void
   text_buffer_add_text( text_buffer_t * self,
                         vec2 * pen, markup_t * markup,
-                        wchar_t * text, size_t length );
+                        const char * text, size_t length );
 
  /**
   * Add a char to the text buffer
@@ -263,9 +283,9 @@ text_buffer_delete( text_buffer_t * self );
   * @param previous previous character (if any)
   */
   void
-  text_buffer_add_wchar( text_buffer_t * self,
-                         vec2 * pen, markup_t * markup,
-                         wchar_t current, wchar_t previous );
+  text_buffer_add_char( text_buffer_t * self,
+                        vec2 * pen, markup_t * markup,
+                        const char * current, const char * previous );
 
 /**
   * Clear text buffer
@@ -279,6 +299,7 @@ text_buffer_delete( text_buffer_t * self );
 /** @} */
 
 #ifdef __cplusplus
+}
 }
 #endif
 

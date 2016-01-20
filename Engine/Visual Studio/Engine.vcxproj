@@ -357,12 +357,6 @@
     <ClCompile Include="..\Source\InputComponent\EditorInput.cpp" />
     <ClCompile Include="..\Source\Input\InputRules.cpp" />
     <ClCompile Include="..\Source\Input\ObjectControl.cpp" />
-    <ClCompile Include="..\Source\libs\edtaa3func.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\Source\libs\xorshift128plus.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\Source\Lighting\DirectionalLight.cpp" />
     <ClCompile Include="..\Source\Lighting\Light.cpp" />
     <ClCompile Include="..\Source\Lighting\PointLight.cpp" />

@@ -32,9 +32,6 @@
     <Filter Include="Engine\InputComponent">
       <UniqueIdentifier>{43f8a4b1-b954-4121-831e-461b10d761cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\libs">
-      <UniqueIdentifier>{189233e7-423e-4a7a-b141-ae065a623e3f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Lighting">
       <UniqueIdentifier>{3fa47d42-290a-42fc-a66f-69cb60957a0a}</UniqueIdentifier>
     </Filter>
@@ -168,12 +165,6 @@
     </ClCompile>
     <ClCompile Include="..\Source\InputComponent\CameraDebugInput.cpp">
       <Filter>Engine\InputComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\libs\edtaa3func.c">
-      <Filter>Engine\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\libs\xorshift128plus.cpp">
-      <Filter>Engine\libs</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Utils\3D.cpp">
       <Filter>Engine\Utils</Filter>
