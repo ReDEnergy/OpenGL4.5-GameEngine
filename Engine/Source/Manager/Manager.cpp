@@ -59,6 +59,8 @@ PhysicsManager*		Manager::Physics = nullptr;
 
 void Manager::Init() {
 
+	CheckOpenGLError();
+
 	InputSystem::Init();
 
 	Debug = Singleton<DebugInfo>::Instance();
@@ -95,11 +97,15 @@ void Manager::Init() {
 
 	Event->Clear();
 
+	CheckOpenGLError();
+
 	Manager::LoadConfig();
 }
 
 // Load configuration file
 void Manager::LoadConfig() {
+
+	CheckOpenGLError();
 
 	RenderSys->Init();
 	Config->Load("config.xml");
@@ -113,6 +119,7 @@ void Manager::LoadConfig() {
 
 	/* Force Vertical Sync */
 	wglSwapIntervalEXT(RenderSys->Is(RenderState::VSYNC));
+	CheckOpenGLError();
 
 	////////////////////////////////////////
 

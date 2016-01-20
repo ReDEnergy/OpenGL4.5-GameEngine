@@ -102,7 +102,6 @@ void ErrorCallback(int error, const char* description)
 
 void Engine::Init()
 {
-
 	/* Initialize the library */
 	if (!glfwInit())
 		return;
@@ -111,4 +110,6 @@ void Engine::Init()
 
 	glClearDepth(1);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	CheckOpenGLError();
 }

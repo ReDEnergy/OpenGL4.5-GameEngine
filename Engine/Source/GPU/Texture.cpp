@@ -257,6 +257,7 @@ void Texture::Init2DTexture(unsigned int width, unsigned int height, unsigned in
 	this->height = height;
 	this->channels = channels;
 
+	CheckOpenGLError();
 	if (textureID)
 		glDeleteTextures(1, &textureID);
 	glGenTextures(1, &textureID);
