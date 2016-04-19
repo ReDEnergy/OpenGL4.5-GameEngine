@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+﻿#include <pch.h>
 #include "ToFSimulation.h"
 
 ToFSimulation::ToFSimulation()
@@ -28,7 +28,6 @@ void ToFSimulation::Update()
 	{
 		S->Use();
 
-		int WORK_GROUP_SIZE = 32;
 		unsigned int width, height;
 		computeTexture->GetSize(width, height);
 
@@ -36,8 +35,7 @@ void ToFSimulation::Update()
 		glBindImageTexture(0, FBO->GetTextureID(3), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
 		glBindImageTexture(1, computeTexture->GetTextureID(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32F);
 
-		glDispatchCompute(GLuint(UPPER_BOUND(width, WORK_GROUP_SIZE)), GLuint(UPPER_BOUND(height, WORK_GROUP_SIZE)), 1);
-		glMemoryBarrier(GL_ALL_BARRIER_BITS);
+		OpenGL::DispatchCompute(width, height, 1, 32);
 	}
 }
 

@@ -1,0 +1,23 @@
+QWidget {
+}
+
+QWidget[SimpleFloatInput] QWidget {
+	padding: 5px;
+}
+
+QLabel#SimpleFloatInputLabel {
+	border: 1px solid #777;
+	border-left: none;
+	border-right: none;
+	padding: 5px 10px;
+	min-width: 120px;
+}
+
+QWidget#TotalTime {
+	background: #F23A3A;
+}
+
+QWidget#TotalTime QLabel {
+	font-weight: bold;
+	color: #FFF;
+}

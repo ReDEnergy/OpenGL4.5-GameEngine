@@ -50,7 +50,7 @@ void main()
 vec4 shp;
 int DEPTH_COMPONENT = 0;
 int cascadeID = 0;
-float shadow_bias[5] = {0.00005, 0.00014, 0.0006, 0.0008, 0.0013};
+float shadow_bias[5] = {0.00005, 0.00014, 0.0006, 0.0012, 0.005};
 
 int IsLit(sampler2D DEPTH_TEXTURE, ivec2 offset) {
 	float depth = texture(DEPTH_TEXTURE, shp.xy + offset * shadow_texel_size)[DEPTH_COMPONENT];
@@ -67,7 +67,7 @@ float PCFfactor(sampler2D DEPTH_TEXTURE)
 
 	float x, y;
 	float sum = 0;
-	float kernel_size = 5;
+	float kernel_size = 3;
 	float limit = kernel_size/2 - 0.5;
 	
 	sum += IsLit(DEPTH_TEXTURE, ivec2( 0.0, 0.0));

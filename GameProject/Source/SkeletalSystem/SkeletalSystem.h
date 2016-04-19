@@ -1,14 +1,13 @@
 #pragma once
-#include "pch.h"
-
+#include <vector>
 #include <unordered_map>
 
 #include <Kinect/Kinect.h>
 
-using namespace std;
-
-class SkeletalJoint;
+class GSkeletalJoint;
 class SkeletalTracking;
+class KinectAvatar;
+class GameObject;
 
 class SkeletalSystem :
 	public ObjectInput,
@@ -22,9 +21,10 @@ class SkeletalSystem :
 		void GetJoints(pugi::xml_node & node);
 		void Clear();
 
+		const std::unordered_map<std::string, GSkeletalJoint*>& GetJoints() const;
+
 		void BindForComposition(GLenum DEPTH_TEXTURE_UNIT, GLenum CONTENT_TEXTURE_UNIT);
 
-		void Render(Camera *camera) const;
 		void Update(SkeletalTracking *tracking);
 
 		void OnKeyPress(int key, int mods);
@@ -33,16 +33,18 @@ class SkeletalSystem :
 		void RecordSkeletalPhysicState(SkeletalTracking * tracking);
 
 	protected:
-		void OnEvent(const string& eventID, void *data);
+		void OnEvent(const std::string& eventID, void *data);
 
 	public:
-		unordered_map<string, SkeletalJoint*> joints;
-		vector<SkeletalJoint*> kinectJointMapping;
+		std::unordered_map<std::string, GSkeletalJoint*> joints;
+		std::vector<GSkeletalJoint*> kinectJointMapping;
 
 	private:
+		KinectAvatar *avatar;
+
 		FrameBuffer *FBO;
 		Shader *jointShader;
-		SkeletalJoint *ROOT;
+		GSkeletalJoint *ROOT;
 		GameObject *skeletonControl;
 
 		bool recordKinectState;

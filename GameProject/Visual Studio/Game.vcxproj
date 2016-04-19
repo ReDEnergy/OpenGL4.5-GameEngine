@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug ARM|Win32">
+      <Configuration>Debug ARM</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug ARM|x64">
+      <Configuration>Debug ARM</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug-Physics|Win32">
       <Configuration>Debug-Physics</Configuration>
       <Platform>Win32</Platform>
@@ -44,17 +52,29 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
@@ -68,7 +88,16 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -83,7 +112,15 @@
     <Import Project="Property Sheets\Kinect.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\QT.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property Sheets\MacrosDebug.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\OpenGL-ES3.1.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -93,7 +130,7 @@
     <Import Project="Property Sheets\Kinect.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\QT.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -103,7 +140,17 @@
     <Import Project="Property Sheets\Kinect.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\QT.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property Sheets\MacrosDebug.props" />
+    <Import Project="Property Sheets\Engine.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\Kinect.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\QT.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -113,7 +160,7 @@
     <Import Project="Property Sheets\Kinect.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\QT.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
     <Import Project="Property Sheets\MacrosRelease.props" />
@@ -123,7 +170,7 @@
     <Import Project="Property Sheets\PhysX.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\QT.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">
     <Import Project="Property Sheets\MacrosRelease.props" />
@@ -132,7 +179,7 @@
     <Import Project="Property Sheets\Kinect.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\QT.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
     <Import Project="Property Sheets\MacrosDebug.props" />
@@ -142,7 +189,7 @@
     <Import Project="Property Sheets\PhysX.debug.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\QT.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
     <Import Project="Property Sheets\MacrosDebug.props" />
@@ -151,7 +198,7 @@
     <Import Project="Property Sheets\Kinect.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\QT.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -159,7 +206,17 @@
     <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
@@ -205,8 +262,35 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;OPENGL_ES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -224,8 +308,35 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -247,8 +358,12 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -270,8 +385,12 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
@@ -279,11 +398,16 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PHYSX_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
     </PostBuildEvent>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -294,11 +418,16 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PHYSX_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
     </PostBuildEvent>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -309,11 +438,16 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
     </PostBuildEvent>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -324,17 +458,49 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\..\libs\Engine\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.dll" "$(OutDir)"
-xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(OutDir)"</Command>
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.dll" "$(OutDir)"
+xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration)\Engine.pdb" "$(OutDir)"
+
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\*.dll" "$(OutDir)"
+xcopy /y /d /T "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)" "$(OutDir)"
+xcopy /y /d "..\..\libs\$(QtVersion)\$(PlatformTarget)\$(EngineConfiguration)\platforms" "$(OutDir)\platforms" </Command>
     </PostBuildEvent>
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\libs\pugixml\pugiconfig.hpp" />
+    <ClInclude Include="..\..\libs\pugixml\pugixml.hpp" />
+    <ClInclude Include="..\Source\Editor\App\CameraPropertyEditor.h" />
+    <ClInclude Include="..\Source\Editor\App\GameWindow.h" />
+    <ClInclude Include="..\Source\Editor\App\GeneralWindow.h" />
+    <ClInclude Include="..\Source\Editor\App\ObjectPropertiesWindow.h" />
+    <ClInclude Include="..\Source\Editor\App\ProfilingWindow.h" />
+    <ClInclude Include="..\Source\Editor\Config\QtConfig.h" />
+    <ClInclude Include="..\Source\Editor\EditorMain.h" />
+    <ClInclude Include="..\Source\Editor\include\Editor.h" />
+    <ClInclude Include="..\Source\Editor\include\QTForward.h" />
+    <ClInclude Include="..\Source\Editor\Interface\QtInput.h" />
+    <ClInclude Include="..\Source\Editor\Interface\QtListTemplates.h" />
+    <ClInclude Include="..\Source\Editor\Interface\QtSortableInput.h" />
+    <ClInclude Include="..\Source\Editor\Interface\SimpleTextBox.h" />
+    <ClInclude Include="..\Source\Editor\OpenGL\QtGLFW.h" />
+    <ClInclude Include="..\Source\Editor\System\FilePicker.h" />
+    <ClInclude Include="..\Source\Editor\UI\GUI.h" />
+    <ClInclude Include="..\Source\Editor\UI\GUIEntity.h" />
+    <ClInclude Include="..\Source\Editor\Utils\Utils.h" />
+    <ClInclude Include="..\Source\Editor\Windows\General\AboutWindow.h" />
+    <ClInclude Include="..\Source\Editor\Windows\Interface\CustomWidget.h" />
+    <ClInclude Include="..\Source\Editor\Windows\Interface\DockWindow.h" />
+    <ClInclude Include="..\Source\Editor\Windows\Interface\EditorList.h" />
+    <ClInclude Include="..\Source\Editor\Windows\Interface\GenericList.h" />
+    <ClInclude Include="..\Source\Editor\Windows\OpenGL\OpenGLWindow.h" />
+    <ClInclude Include="..\Source\Game\Actors\TriggerSphere.h" />
     <ClInclude Include="..\Source\Game\Game.h" />
     <ClInclude Include="..\Source\Game\Input\AnimationInput.h" />
     <ClInclude Include="..\Source\Game\Input\GameInput.h" />
@@ -352,15 +518,19 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">
+      </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Source\Kinect\Smoothing\ExponentialSmoothing.h" />
     <ClInclude Include="..\Source\PCH\pch.h" />
     <ClInclude Include="..\Source\Physics\PhysX.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
       </ExcludedFromBuild>
@@ -368,10 +538,12 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
     </ClInclude>
     <ClInclude Include="..\Source\Physics\PhysXManager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
       </ExcludedFromBuild>
@@ -379,42 +551,289 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
     </ClInclude>
     <ClInclude Include="..\Source\Physics\PhysXRagdoll.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\Source\Prototyping\ToFSimulation.h" />
-    <ClInclude Include="..\Source\SkeletalSystem\SkeletalJoint.h" />
+    <ClInclude Include="..\Source\SkeletalSystem\KinectAvatar.h" />
+    <ClInclude Include="..\Source\SkeletalSystem\GSkeletalJoint.h" />
     <ClInclude Include="..\Source\SkeletalSystem\SkeletalSystem.h" />
     <ClInclude Include="..\Source\SkeletalSystem\Transform\JointTransform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\libs\pugixml\pugixml.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\CameraPropertyEditor.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\GameWindow.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\GeneralWindow.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\ObjectPropertiesWindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\ProfilingWindow.cpp" />
+    <ClCompile Include="..\Source\Editor\Config\QtConfig.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\EditorMain.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Interface\QtInput.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Interface\QtSortableInput.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Interface\SimpleTextBox.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\OpenGL\QtGLFW.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\System\FilePicker.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\UI\GUI.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\UI\GUIEntity.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Utils\Utils.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\General\AboutWindow.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\Interface\CustomWidget.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\Interface\DockWindow.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\Interface\EditorList.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\OpenGL\OpenGLWindow.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Game\Actors\TriggerSphere.cpp" />
     <ClCompile Include="..\Source\Game\Game.cpp" />
     <ClCompile Include="..\Source\Game\Input\AnimationInput.cpp" />
     <ClCompile Include="..\Source\Game\Input\GameInput.cpp" />
     <ClCompile Include="..\Source\Game\Input\SimpleObjectControl.cpp" />
-    <ClCompile Include="..\Source\Kinect\Depth\KinectParticle.cpp" />
-    <ClCompile Include="..\Source\Kinect\Depth\KinectPointCloud.cpp" />
-    <ClCompile Include="..\Source\Kinect\KinectSensor.cpp" />
-    <ClCompile Include="..\Source\Kinect\KinectStreaming.cpp" />
-    <ClCompile Include="..\Source\Kinect\SkeletalTracking.cpp" />
-    <ClCompile Include="..\Source\Kinect\Smoothing\ExponentialJoint.cpp" />
+    <ClCompile Include="..\Source\Kinect\Depth\KinectParticle.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\Depth\KinectPointCloud.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\KinectSensor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\KinectStreaming.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\SkeletalTracking.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\Smoothing\ExponentialJoint.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Source\Kinect\Smoothing\ExponentialRotation.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Source\Kinect\Smoothing\ExponentialSmoothing.cpp" />
+    <ClCompile Include="..\Source\Kinect\Smoothing\ExponentialSmoothing.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Source\Main.cpp" />
     <ClCompile Include="..\Source\PCH\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">Create</PrecompiledHeader>
@@ -422,7 +841,9 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">Create</PrecompiledHeader>
@@ -432,10 +853,12 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
     </ClCompile>
     <ClCompile Include="..\Source\Physics\PhysXManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
       </ExcludedFromBuild>
@@ -443,18 +866,24 @@ xcopy /y /d "..\..\Engine\lib\$(PlatformTarget)\$(Configuration)\Engine.pdb" "$(
     </ClCompile>
     <ClCompile Include="..\Source\Physics\PhysXRagdoll.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Physics|x64'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Source\Prototyping\ToFSimulation.cpp" />
-    <ClCompile Include="..\Source\SkeletalSystem\SkeletalJoint.cpp" />
-    <ClCompile Include="..\Source\SkeletalSystem\SkeletalSystem.cpp" />
+    <ClCompile Include="..\Source\SkeletalSystem\KinectAvatar.cpp" />
+    <ClCompile Include="..\Source\SkeletalSystem\GSkeletalJoint.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\SkeletalSystem\SkeletalSystem.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Source\SkeletalSystem\Transform\JointTransform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

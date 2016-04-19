@@ -46,22 +46,6 @@ vec4 DebugView(vec2 text_coord) {
 	return vec4(0);
 }
 
-vec4 KinectView(vec2 text_coord) {
-	float ds = texture(u_texture_4, text_coord).r;
-	float dd = texture(u_texture_8, text_coord).r;
-	if (dd < ds)
-		return texture(u_texture_9, text_coord);
-	return vec4(0);
-}
-
-vec4 SkeletalView(vec2 text_coord) {
-	float ds = texture(u_texture_4, text_coord).r;
-	float dd = texture(u_texture_10, text_coord).r;
-	if (dd < ds)
-		return texture(u_texture_11, text_coord);
-	return vec4(0);
-}
-
 float SoftShadow(vec2 text_coord) {
 	float depth = linearDepth(u_texture_4, text_coord);
 	if (depth > 40)
@@ -121,9 +105,6 @@ void main() {
 	if (debug_view == 1)
 		out_color += DebugView(text_coord);
 		
-	out_color += KinectView(text_coord);
-	out_color += SkeletalView(text_coord);
-
 	//Gizmo - BUG - until not used final image is darker
 	if (active_selection)
 	{

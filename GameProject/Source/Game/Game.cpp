@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+﻿#include <pch.h>
 #include "Game.h"
 
 #include <Game/Input/AnimationInput.h>
@@ -14,7 +14,7 @@
 // DEBUG BUILD
 #endif
 
-//#define KINECT_MODULE
+#define KINECT_MODULE
 #ifdef KINECT_MODULE
 #include <Kinect/KinectSensor.h>
 #include <Kinect/SkeletalTracking.h>
@@ -31,10 +31,6 @@ KinectStreaming *kinectStreaming;
 KinectPointCloud *kinectPointCloud;
 #endif
 
-#define COMPUTE_TESTS
-#ifdef COMPUTE_TESTS
-#endif
-
 // Add support for PhysX Engine
 #ifdef PHYSX_ENGINE
 #include <Physics/PhysX.h>
@@ -43,57 +39,58 @@ PhysXManager *physXManager;
 PhysXRagdoll *ragdoll;
 #endif
 
-// Prototyping
-#define PROTOTYPING
-#ifdef PROTOTYPING
-#include <Prototyping/ToFSimulation.h>
-ToFSimulation *ToF;
-
-#endif
-
-
-Game::Game() {
+Game::Game()
+{
+	window = WindowManager::GetDefaultWindow();
+	window->SetVSync(true);
 }
 
 Game::~Game() {
 }
 
-void Game::Init() {
-	
+void Game::Init()
+{
+	cpuTime = new ProfileTimer();
+	cpuTime->SetMessage("CPU time");
+
 	// Game resolution
-	glm::ivec2 resolution = Engine::Window->resolution;
+	glm::ivec2 resolution = Engine::Window->GetResolution();
 	float aspectRation = float(resolution.x) / resolution.y;
 
 	// Cameras
 	gameCamera = new Camera();
-	gameCamera->SetPerspective(50, aspectRation, 0.001f, 1500);
+	gameCamera->SetName("Game Camera");
+	gameCamera->SetPerspective(50, aspectRation, 0.001f, 300);
 	gameCamera->SetPosition(glm::vec3(0, 5, 5));
-	gameCamera->SplitFrustum(5);
 	gameCamera->transform->SetMoveSpeed(5);
+	Manager::GetScene()->AddObject(gameCamera);
 
 	freeCamera = new Camera();
-	freeCamera->SetPerspective(40, aspectRation, 0.001f, 500);
+	freeCamera->SetName("Free Camera");
+	freeCamera->SetPerspective(40, aspectRation, 0.001f, 300);
 	freeCamera->SetPosition(glm::vec3(0.0f, 10.0f, 10.0f));
 	freeCamera->Update();
+	Manager::GetScene()->AddObject(freeCamera);
 
 	Manager::GetScene()->SetActiveCamera(gameCamera);
 
 	// Lights
 	Sun = new DirectionalLight();
-	Sun->SetPosition(glm::vec3(0.0f, 50.0f, 0.0f));
-	Sun->RotateOX(-460);
-	Sun->RotateOY(360);
+	Sun->SetName("Directional Light");
+	Sun->transform->SetWorldPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+	Sun->transform->SetWorldRotation(glm::vec3(-35, -45, 0));
 	Sun->SetOrthgraphic(40, 40, 0.1f, 200);
-	Sun->transform->SetWorldRotation(glm::vec3(30, 60, 0));
 	Sun->SetCamera(gameCamera);
 	Sun->Update();
+	Manager::GetScene()->AddObject(Sun);
+
 
 	Spot = new SpotLight();
-	Spot->SetPosition(glm::vec3(5, 3, 0));
+	Spot->SetPosition(glm::vec3(5.25, 3, 9));
 	Spot->SetPerspective(90, 1, 0.1f, 50);
-	Spot->ComputeFrustum();
-	Spot->transform->SetWorldRotation(glm::vec3(90, 0, 0));
+	Spot->transform->SetWorldRotation(glm::vec3(-45, -25, 0));
 	Manager::GetDebug()->Add(Spot);
+	Manager::GetScene()->AddObject(Spot);
 
 	ShadowMap = new Texture();
 	ShadowMap->Create2DTextureFloat(NULL, resolution.x, resolution.y, 4, 32);
@@ -104,6 +101,10 @@ void Game::Init() {
 
 	FBO_Light = new FrameBuffer();
 	FBO_Light->Generate(resolution.x, resolution.y, 1, false);
+
+	FBO_Out = new FrameBuffer();
+	FBO_Out->Generate(resolution.x, resolution.y, 1, false);
+	FrameBuffer::SetOffScreenBuffer(FBO_Out);
 
 	// Rendering 
 	ssao = new SSAO();
@@ -116,25 +117,24 @@ void Game::Init() {
 	auto *TDBG = Manager::GetTextureDebugger();
 	TDBG->SetChannel(0, FBO);
 	TDBG->PushToChannel(0, FBO_Light->GetTexture(0));
+	TDBG->PushToChannel(0, FBO_Out->GetTexture(0));
 	TDBG->SetChannel(1, Manager::GetPicker()->FBO);
 	TDBG->PushToChannel(1, Manager::GetPicker()->FBO_Gizmo->GetTexture(0));
-
-	// Listens to Events and Input
-
-	SubscribeToEvent("barrels");
-	SubscribeToEvent("barrels-light");
-	SubscribeToEvent(EventType::SWITCH_CAMERA);
+	TDBG->SetChannel(3, Sun->GetTextureBuffer());
 
 	cameraInput = new CameraInput(Manager::GetScene()->GetActiveCamera());
 	cameraDebugInput = new CameraDebugInput(gameCamera);
 	ObjectInput *DI = new DebugInput();
 	ObjectInput *EI = new EditorInput();
 	ObjectInput *GI = new GameInput(this);
-	//ObjectControl *control = new ObjectControl(PLSC->transform);
-	InputRules::PushRule(InputRule::R_GAMEPLAY);
+	cameraInput->AttachTo(window);
+	cameraDebugInput->AttachTo(window);
+	DI->AttachTo(window);
+	EI->AttachTo(window);
+	GI->AttachTo(window);
 
 
-	 //GameObjects
+	// GameObjects
 	//for (uint i = 0; i < 300; i++) {
 	//	GameObject *tree = Manager::GetResource()->GetGameObject("bamboo");
 	//	tree->transform->SetWorldPosition(glm::vec3(rand() % 100 - 50, 0, rand() % 100 - 50));
@@ -160,21 +160,23 @@ void Game::Init() {
 	Manager::GetScene()->Update();
 
 	auto character = Manager::GetScene()->GetGameObject("Archer2", 1);
-	AnimationInput *aInput = new AnimationInput(character);
-	character->input = aInput;
+	if (character) {
+		AnimationInput *aInput = new AnimationInput(character);
+		character->input = aInput;
+		aInput->AttachTo(window);
+	}
 
 	// Kinect Modules
 	#ifdef KINECT_MODULE
 
 	kinectSensor = Singleton<KinectSensor>::Instance();
+	skeletalSystem = Singleton<SkeletalSystem>::Instance();
 	skeletalTracking = new SkeletalTracking();
 	skeletalTracking->Init(kinectSensor);
-	skeletalSystem = new SkeletalSystem();
 	
-	kinectStreaming = Singleton<KinectStreaming>::Instance();
-	kinectStreaming->Init(kinectSensor);
-
-	kinectPointCloud = new KinectPointCloud();
+	//kinectStreaming = Singleton<KinectStreaming>::Instance();
+	//kinectStreaming->Init(kinectSensor);
+	//kinectPointCloud = new KinectPointCloud();
 
 	// testCone = new TestConeConstraint();
 
@@ -208,35 +210,46 @@ void Game::Init() {
 
 	Manager::GetScene()->AddObject(box0);
 
-
 	// Joint Test
-
 	//GameObject *box3 = Manager::GetResource()->GetGameObject("box");
 	//GameObject *box4 = Manager::GetResource()->GetGameObject("box");
-
 	//box3->transform = new LimitedTransform();
 	//box4->transform = new LimitedTransform();
-
 	//box3->transform->SetWorldPosition(glm::vec3(10, 10, 0));
-	//box3->AddChild(box4);
+	//box3->AddChild(box4;)
 	//box4->transform->SetLocalPosition(glm::vec3(7.5, 0, 0));
-
 	//Manager::GetScene()->AddObject(box3);
 
-	// Prototyping
-	ToF = new ToFSimulation();
-	ToF->Init(*FBO);
+	// Trigger Sphere Test
+	GameObject *box = Manager::GetResource()->GetGameObject("box");
+	box->transform->SetWorldPosition(glm::vec3(0, 1, 4));
+	box->transform->SetScale(glm::vec3(0.1f));
 
-	wglSwapIntervalEXT(1);
-};
+	// Listens to Events and Input
+	SubscribeToEvent("barrels");
+	SubscribeToEvent("barrels-light");
+	SubscribeToEvent(EventType::SWITCH_CAMERA);
+	SubscribeToEvent(EventType::FRONT_END_INITIALIZED);
+}
+
+void Game::InitUIHooks()
+{
+	Manager::GetEvent()->EmitSync("Set-Profile-Timer", cpuTime);
+}
 
 void Game::FrameStart()
 {
-	Engine::Window->SetContext();
+//	Engine::Window->SetContext();
+	window->MakeCurrentContext();
 	Manager::GetEvent()->EmitSync(EventType::FRAME_START);
 }
 
-void Game::Update(float elapsedTime, float deltaTime) {
+void Game::Update(float deltaTime)
+{
+	if (Engine::GetElapsedTime() - cpuTime->GetStartTime() > 1) {
+		cpuTime->Reset();
+		cpuTime->Start();
+	}
 
 	Camera *activeCamera = Manager::GetScene()->GetActiveCamera();
 
@@ -245,12 +258,14 @@ void Game::Update(float elapsedTime, float deltaTime) {
 	// -----------------------//
 
 	#ifdef KINECT_MODULE
-	kinectSensor->Update(elapsedTime, deltaTime);
+	kinectSensor->Update();
 	skeletalTracking->Update();
 	skeletalSystem->Update(skeletalTracking);
-	kinectStreaming->Update();
-	kinectPointCloud->Update();
+	//kinectStreaming->Update();
+	//kinectPointCloud->Update();
 	#endif
+
+	cpuTime->Lap("Kinect");
 
 	// ---------------------------//
 	// --- Physics Simulation --- //
@@ -260,31 +275,30 @@ void Game::Update(float elapsedTime, float deltaTime) {
 	Manager::GetHavok()->StepSimulation(deltaTime);
 	physXManager->StepPhysics(deltaTime);
 	//ragdoll->Update(deltaTime, activeCamera);
+	cpuTime->Lap("Physics");
 	#endif
 
 	///////////////////////////////////////////////////////////////////////////
 	// Update Scene
 
-  	InputSystem::UpdateObservers(deltaTime);
+	WindowManager::GetDefaultWindow()->UpdateObserver();
 
 	Manager::GetAudio()->Update(activeCamera);
 	Manager::GetEvent()->Update();
 	Manager::GetScene()->Update();
 	Manager::GetScene()->LightSpaceCulling(gameCamera, Sun);
 	Manager::GetPicker()->Update(activeCamera);
-	Manager::GetPicker()->DrawSceneForPicking();
+	//Manager::GetPicker()->DrawSceneForPicking();
 	Manager::GetDebug()->Update(activeCamera);
 	Manager::GetEvent()->EmitSync(EventType::FRAME_UPDATE);
 
-	#ifdef KINECT_MODULE
-	// testCone->Update(deltaTime);
-	#endif
+	cpuTime->Lap("Scene Update");
 
 	///////////////////////////////////////////////////////////////////////////
 	// Scene Rendering
 
 	if (Manager::GetRenderSys()->Is(RenderState::FORWARD)) {
-		FrameBuffer::Unbind();
+		FrameBuffer::Unbind(Engine::Window);
 		FrameBuffer::Clear();
 	}
 	else {
@@ -293,21 +307,20 @@ void Game::Update(float elapsedTime, float deltaTime) {
 	}
 
 	Manager::GetScene()->Render(activeCamera);
+	skeletalTracking->Render();
+
+	cpuTime->Lap("Scene Rendering");
 
 	///////////////////////////////////////////////////////////////////////////
 	// Shadows Casting
 	{
-		Sun->CastShadows();
-		Spot->CastShadows();
-		Sun->BakeShadows(FBO);
-		Spot->BakeShadows(FBO);
+		//Sun->CastShadows();
+		//Spot->CastShadows();
+		//cpuTime->Lap("Shadow Casting");
+		//Sun->BakeShadows(FBO);
+		//Spot->BakeShadows(FBO);
+		//cpuTime->Lap("Shadow Backing");
 	}
-
-	#ifdef KINECT_MODULE
-	skeletalTracking->Render(activeCamera);
-	skeletalSystem->Render(activeCamera);
-	kinectPointCloud->Render(activeCamera);
-	#endif
 
 	// ---------------------------//
 	// --- Deferred Rendering --- //
@@ -343,27 +356,38 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			glDisable(GL_BLEND);
 		}
 
+		cpuTime->Lap("Deferred Lighing");
+
 		// --- Screen Space Ambient Occlusion (SSAO) --- //
 		if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
 			ssao->Update(FBO, activeCamera);
+			cpuTime->Lap("SSAO");
 		}
 
-		// --- Render to the screen --- //
 		// ---   Composition step   --- //
+		// TODO - use compute shader if available... might be faster?!
+		bool outputToScreen = Engine::Window->props.visible;
+		if (outputToScreen)
+		{
+			FrameBuffer::Unbind(Engine::Window);
+			FrameBuffer::Clear();
 
-		FrameBuffer::Unbind();
-		FrameBuffer::Clear();
-		glDepthMask(GL_FALSE);
-		glDisable(GL_DEPTH_TEST);
+			glDepthMask(GL_FALSE);
+			glDisable(GL_DEPTH_TEST);
+		}
+		else {
+			FBO_Out->Bind();
+		}
+
 		{
 			Shader *Composition = Manager::GetShader()->GetShader("composition");
 			Composition->Use();
-			glUniform2f(Composition->loc_resolution, (float)Engine::Window->resolution.x, (float)Engine::Window->resolution.y);
+			glUniform2f(Composition->loc_resolution, (float)Engine::Window->GetResolution().x, (float)Engine::Window->GetResolution().y);
 			glUniform1i(Composition->loc_debug_view, Manager::GetDebug()->GetActiveState());
 			glUniform1i(Composition->active_ssao, Manager::GetRenderSys()->Is(RenderState::SS_AO));
 			glUniform1i(Composition->active_selection, Manager::GetPicker()->HasActiveSelection());
 			activeCamera->BindProjectionDistances(Composition);
-
+		
 			FBO->BindTexture(0, GL_TEXTURE0);
 			FBO_Light->BindTexture(0, GL_TEXTURE1);
 			ShadowMap->BindToTextureUnit(GL_TEXTURE2);
@@ -372,29 +396,31 @@ void Game::Update(float elapsedTime, float deltaTime) {
 			Manager::GetDebug()->FBO->BindTexture(0, GL_TEXTURE5);
 			Manager::GetDebug()->FBO->BindDepthTexture(GL_TEXTURE6);
 			Manager::GetPicker()->FBO_Gizmo->BindTexture(0, GL_TEXTURE7);
-				
-			#ifdef KINECT_MODULE
-			skeletalTracking->BindForComposition(GL_TEXTURE8, GL_TEXTURE9);
-			skeletalSystem->BindForComposition(GL_TEXTURE10, GL_TEXTURE11);
-			#endif
 
 			ScreenQuad->Render(Composition);
+			glEnable(GL_DEPTH_TEST);
+			glDepthMask(GL_TRUE);
 		}
-		glEnable(GL_DEPTH_TEST);
-		glDepthMask(GL_TRUE);
+		cpuTime->Lap("Composition");
 	}
 
-	Manager::GetDebugText()->Update();
-	Manager::GetScene()->FrameEnded();
 	Manager::GetEvent()->EmitSync(EventType::FRAME_AFTER_RENDERING);
+
 }
 
 void Game::FrameEnd()
 {
+	Manager::GetDebugText()->Update();
 	Manager::GetTextureDebugger()->Render();
+	cpuTime->Lap("Debug Layer");
 	Manager::GetMenu()->RenderMenu();
-	Manager::GetScene()->FrameEnded();
+	cpuTime->Lap("Game Menu");
+
 	Manager::GetEvent()->EmitSync(EventType::FRAME_END);
+	Manager::GetScene()->FrameEnded();
+	//Manager::GetEvent()->EmitSync(EventType::FRAME_SYNC);
+
+	cpuTime->Stop();
 }
 
 void Game::BarrelPhysicsTest(bool pointLights)
@@ -418,11 +444,17 @@ void Game::BarrelPhysicsTest(bool pointLights)
 #endif
 }
 
-void Game::OnEvent(EventType Event, void *data) {
+void Game::OnEvent(EventType Event, void *data)
+{
 	switch (Event)
 	{
+	case EventType::FRONT_END_INITIALIZED:
+	{
+		InitUIHooks();
+		break;
+	}
 	case EventType::SWITCH_CAMERA:
-
+	{
 		Manager::GetScene()->GetActiveCamera()->SetDebugView(true);
 
 		activeSceneCamera++;
@@ -433,7 +465,8 @@ void Game::OnEvent(EventType Event, void *data) {
 		Manager::GetScene()->SetActiveCamera(sceneCameras[activeSceneCamera]);
 		Manager::GetScene()->GetActiveCamera()->SetDebugView(false);
 		cameraInput->camera = Manager::GetScene()->GetActiveCamera();
-
+		break;
+	}
 	default:
 		break;
 	}

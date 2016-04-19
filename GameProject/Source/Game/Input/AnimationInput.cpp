@@ -1,9 +1,10 @@
-#include "pch.h"
-
+#include <pch.h>
 #include "AnimationInput.h"
 
+#include <include/gl.h>
+
 AnimationInput::AnimationInput(GameObject *obj)
-	: ObjectInput(InputGroup::IG_GAMEPLAY), GO(obj)
+	: GO(obj)
 {
 	GO->transform->SetMoveSpeed(2);
 	GO->transform->SetRotationSpeed(200);
@@ -23,38 +24,38 @@ void AnimationInput::Update(float deltaTime, int mods)
 	if (mods != GLFW_MOD_SHIFT)
 		return;
 
-	if (InputSystem::KeyHold(GLFW_KEY_D)) {
+	if (window->KeyHold(GLFW_KEY_D)) {
 		GO->transform->RotateWorldOY(-deltaTime);
 	}
-	if (InputSystem::KeyHold(GLFW_KEY_A)) {
+	if (window->KeyHold(GLFW_KEY_A)) {
 		GO->transform->RotateWorldOY(deltaTime);
 	}
-	if (InputSystem::KeyHold(GLFW_KEY_W)) {
+	if (window->KeyHold(GLFW_KEY_W)) {
 		GO->transform->Move(glm::normalize(glm::rotate(GO->transform->GetWorldRotation(), glm::vec3(0, 0, 1))), deltaTime);
 	}
-	if (InputSystem::KeyHold(GLFW_KEY_S)) {
+	if (window->KeyHold(GLFW_KEY_S)) {
 		GO->transform->Move(glm::normalize(glm::rotate(GO->transform->GetWorldRotation(), glm::vec3(0, 0, 1))), -deltaTime);
-	}
-	if (InputSystem::KeyHold(GLFW_KEY_P)) {
-		GO->animation->SetAnimation(nullptr);
 	}
 }
 
 void AnimationInput::OnKeyPress(int key, int mods)
 {
+	unsigned int animationID = 0;
 	switch (key)
 	{
 		case GLFW_KEY_6: {
-			GO->animation->SetAnimation("combinedAnim_0");
+			if (GO->animation)
+				GO->animation->SetAnimation(animationID);
 			break;
 		}
 		case GLFW_KEY_7: {
-			GO->animation->SetAnimation(nullptr);
+			if (GO->animation)
+				GO->animation->SetDefaultPose();
 			break;
 		}
 		case GLFW_KEY_8: {
 			auto SGO = Manager::GetPicker()->GetSelectedObject();
-			if (SGO && dynamic_cast<SkinnedMesh*>(SGO->mesh)) {
+			if (SGO && dynamic_cast<SkinnedMesh*>(SGO->GetMesh())) {
 				GO = SGO;
 				cout << "[SUCCESS] - New Object attached to controller" << endl;
 			}
@@ -64,7 +65,8 @@ void AnimationInput::OnKeyPress(int key, int mods)
 			break;
 		}
 		case GLFW_KEY_Y: {
-			GO->animation->TogglePlayback();
+			if (GO->animation)
+				GO->animation->TogglePlayback();
 			break;
 		}
 	}

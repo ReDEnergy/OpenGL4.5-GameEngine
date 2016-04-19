@@ -1,14 +1,14 @@
 #pragma once
-#include "pch.h"
-
 #include <string>
 #include <unordered_map>
 
 #include <PhysX/PxPhysicsAPI.h>
+#include <Component/ObjectInput.h>
 
 using namespace physx;
-using namespace std;
 
+class Camera;
+class Transform;
 class PhysXManager;
 
 class PhysXRagdoll : public ObjectInput
@@ -17,7 +17,7 @@ class PhysXRagdoll : public ObjectInput
 		PhysXRagdoll(PhysXManager * const pxManager);
 		~PhysXRagdoll();
 
-		void Load(const string &fileName);
+		void Load(const std::string &fileName);
 		void Update(float deltaTime, Camera * camera);
 		void Update(float deltaTime, int mods);
 		void OnKeyPress(int key, int mods);
@@ -29,6 +29,6 @@ class PhysXRagdoll : public ObjectInput
 		unsigned int dynamicSphere;
 
 	public:
-		unordered_map <string, PxActor*> actors;
-		unordered_map <string, PxD6Joint*> joints;
+		std::unordered_map<std::string, PxActor*> actors;
+		std::unordered_map<std::string, PxD6Joint*> joints;
 };

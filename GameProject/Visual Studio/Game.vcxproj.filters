@@ -32,8 +32,50 @@
     <Filter Include="Source\PCH">
       <UniqueIdentifier>{043c9f80-6277-442d-bc84-79d8d4d5dac9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Prototyping">
-      <UniqueIdentifier>{d6c3fba4-e60a-4d96-9c93-b7a26a062088}</UniqueIdentifier>
+    <Filter Include="Source\Editor">
+      <UniqueIdentifier>{f5a1ca41-7969-403a-a549-196a610b72e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\Windows">
+      <UniqueIdentifier>{baeeed2f-0d40-4a8a-b601-480d5a3c6db6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\Windows\General">
+      <UniqueIdentifier>{a5b3f224-5c84-45aa-8b50-8368b078c4bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\Windows\Interface">
+      <UniqueIdentifier>{f6154a05-2943-402d-9811-5b156b658a4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\Windows\OpenGL">
+      <UniqueIdentifier>{7c1f593b-acf9-4336-a166-82d17c3e5fc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\App">
+      <UniqueIdentifier>{4524f18e-7cd9-4278-ae2b-11f979a4b098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\Config">
+      <UniqueIdentifier>{cc3097f3-e38c-421c-9b36-4e38ffa602b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\include">
+      <UniqueIdentifier>{e1f9c9d0-24f3-4876-8599-365f0da61046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\System">
+      <UniqueIdentifier>{7a1ff7d8-6473-4cb8-aadf-b6e9fa836586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\UI">
+      <UniqueIdentifier>{33b0ec72-70b1-4f13-8a62-429334626fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\Utils">
+      <UniqueIdentifier>{4340f697-c35b-4695-a42f-134f4d98a479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\Interface">
+      <UniqueIdentifier>{38a533f0-688a-488a-8bf3-2bd8f7fd6ede}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Actors">
+      <UniqueIdentifier>{854759f4-c49b-4f65-a821-b5816e102604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\OpenGL">
+      <UniqueIdentifier>{c4729bf5-bbbb-4c92-85e3-43e1c4a6f55d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\libs">
+      <UniqueIdentifier>{75cfd2d3-e733-46b5-a8c3-04affd4f257d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,9 +103,6 @@
     <ClCompile Include="..\Source\Physics\PhysXRagdoll.cpp">
       <Filter>Source\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\SkeletalSystem\SkeletalJoint.cpp">
-      <Filter>Source\SkeletalSystem</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Game\Input\SimpleObjectControl.cpp">
       <Filter>Source\Game\Input</Filter>
     </ClCompile>
@@ -88,14 +127,81 @@
     <ClCompile Include="..\Source\Kinect\Depth\KinectPointCloud.cpp">
       <Filter>Source\Kinect\Depth</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\PCH\pch.cpp">
       <Filter>Source\PCH</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Prototyping\ToFSimulation.cpp">
-      <Filter>Source\Prototyping</Filter>
+    <ClCompile Include="..\Source\Editor\EditorMain.cpp">
+      <Filter>Source\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\General\AboutWindow.cpp">
+      <Filter>Source\Editor\Windows\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\Interface\CustomWidget.cpp">
+      <Filter>Source\Editor\Windows\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\Interface\DockWindow.cpp">
+      <Filter>Source\Editor\Windows\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\Interface\EditorList.cpp">
+      <Filter>Source\Editor\Windows\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Windows\OpenGL\OpenGLWindow.cpp">
+      <Filter>Source\Editor\Windows\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\CameraPropertyEditor.cpp">
+      <Filter>Source\Editor\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Config\QtConfig.cpp">
+      <Filter>Source\Editor\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\UI\GUI.cpp">
+      <Filter>Source\Editor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\UI\GUIEntity.cpp">
+      <Filter>Source\Editor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\System\FilePicker.cpp">
+      <Filter>Source\Editor\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Utils\Utils.cpp">
+      <Filter>Source\Editor\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\GameWindow.cpp">
+      <Filter>Source\Editor\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Main.cpp" />
+    <ClCompile Include="..\Source\Editor\App\ObjectPropertiesWindow.cpp">
+      <Filter>Source\Editor\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Interface\SimpleTextBox.cpp">
+      <Filter>Source\Editor\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\GeneralWindow.cpp">
+      <Filter>Source\Editor\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\ProfilingWindow.cpp">
+      <Filter>Source\Editor\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\SkeletalSystem\KinectAvatar.cpp">
+      <Filter>Source\SkeletalSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\SkeletalSystem\GSkeletalJoint.cpp">
+      <Filter>Source\SkeletalSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Game\Actors\TriggerSphere.cpp">
+      <Filter>Source\Game\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\OpenGL\QtGLFW.cpp">
+      <Filter>Source\Editor\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Interface\QtInput.cpp">
+      <Filter>Source\Editor\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Interface\QtSortableInput.cpp">
+      <Filter>Source\Editor\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\pugixml\pugixml.cpp">
+      <Filter>Source\libs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +228,6 @@
     </ClInclude>
     <ClInclude Include="..\Source\Physics\PhysXRagdoll.h">
       <Filter>Source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\SkeletalSystem\SkeletalJoint.h">
-      <Filter>Source\SkeletalSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Physics\PhysX.h">
       <Filter>Source\Physics</Filter>
@@ -162,8 +265,92 @@
     <ClInclude Include="..\Source\PCH\pch.h">
       <Filter>Source\PCH</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Prototyping\ToFSimulation.h">
-      <Filter>Source\Prototyping</Filter>
+    <ClInclude Include="..\Source\Editor\EditorMain.h">
+      <Filter>Source\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Windows\General\AboutWindow.h">
+      <Filter>Source\Editor\Windows\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Windows\Interface\CustomWidget.h">
+      <Filter>Source\Editor\Windows\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Windows\Interface\DockWindow.h">
+      <Filter>Source\Editor\Windows\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Windows\Interface\EditorList.h">
+      <Filter>Source\Editor\Windows\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Windows\Interface\GenericList.h">
+      <Filter>Source\Editor\Windows\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Windows\OpenGL\OpenGLWindow.h">
+      <Filter>Source\Editor\Windows\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\App\CameraPropertyEditor.h">
+      <Filter>Source\Editor\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Config\QtConfig.h">
+      <Filter>Source\Editor\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\include\Editor.h">
+      <Filter>Source\Editor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\include\QTForward.h">
+      <Filter>Source\Editor\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\UI\GUI.h">
+      <Filter>Source\Editor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\UI\GUIEntity.h">
+      <Filter>Source\Editor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\System\FilePicker.h">
+      <Filter>Source\Editor\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Utils\Utils.h">
+      <Filter>Source\Editor\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\App\GameWindow.h">
+      <Filter>Source\Editor\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\App\ObjectPropertiesWindow.h">
+      <Filter>Source\Editor\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Interface\SimpleTextBox.h">
+      <Filter>Source\Editor\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\App\GeneralWindow.h">
+      <Filter>Source\Editor\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\App\ProfilingWindow.h">
+      <Filter>Source\Editor\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\SkeletalSystem\KinectAvatar.h">
+      <Filter>Source\SkeletalSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\SkeletalSystem\GSkeletalJoint.h">
+      <Filter>Source\SkeletalSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Game\Actors\TriggerSphere.h">
+      <Filter>Source\Game\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\OpenGL\QtGLFW.h">
+      <Filter>Source\Editor\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Interface\QtSortableInput.h">
+      <Filter>Source\Editor\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Interface\QtInput.h">
+      <Filter>Source\Editor\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Interface\QtListTemplates.h">
+      <Filter>Source\Editor\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\pugixml\pugiconfig.hpp">
+      <Filter>Source\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\pugixml\pugixml.hpp">
+      <Filter>Source\libs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

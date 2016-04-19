@@ -1,8 +1,6 @@
 #pragma once
 #include <Component/Transform/Transform.h>
 
-using namespace std;
-
 class JointTransform
 	: public Transform
 {

@@ -1,0 +1,26 @@
+/*
+QDockWidget {
+	titlebar-close-icon: url(Resources/Icons/power.png);
+}
+*/
+
+QMainWindow::separator {
+	width: 2px;
+}
+
+QWidget {
+}
+
+QComboBox {
+	height: 22px;
+	margin-left: 0px;
+	padding-left: 10px;
+}
+
+QComboBox QAbstractItemView::item {
+	height: 22px;
+}
+
+QToolButton {
+	height: 30px;
+}

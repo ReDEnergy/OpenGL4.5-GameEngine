@@ -11,7 +11,7 @@
 		<path>Primitives</path>
 		<file>screen_quad.obj</file>
 	</mesh>
-	<mesh quad="true">
+	<mesh>
 		<name>box</name>
 		<path>Primitives</path>
 		<file>box.obj</file>
@@ -54,11 +54,26 @@
 		<path>Characters/Vanguard</path>
 		<file>vaguard2.dae</file>
 	</mesh>	
+	<mesh skinned="true">
+		<name>Archer</name>
+		<path>Characters/Archer</path>
+		<file>Archer.fbx</file>
+	</mesh>		
 -->
 	<mesh skinned="true">
 		<name>Archer2</name>
 		<path>Characters/Archer2</path>
 		<file>Archer.dae</file>
+	</mesh>
+	<mesh skinned="true">
+		<name>Atienza</name>
+		<path>Characters/Atienza</path>
+		<file>Atienza.dae</file>
+	</mesh>
+	<mesh>
+		<name>AtienzaNo</name>
+		<path>Characters/Atienza</path>
+		<file>Atienza.dae</file>
 	</mesh>		
 	<mesh>
 		<name>player</name>
@@ -115,6 +130,7 @@
 
 <!-- Audio -->
 <audio>
+	<!-- 
 	<music>
 		<name>relax</name>
 		<file>relax.ogg</file>
@@ -123,42 +139,38 @@
 		<name>relaxMono</name>
 		<file>relaxMono.ogg</file>
 	</music>
-	<!-- 
 	<music>
-		<name>truck</name>
-		<path>SoV</path>
-		<file>truck.wav</file>
+		<name>Luminous Sword</name>
+		<path>Music</path>
+		<file>Luminous Sword.ogg</file>
 	</music>
 	<music>
-		<name>wind</name>
-		<path>SoV</path>
-		<file>wind.wav</file>
-	</music>
-	<music>
-		<name>greynoise</name>
-		<path>SoV</path>
-		<file>greynoise.wav</file>
-	</music>
-	<music>
-		<name>bluenoise</name>
-		<path>SoV</path>
-		<file>bluenoise.wav</file>
-	</music>
-	<music>
-		<name>brownnoise</name>
-		<path>SoV</path>
-		<file>brownnoise.wav</file>
+		<name>Swordland</name>
+		<path>Music</path>
+		<file>Swordland.ogg</file>
 	</music>
 	<music>
 		<name>winter</name>
 		<file>winter.ogg</file>
 	</music>
-	-->
 	<music>
 		<name>music-box</name>
 		<path>Effects</path>
 		<file>music-box.ogg</file>
 	</music>
+	<soundfx>
+		<name>Swordland</name>
+		<path>Music</path>
+		<file>Swordland.ogg</file>
+		<effects>
+			<fx>
+				<name>Swordland</name>
+				<start>0</start>
+				<end>197</end>
+			</fx>
+		</effects>
+	</soundfx>
+	-->
 	<soundfx>
 		<name>music-box</name>
 		<path>Effects</path>
@@ -185,23 +197,9 @@
 	</soundfx>
 </audio>
 
-<!-- GameObjects -->
+<!-- Custom GameObjects / Prefabs -->
 <objects>
-	<!-- gizmo objects -->
-	<object>
-		<name>gizmo_move</name>
-		<mesh>gizmo_move</mesh>
-	</object>
-	<object>
-		<name>gizmo_rotate</name>
-		<mesh>gizmo_rotate</mesh>
-	</object>
-	<object>
-		<name>gizmo_scale</name>
-		<mesh>gizmo_scale</mesh>
-	</object>
 	<!-- end gizmo objects -->
-	
 	<object prop="">
 		<name>render-quad</name>
 		<mesh>screen-quad</mesh>
@@ -209,39 +207,13 @@
 			<culling>none</culling>
 		</rendering>
 	</object>
-	<object prop="">
-		<name>box</name>
-		<mesh>box</mesh>
-	</object>
-	<object>
-		<name>light-debug</name>
-		<mesh>sphere</mesh>
-	</object>
-	<object prop="">
-		<name>sphere</name>
-		<mesh>sphere</mesh>
-	</object>
-	<object>
-		<name>player</name>
-		<mesh>player</mesh>
-	</object>
+<!-- Example for Havok Physics
 	<object>
 		<name>ground</name>
 		<mesh>ground</mesh>
 		<physics>
 			<file>ground.hkt</file>
 		</physics>
-	</object>
-	<object>
-		<name>teapot</name>
-		<mesh>teapot</mesh>
-	</object>
-	<object>
-		<name>bamboo</name>
-		<mesh>bamboo</mesh>
-		<transform>
-			<scale>0.1</scale>
-		</transform>
 	</object>
 	<object>
 		<name>invwall</name>
@@ -258,15 +230,6 @@
 		<physics>
 			<file>oildrum.hkt</file>
 		</physics>
-	</object>
-	<object>
-		<name>gate</name>
-		<mesh>gate</mesh>
-		<transform>
-			<position>60 1.3 0.3</position>
-			<rotation>0 -90 0</rotation>
-			<scale>0.13</scale>
-		</transform>
 	</object>
 	<object>
 		<name>block10-10</name>
@@ -289,39 +252,5 @@
 			<file>Path/block15-15.hkt</file>
 		</physics>
 	</object>
-<!--	
-	<object>
-		<name>soldier</name>
-		<mesh>soldier</mesh>
-		<transform>
-			<scale>0.01</scale>
-			<rotation>0 90 0</rotation>
-		</transform>
-	</object>
-	<object>
-		<name>guard</name>
-		<mesh>guard</mesh>
-		<transform>
-			<scale>0.025</scale>
-		</transform>
-	</object>
 -->
-	<object>
-		<name>Vanguard</name>
-		<mesh>Vanguard</mesh>
-		<transform>
-			<scale>0.1</scale>
-		</transform>
-	</object>
-	<object>
-		<name>Archer2</name>
-		<mesh>Archer2</mesh>
-		<transform>
-			<scale>0.01</scale>
-		</transform>
-	</object>	
-	<object>
-		<name>oildrum_center</name>
-		<mesh>oildrum_center</mesh>
-	</object>	
 </objects>

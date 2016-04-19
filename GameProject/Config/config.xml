@@ -6,7 +6,7 @@
 		<fullscreen>false</fullscreen>
 		<position>50 50</position>
 		<centered>true</centered>
-		<hidden>false</hidden>
+		<visible>false</visible>
 	</window>
 
 	<vsync>false</vsync>
@@ -16,5 +16,4 @@
 	<shaders>Shaders.xml</shaders>
 	<scene>Scene.xml</scene>
 	<menu>Menu.xml</menu>
-
 </config>

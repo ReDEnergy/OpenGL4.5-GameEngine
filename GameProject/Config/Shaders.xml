@@ -12,11 +12,19 @@
 	<tess_control></tess_control>
 </shader>
 -->
+
+<base-path>Resources/Shaders/</base-path>
+
 <shaders>
 	<shader name="simple">
 		<vertex>MVP.Texture.VS</vertex>
 		<fragment>Simple.FS</fragment>
 	</shader>
+	
+	<shader name="simple-skinned">
+		<vertex>Skinning/MVP.Texture.VS</vertex>
+		<fragment>Simple.FS</fragment>
+	</shader>	
 
 	<shader name="debug">
 		<vertex>Model.Texture.VS</vertex>
@@ -49,6 +57,11 @@
 	<shader name="composition">
 		<vertex>Screen.VS</vertex>
 		<fragment>Composition.FS</fragment>
+	</shader>
+
+	<shader name="screen">
+		<vertex>Screen.VS</vertex>
+		<fragment>Screen.FS</fragment>
 	</shader>
 
 	<shader name="shadow">
@@ -97,15 +110,6 @@
 		<fragment>R2T.FS</fragment>
 	</shader>	
 
-	<shader name="SoVInput">
-		<compute>SoV/SoVInput.CS</compute>
-	</shader>
-	
-	<!-- Prototyping -->
-	<shader name="ToFSimulation">
-		<compute>Prototyping/ToFSimulation.CS</compute>
-	</shader>
-	 
 	<!-- Kinect Processing Shaders -->
 	<shader name="particle">
 		<vertex>Particles/Particle.VS</vertex>

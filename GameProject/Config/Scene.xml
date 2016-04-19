@@ -15,7 +15,6 @@
 			<position>20 0 2</position>
 		</transform>
 	</object>
-	-->
 	<object>
 		<ref>oildrum_center</ref>
 		<transform>
@@ -30,18 +29,39 @@
 			<position>-2 0 0</position>
 		</transform>
 	</object>	
-	
 	<object>
-		<ref>Archer2</ref>
+		<ref>Archer</ref>
 		<transform>
-			<position>0 0 0</position>
+			<position>-2 0 0</position>
 		</transform>
 	</object>		
-	<!-- Scene objects -->
+-->
+<!--	<object>
+		<ref>Atienza</ref>
+		<transform>
+			<scale>0.01</scale>
+			<position>-6 0 0</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>YBot</ref>
+		<transform>
+			<scale>0.01</scale>
+			<position>-4 0 0</position>
+		</transform>
+	</object>		
 	<object>
 		<ref>box</ref>
 		<transform>
 			<position>3 0 -3</position>
+		</transform>
+	</object>
+-->	
+	<object>
+		<ref>Archer2</ref>
+		<transform>
+			<scale>0.01</scale>
+			<position>2 0 0</position>
 		</transform>
 	</object>
 	<object>
@@ -50,6 +70,13 @@
 			<scale>10 1 10</scale>
 		</transform>
 	</object>
+	<object>
+		<ref>AtienzaNo</ref>
+		<transform>
+			<position>2 1.5 1</position>
+			<scale>0.01</scale>
+		</transform>
+	</object>	
 	<object>
 		<ref>block10-10</ref>
 		<transform>
@@ -62,7 +89,7 @@
 		<transform>
 			<position>3 3 3</position>
 		</transform>
-		<audio loop="true">relaxMono</audio>
+		<!-- <audio loop="true">relaxMono</audio> -->
 	</object>	
 	<object>
 		<ref>oildrum</ref>
@@ -111,7 +138,7 @@
 	</light>
 	<light>
 		<transform>
-			<position>8 12 0</position>
+			<position>8 2 4</position>
 		</transform>
 		<area>10</area>
 	</light>

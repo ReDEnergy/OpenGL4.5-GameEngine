@@ -5,7 +5,7 @@
   <PropertyGroup>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>..\..\libs;..\..\Engine\Source;..\..\Engine\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\Engine\lib\$(PlatformTarget)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\Engine\lib\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
     <_PropertySheetDisplayName>Engine</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>

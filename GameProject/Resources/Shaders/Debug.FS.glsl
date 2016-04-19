@@ -27,6 +27,7 @@ uniform int debug_id;
 uniform vec3 eye_position;
 uniform float zFar;
 uniform float zNear;
+uniform ivec4 channel_mask;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Utils
@@ -92,6 +93,19 @@ void main() {
 		default:
 			frag_color = texture(u_texture_0, text_coord);
 	}
+
+	frag_color *= channel_mask;
+	
+	int val = 0;
+	int index = -1;
+	if (channel_mask.r == 1) { val++; index = 0; }
+	if (channel_mask.g == 1) { val++; index = 1; }
+	if (channel_mask.b == 1) { val++; index = 2; }
+	if (channel_mask.a == 1) { val++; index = 3; }
+	if (val == 1) {
+		frag_color = vec4(pow(frag_color[index], 50));
+	}
+	
 	// CubeMapping
 	// vec4 wpos = texture(u_texture_1, text_coord);
 	// vec3 dir = wpos.xyz - eye_position;

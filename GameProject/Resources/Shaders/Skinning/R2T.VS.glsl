@@ -11,7 +11,6 @@ uniform mat4 Model;
 uniform mat4 View;
 uniform mat4 Projection;
 uniform mat4 Bones[MAX_BONES];
-uniform bool animated;
 
 layout(location = 0) out vec2 texture_coord;
 layout(location = 1) out vec4 world_position;

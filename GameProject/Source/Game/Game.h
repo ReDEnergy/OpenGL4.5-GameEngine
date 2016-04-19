@@ -1,19 +1,22 @@
 #pragma once
-#include "pch.h"
+#include <pch.h>
 #include <vector>
 
 using namespace std;
 
-class Game : public World,
-			public EventListener
+class Game : 
+	public World,
+	public EventListener,
+	public ObjectInput
 {
 	public:
 		Game();
 		~Game();
 		void Init();
+		void InitUIHooks();
 
 		void FrameStart();
-		void Update(float elapsedTime, float deltaTime);
+		void Update(float deltaTime);
 		void FrameEnd();
 
 		void BarrelPhysicsTest(bool pointLights);
@@ -33,6 +36,7 @@ class Game : public World,
 		SpotLight			*Spot;
 
 		FrameBuffer			*FBO;
+		FrameBuffer			*FBO_Out;
 		FrameBuffer			*FBO_Light;
 
 		GameObject			*ScreenQuad;
@@ -43,4 +47,6 @@ class Game : public World,
 
 		vector<Camera*>		sceneCameras;
 		unsigned int		activeSceneCamera;
+
+		ProfileTimer		*cpuTime;
 };

@@ -1,4 +1,5 @@
-﻿#include "pch.h"
+﻿#include <pch.h>
+#include <fstream>
 
 #include "SkeletalSystem.h"
 
@@ -6,14 +7,18 @@
 
 #include <Kinect/KinectAPI.h>
 
-#include <SkeletalSystem/SkeletalJoint.h>
+#include <SkeletalSystem/KinectAvatar.h>
+#include <SkeletalSystem/GSkeletalJoint.h>
 #include <SkeletalSystem/Transform/JointTransform.h>
 
+using namespace std;
+
 SkeletalSystem::SkeletalSystem()
-	: ObjectInput(InputGroup::IG_GAMEPLAY)
 {
+	AttachTo(WindowManager::GetDefaultWindow());
+
 	FBO = new FrameBuffer();
-	FBO->Generate(Engine::Window->resolution.x, Engine::Window->resolution.y, 1);
+	FBO->Generate(Engine::Window->props.resolution.x, Engine::Window->props.resolution.y, 1);
 
 	jointShader = Manager::GetShader()->GetShader("simple");
 
@@ -36,21 +41,27 @@ SkeletalSystem::~SkeletalSystem() {
 
 void SkeletalSystem::Init()
 {
-	Clear();
+	//Clear();
 
-	const pugi::xml_document *doc = pugi::LoadXML("Config/SkeletalSystem.xml");
+	//const pugi::xml_document *doc = pugi::LoadXML("Config/SkeletalSystem.xml");
 
-	GetJoints(doc->child("skelet").child("joints"));
+	//GetJoints(doc->child("skelet").child("joints"));
 
-	ROOT->transform->SetWorldPosition(glm::vec3(0, 0, 0));
+	//ROOT->transform->SetWorldPosition(glm::vec3(0, 0, 0));
 
-	SAFE_FREE(doc);
+	//SAFE_FREE(doc);
 
+	avatar = new KinectAvatar("");
 }
 
 void SkeletalSystem::Clear()
 {
 	joints.clear();
+}
+
+const unordered_map<string, GSkeletalJoint*>& SkeletalSystem::GetJoints() const
+{
+	return joints;
 }
 
 void SkeletalSystem::GetJoints(pugi::xml_node &node)
@@ -59,14 +70,14 @@ void SkeletalSystem::GetJoints(pugi::xml_node &node)
 		Manager::GetScene()->RemoveObject((GameObject*)ROOT, true);
 
 	const char* rotations[3] = { "ox\0", "oy\0", "oz\0" };
-	SkeletalJoint *SKJ;
+	GSkeletalJoint *SKJ;
 
 	for (pugi::xml_node joint : node.children())
 	{
 		// Get/create joint
 		const char *name = joint.child_value("name");
 
-		SKJ = (joints.find(name) != joints.end()) ? joints[name] : new SkeletalJoint(name);
+		SKJ = (joints.find(name) != joints.end()) ? joints[name] : new GSkeletalJoint(name);
 		joints[name] = SKJ;
 
 		uint kinectID = joint.child("kinectID").text().as_uint();
@@ -78,7 +89,7 @@ void SkeletalSystem::GetJoints(pugi::xml_node &node)
 		if (parent) {
 			const char *parentName = parent.text().get();
 			if (joints.find(parentName) == joints.end())
-				joints[parentName] = new SkeletalJoint(parentName);
+				joints[parentName] = new GSkeletalJoint(parentName);
 
 			joints[parentName]->AddChild((GameObject*) SKJ);
 		}
@@ -109,24 +120,6 @@ void SkeletalSystem::GetJoints(pugi::xml_node &node)
 	skeletonControl->AddChild(ROOT);
 	Manager::GetScene()->AddObject((GameObject*)skeletonControl);
 
-}
-
-void SkeletalSystem::Render(Camera *camera) const
-{
-	if (!ROOT)
-		return;
-
-	FBO->Bind();
-
-	jointShader->Use();
-
-	camera->BindViewMatrix(jointShader->loc_view_matrix);
-	camera->BindProjectionMatrix(jointShader->loc_projection_matrix);
-
-	glLineWidth(4);
-	skeletonControl->Render(jointShader);
-
-	FrameBuffer::Unbind();
 }
 
 void SkeletalSystem::Update(SkeletalTracking * tracking)

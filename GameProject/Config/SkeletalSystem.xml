@@ -71,11 +71,11 @@
 			<name>Head</name>
 			<pos>0 1.75 0</pos>
 			<parent>Neck</parent>
-			<kinectID>3</kinectID>
 			<constraints>
 				<dir> 0 1 0.3 </dir>
 				<angle>45</angle>
 			</constraints>
+			<kinectID>3</kinectID>
 		</joint>
 		<!-- Left Hand -->
 		<joint>

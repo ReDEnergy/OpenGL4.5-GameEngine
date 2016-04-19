@@ -1,11 +1,12 @@
-#include "pch.h"
-
+#include <pch.h>
 #include "GameInput.h"
+
+#include <include/gl.h>
 
 #include <Game/Game.h>
 
 GameInput::GameInput(Game *game)
-	: ObjectInput(InputGroup::IG_GAMEPLAY), game(game)
+	: game(game)
 {
 
 }
@@ -14,13 +15,13 @@ void GameInput::Update(float deltaTime, int mods) {
 
 	Camera *activeCamera = Manager::GetScene()->GetActiveCamera();
 
-	if (InputSystem::KeyHold(GLFW_KEY_RIGHT))
+	if (window->KeyHold(GLFW_KEY_RIGHT))
 		activeCamera->MoveRight(deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_UP))
+	if (window->KeyHold(GLFW_KEY_UP))
 		activeCamera->MoveForward(deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_LEFT))
+	if (window->KeyHold(GLFW_KEY_LEFT))
 		activeCamera->MoveRight(-deltaTime);
-	if (InputSystem::KeyHold(GLFW_KEY_DOWN))
+	if (window->KeyHold(GLFW_KEY_DOWN))
 		activeCamera->MoveBackward(deltaTime);
 
 	activeCamera->Update();

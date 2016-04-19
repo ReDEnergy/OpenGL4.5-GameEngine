@@ -11,6 +11,7 @@ void main() {
     float width = fwidth(dist);
     float alpha = smoothstep(0.5-width, 0.5+width, dist);
     frag_color = vec4(text_color, alpha);
+	frag_color = texture2D(u_texture_0, texture_coord);
 
 //	vec4 color = vec4(0.967, 0.333, 0.486, 1.0);
 }
