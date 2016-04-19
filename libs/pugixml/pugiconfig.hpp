@@ -1,5 +1,5 @@
 /**
- * pugixml parser - version 1.6
+ * pugixml parser - version 1.7
  * --------------------------------------------------------
  * Copyright (C) 2006-2015, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
  * Report bugs and download new versions at http://pugixml.org/
@@ -17,6 +17,9 @@
 // Uncomment this to enable wchar_t mode
 // #define PUGIXML_WCHAR_MODE
 
+// Uncomment this to enable compact mode
+// #define PUGIXML_COMPACT
+
 // Uncomment this to disable XPath
 // #define PUGIXML_NO_XPATH
 
@@ -27,7 +30,7 @@
 // #define PUGIXML_NO_EXCEPTIONS
 
 // Set this to control attributes for public classes/functions, i.e.:
-#define PUGIXML_API __declspec(dllexport) // to export all public symbols from DLL
+// #define PUGIXML_API __declspec(dllexport) // to export all public symbols from DLL
 // #define PUGIXML_CLASS __declspec(dllimport) // to import all classes from DLL
 // #define PUGIXML_FUNCTION __fastcall // to set calling conventions to all public functions to fastcall
 // In absence of PUGIXML_CLASS/PUGIXML_FUNCTION definitions PUGIXML_API is used instead

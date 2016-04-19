@@ -38,7 +38,7 @@
 extern "C" {
 #endif
 
-#include "opengl.h"
+//#include "opengl.h"
 #include "vector.h"
 #include "vertex-attribute.h"
 
