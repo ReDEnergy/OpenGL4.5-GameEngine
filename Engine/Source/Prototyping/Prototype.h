@@ -3,8 +3,6 @@
 #include <Event/EventListener.h>
 #include <Component/ObjectInput.h>
 
-using namespace std;
-
 class Camera;
 class Shader;
 
@@ -34,6 +32,6 @@ class DLLExport Prototype :
 
 	protected:
 		// Listen for Events
-		void OnEvent(const string& eventID, void *data) {};
+		void OnEvent(const std::string& eventID, void *data) {};
 		void OnEvent(EventType Event, void *data) {};
 };

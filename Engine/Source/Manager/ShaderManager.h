@@ -9,8 +9,6 @@
 #include <include/utils.h>
 #include <include/pugixml.h>
 
-using namespace std;
-
 class Shader;
 
 class DLLExport ShaderManager
@@ -30,9 +28,10 @@ class DLLExport ShaderManager
 		void ReloadFromFile();
 
 	private:
-		unordered_map<string, uint> shaderType;
-		unordered_map<string, Shader*> shaders;
-		stack <const Shader*> programs;
-		const char *shaderCfgFile;
+		std::string BasePath;
+		std::unordered_map<std::string, uint> shaderType;
+		std::unordered_map<std::string, Shader*> shaders;
+		std::stack <const Shader*> programs;
+		std::string shaderDataFile;
 
 };

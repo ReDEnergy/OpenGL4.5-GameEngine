@@ -1,5 +1,6 @@
-//#include <pch.h>
 #include "DebugOverlayText.h"
+
+#include <include/gl.h>
 
 #include <Component/Text.h>
 #include <Component/Transform/Transform.h>
@@ -9,6 +10,8 @@
 
 #include <GPU/Shader.h>
 #include <GPU/FrameBuffer.h>
+
+using namespace std;
 
 static glm::mat4 pmat = glm::perspective(25.0f, 1.6f, 0.1f, 50.0f);
 
@@ -39,8 +42,6 @@ void DebugOverlayText::Toggle(const string messageID, bool state)
 
 void DebugOverlayText::Update()
 {
-	FrameBuffer::Unbind();
-
 	Shader *shader = Manager::Shader->GetShader("font");
 	shader->Use();
 	glUniformMatrix4fv(shader->loc_projection_matrix, 1, false, glm::value_ptr(pmat));

@@ -19,6 +19,9 @@ class SkinnedMesh;
 class Transform;
 class Renderer;
 
+// Debugging
+class ProfileTimer;
+
 // Audio
 class AudioStream;
 class SoundFX;
@@ -64,11 +67,14 @@ class ObjectControl;
 class FrameBuffer;
 class Texture;
 class Shader;
+class GPUBuffers;
 
 // Rendering
+template <class StorageEntry>
+class SSBO;
 class SSAO;
+
 class ShadowMapping;
 
 // Events
-class EventType;
 class EventListener;

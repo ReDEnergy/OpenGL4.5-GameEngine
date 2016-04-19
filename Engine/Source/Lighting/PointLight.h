@@ -1,6 +1,6 @@
 #pragma once
 #include <Lighting/Light.h>
-#include <include/gl.h>
+#include <include/gl_defines.h>
 
 class Camera;
 class Texture;

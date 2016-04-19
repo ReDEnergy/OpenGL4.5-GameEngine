@@ -2,8 +2,6 @@
 #include <include/dll_export.h>
 #include <include/glm.h>
 
-using namespace std;
-
 class GameObject;
 class Transform;
 class Shader;

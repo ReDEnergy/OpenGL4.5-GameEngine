@@ -12,7 +12,7 @@ class DLLExport Text : virtual public GameObject
 		const char* GetText() const;
 
 		void SetColor(glm::vec3& color);
-		void SetText(const string &text);
+		void SetText(const char* text);
 		void AppendText(const char *text);
 		void Render(const Shader *shader) const;
 
@@ -21,7 +21,8 @@ class DLLExport Text : virtual public GameObject
 
 	public:
 		Transform *offset;
-		string content;
+		Mesh *mesh;
+		std::string content;
 
 	private:
 		glm::vec3 color;

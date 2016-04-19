@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <include/gl.h>
 
 using namespace std;
 
@@ -37,6 +38,11 @@ void Shader::OnLoad(function<void()> onLoad)
 	loadObservers.push_back(onLoad);
 }
 
+bool Shader::HasCompileErrors() const
+{
+	return program ? false : true;
+}
+
 void Shader::GetUniforms()
 {
 	// MVP
@@ -68,11 +74,12 @@ void Shader::GetUniforms()
 
 	// General
 	loc_resolution = GetUniformLocation("resolution");
+	loc_object_class = GetUniformLocation("obj_class");
 
 	// SSAO
-	loc_kernel_size = GetUniformLocation("kernel_size");	
-	loc_kernel = GetUniformLocation("kernel");	
-	loc_u_rad = GetUniformLocation("u_rad");	
+	loc_kernel_size = GetUniformLocation("kernel_size");
+	loc_kernel = GetUniformLocation("kernel");
+	loc_u_rad = GetUniformLocation("u_rad");
 
 	// TESS
 	loc_lod_factor = GetUniformLocation("lod_factor");
@@ -81,7 +88,7 @@ void Shader::GetUniforms()
 	loc_displacement_factor = GetUniformLocation("displacement_factor");
 
 	// Material Block
-	loc_material = glGetUniformBlockIndex(program, "Material");	
+	loc_material = glGetUniformBlockIndex(program, "Material");
 	loc_transparency = GetUniformLocation("transparency");
 
 	char buffer[64];
@@ -92,21 +99,21 @@ void Shader::GetUniforms()
 
 	// Textures
 	for (int i = 0; i < MAX_2D_TEXTURES; i++) {
-		sprintf_s(buffer, "u_texture_%d", i);
+		sprintf(buffer, "u_texture_%d", i);
 		loc_textures[i]	 = GetUniformLocation(buffer);
 
-		sprintf_s(buffer, "u_texture_cube_%d", i);
+		sprintf(buffer, "u_texture_cube_%d", i);
 		loc_cube_textures[i] = GetUniformLocation(buffer);
 	}
 	loc_channel_mask = GetUniformLocation("channel_mask");
 
 	// Text
-	text_color = GetUniformLocation("text_color");	
-	
+	text_color = GetUniformLocation("text_color");
+
 	// Debugging
-	loc_debug_id = GetUniformLocation("debug_id");	
-	loc_debug_view = GetUniformLocation("debug_view");	
-	loc_debug_color = GetUniformLocation("debug_color");	
+	loc_debug_id = GetUniformLocation("debug_id");
+	loc_debug_view = GetUniformLocation("debug_view");
+	loc_debug_color = GetUniformLocation("debug_color");
 
 	// Composition settings
 	active_ssao = GetUniformLocation("active_ssao");
@@ -172,7 +179,7 @@ void Shader::ClearShaders()
 	shaderFiles.clear();
 }
 
-unsigned int Shader::CreateShader(const string &shaderFile, GLenum shaderType) 
+unsigned int Shader::CreateShader(const string &shaderFile, GLenum shaderType)
 {
 	string shader_code;
 	ifstream file(shaderFile.c_str(), ios::in);
@@ -194,9 +201,9 @@ unsigned int Shader::CreateShader(const string &shaderFile, GLenum shaderType)
 	int infoLogLength = 0;
 	int compileResult = 0;
 	unsigned int glShaderObject;
-			
+
 	// Create new shader object
-	glShaderObject = glCreateShader(shaderType);				
+	glShaderObject = glCreateShader(shaderType);
 	if (glShaderObject == 0) {
 		cout << "\t ..... ERROR " << endl;
 		return 0;
@@ -205,25 +212,27 @@ unsigned int Shader::CreateShader(const string &shaderFile, GLenum shaderType)
 	const char *shader_code_ptr = shader_code.c_str();
 	const int shader_code_size = (int) shader_code.size();
 
-	glShaderSource(glShaderObject, 1, &shader_code_ptr, &shader_code_size);	
+	glShaderSource(glShaderObject, 1, &shader_code_ptr, &shader_code_size);
 	glCompileShader(glShaderObject);
-	glGetShaderiv(glShaderObject, GL_COMPILE_STATUS, &compileResult);					
-			
+	glGetShaderiv(glShaderObject, GL_COMPILE_STATUS, &compileResult);
+
 	// LOG COMPILE ERRORS
 	if(compileResult == GL_FALSE)
 	{
 		string str_shader_type = "";
 
 		if(shaderType == GL_VERTEX_SHADER)				str_shader_type="VERTEX";
+		#ifndef OPENGL_ES
 		if(shaderType == GL_TESS_CONTROL_SHADER)		str_shader_type="TESS CONTROL";
 		if(shaderType == GL_TESS_EVALUATION_SHADER)		str_shader_type="TESS EVALUATION";
 		if(shaderType == GL_GEOMETRY_SHADER)			str_shader_type="GEOMETRY";
+		#endif
 		if(shaderType == GL_FRAGMENT_SHADER)			str_shader_type="FRAGMENT";
 		if(shaderType == GL_COMPUTE_SHADER)				str_shader_type="COMPUTE";
 
-		glGetShaderiv(glShaderObject, GL_INFO_LOG_LENGTH, &infoLogLength);		
+		glGetShaderiv(glShaderObject, GL_INFO_LOG_LENGTH, &infoLogLength);
 		vector<char> shader_log(infoLogLength);
-		glGetShaderInfoLog(glShaderObject, infoLogLength, NULL, &shader_log[0]);	
+		glGetShaderInfoLog(glShaderObject, infoLogLength, NULL, &shader_log[0]);
 
 		cout << "\n-----------------------------------------------------\n";
 		cout << "\n[ERROR]: [" << str_shader_type << " SHADER]\n\n";
@@ -249,13 +258,13 @@ unsigned int Shader::CreateProgram(const vector<unsigned int> &shaderObjects)
 	for (auto shader: shaderObjects)
 		glAttachShader(glProgramObject, shader);
 
-	glLinkProgram(glProgramObject);												
+	glLinkProgram(glProgramObject);
 	glGetProgramiv(glProgramObject, GL_LINK_STATUS, &linkResult);
 
 	// LOG LINK ERRORS
-	if(linkResult == GL_FALSE) {														
+	if(linkResult == GL_FALSE) {
 
-		glGetProgramiv(glProgramObject, GL_INFO_LOG_LENGTH, &infoLogLength);		
+		glGetProgramiv(glProgramObject, GL_INFO_LOG_LENGTH, &infoLogLength);
 		vector<char> program_log(infoLogLength);
 		glGetProgramInfoLog(glProgramObject, infoLogLength, NULL, &program_log[0]);
 
@@ -264,8 +273,8 @@ unsigned int Shader::CreateProgram(const vector<unsigned int> &shaderObjects)
 
 		return 0;
 	}
-			
-	// Delete the shader objects because we do not need them any more 
+
+	// Delete the shader objects because we do not need them any more
 	for (auto shader: shaderObjects)
 		glDeleteShader(shader);
 

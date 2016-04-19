@@ -9,8 +9,6 @@
 
 #include <include/dll_export.h>
 
-using namespace std;
-
 enum class MenuEntryType {
 	ACTION,
 	PAGE,
@@ -30,7 +28,7 @@ class PageEntry {
 		virtual void EmitAction();
 
 	public:
-		string actionID;
+		std::string actionID;
 		MenuEntryType type;
 		Text *text;
 };
@@ -70,9 +68,9 @@ class MenuPage {
 		void Render();
 
 	public:
-		string UID;
-		string name;
-		vector<PageEntry*> entries;
+		std::string UID;
+		std::string name;
+		std::vector<PageEntry*> entries;
 };
 
 class DLLExport MenuSystem 
@@ -88,6 +86,6 @@ class DLLExport MenuSystem
 		void ConstructPage(pugi::xml_node &pageXML);
 
 	public:
-		unordered_map<string, MenuPage*> pages;
+		std::unordered_map<std::string, MenuPage*> pages;
 		GameMenu *Menu;
 };

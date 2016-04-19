@@ -5,6 +5,8 @@
 
 Renderer::Renderer()
 {
+	alphaChannel = false;
+	isRendered = true;
 	castSadows = true;
 	opacity = 1.0f;
 	culling = OpenGL::CULL::BACK;
@@ -22,12 +24,17 @@ bool Renderer::CastShadow() const
 
 bool Renderer::IsTransparent() const
 {
-	return (opacity < 1.0);
+	return (alphaChannel || (opacity < 1.0));
 }
 
 float Renderer::GetOpacity() const
 {
 	return opacity;
+}
+
+bool Renderer::IsRendered() const
+{
+	return isRendered;
 }
 
 RenderingLayer Renderer::GetRenderingLayer()
@@ -44,6 +51,16 @@ void Renderer::SetOpacity(float value)
 {
 	// value should be between 0 and 1
 	opacity = value;
+}
+
+void Renderer::SetIsRendered(bool value)
+{
+	isRendered = value;
+}
+
+void Renderer::SetUseAlphaChannel(bool value)
+{
+	alphaChannel = value;
 }
 
 void Renderer::Use() const

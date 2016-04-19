@@ -8,9 +8,8 @@
 class PointLight;
 class GameObject;
 class Camera;
+class Shader;
 class DirectionalLight;
-
-using namespace std;
 
 class DLLExport SceneManager
 {
@@ -19,9 +18,11 @@ class DLLExport SceneManager
 		~SceneManager();
 
 	public:
+		void Init();
 		void LoadScene(const char *fileName);
 		void ReloadScene();
 			 
+		void GlobalUpdate();
 		void Update();
 		void FrustumCulling(Camera *camera);
 		void LightSpaceCulling(Camera *camera, DirectionalLight *light);
@@ -33,9 +34,9 @@ class DLLExport SceneManager
 		void FrameEnded();
 
 		GameObject* GetGameObject(char *refID, unsigned int instanceID);
-		const list<GameObject*>& GetActiveObjects() const;
-		const list<GameObject*>& GetFrustrumObjects() const;
-		const vector<PointLight*>& GetPointLights() const;
+		const std::list<GameObject*>& GetActiveObjects() const;
+		const std::list<GameObject*>& GetFrustrumObjects() const;
+		const std::vector<PointLight*>& GetPointLights() const;
 
 		Camera* GetActiveCamera();
 		void SetActiveCamera(Camera *camera);
@@ -43,14 +44,17 @@ class DLLExport SceneManager
 		void Render(Camera *camera);
 
 	private:
+		Shader *R2T;
+		Shader *R2TSk;
+
 		const char *sceneFile;
-		list<GameObject*> toAdd;
-		list<GameObject*> toRemove;
-		list<GameObject*> toDelete;
+		std::list<GameObject*> toAdd;
+		std::list<GameObject*> toRemove;
+		std::list<GameObject*> toDelete;
 		Camera *activeCamera;
 
-		vector<PointLight*> lights;
-		list<GameObject*> activeObjects;
-		list<GameObject*> frustumObjects;
+		std::vector<PointLight*> lights;
+		std::list<GameObject*> activeObjects;
+		std::list<GameObject*> frustumObjects;
 
 };

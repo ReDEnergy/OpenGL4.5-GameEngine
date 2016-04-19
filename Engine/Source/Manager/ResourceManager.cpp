@@ -1,7 +1,6 @@
 #include "ResourceManager.h"
 
 #include <iostream>
-using namespace std;
 
 #include <include/glm.h>
 #include <include/glm_utils.h>
@@ -28,6 +27,8 @@ using namespace std;
 #include <Component/Physics.h>
 #endif
 
+using namespace std;
+
 ResourceManager::ResourceManager() {
 }
 
@@ -45,7 +46,7 @@ void ResourceManager::Load(const char* file) {
 	const pugi::xml_document &doc = *(pugi::LoadXML(file));
 
 	LoadMeshes(doc);
-	LoadGameObjects(doc);
+	LoadPrefabObjects(doc);
 	LoadGameAudio(doc);
 }
 
@@ -57,21 +58,26 @@ void ResourceManager::LoadMeshes(const pugi::xml_document &doc)
 	for (pugi::xml_node mesh : meshesXML.children())
 	{
 		bool skinned = mesh.attribute("skinned").as_bool();
-		bool quad = mesh.attribute("quad").as_bool();
 		bool noMaterial = mesh.attribute("material") ? true : false;
 
 		meshName = mesh.child_value("name");
 
 		Mesh *M = skinned ? new SkinnedMesh(meshName) : new Mesh(meshName);
 
-		if (quad)			M->SetGlPrimitive(GL_QUADS);
 		if (noMaterial)		M->UseMaterials(false);
 
 		if (!M->LoadMesh(RESOURCE_PATH::MODELS + mesh.child_value("path"), mesh.child_value("file"))) {
 			SAFE_FREE(M);
 			continue;
 		}
+
+		// Create gameobject for this mesh
+		GameObject *GO = new GameObject(meshName);
+		GO->SetMesh(M);
+
+		// Save Mesh and GameObject references
 		_meshes[meshName] = M;
+		_objects[meshName] = GO;
 	}
 }
 
@@ -85,7 +91,7 @@ void ResourceManager::LoadGameAudio(const pugi::xml_document &doc)
 		cout << "Audio Type: " << audio.name() << endl;
 
 		audioName = audio.child_value("name");
-		string fileLocation = RESOURCE_PATH::AUDIO + audio.child_value("path") + "\\" + audio.child_value("file");
+		string fileLocation = RESOURCE_PATH::AUDIO + audio.child_value("path") + "/" + audio.child_value("file");
 
 		if (strcmp(audio.name(), "music") == 0)
 		{
@@ -110,7 +116,7 @@ void ResourceManager::LoadGameAudio(const pugi::xml_document &doc)
 	}
 }
 
-void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
+void ResourceManager::LoadPrefabObjects(const pugi::xml_document &doc)
 {
 	const char *objName;
 	const char* meshName;
@@ -126,17 +132,13 @@ void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
 		objName = obj.child_value("name");
 		meshName = obj.child_value("mesh");
 		auto shaderInfo = obj.child("shader");
-		auto physicsInfo = obj.child("physics");
 		auto transformInfo = obj.child("transform");
 		auto renderingInfo = obj.child("rendering");
-		bool createProp = obj.attribute("prop") ? true : false;
-
 
 		GameObject *GO = new GameObject(objName);
 		Serialization::ReadTransform(transformInfo, *GO->transform);
 		if (meshName) {
-			GO->mesh = _meshes[meshName];
-			GO->SetupAABB();
+			GO->SetMesh(_meshes[meshName]);
 		}
 
 		if (shaderInfo) {
@@ -144,6 +146,7 @@ void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
 		}
 
 		#ifdef PHYSICS_ENGINE
+		auto physicsInfo = obj.child("physics");
 		if (physicsInfo) {
 			GO->physics = new Physics(GO);
 			GO->physics->LoadHavokFile(RESOURCE_PATH::PHYSICS + physicsInfo.child_value("file"));
@@ -163,9 +166,6 @@ void ResourceManager::LoadGameObjects(const pugi::xml_document &doc)
 		}
 
 		_objects[objName] = GO;
-
-		if (createProp)
-			_props[objName] = GO;
 	}
 }
 
@@ -176,14 +176,14 @@ GameObject* ResourceManager::GetGameObject(const char *name) const
 	return nullptr;
 }
 
-GameObject * ResourceManager::GetPropObject(const char * name) const
+GameObject* ResourceManager::GetPropObject(const char * name) const
 {
-	if (_props.find(name) != _props.end())
-		return _props.at(name);
+	if (_objects.find(name) != _objects.end())
+		return _objects.at(name);
 	return nullptr;
 }
 
-Mesh * ResourceManager::GetMesh(const char *name) const
+Mesh* ResourceManager::GetMesh(const char *name) const
 {
 	if (_meshes.find(name) != _meshes.end()) {
 		return _meshes.at(name);
@@ -195,11 +195,16 @@ unsigned int ResourceManager::GetGameObjectUID(const char *name)
 {
 	if (name == nullptr)
 		return -1;
-	
+
 	if (_counter.find(name) == _counter.end()) {
 		_counter[name] = -1;
 	}
 	_counter[name]++;
 
 	return _counter[name];
+}
+
+const unordered_map<string, Mesh*>& ResourceManager::GetMeshList() const
+{
+	return _meshes;
 }

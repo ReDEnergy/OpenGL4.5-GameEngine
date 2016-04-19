@@ -5,8 +5,6 @@
 #include <include/dll_export.h>
 #include <Event/EventListener.h>
 
-using namespace std;
-
 class DLLExport SimpleTimer
 	: public EventListener
 {
@@ -20,7 +18,7 @@ class DLLExport SimpleTimer
 		void Update();
 		bool IsActive();
 		void SetDuration(float duration);
-		void OnExpire(function<void()> func);
+		void OnExpire(std::function<void()> func);
 
 	private:
 		void OnEvent(EventType Event, void *data);
@@ -29,5 +27,5 @@ class DLLExport SimpleTimer
 		bool isActive;
 		float duration;
 		float startTime;
-		list<function<void()>> onExprire;
+		std::list<std::function<void()>> onExprire;
 };

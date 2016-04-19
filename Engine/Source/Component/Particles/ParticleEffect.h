@@ -15,8 +15,6 @@
 #include <Manager/ShaderManager.h>
 #include <Manager/TextureManager.h>
 
-using namespace std;
-
 class Particle
 {
 	public:
@@ -43,13 +41,15 @@ class ParticleEffect
 		virtual void Render(Camera *camera, Shader *shader);
 		virtual void Update();
 
+	public:
+		Texture *billboard;
+		Transform *source;
+
 	protected:
 		unsigned int particleCount;
 		GLuint VAO;
 		GLuint VBO;
-		Texture *billboard;
-		Transform *source;
-		vector<T> particles;
+		std::vector<T> particles;
 };
 
 

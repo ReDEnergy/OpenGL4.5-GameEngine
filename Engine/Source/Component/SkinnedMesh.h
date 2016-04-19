@@ -4,15 +4,12 @@
 #ifdef ENGINE_DLL_EXPORTS
 #include <include/assimp.h>
 #endif
-#include <include/gl.h>
 #include <include/glm.h>
 #include <include/utils.h>
 
 #include <Component/Mesh.h>
 
 #include <unordered_map>
-
-using namespace std;
 
 #define NUM_BONES_PER_VEREX 4
 
@@ -36,7 +33,7 @@ struct VertexBoneData
 		ZERO_MEM(Weights);
 	}
 
-	uint AddBoneData(uint BoneID, float Weight);
+	void SetBoneData(uint index, uint BoneID, float Weight);
 };
 
 
@@ -52,13 +49,14 @@ class DLLExport SkinnedMesh : public Mesh
 		~SkinnedMesh();
 
 		bool LoadMesh(const std::string& fileLocation, const std::string& fileName);
-		void ScaleAnimationTime(const string &animation, float timeScale);
+		void ScaleAnimationTime(const std::string &animation, float timeScale);
 		
 		// Return a new copy of the Skeleton
-		SkeletalJoint* GetSkeletonInfo(unordered_map<string, SkeletalJoint*> &joints) const;
+		std::unordered_map<std::string, SkeletalJoint*> GetSkeletonCopy(SkeletalJoint* &ROOT) const;
 
 		#ifdef ENGINE_DLL_EXPORTS
-		aiAnimation * GetAnimation(const char *name) const;
+		aiAnimation* GetAnimation(const char *name) const;
+		aiAnimation* GetAnimationByID(uint animationID) const;
 		#endif
 
 		uint GetNumberOfBones() const;
@@ -72,9 +70,9 @@ class DLLExport SkinnedMesh : public Mesh
 		#endif
 
 	private:
-		unordered_map<string, SkeletalJoint*> skeletalJoints;
-		vector<VertexBoneData> boneData;
-		vector<glm::mat4> boneTransform;
+		std::unordered_map<std::string, SkeletalJoint*> skeletalJoints;
+		std::vector<VertexBoneData> boneData;
+		std::vector<glm::mat4> boneTransform;
 		unsigned short nrBones;
 
 		// TODO - Support for multiple skinned meshes
@@ -87,7 +85,7 @@ class DLLExport SkinnedMesh : public Mesh
 		Assimp::Importer Importer;
 		const aiScene* pScene;
 
-		unordered_map<string, aiAnimation*> animations;
+		std::unordered_map<std::string, aiAnimation*> animations;
 		aiAnimation *animationState;
 		#endif
 };

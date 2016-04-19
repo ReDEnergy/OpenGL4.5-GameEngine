@@ -1,12 +1,13 @@
-//#include <pch.h>
 #include "EditorInput.h"
 
+#include <Core/WindowObject.h>
 #include <Manager/Manager.h>
 #include <Manager/RenderingSystem.h>
 #include <UI/MenuSystem.h>
 
+using namespace std;
+
 EditorInput::EditorInput()
-	: ObjectInput(InputGroup::IG_EDITOR)
 {
 	SubscribeToEvent("ssao");
 	SubscribeToEvent("forward-rendering");
@@ -28,6 +29,6 @@ void EditorInput::OnEvent(const string& eventID, void *data)
 	}
 	if (eventID.compare("vsync-rendering") == 0) {
 		Manager::RenderSys->Set(RenderState::VSYNC, entry->GetState());
-		wglSwapIntervalEXT(entry->GetState());
+		window->SetVSync(entry->GetState());
 	}
 }

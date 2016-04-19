@@ -4,8 +4,6 @@
 #include <include/dll_export.h>
 #include <include/pugixml.h>
 
-using namespace std;
-
 class Mesh;
 class Transform;
 class GameObject;
@@ -25,15 +23,15 @@ class DLLExport ResourceManager
 		GameObject * GetPropObject(const char * name) const;
 		Mesh* GetMesh(const char *name) const;
 		unsigned int GetGameObjectUID(const char *name);
+		const std::unordered_map<std::string, Mesh*>& GetMeshList() const;
 
 	private:
 		void LoadMeshes(const pugi::xml_document &doc);
-		void LoadGameObjects(const pugi::xml_document &doc);
+		void LoadPrefabObjects(const pugi::xml_document &doc);
 		void LoadGameAudio(const pugi::xml_document &doc);
 
 	private:
-		unordered_map<string, GameObject*> _objects;
-		unordered_map<string, GameObject*> _props;
-		unordered_map<string, unsigned int> _counter;
-		unordered_map<string, Mesh*> _meshes;
+		std::unordered_map<std::string, GameObject*> _objects;
+		std::unordered_map<std::string, unsigned int> _counter;
+		std::unordered_map<std::string, Mesh*> _meshes;
 };

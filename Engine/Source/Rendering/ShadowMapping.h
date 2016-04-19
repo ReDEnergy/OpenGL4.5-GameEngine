@@ -1,5 +1,6 @@
 #pragma once
-#include <include/gl.h>
+
+#include <include/gl_defines.h>
 
 class FrameBuffer;
 class DirectionalLight;

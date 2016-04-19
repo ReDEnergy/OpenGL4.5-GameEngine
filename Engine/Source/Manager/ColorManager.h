@@ -14,20 +14,17 @@ class DLLExport ColorManager
 		~ColorManager();
 
 	public:
+		unsigned int GetObjectUID(GameObject* object);
 		glm::vec3 GetColorUID(GameObject* object);
 		glm::ivec3 GetOffsetID() const;
 		glm::ivec3 GetChannelsEncodeSize() const;
-		GameObject* GetObjectByColor(const glm::vec3 &unitColor) const;
+		GameObject* GetObjectByColor(const glm::ivec3 &color) const;
 		GameObject* GetObjectByID(unsigned int ID) const;
-
-		// color components must be in [0 - 1] range
-		unsigned int GetUKeyFromColor(const glm::vec3 &unitColor) const;
 
 	private:
 		
 		glm::ivec3 colorID;
 		glm::ivec3 offset;
-		glm::ivec3 invOffset;
 		std::vector<GameObject*> colorMap;
 };
 

@@ -5,7 +5,14 @@
 #include <include/dll_export.h>
 #include <include/utils.h>
 
-using namespace std;
+struct LapInfo
+{
+	LapInfo(const char* label, double time)
+		: label(label), time(time) {};
+
+	const char* label;
+	double time;
+};
 
 class DLLExport ProfileTimer
 {
@@ -17,15 +24,20 @@ class DLLExport ProfileTimer
 		void Start();
 		void Stop();
 		void Reset();
-		void Lap();
+		void Lap(const char* label = nullptr);
 		void Print();
+
+		bool IsActive() const;
+		float GetStartTime() const;
+		float GetDeltaTime() const;
+		const std::vector<LapInfo>& GetInfo() const;
 
 		void SetMessage(const char* message);
 
 	private:
-		bool active;
+		bool isActive;
 		double startTime;
 		double stopTime;
-		vector<double> laps;
-		string message;
+		std::vector<LapInfo> laps;
+		std::string message;
 };

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <vector>
+
 #include <include/dll_export.h>
+#include <include/glm.h>
 #include <include/utils.h>
 
 #include <Component/ObjectInput.h>
@@ -22,17 +25,21 @@ class DLLExport TextureDebugger
 
 	public:
 		void Init();
-		void SetChannelIndex(unsigned int channel, unsigned int index, const Texture * const texture);
-		void PushToChannel(unsigned int channel, const Texture * const texture);
+		void SetChannelIndex(unsigned int channel, unsigned int index, const Texture* texture);
+		void PushToChannel(unsigned int channel, const Texture* texture);
 		void SetChannel(unsigned int channel, const FrameBuffer* const frameBuffer);
+		unsigned int GetEmptyChannel() const;
 		void SetRenderingVAO(unsigned int VAO);
 		void Render();
 
 		bool Toggle();
 		bool ToggleFullScreen();
 		bool IsFullScreen();
-		void SelectChannel(uint channelID);
-		void SelectTextureChannel(uint textureChannel);
+		void SelectActiveChannel(uint channelID);
+		void SelectActiveTexture(uint textureIndex);
+		void SetViewMode(glm::ivec4 mask);
+
+		glm::ivec4 GetMask() const;
 
 	private:
 		void OnKeyPress(int key, int mods);
@@ -43,8 +50,11 @@ class DLLExport TextureDebugger
 		bool fullScreen;
 		uint activeChannel;
 		uint activeTexture;
+		glm::ivec4 channelMask;
 		GameObject *renderingQuad;
-		Shader *shader;
 
-		vector<const Texture* const> channels[TEXTURE_DEBUGGER_CHANNELS];
+		Shader *shader;
+		int loc_channel_mask;
+
+		std::vector<const Texture*> channels[TEXTURE_DEBUGGER_CHANNELS];
 };

@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "FontManager.h"
 
 #include <string>
@@ -6,6 +5,9 @@
 #include "Manager.h"
 #include <Manager/DebugInfo.h>
 #include <Core/GameObject.h>
+
+#include <include/gl.h>
+#include <Config/ResourcePath.h>
 
 #include <freetype-gl/freetype-gl.h>
 #include <freetype-gl/text-buffer.h>
@@ -19,10 +21,8 @@
 
 using namespace std;
 
-static const string _PATH("Resources\\Fonts\\");
-
 FontManager::FontManager() {
-
+	fontAtlasID = 0;
 }
 
 FontManager::~FontManager() {
@@ -33,25 +33,38 @@ void FontManager::Init() {
 	Manager::Debug->InitManager("Font");
 
 	 /* Text to be printed */
-	const wchar_t *cache = L" !\"#$%&'()*+,-./0123456789:;<=>?"
-                           L"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
-                           L"`abcdefghijklmnopqrstuvwxyz{|}~";
+	const char *cache = " !\"#$%&'()*+,-./0123456789:;<=>?"
+                           "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
+                           "`abcdefghijklmnopqrstuvwxyz{|}~";
 
 	/* Texture atlas to store individual glyphs */
-	atlas = texture_atlas_new( 512, 512, 1 );
+	auto fatlas = texture_atlas_new( 512, 512, 1 );
 
 	/* Build a new texture font from its description and size */
-	font = texture_font_new_from_file( atlas, 48, (_PATH + "Roboto\\Roboto-Regular.ttf").c_str());
+	auto font = texture_font_new_from_file(fatlas, 48, (RESOURCE_PATH::FONTS + "Roboto/Roboto-Regular.ttf").c_str());
+	fontInfo = (void*)font;
 	
 	/* Cache some glyphs to speed things up */
 	texture_font_load_glyphs( font, cache);
 	// texture_font_delete( font );
 
 	unsigned char *map;
-    map = MakeDistanceMap(atlas->data, atlas->width, atlas->height);
-    memcpy( atlas->data, map, atlas->width*atlas->height*sizeof(unsigned char) );
+    map = MakeDistanceMap(fatlas->data, fatlas->width, fatlas->height);
+    memcpy(fatlas->data, map, fatlas->width * fatlas->height * sizeof(unsigned char) );
     free(map);
-    texture_atlas_upload( atlas );
+
+	texture_atlas_upload(fatlas);
+	fontAtlasID = fatlas->id;
+}
+
+unsigned int FontManager::GetFontAtlasID() const
+{
+	return fontAtlasID;
+}
+
+void* FontManager::GetTextureFont() const
+{
+	return fontInfo;
 }
 
 unsigned char * FontManager::MakeDistanceMap( unsigned char *img, unsigned int width, unsigned int height )

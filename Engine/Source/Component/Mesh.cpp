@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "Mesh.h"
 
 #include <include/utils.h>
@@ -15,27 +14,30 @@
 
 #include <Utils/GPU.h>
 
+using namespace std;
+
 Mesh::Mesh(const char* meshID)
 {
 	if (meshID)
 		this->meshID.assign(meshID);
-	meshType = MeshType::STATIC;
+	meshType = MESH_TYPE::STATIC;
 	useMaterial = true;
 	debugColor = glm::vec4(1);
-	glPrimitive = GL_TRIANGLES;
-	buffers = nullptr;
+	glDrawMode = GL_TRIANGLES;
+	buffers = new GPUBuffers();
 	bbox = nullptr;
 }
 
 Mesh::~Mesh() {
 	ClearData();
+	meshEntries.clear();
 	SAFE_FREE(buffers);
 }
 
 
 void Mesh::ClearData()
 {
-	loadState = LOG_MESH::SUCCESS;
+	loadState = MESH_STATUS::SUCCESS;
 	for (unsigned int i = 0 ; i < materials.size() ; i++) {
 		SAFE_FREE(materials[i]);
 	}
@@ -50,12 +52,12 @@ bool Mesh::LoadMesh(const string& fileLocation, const string& fileName)
 {
 	ClearData();
 	this->fileLocation = fileLocation;
-	string file = (fileLocation + '\\' + fileName).c_str();
+	string file = (fileLocation + '/' + fileName).c_str();
 
 	Assimp::Importer Importer;
 
 	unsigned int flags = aiProcess_GenSmoothNormals | aiProcess_FlipUVs;
-	if (glPrimitive == GL_TRIANGLES) flags |= aiProcess_Triangulate;
+	if (glDrawMode == GL_TRIANGLES) flags |= aiProcess_Triangulate;
 
 	const aiScene* pScene = Importer.ReadFile(file, flags);
 
@@ -65,33 +67,35 @@ bool Mesh::LoadMesh(const string& fileLocation, const string& fileName)
 
 	// pScene is freed when returning because of Importer
 
-	printf("Error parsing '%s': '%s'\n", file, Importer.GetErrorString());
+	printf("Error parsing '%s': '%s'\n", file.c_str(), Importer.GetErrorString());
 	return false;
 }
 
 bool Mesh::InitFromData()
 {
-	MeshEntry *M = new MeshEntry();
-	M->nrIndices = this->indices.size();
 	meshEntries.clear();
+
+	MeshEntry M;
+	M.nrIndices = static_cast<unsigned short>(indices.size());
 	meshEntries.push_back(M);
 
+	buffers->ReleaseMemory();
 	if (texCoords.size()) {
-		buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
+		*buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
 	}
 	else {
-		buffers = UtilsGPU::UploadData(positions, normals, indices);
+		*buffers = UtilsGPU::UploadData(positions, normals, indices);
 	}
 
 	SAFE_FREE(bbox);
 	bbox = new BoundingBox(positions);
 
-	return buffers->VAO != -1;
+	return buffers->VAO != 0;
 }
 
-bool Mesh::InitFromData(vector<glm::vec3>& positions, 
-						vector<glm::vec3>& normals, 
-						vector<glm::vec2>& texCoords, 
+bool Mesh::InitFromData(vector<glm::vec3>& positions,
+						vector<glm::vec3>& normals,
+						vector<glm::vec2>& texCoords,
 						vector<unsigned short>& indices)
 {
 	this->positions = positions;
@@ -110,19 +114,18 @@ bool Mesh::InitFromScene(const aiScene* pScene)
 
 	unsigned int nrVertices = 0;
 	unsigned int nrIndices = 0;
-	
+
 	// Count the number of vertices and indices
 	for (unsigned int i = 0 ; i < pScene->mNumMeshes ; i++) {
-		meshEntries[i] = new MeshEntry();
-		meshEntries[i]->materialIndex = pScene->mMeshes[i]->mMaterialIndex;      
-		meshEntries[i]->nrIndices = pScene->mMeshes[i]->mNumFaces * (glPrimitive == GL_TRIANGLES ? 3 : 4);
-		meshEntries[i]->baseVertex = nrVertices;
-		meshEntries[i]->baseIndex = nrIndices;
-		
+		meshEntries[i].materialIndex = pScene->mMeshes[i]->mMaterialIndex;
+		meshEntries[i].nrIndices = pScene->mMeshes[i]->mNumFaces * (glDrawMode == GL_TRIANGLES ? 3 : 4);
+		meshEntries[i].baseVertex = nrVertices;
+		meshEntries[i].baseIndex = nrIndices;
+
 		nrVertices += pScene->mMeshes[i]->mNumVertices;
-		nrIndices  += meshEntries[i]->nrIndices;
+		nrIndices  += meshEntries[i].nrIndices;
 	}
-	
+
 	// Reserve space in the vectors for the vertex attributes and indices
 	positions.reserve(nrVertices);
 	normals.reserve(nrVertices);
@@ -138,12 +141,13 @@ bool Mesh::InitFromScene(const aiScene* pScene)
 	if (useMaterial && !InitMaterials(pScene))
 		return false;
 
-	buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
-	return buffers->VAO != -1;
+	buffers->ReleaseMemory();
+	*buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
+	return buffers->VAO != 0;
 }
 
 void Mesh::InitMesh(const aiMesh* paiMesh)
-{    
+{
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 
 	// Populate the vertex attribute vectors
@@ -211,9 +215,9 @@ void Mesh::UseMaterials(bool value) {
 	useMaterial = value;
 }
 
-void Mesh::SetGlPrimitive(unsigned int glPrimitive)
+void Mesh::SetGLDrawMode(GLenum drawMode)
 {
-	this->glPrimitive = glPrimitive;
+	glDrawMode = drawMode;
 }
 
 const char * Mesh::GetMeshID() const
@@ -221,99 +225,37 @@ const char * Mesh::GetMeshID() const
 	return meshID.c_str();
 }
 
-void Mesh::Render(const Shader *shader)
-{
-	glBindVertexArray(buffers->VAO);
-	for (unsigned int i = 0 ; i < meshEntries.size() ; i++) {
-
-		if (useMaterial) {
-			const unsigned int materialIndex = meshEntries[i]->materialIndex;
-			if (materialIndex != INVALID_MATERIAL && materials[materialIndex]->texture) {
-				(materials[materialIndex]->texture)->BindToTextureUnit(GL_TEXTURE0);
-				// TODO: RenderDoc will crash here
-				//glBindBufferBase(GL_UNIFORM_BUFFER, 0, materials[materialIndex]->material_ubo);
-			}
-			else {
-				Manager::Texture->GetTexture(unsigned int(0))->BindToTextureUnit(GL_TEXTURE0);
-			}
-		}
-
-		glDrawElementsBaseVertex(glPrimitive,
-								meshEntries[i]->nrIndices,
-								GL_UNSIGNED_SHORT,
-								(void*)(sizeof(unsigned short) * meshEntries[i]->baseIndex),
-								meshEntries[i]->baseVertex);
-
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	}
-	glBindVertexArray(0);
-}
-
-void Mesh::RenderInstanced(unsigned int instances)
-{
-	instances = instances < 1 ? 1 : instances;
-	glBindVertexArray(buffers->VAO);
-	for (unsigned int i = 0; i < meshEntries.size(); i++) {
-
-		if (useMaterial) {
-			const unsigned int materialIndex = meshEntries[i]->materialIndex;
-			if (materialIndex != INVALID_MATERIAL && materials[materialIndex]->texture) {
-				(materials[materialIndex]->texture)->BindToTextureUnit(GL_TEXTURE0);
-				glBindBufferBase(GL_UNIFORM_BUFFER, 0, materials[materialIndex]->material_ubo);
-			}
-			else {
-				Manager::Texture->GetTexture(unsigned int(0))->BindToTextureUnit(GL_TEXTURE0);
-			}
-		}
-
-		glDrawElementsInstancedBaseVertex(glPrimitive,
-			meshEntries[i]->nrIndices,
-			GL_UNSIGNED_SHORT,
-			(void*)(sizeof(unsigned short) * meshEntries[i]->baseIndex),
-			instances,
-			meshEntries[i]->baseVertex);
-
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	}
-	glBindVertexArray(0);
-}
-
-void Mesh::RenderDebug(const Shader *shader) const
-{
-
-}
-
 BoundingBox::BoundingBox(vector<glm::vec3> &positions)
 {
-	glm::vec3 max = positions[0];
-	glm::vec3 min = positions[0];
+	glm::vec3 maxValue = positions[0];
+	glm::vec3 minValue = positions[0];
 
 	for (auto point : positions) {
 		// find max
-		if (point.x > max.x)
-			max.x = point.x;
-		if (point.y > max.y)
-			max.y = point.y;
-		if (point.z > max.z)
-			max.z = point.z;
+		if (point.x > maxValue.x)
+			maxValue.x = point.x;
+		if (point.y > maxValue.y)
+			maxValue.y = point.y;
+		if (point.z > maxValue.z)
+			maxValue.z = point.z;
 
 		// find min
-		if (point.x < min.x)
-			min.x = point.x;
-		if (point.y < min.y)
-			min.y = point.y;
-		if (point.z < min.z)
-			min.z = point.z;
+		if (point.x < minValue.x)
+			minValue.x = point.x;
+		if (point.y < minValue.y)
+			minValue.y = point.y;
+		if (point.z < minValue.z)
+			minValue.z = point.z;
 	}
 
-	glm::vec3 halfSize = (max - min) / 2.0f;
-	glm::vec3 center = (max + min) / 2.0f;
+	glm::vec3 halfSize = (maxValue - minValue) / 2.0f;
+	glm::vec3 center = (maxValue + minValue) / 2.0f;
 
 	points.push_back(center + halfSize * glm::vec3( 1,  1,  1));
 	points.push_back(center + halfSize * glm::vec3( 1,  1, -1));
 	points.push_back(center + halfSize * glm::vec3( 1, -1,  1));
 	points.push_back(center + halfSize * glm::vec3( 1, -1, -1));
-												   
+
 	points.push_back(center + halfSize * glm::vec3(-1,  1,  1));
 	points.push_back(center + halfSize * glm::vec3(-1,  1, -1));
 	points.push_back(center + halfSize * glm::vec3(-1, -1,  1));

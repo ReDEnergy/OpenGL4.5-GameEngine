@@ -7,19 +7,22 @@ using namespace std;
 #include <include/glm.h>
 
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
+#include <Core/WindowManager.h>
 #include <Core/Camera/Camera.h>
+
 #include <Component/Text.h>
 #include <Component/Transform/Transform.h>
 
 #include <Event/EventType.h>
 
 #include <GPU/Shader.h>
-#include <Input/ObjectControl.h>
 
 #include <Manager/Manager.h>
 #include <Manager/AudioManager.h>
 #include <Manager/ConfigFile.h>
 #include <Manager/ShaderManager.h>
+#include <Manager/SceneManager.h>
 #include <Manager/EventSystem.h>
 
 #include <UI/MenuSystem.h>
@@ -27,23 +30,25 @@ using namespace std;
 using namespace std;
 
 GameMenu::GameMenu()
-	: ObjectInput(InputGroup::IG_IN_GAME_MENU)
 {
 	activePage = Manager::GetMenu()->pages["in_game_menu"];
 	activeEntryIndex = 0;
 
-	float aspectRation = (float)Engine::Window->resolution.x / Engine::Window->resolution.y;
-
 	HUDCamera = new Camera();
-	HUDCamera->SetPerspective(25.0f, aspectRation, 0.1f, 50.0f);
+	HUDCamera->SetPerspective(25.0f, Engine::Window->props.aspectRatio, 0.1f, 50.0f);
 	//HUDCamera->SetOrthgraphic(10, 10, 0.1f, 50.0f);
 	HUDCamera->SetPosition(glm::vec3(0, 0, 10.0f));
 	HUDCamera->transform->SetWorldRotation(glm::vec3(0, 0, 0));
 	HUDCamera->Update();
 
-	for (auto &page : (Manager::GetMenu()->pages)) {
+
+
+	for (auto &page : (Manager::GetMenu()->pages))
+	{
 		SetPageLayout(page.second);
 	}
+
+	AttachTo(WindowManager::GetDefaultWindow());
 
 	SubscribeToEvent("resume");
 	SubscribeToEvent("exit");
@@ -51,24 +56,24 @@ GameMenu::GameMenu()
 	SubscribeToEvent(EventType::OPEN_GAME_MENU);
 }
 
-void GameMenu::SetPageLayout(MenuPage *page) {
-	int index = 0;
+void GameMenu::SetPageLayout(MenuPage *page)
+{
 	float offset = 1.6f;
 	float lineOffset = 0.25f;
-	float leftOffset = -3.20f; 
+	float leftOffset = -3.20f;
 	for (auto entry : page->entries) {
 		entry->text->transform->SetWorldPosition(entry->text->transform->GetWorldPosition() + glm::vec3(leftOffset, offset, 0));
 		offset -= lineOffset;
 	}
 }
 
-GameMenu::~GameMenu() {
+GameMenu::~GameMenu()
+{
 }
 
 void GameMenu::Render() const
 {
-	if (!InputRules::IsActiveRule(InputRule::R_IN_GAME_MENU))
-		return;
+	if (!isActive) return;
 
 	glm::vec3 color = glm::vec3(0.967f, 0.333f, 0.486f);
 	glm::vec3 selectColor = glm::vec3(0.967f, 0.873f, 0.486f);
@@ -79,8 +84,13 @@ void GameMenu::Render() const
 	HUDCamera->BindViewMatrix(shader->loc_view_matrix);
 	glUniform3f(shader->text_color, 0.967f, 0.333f, 0.486f);
 
+	Manager::GetRenderSys()->SetGlobalCulling(OpenGL::CULL::NONE);
+
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	for (unsigned int i = 0; i < activePage->entries.size(); i++) {
 		auto text = activePage->entries[i]->text;
@@ -89,23 +99,37 @@ void GameMenu::Render() const
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 	glDepthMask(GL_TRUE);
+
+	Manager::GetRenderSys()->DisableGlobalCulling();
+
+	CheckOpenGLError();
 }
 
-void GameMenu::Open() {
-	InputRules::PushRule(InputRule::R_IN_GAME_MENU);
+void GameMenu::Open()
+{
+	isActive = true;
 }
 
-void GameMenu::Close() {
-	InputRules::PopRule();
+void GameMenu::Close()
+{
+	isActive = false;
 	Manager::GetEvent()->EmitAsync(EventType::CLOSE_MENU, nullptr);
 }
 
-void GameMenu::PreviousPage() {
+bool GameMenu::IsActive() const
+{
+	return isActive;
+}
+
+void GameMenu::PreviousPage()
+{
 	if (topPages.size() == 0) {
 		Close();
 		return;
 	}
+	isActive = true;
 	auto active = topPages.top();
 	activeEntryIndex = active.second;
 	activePage = active.first;
@@ -128,13 +152,25 @@ void GameMenu::OnEvent(EventType Event, void *data)
 {
 	switch (Event)
 	{
-		case EventType::OPEN_GAME_MENU:
+		case EventType::OPEN_GAME_MENU: {
 			Open();
 			return;
+		}
+		default: {
+            break;
+		}
 	}
 }
 
-void GameMenu::OnKeyPress(int key, int mods) {
+void GameMenu::OnKeyPress(int key, int mods)
+{
+	if (isActive == false) {
+		if (key == GLFW_KEY_ESCAPE) {
+			Open();
+		}
+		return;
+	}
+
 	switch (key)
 	{
 		case GLFW_KEY_ESCAPE:
@@ -145,7 +181,7 @@ void GameMenu::OnKeyPress(int key, int mods) {
 			activeEntryIndex++;
 			activeEntryIndex %= activePage->entries.size();
 			return;
-		
+
 		case GLFW_KEY_UP:
 			if (activeEntryIndex == 0)
 				activeEntryIndex = activePage->entries.size() - 1;
@@ -157,14 +193,15 @@ void GameMenu::OnKeyPress(int key, int mods) {
 			PageEntry *activeEntry = activePage->entries[activeEntryIndex];
 			switch (activeEntry->type)
 			{
-				case MenuEntryType::TOGGLE:
+				case MenuEntryType::TOGGLE: {
 					activeEntry->Trigger();
 					break;
-				case MenuEntryType::ACTION:
-					Manager::GetEvent()->EmitAsync(activeEntry->actionID.c_str(), nullptr); 
+                }
+				case MenuEntryType::ACTION: {
+					Manager::GetEvent()->EmitAsync(activeEntry->actionID.c_str(), nullptr);
 					break;
-
-				case MenuEntryType::PAGE:
+                }
+				case MenuEntryType::PAGE: {
 					MenuPage *page = Manager::GetMenu()->pages[activeEntry->actionID];
 					if (page) {
 						topPages.push(make_pair(activePage, activeEntryIndex));
@@ -172,6 +209,9 @@ void GameMenu::OnKeyPress(int key, int mods) {
 						activeEntryIndex = 0;
 						cout << "Access menu: " << page->name << endl;
 					}
+					break;
+				}
+                default:
 					break;
 			}
 	}

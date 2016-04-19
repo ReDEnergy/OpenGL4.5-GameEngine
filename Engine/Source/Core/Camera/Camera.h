@@ -2,12 +2,9 @@
 #include <vector>
 
 #include <include/dll_export.h>
-#include <include/gl.h>
 #include <include/glm.h>
 
 #include <Core/GameObject.h>
-
-using namespace std;
 
 enum class CameraType {
 	FirstPerson,
@@ -16,6 +13,7 @@ enum class CameraType {
 
 class AABB;
 class DirectionalLight;
+class FrustumSplit;
 
 struct ProjectionInfo
 {
@@ -38,7 +36,6 @@ class DLLExport Camera: virtual public GameObject {
 		virtual void Update();
 
 	public:
-
 		glm::mat4 GetViewMatrix() const;
 
 		// Rotation
@@ -62,29 +59,22 @@ class DLLExport Camera: virtual public GameObject {
 		void MoveInDirection(glm::vec3 direction, float deltaTime);
 
 		// Bind shader uniforms
-		void BindPosition(GLint location) const;
-		void BindViewMatrix(GLint location) const;
-		void BindProjectionMatrix(GLint location) const;
+		void BindPosition(int location) const;
+		void BindViewMatrix(int location) const;
+		void BindProjectionMatrix(int location) const;
 		void BindProjectionDistances(const Shader *shader) const;
 
-		// TODO - Move this to DirectionalLight because it's related to CSM not to this implementation
-		void ComputeFrustum();
-		void ComputePerspectiveSection(float distance, vector<glm::vec3>::iterator it) const;
-		void SplitFrustum(unsigned int splits);
-		void UpdateBoundingBox(DirectionalLight * Ref) const;
 		void RenderDebug(const Shader *shader) const;
 
-		// Perspective projection
 		void SetPerspective(float FOV, float aspectRatio, float zNear, float zFar);
-
-		// Orthogonal projection
 		void SetOrthgraphic(float width, float height, float zNear, float zFar);
-
 		void SetProjection(const ProjectionInfo &PI);
 		ProjectionInfo GetProjectionInfo() const;
 
-		// Gameobject
-		void SetDebugView(bool value);
+		bool ColidesWith(GameObject *object);
+
+	private:
+		void ComputeFrustum();
 
 	protected:
 		// FPS Rotation Mode
@@ -95,16 +85,10 @@ class DLLExport Camera: virtual public GameObject {
 	public:
 		// Camera Type
 		CameraType type;
-
 		GameObject *frustum;
-		GameObject *physicalDevice;
 
 		glm::mat4 View;
 		glm::mat4 Projection;
-
-		unsigned int splits;
-		vector<float> splitDistances;
-		vector<GameObject*> zones;
 
 	protected:
 		// Controll settings

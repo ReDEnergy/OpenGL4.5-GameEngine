@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "AABB.h"
 
 #include <include/gl_utils.h>
@@ -6,6 +5,7 @@
 
 #include <Component/Transform/Transform.h>
 #include <Component/Mesh.h>
+#include <Component/MeshRenderer.h>
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
 #include <GPU/Shader.h>
@@ -26,6 +26,7 @@ AABB::AABB(GameObject *obj)
 }
 
 AABB::~AABB() {
+	SAFE_FREE(transform);
 }
 
 // TODO - move this to a cached pool of control objects (in the resource manager)
@@ -67,32 +68,33 @@ void AABB::UpdateChildren(const glm::quat & rotationQ)
 void AABB::Update(glm::quat rotationQ)
 {
 	auto q = glm::inverse(rotationQ) * gameObj->transform->GetWorldRotation();
+	auto mesh = gameObj->meshRenderer->mesh;
 
-	glm::vec3 min, max = glm::rotate(q, gameObj->mesh->bbox->points[0]);
+	glm::vec3 minValue, maxValue = glm::rotate(q, mesh->bbox->points[0]);
 
-	for (auto point: gameObj->mesh->bbox->points) {
+	for (auto point: mesh->bbox->points) {
 
 		point = glm::rotate(q, point);
 
 		// find max
-		if (point.x > max.x)
-			max.x = point.x;
-		if (point.y > max.y)
-			max.y = point.y;
-		if (point.z > max.z)
-			max.z = point.z;
+		if (point.x > maxValue.x)
+			maxValue.x = point.x;
+		if (point.y > maxValue.y)
+			maxValue.y = point.y;
+		if (point.z > maxValue.z)
+			maxValue.z = point.z;
 
 		// find min
-		if (point.x < min.x)
-			min.x = point.x;
-		if (point.y < min.y)
-			min.y = point.y;
-		if (point.z < min.z)
-			min.z = point.z;
+		if (point.x < minValue.x)
+			minValue.x = point.x;
+		if (point.y < minValue.y)
+			minValue.y = point.y;
+		if (point.z < minValue.z)
+			minValue.z = point.z;
 	}
 
-	halfSize = (max - min) / 2.0f * gameObj->transform->GetScale();
-	center = (max + min) / 2.0f * gameObj->transform->GetScale();
+	halfSize = (maxValue - minValue) / 2.0f * gameObj->transform->GetScale();
+	center = (maxValue + minValue) / 2.0f * gameObj->transform->GetScale();
 	center = glm::rotate(rotationQ, center);
 
 	transform->SetScale(halfSize * 2.0f);

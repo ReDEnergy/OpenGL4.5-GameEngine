@@ -1,6 +1,6 @@
 #pragma once
 
-#include <include\glm.h>
+#include <include/glm.h>
 #include <GPU/Shader.h>
 #include <GPU/Texture.h>
 

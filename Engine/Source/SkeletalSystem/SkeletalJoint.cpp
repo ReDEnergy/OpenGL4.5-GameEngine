@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-#include <include/gl_utils.h>
+#include <include/gl.h>
 #include <include/glm_utils.h>
 #include <include/assimp_utils.h>
 #include <Utils/OpenGL.h>
@@ -15,6 +15,8 @@ using namespace std;
 #include <Component/Transform/SkinningJointTransform.h>
 #include <GPU/Shader.h>
 
+#include <Rendering/DirectOpenGL.h>
+
 #include <Manager/Manager.h>
 #include <Manager/ResourceManager.h>
 #include <Manager/ResourceManager.h>
@@ -24,7 +26,7 @@ SkeletalJoint::SkeletalJoint(const char * name, uint jointID)
 	: GameObject(name)
 	, jointID(jointID)
 {
-	SAFE_FREE(transform);
+	//SAFE_FREE(transform);
 	transform = new SkinningJointTransform();
 	auto mesh = Manager::GetResource()->GetMesh("box");
 	SetName(name);
@@ -36,13 +38,14 @@ SkeletalJoint::SkeletalJoint(const SkeletalJoint& joint)
 	: GameObject(joint.GetName())
 	, jointID(joint.jointID)
 {
-	SAFE_FREE(transform);
+	//SAFE_FREE(transform);
 	transform = new SkinningJointTransform();
 	auto mesh = Manager::GetResource()->GetMesh("box");
 	SetMesh(mesh);
 	renderer->SetRenderingLayer(RenderingLayer::ON_TOP);
 	boneOffset = joint.boneOffset;
 	TPoseOffset = joint.TPoseOffset;
+	pAnimationNode = joint.pAnimationNode;
 }
 
 SkeletalJoint::~SkeletalJoint()
@@ -51,29 +54,39 @@ SkeletalJoint::~SkeletalJoint()
 
 void SkeletalJoint::Render(const Shader *shader) const
 {
-	GL_Utils::SetColor256(shader->loc_debug_color, 30, 185, 80);
 	GameObject::Render(shader);
+
+	auto DirectGL = Manager::GetDirectGL();
+	DirectGL->Use();
+	DirectGL->SetDrawColor(200, 70, 50);
+
 	RenderBones(shader);
+
+	shader->Use();
 }
 
 void SkeletalJoint::RenderBones(const Shader * shader) const
 {
-	glLineWidth(2);
-	GL_Utils::SetColor256(shader->loc_debug_color, 200, 70, 50);
-	glm::mat4 scale = glm::scale(glm::mat4(1), transform->GetScale());
-	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(scale));
+	auto DirectGL = Manager::GetDirectGL();
 	for (auto child : _children) {
-		RenderBone((SkeletalJoint*)child);
+		DirectGL->DrawLine(transform->GetWorldPosition(), child->transform->GetWorldPosition());
 	}
 }
 
 void SkeletalJoint::RenderDebug(const Shader * shader) const
 {
 	glDepthMask(GL_FALSE);
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 1, 1, 0);
+
 	GameObject::Render(shader);
+	
+	auto DirectGL = Manager::GetDirectGL();
+	DirectGL->Use();
+	DirectGL->SetDrawColor(255, 255, 0);
+
 	RenderBones(shader);
+
 	glDepthMask(GL_TRUE);
+	shader->Use();
 }
 
 void SkeletalJoint::RenderForPicking(const Shader * shader) const
@@ -81,16 +94,16 @@ void SkeletalJoint::RenderForPicking(const Shader * shader) const
 	GameObject::RenderForPicking(shader);
 }
 
-void SkeletalJoint::UpdateSkeletonTPose(const glm::mat4 & globalInverse)
+void SkeletalJoint::UpdateSkeletonBindPose(const glm::mat4 & globalInverse)
 {
 	transform->ForceUpdate();
-	UpdateTransformTPose(globalInverse);
+	UpdateTransformBindPose(globalInverse);
 	for (auto child : _children) {
-		((SkeletalJoint*)child)->UpdateSkeletonTPose(globalInverse);
+		((SkeletalJoint*)child)->UpdateSkeletonBindPose(globalInverse);
 	}
 }
 
-void SkeletalJoint::UpdateTransformTPose(const glm::mat4 &globalInverse)
+void SkeletalJoint::UpdateTransformBindPose(const glm::mat4 &globalInverse)
 {
 	if (_parent) {
 		globalTransform = ((SkeletalJoint*)_parent)->globalTransform;
@@ -126,20 +139,4 @@ void SkeletalJoint::UpdateTransform(const glm::mat4 &globalInverse)
 uint SkeletalJoint::GetJointID() const
 {
 	return jointID;
-}
-
-void SkeletalJoint::LogDebugInfo() const
-{
-	cout << "[BoneOffeset]" << endl;
-	for (int i = 0; i < 4; i++)
-		cout << boneOffset[i] << endl;
-
-	cout << "[TPose]" << endl;
-	for (int i = 0; i < 4; i++)
-		cout << TPoseOffset[i] << endl;
-}
-
-void SkeletalJoint::RenderBone(SkeletalJoint *child) const
-{
-	OpenGL::DrawLine(transform->GetWorldPosition(), child->transform->GetWorldPosition());
 }

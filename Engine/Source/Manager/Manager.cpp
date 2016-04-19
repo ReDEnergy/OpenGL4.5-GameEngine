@@ -1,8 +1,8 @@
-//#include <pch.h>
 #include "Manager.h"
 
 #include <iostream>
 
+#include <include/gl.h>
 #include <include/glm_utils.h>
 #include <templates/singleton.h>
 
@@ -11,8 +11,7 @@
 #include <Core/Engine.h>
 #include <Core/InputSystem.h>
 #include <Core/WindowManager.h>
-
-#include <Input/InputRules.h>
+#include <Core/WindowObject.h>
 
 #include <Manager/AudioManager.h>
 #include <Manager/ColorManager.h>
@@ -25,7 +24,10 @@
 #include <Manager/SceneManager.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/TextureManager.h>
+
 #include <Debugging/TextureDebugger.h>
+
+#include <Rendering/DirectOpenGL.h>
 
 #ifdef PHYSICS_ENGINE
 #include <Manager/HavokCore.h>
@@ -42,6 +44,7 @@ ColorManager*		Manager::Color = nullptr;
 ColorPicking*		Manager::Picker = nullptr;
 ConfigFile*			Manager::Config = nullptr;
 DebugOverlayText*	Manager::DebugText = nullptr;
+DirectOpenGL*		Manager::DirectGL = nullptr;
 EventSystem*		Manager::Event = nullptr;
 FontManager*		Manager::Font = nullptr;
 MenuSystem*			Manager::Menu = nullptr;
@@ -57,45 +60,43 @@ HavokCore*			Manager::Havok = nullptr;
 PhysicsManager*		Manager::Physics = nullptr;
 #endif
 
-void Manager::Init() {
-
-	CheckOpenGLError();
-
+void Manager::Init()
+{
+	// Init static objects
 	InputSystem::Init();
+	WindowManager::Init();
 
-	Debug = Singleton<DebugInfo>::Instance();
-	Debug->InitManager("Manager");
+	// Init Managers
+	Config		= Singleton<ConfigFile>::Instance();
+	RenderSys	= Singleton<RenderingSystem>::Instance();
+	RenderSys->Init();
 
-	DebugText = Singleton<DebugOverlayText>::Instance();
+	// Load configuration
+	Config->Load("config.xml");
+	Engine::Window = new WindowObject(*(Config->windowProperties));
 
-	InputRules::Init();
-	RenderSys = Singleton<RenderingSystem>::Instance();
-	Audio = Singleton<AudioManager>::Instance();
-	Event = Singleton<EventSystem>::Instance();
-	Color = Singleton<ColorManager>::Instance();
-	Picker = Singleton<ColorPicking>::Instance();
-	Config = Singleton<ConfigFile>::Instance();
-	Font = Singleton<FontManager>::Instance();
-	TextureDBG = Singleton<TextureDebugger>::Instance();
+	// Init Managers
+	Debug		= Singleton<DebugInfo>::Instance();
+	DebugText	= Singleton<DebugOverlayText>::Instance();
+	
+	Audio		= Singleton<AudioManager>::Instance();
+	Event		= Singleton<EventSystem>::Instance();
+	Color		= Singleton<ColorManager>::Instance();
+	Picker		= Singleton<ColorPicking>::Instance();
+	Font		= Singleton<FontManager>::Instance();
+	TextureDBG	= Singleton<TextureDebugger>::Instance();
+	DirectGL	= Singleton<DirectOpenGL>::Instance();
+	Texture		= Singleton<TextureManager>::Instance();
 
 #ifdef PHYSICS_ENGINE
 	Havok = Singleton<HavokCore>::Instance();
-#endif
-
-	Texture = Singleton<TextureManager>::Instance();
-	Resource = Singleton<ResourceManager>::Instance();
-
-#ifdef PHYSICS_ENGINE
 	Physics = Singleton<PhysicsManager>::Instance();
 #endif
 
-	Scene = Singleton<SceneManager>::Instance();
-	Shader = Singleton<ShaderManager>::Instance();
-	Menu = Singleton<MenuSystem>::Instance();
-
-	WindowManager::Init();
-
-	Event->Clear();
+	Resource	= Singleton<ResourceManager>::Instance();
+	Shader		= Singleton<ShaderManager>::Instance();
+	Scene		= Singleton<SceneManager>::Instance();
+	Menu		= Singleton<MenuSystem>::Instance();
 
 	CheckOpenGLError();
 
@@ -103,22 +104,18 @@ void Manager::Init() {
 }
 
 // Load configuration file
-void Manager::LoadConfig() {
-
-	CheckOpenGLError();
-
-	RenderSys->Init();
-	Config->Load("config.xml");
-	Engine::Window = WindowManager::Create(Config->windowProperties);
-
+void Manager::LoadConfig()
+{
 	////////////////////////////////////////
 	// TODO inspect if I can move these
 
-	glewExperimental = true;
-	glewInit();
+	#ifndef OPENGL_ES
+		glewExperimental = true;
+		glewInit();
+	#endif
 
-	/* Force Vertical Sync */
-	wglSwapIntervalEXT(RenderSys->Is(RenderState::VSYNC));
+	Engine::Window->MakeCurrentContext();
+	Engine::Window->SetVSync(RenderSys->Is(RenderState::VSYNC));
 	CheckOpenGLError();
 
 	////////////////////////////////////////
@@ -128,17 +125,21 @@ void Manager::LoadConfig() {
 	Havok->Init();
 	#endif
 
+
 	Texture->Init();
 	Audio->Init();
 	Font->Init();
-	Shader->Load(Config->GetResourceFileLoc("shaders"));
-	Resource->Load(Config->GetResourceFileLoc("resource"));
-	Menu->Load(Config->GetResourceFileLoc("menu"));
-	Scene->LoadScene(Config->GetResourceFileLoc("scene"));
-	TextureDBG->Init();
+
+	Shader->Load(Config->GetResourceFileLoc("shaders").c_str());
+	Resource->Load(Config->GetResourceFileLoc("resource").c_str());
+	Menu->Load(Config->GetResourceFileLoc("menu").c_str());
+	Scene->LoadScene(Config->GetResourceFileLoc("scene").c_str());
 
 	AABB::Init();
 	Picker->Init();
+	DirectGL->Init();
+	TextureDBG->Init();
+	Scene->Init();
 }
 
 DLLExport AudioManager* Manager::GetAudio()
@@ -154,6 +155,11 @@ ColorPicking * Manager::GetPicker()
 DebugInfo* Manager::GetDebug()
 {
 	return Debug;
+}
+
+DLLExport DirectOpenGL* Manager::GetDirectGL()
+{
+	return DirectGL;
 }
 
 SceneManager* Manager::GetScene()

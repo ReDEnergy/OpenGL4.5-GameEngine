@@ -1,8 +1,6 @@
 #pragma once
 #include <Component/ObjectInput.h>
 
-using namespace std;
-
 class Camera;
 
 class DLLExport CameraDebugInput : public ObjectInput {

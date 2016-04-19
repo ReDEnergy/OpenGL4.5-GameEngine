@@ -1,13 +1,14 @@
 #include <string>
 
-using namespace std;
-
-namespace RESOURCE_PATH {
-	const string ROOT = "Resources\\";
-	const string AUDIO = ROOT + "Audio\\";
-	const string MODELS = ROOT + "Models\\";
-	const string TEXTURES = ROOT + "Textures\\";
-	const string PHYSICS = ROOT + "Physics\\";
+namespace RESOURCE_PATH
+{
+	const std::string CONFIG = "Config/";
+	const std::string ROOT = "Resources/";
+	const std::string AUDIO = ROOT + "Audio/";
+	const std::string MODELS = ROOT + "Models/";
+	const std::string TEXTURES = ROOT + "Textures/";
+	const std::string FONTS = ROOT + "Fonts/";
+	const std::string PHYSICS = ROOT + "Physics/";
 }
 
 // TODO - Make configurable at runtime

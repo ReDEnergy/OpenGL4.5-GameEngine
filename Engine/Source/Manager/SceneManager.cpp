@@ -3,12 +3,15 @@
 #include <iostream>
 #include <memory>
 
+#include <include/gl.h>
+
 #ifdef PHYSICS_ENGINE
 #include <Component/Physics.h>
 #endif
 #include <Component/AABB.h>
 #include <Component/AudioSource.h>
 #include <Component/Mesh.h>
+#include <Component/MeshRenderer.h>
 #include <Component/Renderer.h>
 #include <Component/Transform/Transform.h>
 #include <GPU/Shader.h>
@@ -30,12 +33,20 @@
 #include <UI/ColorPicking/ColorPicking.h>
 #include <Utils/Serialization.h>
 
+using namespace std;
+
 SceneManager::SceneManager()
 {
 	activeCamera = nullptr;
 }
 
 SceneManager::~SceneManager() {
+}
+
+void SceneManager::Init()
+{
+	R2T = Manager::Shader->GetShader("rendertargets");
+	R2TSk = Manager::Shader->GetShader("r2tskinning");
 }
 
 void SceneManager::LoadScene(const char *fileName)
@@ -77,10 +88,13 @@ void SceneManager::LoadScene(const char *fileName)
 		if (audioInfo) {
 			bool loop = audioInfo.attribute("loop").as_bool();
 			pugi::xml_attribute att = audioInfo.attribute("volume");
-			GO->SetAudioSource(Manager::Audio->GetAudioSource(audioInfo.text().get()));
-			GO->audioSource->SetLoop(loop);
-			if (!att.empty())
-				GO->audioSource->SetVolume(att.as_uint());
+			auto audioSource = Manager::Audio->GetAudioSource(audioInfo.text().get());
+			if (audioSource) {
+				GO->SetAudioSource(audioSource);
+				GO->audioSource->SetLoop(loop);
+				if (!att.empty())
+					GO->audioSource->SetVolume(att.as_float());
+			}
 		}
 
 		AddObject(GO);
@@ -109,6 +123,11 @@ void SceneManager::ReloadScene() {
 	LoadScene(sceneFile);
 }
 
+void SceneManager::GlobalUpdate()
+{
+
+}
+
 void SceneManager::Update()
 {
 	bool shouldAdd = !toAdd.empty();
@@ -125,8 +144,13 @@ void SceneManager::Update()
 
 		if (shouldRemove) {
 			for (auto obj: toRemove) {
-				activeObjects.remove(obj);
 				obj->SetDebugView(false);
+				if (obj->GetParent()) {
+					obj->SetParent(nullptr);
+				}
+				else {
+					activeObjects.remove(obj);
+				}
 			}
 			toRemove.clear();
 		}
@@ -226,50 +250,50 @@ void SceneManager::SetActiveCamera(Camera * camera)
 
 void SceneManager::Render(Camera * camera)
 {
-	Shader *R2T = Manager::Shader->GetShader("rendertargets");
 	R2T->Use();
 	camera->BindPosition(R2T->loc_eye_pos);
 	camera->BindViewMatrix(R2T->loc_view_matrix);
 	camera->BindProjectionMatrix(R2T->loc_projection_matrix);
 
-	glUniform1f(R2T->loc_transparency, 1);
 	glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 
 	list<GameObject*> transparentObjects;
 
 	for (auto *obj : frustumObjects) {
-		if (obj->mesh && obj->mesh->meshType == MeshType::STATIC)
+		if (obj->meshRenderer && obj->meshRenderer->mesh->meshType == MESH_TYPE::STATIC)
 		{
 			if (obj->renderer->IsTransparent()) {
 				transparentObjects.push_back(obj);
-			} else {
+			}
+			else {
 				obj->Render(R2T);
 			}
 		}
 	}
 
 	// Render transparent objects
-	glEnable(GL_BLEND);
-	glBlendEquationi(0, GL_FUNC_ADD);
-	glBlendFunci(0, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	{
+		glEnable(GL_BLEND);
+		glBlendEquation(GL_FUNC_ADD);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	for (auto *obj : transparentObjects) {
-		if (obj->mesh && obj->mesh->meshType == MeshType::STATIC)
-		{
-			glUniform1f(R2T->loc_transparency, obj->renderer->GetOpacity());
+		for (auto *obj : transparentObjects) {
+			if (obj->meshRenderer && obj->meshRenderer->mesh->meshType == MESH_TYPE::STATIC)
+			{
+				obj->Render(R2T);
+			}
+		}
+
+		glUniform1f(R2T->loc_transparency, 0.3f);
+		for (auto *obj : lights) {
 			obj->Render(R2T);
 		}
-	}
 
-	glUniform1f(R2T->loc_transparency, 0.3f);
-	for (auto *obj : lights) {
-		obj->Render(R2T);
+		glDisable(GL_BLEND);
 	}
-	glDisable(GL_BLEND);
 
 	// Render Skinned meshes
-	Shader *R2TSk = Manager::Shader->GetShader("r2tskinning");
 	if (R2TSk) {
 		R2TSk->Use();
 		camera->BindPosition(R2TSk->loc_eye_pos);
@@ -277,7 +301,7 @@ void SceneManager::Render(Camera * camera)
 		camera->BindProjectionMatrix(R2TSk->loc_projection_matrix);
 
 		for (auto *obj : frustumObjects) {
-			if (obj->mesh && obj->mesh->meshType == MeshType::SKINNED) {
+			if (obj->meshRenderer && obj->meshRenderer->mesh->meshType == MESH_TYPE::SKINNED) {
 				obj->Render(R2TSk);
 			}
 		}
@@ -299,7 +323,7 @@ void SceneManager::LightSpaceCulling(Camera * camera, DirectionalLight * light)
 	// Update Camera BoundingBox if camera has moved or the sun direction is changed
 	bool change = camera->transform->GetMotionState() || sunMotion;
 	if (change) {
-		camera->UpdateBoundingBox(light);
+		//camera->UpdateBoundingBox(light);
 	}
 
 	for (auto obj : activeObjects) {

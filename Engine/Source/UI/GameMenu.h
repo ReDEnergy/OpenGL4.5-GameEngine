@@ -20,6 +20,7 @@ class GameMenu
 		void PreviousPage();
 		void Open();
 		void Close();
+		bool IsActive() const;
 		
 		// Input Events
 		void Update(float deltaTime, int mods) {};
@@ -27,12 +28,13 @@ class GameMenu
 		void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {};
 
 		// Custom Events
-		void OnEvent(const string& eventID, void * data);
+		void OnEvent(const std::string& eventID, void * data);
 		void OnEvent(EventType Event, void *data);
 
 		void Render() const;
 
 	private:
+		bool isActive;
 		char* name;
 		Camera *HUDCamera;
 		MenuPage *activePage;

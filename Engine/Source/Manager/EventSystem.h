@@ -3,9 +3,8 @@
 #include <list>
 #include <unordered_map>
 #include <string>
+#include <functional>
 #include <vector>
-
-using namespace std;
 
 #include <Event/EventType.h>
 #include <Event/EventListener.h>
@@ -38,36 +37,55 @@ class DLLExport EventSystem
 		~EventSystem();
 
 	public:
-		void Subscribe(EventListener *E, const string& eventID);
-		void UnSubscribe(EventListener *E, const string& eventID);
-		void EmitAsync(const string eventID, void *data = nullptr);
-		void EmitSync(const string eventID, void *data = nullptr);
+		void Subscribe(EventListener *E, const std::string& eventID);
+		void UnSubscribe(EventListener *E, const std::string& eventID);
+		void EmitAsync(const std::string eventID, void *data = nullptr);
+		void EmitSync(const std::string eventID, void *data = nullptr);
 
 		void Subscribe(EventListener *E, EventType Event);
+		void Subscribe(EventType Event, std::function<void(void*)> listener);
 		void UnSubscribe(EventListener *E, EventType Event);
 		void EmitAsync(EventType Event, void *data = nullptr);
 		void EmitSync(EventType Event, void *data = nullptr);
 
 		void UnSubscribe(EventListener *E);
 
+		// Support for dinamic channels with direct messaging
+		void Subscribe(const char* channelID, const std::string& eventID, std::function<void(void*)> listener);
+		void EmitAsync(const char* channelID, const std::string& eventID, void *data);
+		void EmitSync(const char* channelID, const std::string& eventID, void *data);
+		void ProcessChannelEvents(const char* channelID);
+
 		void Update();
 		void Clear();
 
 		// Timer Events
-		TimerManager<string>* GetDynamicTimers() const;
+		TimerManager<std::string>* GetDynamicTimers() const;
 		TimerManager<EventType>* GetStandardTimers() const;
 
 	private:
 		void ProcessEvents();
 
 	public:
-		TimerManager<string> *dynamicTimers;
+		TimerManager<std::string> *dynamicTimers;
 		TimerManager<EventType> *standardTimers;
 
 	private:
-		unordered_map<string, list<EventListener*>> listeners;
-		list<EventListener*> listenersEnum[EventType::SIZE];
 
-		vector<EventQueueElem<EventType>> eventQueueEnum;
-		vector<EventQueueElem<string>> eventQueueString;
+		struct ChannelListeners {
+			std::vector < std::function<void(void*)>> funcListeners;
+		};
+
+		// Channel based events
+		std::unordered_map<std::string, std::unordered_map<std::string, ChannelListeners>> channelListeners;
+		std::unordered_map<std::string, std::unordered_map<std::string, std::vector<void*>>> channelData;
+
+		std::unordered_map<std::string, std::list<EventListener*>> listeners;
+		std::list<EventListener*> listenersEnum[static_cast<unsigned int>(EventType::SIZE)];
+		std::list<std::function<void(void*)>> funcEnumListeners[static_cast<unsigned int>(EventType::SIZE)];
+
+		std::vector<EventQueueElem<EventType>> eventQueueEnum;
+		std::vector<EventQueueElem<std::string>> eventQueueString;
+
+
 };

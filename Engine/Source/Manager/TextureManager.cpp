@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "TextureManager.h"
 
 #include <include/utils.h>
@@ -11,11 +10,15 @@
 #include <Manager/DebugInfo.h>
 #include <Manager/ResourceManager.h>
 
-TextureManager::TextureManager() {
+using namespace std;
+
+TextureManager::TextureManager()
+{
 	Manager::Debug->InitManager("Shader");
 }
 
-void TextureManager::Init() {
+void TextureManager::Init()
+{
 	LoadTexture(RESOURCE_PATH::TEXTURES, "default.png");
 	LoadTexture(RESOURCE_PATH::TEXTURES, "white.png");
 	LoadTexture(RESOURCE_PATH::TEXTURES, "black.jpg");
@@ -25,15 +28,16 @@ void TextureManager::Init() {
 	LoadTexture(RESOURCE_PATH::TEXTURES, "particle.png");
 }
 
-TextureManager::~TextureManager() {
+TextureManager::~TextureManager()
+{
 	// delete textures
 	unsigned int size = (unsigned int) vTextures.size();
 	for (unsigned int i=0; i <size; ++i)
 		SAFE_FREE(vTextures[i]);
 }
 
-Texture* TextureManager::LoadTexture(const string &path, const char *fileName) {
-
+Texture* TextureManager::LoadTexture(const string &path, const char *fileName)
+{
 	Texture *texture = GetTexture(fileName);
 
 	if (texture) {
@@ -41,9 +45,9 @@ Texture* TextureManager::LoadTexture(const string &path, const char *fileName) {
 	}
 
 	texture = new Texture();
-	bool rc = texture->Load2D((path + '\\' + fileName).c_str());
+	bool status = texture->Load2D((path + '/' + fileName).c_str());
 
-	if (rc == FALSE) {
+	if (status == false) {
 		delete texture;
 		return vTextures[0];
 	}
@@ -53,13 +57,15 @@ Texture* TextureManager::LoadTexture(const string &path, const char *fileName) {
 	return texture;
 }
 
-Texture* TextureManager::GetTexture(const char* name) {
+Texture* TextureManager::GetTexture(const char* name)
+{
 	if (mapTextures[name])
 		return mapTextures[name];
 	return NULL;
 }
 
-Texture* TextureManager::GetTexture(unsigned int textureID) {
+Texture* TextureManager::GetTexture(unsigned int textureID)
+{
 	if (textureID < vTextures.size())
 		return vTextures[textureID];
 	return NULL;

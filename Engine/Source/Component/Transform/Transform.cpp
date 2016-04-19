@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "Transform.h"
 
 #include <include/glm_utils.h>
@@ -272,10 +271,10 @@ void Transform::UpdateRelativeRotation()
 	_relativeRotation = glm::inverse(parentRot) * _worldRotation;
 }
 
-void Transform::SetRelativeRotation(glm::quat relativeRotationQ)
+void Transform::SetLocalRotation(glm::quat localRotationQ)
 {
-	_worldRotation = _parentNode ? _parentNode->_worldRotation * relativeRotationQ : relativeRotationQ;
-	SetWorldRotation(_worldRotation);
+	glm::quat localRotation = _parentNode->_worldRotation * localRotationQ;
+	SetWorldRotation(localRotation);
 }
 
 void Transform::SetWorldRotationAndScale(glm::quat rotationQ, glm::vec3 scale)

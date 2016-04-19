@@ -1,14 +1,18 @@
 #include "FrameBuffer.h"
 
 #include <iostream>
-using namespace std;
 
+#include <include/gl.h>
 #include <GPU/Shader.h>
 #include <GPU/Texture.h>
 #include <Core/Engine.h>
 #include <Core/WindowObject.h>
 
 #include <include/utils.h>
+
+using namespace std;
+
+FrameBuffer* FrameBuffer::OffScreenBuffer = nullptr;
 
 FrameBuffer::FrameBuffer()
 {
@@ -31,10 +35,11 @@ void FrameBuffer::Clean()
 	SAFE_FREE_ARRAY(DrawBuffers)
 }
 
-void FrameBuffer::Generate(int width, int height, int nrTextures, bool attachDepthTexture)
+void FrameBuffer::Generate(int width, int height, int nrTextures, bool hasDepthTexture, int precision)
 {
-	// clean previous FBO
 	Clean();
+
+	precision = (precision / 8) * 8;
 
 	#ifdef DEBUG_INFO
 		cout << "FBO: " << width << " * " << height << " textures attached: " << nrTextures << endl;
@@ -58,7 +63,7 @@ void FrameBuffer::Generate(int width, int height, int nrTextures, bool attachDep
 		// Create attached textures
 		textures = new Texture[nrTextures];
 		for (int i=0; i<nrTextures; i++)
-			textures[i].CreateFrameBufferTexture(width, height, i);
+			textures[i].CreateFrameBufferTexture(width, height, i, precision);
 
 		glDrawBuffers(nrTextures, DrawBuffers);
 
@@ -68,7 +73,7 @@ void FrameBuffer::Generate(int width, int height, int nrTextures, bool attachDep
 	}
 
 	// Create depth texture
-	if (attachDepthTexture) {
+	if (hasDepthTexture) {
 		depthTexture = new Texture();
 		depthTexture->CreateDepthBufferTexture(width, height);
 	}
@@ -102,12 +107,12 @@ unsigned int FrameBuffer::GetNumberOfRenderTargets() const
 	return nrTextures;
 }
 
-void FrameBuffer::BindTexture(int textureID, GLenum TextureUnit) const
+void FrameBuffer::BindTexture(int textureID, unsigned int TextureUnit) const
 {
 	textures[textureID].BindToTextureUnit(TextureUnit);
 }
 
-void FrameBuffer::BindDepthTexture(GLenum TextureUnit) const
+void FrameBuffer::BindDepthTexture(unsigned int TextureUnit) const
 {
 	depthTexture->BindToTextureUnit(TextureUnit);
 }
@@ -134,14 +139,24 @@ void FrameBuffer::BindAllTextures() const
 	}
 }
 
-void FrameBuffer::Unbind()
+void FrameBuffer::Unbind(WindowObject *window)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, Engine::Window->resolution.x, Engine::Window->resolution.y);
+	glViewport(0, 0, window->props.resolution.x, window->props.resolution.y);
 	CheckOpenGLError();
 }
 
 void FrameBuffer::Clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void FrameBuffer::SetOffScreenBuffer(FrameBuffer *buffer)
+{
+	OffScreenBuffer = buffer;
+}
+
+FrameBuffer * FrameBuffer::GetOffScreenBuffer()
+{
+	return OffScreenBuffer;
 }

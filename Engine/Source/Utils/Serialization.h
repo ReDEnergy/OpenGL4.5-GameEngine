@@ -6,8 +6,6 @@
 
 #include <Component/Transform/Transform.h>
 
-using namespace std;
-
 namespace Serialization
 {
 	DLLExport void ReadTransform(pugi::xml_node node, Transform &T);

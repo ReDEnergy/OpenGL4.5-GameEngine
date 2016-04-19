@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "GameObject.h"
 
 #include <include/gl_utils.h>
@@ -7,11 +6,14 @@
 #include <Component/AudioSource.h>
 #include <Component/AABB.h>
 #include <Component/Mesh.h>
+#include <Component/MeshRenderer.h>
 #include <Component/Renderer.h>
 #include <Component/Text.h>
 #include <Component/Transform/Transform.h>
 #include <Component/ObjectInput.h>
 #include <GPU/Shader.h>
+
+#include <Rendering/DirectOpenGL.h>
 
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
@@ -27,6 +29,8 @@
 #include <Manager/PhysicsManager.h>
 #endif
 
+using namespace std;
+
 GameObject::GameObject()
 {
 	Clear();
@@ -41,6 +45,7 @@ GameObject::GameObject(const char *referenceObject)
 	Clear();
 	if (referenceObject) {
 		referenceName = referenceObject;
+		name = referenceObject;
 	}
 	renderer = new Renderer();
 	transform = new Transform();
@@ -50,15 +55,17 @@ GameObject::GameObject(const char *referenceObject)
 // TODO
 // Copy game hierarchy also
 
-GameObject::GameObject(const GameObject &obj) {
+GameObject::GameObject(const GameObject &obj)
+{
 	Clear();
 	referenceName = obj.referenceName;
-	mesh	= obj.mesh;
 	shader	= obj.shader;
 	input	= obj.input;
 	renderer = new Renderer(*obj.renderer);
 	transform = new Transform(*obj.transform);
-	SetupAABB();
+
+	if (obj.meshRenderer)
+		SetMesh(obj.meshRenderer->mesh);
 	Init();
 
 	#ifdef PHYSICS_ENGINE
@@ -69,9 +76,10 @@ GameObject::GameObject(const GameObject &obj) {
 	#endif
 }
 
-GameObject::~GameObject() {
+GameObject::~GameObject()
+{
 	for (auto child : _children) {
-		delete child;
+		SAFE_FREE(child);
 	}
 	_children.clear();
 
@@ -80,14 +88,15 @@ GameObject::~GameObject() {
 	SAFE_FREE(renderer);
 }
 
-void GameObject::Clear() {
+void GameObject::Clear()
+{
 	_parent = nullptr;
 
 	aabb = nullptr;
 	animation = nullptr;
 	audioSource = nullptr;
 	input = nullptr;
-	mesh = nullptr;
+	meshRenderer = nullptr;
 	renderer = nullptr;
 	shader = nullptr;
 	transform = nullptr;
@@ -102,22 +111,31 @@ void GameObject::Init()
 	debugView = false;
 	instanceID = Manager::Resource->GetGameObjectUID(referenceName);
 	colorID = Manager::Color->GetColorUID(this);
-	if (mesh && mesh->meshType == MeshType::SKINNED) {
+
+	if (meshRenderer && meshRenderer->mesh->meshType == MESH_TYPE::SKINNED)
+	{
 		animation = new AnimationController();
-		animation->Setup((SkinnedMesh*)mesh);
+		animation->Setup((SkinnedMesh*)meshRenderer->mesh);
 	}
 }
 
 void GameObject::SetMesh(Mesh * mesh)
 {
-	this->mesh = mesh;
+	SAFE_FREE(meshRenderer);
+	meshRenderer = new MeshRenderer(*mesh);
+
 	SetupAABB();
+}
+
+Mesh* GameObject::GetMesh() const
+{
+	return meshRenderer ? meshRenderer->mesh : nullptr;
 }
 
 void GameObject::SetupAABB()
 {
-	if (mesh) {
-		if (aabb) SAFE_FREE(aabb);
+	if (meshRenderer) {
+		SAFE_FREE(aabb);
 		aabb = new AABB(this);
 		aabb->Update();
 	}
@@ -154,29 +172,41 @@ bool GameObject::ColidesWith(GameObject *object)
 void GameObject::Render() const
 {
 	if (!shader) return;
-	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
+	if (renderer->IsRendered()) {
+		glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
 
-	if (mesh) {
-		renderer->Use();
-		mesh->Render(shader);
-	}
+		if (meshRenderer) {
+			renderer->Use();
+			meshRenderer->Render(shader);
+		}
 
-	for (auto child : _children) {
-		child->Render();
+		for (auto child : _children) {
+			child->Render();
+		}
 	}
 }
 
 void GameObject::Render(const Shader *shader) const
 {
-	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
+	if (renderer->IsRendered()) {
+		glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
 
-	if (animation) {
-		animation->Render(shader);
-	}
-	else {
-		if (mesh) {
+		auto transparency = renderer->GetOpacity();
+		if (transparency != 1 && shader->loc_transparency >= 0) {
+			glUniform1ui(shader->loc_object_class, 1);
+			glUniform1f(shader->loc_transparency, transparency);
+		}
+		else {
+			glUniform1ui(shader->loc_object_class, 0);
+		}
+
+		if (animation) {
+			animation->BindSkeletonInfo(shader);
+		}
+
+		if (meshRenderer) {
 			renderer->Use();
-			mesh->Render(shader);
+			meshRenderer->Render(shader);
 		}
 	}
 
@@ -188,27 +218,17 @@ void GameObject::Render(const Shader *shader) const
 void GameObject::RenderInstanced(const Shader *shader, unsigned int instances) const
 {
 	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
-	if (mesh) {
+	if (meshRenderer) {
 		renderer->Use();
-		mesh->RenderInstanced(instances);
+		meshRenderer->RenderInstanced(instances);
 	}
 }
 
 void GameObject::RenderDebug(const Shader * shader) const
 {
-	glLineWidth(4);
-	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0)));
-	glm::vec3 wpos = transform->GetWorldPosition();
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 0, 1, 0);
-	OpenGL::DrawLine(wpos, wpos + transform->GetLocalOYVector());
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 1, 0, 0);
-	OpenGL::DrawLine(wpos, wpos + transform->GetLocalOXVector());
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 0, 0, 1);
-	OpenGL::DrawLine(wpos, wpos + transform->GetLocalOZVector());
-
-	if (mesh) {
+	if (meshRenderer) {
 		renderer->Use();
-		mesh->RenderDebug(shader);
+		meshRenderer->RenderDebug(shader);
 	}
 	if (aabb) {
 		Manager::RenderSys->Set(RenderState::WIREFRAME, true);
@@ -222,9 +242,13 @@ void GameObject::RenderForPicking(const Shader * shader) const
 	GL_Utils::SetColorUnit(shader->loc_debug_color, colorID);
 	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
 
-	if (mesh && selectable) {
+	if (animation) {
+		animation->BindSkeletonInfo(shader);
+	}
+
+	if (meshRenderer && selectable) {
 		renderer->Use();
-		mesh->Render(shader);
+		meshRenderer->Render(shader);
 	}
 
 	for (auto child : _children) {
@@ -250,8 +274,8 @@ void GameObject::SetParent(GameObject *object)
 {
 	if (_parent)
 		_parent->RemoveChild(this);
-
-	object->AddChild(this);
+	if (object)
+		object->AddChild(this);
 }
 
 void GameObject::AddChild(GameObject * object)

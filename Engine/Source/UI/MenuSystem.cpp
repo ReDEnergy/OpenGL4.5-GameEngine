@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "MenuSystem.h"
 
 #include <include/pugixml.h>
@@ -11,6 +10,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <assert.h>
+
+using namespace std;
 
 MenuSystem::MenuSystem() {
 }
@@ -40,9 +41,9 @@ MenuPage::MenuPage(pugi::xml_node &pageXML)
 	UID = string(pageXML.child_value("id"));
 	name = string(pageXML.child_value("name"));
 
-	int index = 0;
 	PageEntry *entry;
-	for (pugi::xml_node entryXML: pageXML.child("entries").children()) {
+	for (pugi::xml_node entryXML: pageXML.child("entries").children())
+	{
 		const char* type = entryXML.attribute("type").as_string();
 		if (strcmp(type, "action") == 0) {
 			entry = new ActionEntry(entryXML);

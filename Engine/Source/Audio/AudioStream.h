@@ -1,35 +1,49 @@
 #pragma once
 
+#if defined(USE_AUDIO_MANAGER)
+
 #include <list>
+#include <string>
 
 #include <include/dll_export.h>
 #include <include/glm.h>
 
-#ifdef ENGINE_DLL_EXPORTS
+#if defined(USE_AUDIO_MANAGER) && defined(ENGINE_DLL_EXPORTS)
 #include <SFML/Audio.hpp>
 #endif
 #include <Component/AudioSource.h>
 
-using namespace std;
-
-class AudioStream : public AudioSource
+class DLLExport AudioStream : public AudioSource
 {
 	public:
-		AudioStream();
-		AudioStream(const string &file);
+		AudioStream(const std::string &file);
 		~AudioStream();
 
 		void Play();
+		void Pause();
 		void Stop();
+
+		bool IsPlaying() const;
+		float GetVolume() const;
+		float GetDuration() const;
+
 		void SetLoop(bool state);
-		void SetVolume(unsigned int value);
+		void SetVolume(float value);
 		void SetStatus(bool state);
 		void ToggleStatus();
 		void SetPosition(glm::vec3 position);
+		void PreloadStream();
+
+	private:
+		void LoadStream();
 
 	public:
-		#ifdef ENGINE_DLL_EXPORTS
+		bool loaded;
+		std::string file;
+		#if defined(USE_AUDIO_MANAGER) && defined(ENGINE_DLL_EXPORTS)
 		sf::Music music;
 		#endif
-		string name;
+		std::string name;
 };
+
+#endif

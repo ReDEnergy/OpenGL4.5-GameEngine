@@ -4,6 +4,7 @@
 using namespace std;
 
 #include <include/dll_export.h>
+#include <include/gl_utils.h>
 #include <include/glm.h>
 #include <include/glm_utils.h>
 
@@ -11,10 +12,12 @@ using namespace std;
 
 #include <Core/GameObject.h>
 #include <Core/Camera/Camera.h>
+#include <Core/WindowManager.h>
 
 #include <Component/AABB.h>
 #include <Component/Mesh.h>
 #include <Component/SkinnedMesh.h>
+#include <Component/MeshRenderer.h>
 #include <Component/Text.h>
 #include <Component/Transform/Transform.h>
 #include <Component/ObjectInput.h>
@@ -26,12 +29,15 @@ using namespace std;
 #include <Debugging/TextureDebugger.h>
 
 #include <Manager/Manager.h>
+#include <Manager/ColorManager.h>
 #include <Manager/TextureManager.h>
 #include <Manager/ResourceManager.h>
 #include <Manager/RenderingSystem.h>
 #include <Manager/ShaderManager.h>
 #include <Manager/SceneManager.h>
 #include <Manager/EventSystem.h>
+
+#include <Rendering/DirectOpenGL.h>
 
 #include <Core/Engine.h>
 #include <Core/WindowObject.h>
@@ -54,7 +60,6 @@ struct _Gizmo {
 GIZMO_EVENT events[3] = { GIZMO_EVENT::MOVE, GIZMO_EVENT::ROTATE, GIZMO_EVENT::SCALE };
 
 ColorPicking::ColorPicking()
-	: ObjectInput(InputGroup::IG_GAMEPLAY)
 {
 	rotateMode = GIZMO_EVENT::ROTATE_WORLD;
 }
@@ -64,6 +69,9 @@ ColorPicking::~ColorPicking() {
 
 void ColorPicking::Init()
 {
+	window = WindowManager::GetDefaultWindow();
+	AttachTo(window);
+
 	activeCamera = nullptr;
 	selectedObject = nullptr;
 	gizmo_isLocal = true;
@@ -79,7 +87,7 @@ void ColorPicking::Init()
 
 	GEVENT = GIZMO_EVENT::MOVE;
 
-	glm::ivec2 resolution = Engine::Window->resolution;
+	glm::ivec2 resolution = Engine::Window->props.resolution;
 
 	// Frame buffers
 	// generate buffer for color picking
@@ -94,6 +102,7 @@ void ColorPicking::Init()
 
 	// Get shaders
 	cpShader = Manager::Shader->GetShader("simple");
+	cpShaderSk = Manager::Shader->GetShader("simple-skinned");
 	gizmoShader = cpShader;
 
 	gizmoObject = new Gizmo();
@@ -128,27 +137,17 @@ void ColorPicking::Update(const Camera* activeCamera)
 	this->activeCamera = activeCamera;
 
 	if (pickEvent) {
-		CheckOpenGLError();
-		if (selectedObject)
-			UpdateGizmo(true);
-		DrawSceneForPicking();
-		CheckOpenGLError();
-		GetPickedObject();
-		pickEvent = false;
-		CheckOpenGLError();
+		PickObject();
 	}
 
 	if (selectedObject)
 	{
-		CheckOpenGLError();
 		UpdateGizmo();
-		CheckOpenGLError();
 		DrawGizmo();
 
 		if (focusEvent) {
 			FocusCamera();
 		}
-		CheckOpenGLError();
 	}
 }
 
@@ -183,7 +182,7 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 			selectedObject->transform->SetWorldPosition(selectedObject->transform->GetWorldPosition() + currentAxis * delta);
 
 			// Move Camera if CTRL is pressed
-			if (InputSystem::KeyHold(GLFW_KEY_LEFT_CONTROL))
+			if (window->KeyHold(GLFW_KEY_LEFT_CONTROL))
 			{
 				activeCamera->transform->SetWorldPosition(activeCamera->transform->GetWorldPosition() + currentAxis * delta);
 			}
@@ -193,6 +192,7 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 		case GIZMO_EVENT::ROTATE:
 		{
 			glm::vec3 rotation_vector = currentAxis * glm::vec3(deltaX - deltaY);
+			auto speed = selectedObject->transform->GetRotationSpeed();
 			selectedObject->transform->SetRotationSpeed(0.3f);
 			if (rotateMode == GIZMO_EVENT::ROTATE_WORLD)
 			{
@@ -205,6 +205,7 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 				if (rotation_vector.y) selectedObject->transform->RotateLocalOY(rotation_vector.y);
 				if (rotation_vector.z) selectedObject->transform->RotateLocalOZ(rotation_vector.z);
 			}
+			selectedObject->transform->SetRotationSpeed(speed);
 			break;
 		}
 
@@ -353,16 +354,18 @@ void ColorPicking::FocusCamera()
 
 void ColorPicking::SetSelectedObject(GameObject * object)
 {
-	if (selectedObject == object)
+	if (object)
+		object->OnSelect();
+	Manager::Event->EmitAsync(EventType::EDITOR_OBJECT_SELECTED, object);
+
+	if (selectedObject == object) {
 		return;
+	}
 
 	if (object) {
 		selectedObject = object;
-		//cout << "[NAME] " << selectedObject->GetName() << endl;
-
 		// Align Gizmo to the current gameObj objects
 		UpdateGizmo();
-		Manager::Event->EmitAsync(EventType::EDITOR_OBJECT_SELECTED, selectedObject);
 	}
 }
 
@@ -382,34 +385,46 @@ bool ColorPicking::HasActiveSelection() const
 	return selectedObject != nullptr;
 }
 
-void ColorPicking::GetPickedObject()
+void ColorPicking::PickObject()
 {
-	// read pixel from colorpicking frame buffer
-	glm::vec3 pickedColor;
-	glReadPixels(mousePosition.x, Engine::Window->resolution.y - mousePosition.y, 1, 1, GL_RGB, GL_FLOAT, glm::value_ptr(pickedColor));
-	FrameBuffer::Unbind();
+	if (selectedObject)
+		UpdateGizmo(true);
+
+	FBO->Bind();
+
+	DrawSceneForPicking();
+
+	// Read pixel from colorpicking frame buffer
+	unsigned char pickedColor[3];
+	glReadPixels(mousePosition.x, Engine::Window->props.resolution.y - mousePosition.y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pickedColor);
+	FrameBuffer::Unbind(window);
+
+	glm::ivec3 color(pickedColor[0], pickedColor[1], pickedColor[2]);
+	GetPickedObject(color);
+	pickEvent = false;
+}
+
+void ColorPicking::GetPickedObject(const glm::ivec3 &colorID)
+{
+	GameObject *G = Manager::GetColor()->GetObjectByColor(colorID);
 
 	// check if gizmo was clicked
 	gizmoEvent = false;
 	for (int i = 0; i <= 2; i++) {
-		if (gizmo[i].gizmo_object[GEVENT]->IdentifyByColor(pickedColor))
+		if (gizmo[i].gizmo_object[GEVENT] == G)
 		{
 			gizmoEvent = true;
+
 			//the color matches the axis
 			currentAxis = gizmo[i].color;
 		}
 	}
 
 	if (!gizmoEvent) {
-		//check for objects click
-		for (auto *obj : Manager::Scene->GetActiveObjects()) {
-			GameObject *G = obj->IdentifyByColor(pickedColor);
-			if (G) {
-				SetSelectedObject(G);
-				break;
-			}
-		}
+		SetSelectedObject(G);
 	}
+
+	CheckOpenGLError();
 }
 
 void ColorPicking::OnEvent(EventType Event, void * data)
@@ -468,25 +483,43 @@ void ColorPicking::ResetGizmoRotation()
 
 void ColorPicking::DrawSceneForPicking() const
 {
-	Manager::RenderSys->CullFace(OpenGL::CULL::BACK);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
 
-	FBO->Bind();
 	cpShader->Use();
 
 	activeCamera->BindPosition(cpShader->loc_eye_pos);
 	activeCamera->BindViewMatrix(cpShader->loc_view_matrix);
 	activeCamera->BindProjectionMatrix(cpShader->loc_projection_matrix);
 
-	for (auto obj : Manager::Scene->GetActiveObjects()) {
-		obj->RenderForPicking(cpShader);
+	for (auto *obj : Manager::GetScene()->GetFrustrumObjects()) {
+		if (obj->meshRenderer && obj->meshRenderer->mesh->meshType == MESH_TYPE::STATIC)
+		{
+			obj->RenderForPicking(cpShader);
+		}
+	}
+
+	// Render Skinned meshes
+	cpShaderSk->Use();
+	activeCamera->BindPosition(cpShaderSk->loc_eye_pos);
+	activeCamera->BindViewMatrix(cpShaderSk->loc_view_matrix);
+	activeCamera->BindProjectionMatrix(cpShaderSk->loc_projection_matrix);
+
+	for (auto *obj : Manager::GetScene()->GetFrustrumObjects()) {
+		if (obj->meshRenderer && obj->meshRenderer->mesh->meshType == MESH_TYPE::SKINNED) {
+			obj->RenderForPicking(cpShaderSk);
+		}
 	}
 
 	glDepthMask(GL_FALSE);
 	glDisable(GL_DEPTH_TEST);
+	cpShader->Use();
+
 	for (auto obj : Manager::Scene->GetActiveObjects()) {
 		if (obj->renderer->GetRenderingLayer() == RenderingLayer::ON_TOP)
 			obj->RenderForPicking(cpShader);
 	}
+
 	glDepthMask(GL_TRUE);
 
 	if (selectedObject) {
@@ -506,9 +539,8 @@ void ColorPicking::DrawGizmo() const
 	activeCamera->BindViewMatrix(gizmoShader->loc_view_matrix);
 	activeCamera->BindProjectionMatrix(gizmoShader->loc_projection_matrix);
 
+	CheckOpenGLError();
 	RenderGizmo(gizmoShader);
-
-	FrameBuffer::Unbind();
 }
 
 void ColorPicking::RenderGizmo(const Shader* shader) const
@@ -537,6 +569,7 @@ void ColorPicking::RenderGizmo(const Shader* shader) const
 		obj->Render(shader);
 	}
 
+	CheckOpenGLError();
 	Manager::RenderSys->DisableGlobalCulling();
 }
 
@@ -555,23 +588,7 @@ void ColorPicking::RenderGizmoForPicking(const Shader* shader) const
 void ColorPicking::RenderAxisHelpers(const Shader* shader) const
 {
 	glLineWidth(1);
-
-	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(selectedObject->transform->GetModel()));
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 1, 0, 0);
-	OpenGL::DrawLine(glm::vec3(1, 0, 0));
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 0, 1, 0);
-	OpenGL::DrawLine(glm::vec3(0, 1, 0));
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 0, 0, 1);
-	OpenGL::DrawLine(glm::vec3(0, 0, 1));
-
-	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0)));
-
-	glm::vec3 wpos = selectedObject->transform->GetWorldPosition();
-	glm::quat rRot = selectedObject->transform->GetRelativeRotation();
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 1, 0, 0);
-	OpenGL::DrawLine(wpos, wpos + glm::rotate(rRot, glm::vec3(1, 0, 0)));
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 0, 1, 0);
-	OpenGL::DrawLine(wpos, wpos + glm::rotate(rRot, glm::vec3(0, 1, 0)));
-	GL_Utils::SetColorUnit(shader->loc_debug_color, 0, 0, 1);
-	OpenGL::DrawLine(wpos, wpos + glm::rotate(rRot, glm::vec3(0, 0, 1)));
+	auto DirectGL = Manager::GetDirectGL();
+	DirectGL->SetLineWidth(2);
+	DirectGL->DrawStandardAxis(selectedObject->transform, shader);
 }

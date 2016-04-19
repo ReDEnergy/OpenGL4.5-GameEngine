@@ -1,8 +1,9 @@
-//#include <pch.h>
 #include "SSAO.h"
 
+#include <include/gl.h>
 #include <include/math.h>
 
+#include <Core/Engine.h>
 #include <Core/Camera/Camera.h>
 #include <GPU/Texture.h>
 #include <GPU/Shader.h>
@@ -12,6 +13,7 @@
 #include <Manager/ShaderManager.h>
 #include <Manager/ResourceManager.h>
 
+#include <Utils/OpenGL.h>
 
 SSAO::SSAO()
 {
@@ -78,13 +80,9 @@ void SSAO::Update(const FrameBuffer *FBO, const Camera *camera) const
 	// Finish TASK
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
-
-	FrameBuffer::Unbind();
+	FrameBuffer::Unbind(Engine::Window);
 
 	// -- COMPUTE SHADER
-	int WORK_GROUP_SIZE = 16;
-	auto res = ssaoFBO.GetResolution();
-
 	Shader *S = Manager::Shader->GetShader("ssaoBlur");
 	S->Use();
 
@@ -92,9 +90,9 @@ void SSAO::Update(const FrameBuffer *FBO, const Camera *camera) const
 	ssaoFBO.BindTexture(0, GL_TEXTURE0);
 	
 	glBindImageTexture(1, computeTexture->GetTextureID(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
-	glDispatchCompute(GLuint(UPPER_BOUND(res.x, WORK_GROUP_SIZE)), GLuint(UPPER_BOUND(res.y, WORK_GROUP_SIZE)), 1);
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
+	auto resolution = ssaoFBO.GetResolution();
+	OpenGL::DispatchCompute(resolution.x, resolution.y, 1, 16);
 }
 
 void SSAO::BindTexture(GLenum TextureUnit) {

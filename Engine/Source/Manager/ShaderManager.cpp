@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "ShaderManager.h"
 
 #include <string>
@@ -13,31 +12,38 @@
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
 
-static const string _PATH("Resources\\Shaders\\");
+using namespace std;
 
 ShaderManager::ShaderManager()
 {
 	shaderType["compute"] = GL_COMPUTE_SHADER;
 	shaderType["vertex"] = GL_VERTEX_SHADER;
 	shaderType["fragment"] = GL_FRAGMENT_SHADER;
+
+#ifndef OPENGL_ES
 	shaderType["geometry"] = GL_GEOMETRY_SHADER;
 	shaderType["tess_eval"] = GL_TESS_EVALUATION_SHADER;
 	shaderType["tess_control"] = GL_TESS_CONTROL_SHADER;
+#endif
+
 }
 
 ShaderManager::~ShaderManager()
 {
-	for (auto shader: shaders)
+	for (auto &shader: shaders)
 		SAFE_FREE(shader.second)
 }
 
 void ShaderManager::Load(const char *file)
 {
-	shaderCfgFile = file;
+	shaderDataFile = file;
 	Manager::Debug->InitManager("Shaders");
 
 	pugi::xml_document *doc = pugi::LoadXML(file);
-	if (doc) {
+	if (doc)
+	{
+		BasePath = doc->child_value("base-path");
+
 		pugi::xml_node shaders = doc->child("shaders");
 		for (pugi::xml_node shaderXML : shaders.children()) {
 			ReadShader(shaderXML);
@@ -63,7 +69,7 @@ void ShaderManager::ReadShader(pugi::xml_node &shaderXML)
 
 	for (pugi::xml_node shaderNode : shaderXML.children()) {
 		auto fileName = shaderNode.text().get();
-		auto file = _PATH + fileName + ".glsl";
+		auto file = BasePath + fileName + ".glsl";
 		auto type = shaderType[shaderNode.name()];
 		shader->AddShader(file, type);
 	}
@@ -84,7 +90,7 @@ Shader* ShaderManager::GetShader(const char* name)
 
 void ShaderManager::Reload()
 {
-	Load(shaderCfgFile);
+	Load(shaderDataFile.c_str());
 }
 
 const Shader* ShaderManager::PopState()
@@ -98,6 +104,6 @@ const Shader* ShaderManager::PopState()
 }
 
 void ShaderManager::ReloadFromFile() {
-	for (auto shader: shaders)
+	for (auto &shader: shaders)
 		shader.second->Reload();
 }

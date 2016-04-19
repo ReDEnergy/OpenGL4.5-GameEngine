@@ -23,17 +23,22 @@ class DLLExport Renderer
 		RenderingLayer GetRenderingLayer();
 		bool IsTransparent() const;
 		float GetOpacity() const;
+		bool IsRendered() const;
 
 		void Use() const;
 		void SetCulling(OpenGL::CULL face);
 		void SetCastShadow(bool value);
 		void SetRenderingLayer(RenderingLayer layer);
 		void SetOpacity(float value);
+		void SetIsRendered(bool value);
+		void SetUseAlphaChannel(bool value);
 
 	private:
 		OpenGL::CULL culling;
 		RenderingLayer layer;
+		bool alphaChannel;
 		bool castSadows;
 		float opacity;
+		bool isRendered;
 };
 

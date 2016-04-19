@@ -1,12 +1,15 @@
 #include "Engine.h"
 
 #include <iostream>
-using namespace std;
+
+#include <include/gl.h>
 
 #include <Core/InputSystem.h>
 #include <Core/WindowManager.h>
 #include <Core/WindowObject.h>
 #include <Core/World.h>
+
+using namespace std;
 
 // Engine
 double Engine::elapsedTime = 0;
@@ -43,7 +46,7 @@ float Engine::GetElapsedTime()
 void Engine::Run()
 {
 	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(Window->window))
+	while (!Window->ShouldClose())
 	{
 		Update();
 	}
@@ -55,24 +58,21 @@ void Engine::Run()
 void Engine::Update()
 {
 	/* Poll and process events */
-	glfwPollEvents();
+	Window->PollEvents();
 
 	ComputeFrameDeltaTime();
 	if (paused) return;
 
-	world->FrameStart();
-
-	/* Render Frame */
-	if (world)
-		world->Update((float)elapsedTime, (float)deltaTime);
-
-	InputSystem::EndFrame();
-
-	world->FrameEnd();
+	/* Frame */
+	if (world) {
+		world->FrameStart();
+		world->Update((float)deltaTime);
+		world->FrameEnd();
+	}
 
 	/* Swap front and back buffers */
 	if (!paused)
-		glfwSwapBuffers(Window->window);
+		Window->SwapBuffers();
 }
 
 void Engine::Pause()
@@ -81,10 +81,11 @@ void Engine::Pause()
 	cout << "RENDERING: " << paused << endl;
 }
 
-void Engine::Exit() {
-	if (!glfwWindowShouldClose(Window->window))
+void Engine::Exit()
+{
+	if (!Window->ShouldClose())
 	{
-		glfwSetWindowShouldClose(Window->window, 1);
+		Window->Close();
 		return;
 	}
 	cout << "=====================================================" << endl;
@@ -97,7 +98,7 @@ void Engine::Exit() {
 // -------------------------------------------------------------------------
 void ErrorCallback(int error, const char* description)
 {
-	cout << "[GLFW ERROR]\t" << error << " " << description;
+	cout << "[GLFW ERROR]\t" << error << "\t" << description << endl;
 }
 
 void Engine::Init()
@@ -107,9 +108,5 @@ void Engine::Init()
 		return;
 
 	glfwSetErrorCallback(ErrorCallback);
-
-	glClearDepth(1);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
 	CheckOpenGLError();
 }

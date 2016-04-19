@@ -1,11 +1,10 @@
 #pragma once
-#include <include/gl.h>
 #include <include/glm.h>
 #include <include/assimp.h>
 
-using namespace std;
-
 namespace assimp {
+
+	using namespace std;
 
 	inline void CopyColor(const aiColor4D &color, glm::vec4 dest)
 	{

@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "Gizmo.h"
 
 #include <Manager/Manager.h>

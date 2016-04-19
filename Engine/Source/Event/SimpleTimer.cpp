@@ -6,6 +6,7 @@
 #include <Event/EventType.h>
 #include <Event/EventListener.h>
 
+using namespace std;
 
 SimpleTimer::SimpleTimer(float duration)
 {
@@ -25,6 +26,7 @@ void SimpleTimer::Start()
 
 void SimpleTimer::Reset()
 {
+	isActive = false;
 	UnsubscribeFrom(EventType::FRAME_UPDATE);
 }
 

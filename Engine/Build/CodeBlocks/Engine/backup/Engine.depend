@@ -1,0 +1,2729 @@
+# depslib dependency file v1.0
+1454597532 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Audio/AudioStream.cpp
+	"AudioStream.h"
+
+1457203074 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Audio/AudioStream.h
+	<list>
+	<string>
+	<include/dll_export.h>
+	<include/glm.h>
+	<SFML/Audio.hpp>
+	<Component/AudioSource.h>
+
+1457122275 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/include/dll_export.h
+
+1441230660 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/include/glm.h
+	<glm/glm.hpp>
+	<glm/gtc/type_ptr.hpp>
+	<glm/gtc/matrix_transform.hpp>
+	<glm/gtc/quaternion.hpp>
+	<glm/gtx/quaternion.hpp>
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/glm.hpp
+	"core/_fixes.hpp"
+	<cmath>
+	<climits>
+	<cfloat>
+	<limits>
+	<cstdio>
+	"core/setup.hpp"
+	"./core/_detail.hpp"
+	"./core/_vectorize.hpp"
+	"./core/type.hpp"
+	"./core/func_trigonometric.hpp"
+	"./core/func_exponential.hpp"
+	"./core/func_common.hpp"
+	"./core/func_packing.hpp"
+	"./core/func_geometric.hpp"
+	"./core/func_matrix.hpp"
+	"./core/func_vector_relational.hpp"
+	"./core/func_integer.hpp"
+	"./core/func_noise.hpp"
+	"./core/_swizzle.hpp"
+
+1449881453 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/_fixes.hpp
+	<cmath>
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/setup.hpp
+	<intrin.h>
+	<immintrin.h>
+	<immintrin.h>
+	<smmintrin.h>
+	<pmmintrin.h>
+	<emmintrin.h>
+
+1449881453 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/_detail.hpp
+	"setup.hpp"
+	<cassert>
+	<cstdint>
+
+1449881453 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/_vectorize.hpp
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type.hpp
+	"type_half.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_gentype.hpp"
+	"type_vec1.hpp"
+	"type_vec2.hpp"
+	"type_vec3.hpp"
+	"type_vec4.hpp"
+	"type_mat2x2.hpp"
+	"type_mat2x3.hpp"
+	"type_mat2x4.hpp"
+	"type_mat3x2.hpp"
+	"type_mat3x3.hpp"
+	"type_mat3x4.hpp"
+	"type_mat4x2.hpp"
+	"type_mat4x3.hpp"
+	"type_mat4x4.hpp"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_half.hpp
+	<cstdlib>
+	"type_half.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_half.inl
+	"_detail.hpp"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_float.hpp
+	"type_half.hpp"
+	"setup.hpp"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_int.hpp
+	"setup.hpp"
+	"_detail.hpp"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_gentype.hpp
+	"type_size.hpp"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_size.hpp
+	<cstdlib>
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec1.hpp
+	"type_vec.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_size.hpp"
+	"_swizzle.hpp"
+	"type_vec1.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec.hpp
+	"type_gentype.hpp"
+
+1449881453 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/_swizzle.hpp
+	"_swizzle_func.hpp"
+
+1449881453 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/_swizzle_func.hpp
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec1.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec2.hpp
+	"type_vec.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_size.hpp"
+	"_swizzle.hpp"
+	"type_vec2.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec2.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec3.hpp
+	"type_vec.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_size.hpp"
+	"_swizzle.hpp"
+	"type_vec3.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec3.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec4.hpp
+	"type_vec.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_size.hpp"
+	"_swizzle.hpp"
+	"type_vec4.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_vec4.inl
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x2.hpp
+	"type_mat.hpp"
+	"type_mat2x2.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat.hpp
+	"type_gentype.hpp"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x2.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x3.hpp
+	"type_mat.hpp"
+	"type_mat2x3.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x3.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x4.hpp
+	"type_mat.hpp"
+	"type_mat2x4.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x4.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x2.hpp
+	"type_mat.hpp"
+	"type_mat3x2.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x2.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x3.hpp
+	"type_mat.hpp"
+	"type_mat3x3.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x3.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x4.hpp
+	"type_mat.hpp"
+	"type_mat3x4.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x4.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x2.hpp
+	"type_mat.hpp"
+	"type_mat4x2.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x2.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x3.hpp
+	"type_mat.hpp"
+	"type_mat4x3.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x3.inl
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x4.hpp
+	"type_mat.hpp"
+	"type_mat4x4.inl"
+
+1449881455 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x4.inl
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_trigonometric.hpp
+	"func_trigonometric.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_trigonometric.inl
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_exponential.hpp
+	"func_exponential.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_exponential.inl
+
+1449881453 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_common.hpp
+	"_fixes.hpp"
+	"func_common.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_common.inl
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_packing.hpp
+	"func_packing.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_packing.inl
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_geometric.hpp
+	"func_geometric.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_geometric.inl
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_matrix.hpp
+	"func_matrix.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_matrix.inl
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_vector_relational.hpp
+	"_detail.hpp"
+	"func_vector_relational.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_vector_relational.inl
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_integer.hpp
+	"func_integer.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_integer.inl
+	<intrin.h>
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_noise.hpp
+	"func_noise.inl"
+
+1449881454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/core/func_noise.inl
+
+1449881411 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/type_ptr.hpp
+	"../glm.hpp"
+	"../gtc/half_float.hpp"
+	"../gtc/quaternion.hpp"
+	<cstring>
+	"type_ptr.inl"
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/half_float.hpp
+	"../glm.hpp"
+	"half_float.inl"
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/half_float.inl
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/quaternion.hpp
+	"../glm.hpp"
+	"../gtc/half_float.hpp"
+	"../gtc/constants.hpp"
+	"quaternion.inl"
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/constants.hpp
+	"../glm.hpp"
+	"../gtc/half_float.hpp"
+	"constants.inl"
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/constants.inl
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/quaternion.inl
+	<limits>
+
+1449881411 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/type_ptr.inl
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/matrix_transform.hpp
+	"../glm.hpp"
+	"matrix_transform.inl"
+
+1449881410 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtc/matrix_transform.inl
+
+1449881413 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtx/quaternion.hpp
+	"../glm.hpp"
+	"../gtc/quaternion.hpp"
+	"quaternion.inl"
+
+1449881413 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/glm/gtx/quaternion.inl
+	<limits>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio.hpp
+	<SFML/System.hpp>
+	<SFML/Audio/InputSoundFile.hpp>
+	<SFML/Audio/Listener.hpp>
+	<SFML/Audio/Music.hpp>
+	<SFML/Audio/OutputSoundFile.hpp>
+	<SFML/Audio/Sound.hpp>
+	<SFML/Audio/SoundBuffer.hpp>
+	<SFML/Audio/SoundBufferRecorder.hpp>
+	<SFML/Audio/SoundFileFactory.hpp>
+	<SFML/Audio/SoundFileReader.hpp>
+	<SFML/Audio/SoundFileWriter.hpp>
+	<SFML/Audio/SoundRecorder.hpp>
+	<SFML/Audio/SoundSource.hpp>
+	<SFML/Audio/SoundStream.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System.hpp
+	<SFML/Config.hpp>
+	<SFML/System/Clock.hpp>
+	<SFML/System/Err.hpp>
+	<SFML/System/FileInputStream.hpp>
+	<SFML/System/InputStream.hpp>
+	<SFML/System/Lock.hpp>
+	<SFML/System/MemoryInputStream.hpp>
+	<SFML/System/Mutex.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<SFML/System/Sleep.hpp>
+	<SFML/System/String.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/ThreadLocal.hpp>
+	<SFML/System/ThreadLocalPtr.hpp>
+	<SFML/System/Time.hpp>
+	<SFML/System/Utf.hpp>
+	<SFML/System/Vector2.hpp>
+	<SFML/System/Vector3.hpp>
+
+1430987944 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Config.hpp
+	"TargetConditionals.h"
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Clock.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Time.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Export.hpp
+	<SFML/Config.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Time.hpp
+	<SFML/System/Export.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Err.hpp
+	<SFML/System/Export.hpp>
+	<ostream>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/FileInputStream.hpp
+	<SFML/Config.hpp>
+	<SFML/System/Export.hpp>
+	<SFML/System/InputStream.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<cstdio>
+	<string>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/InputStream.hpp
+	<SFML/Config.hpp>
+	<SFML/System/Export.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/NonCopyable.hpp
+	<SFML/System/Export.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Lock.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/MemoryInputStream.hpp
+	<SFML/Config.hpp>
+	<SFML/System/InputStream.hpp>
+	<SFML/System/Export.hpp>
+	<cstdlib>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Mutex.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Sleep.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Time.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/String.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Utf.hpp>
+	<locale>
+	<string>
+	<SFML/System/String.inl>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Utf.hpp
+	<SFML/Config.hpp>
+	<algorithm>
+	<locale>
+	<string>
+	<cstdlib>
+	<SFML/System/Utf.inl>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Utf.inl
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/String.inl
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Thread.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<cstdlib>
+	<SFML/System/Thread.inl>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Thread.inl
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/ThreadLocal.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<cstdlib>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/ThreadLocalPtr.hpp
+	<SFML/System/ThreadLocal.hpp>
+	<SFML/System/ThreadLocalPtr.inl>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/ThreadLocalPtr.inl
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Vector2.hpp
+	<SFML/System/Vector2.inl>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Vector2.inl
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Vector3.hpp
+	<SFML/System/Vector3.inl>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/System/Vector3.inl
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/InputSoundFile.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/Export.hpp
+	<SFML/Config.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/Listener.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/Vector3.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/Music.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundStream.hpp>
+	<SFML/Audio/InputSoundFile.hpp>
+	<SFML/System/Mutex.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+	<vector>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundStream.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundSource.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/Time.hpp>
+	<SFML/System/Mutex.hpp>
+	<cstdlib>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundSource.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/AlResource.hpp>
+	<SFML/System/Vector3.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/AlResource.hpp
+	<SFML/Audio/Export.hpp>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/OutputSoundFile.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<string>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/Sound.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundSource.hpp>
+	<SFML/System/Time.hpp>
+	<cstdlib>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundBuffer.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/AlResource.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+	<vector>
+	<set>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundBufferRecorder.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundBuffer.hpp>
+	<SFML/Audio/SoundRecorder.hpp>
+	<vector>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundRecorder.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/AlResource.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/Time.hpp>
+	<vector>
+	<string>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundFileFactory.hpp
+	<SFML/Audio/Export.hpp>
+	<string>
+	<vector>
+	<SFML/Audio/SoundFileFactory.inl>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundFileFactory.inl
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundFileReader.hpp
+	<SFML/Audio/Export.hpp>
+	<string>
+
+1429780454 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundFileWriter.hpp
+	<SFML/Audio/Export.hpp>
+	<string>
+
+1454532469 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Component/AudioSource.h
+	<include/dll_export.h>
+	<include/glm.h>
+	<Core/GameObject.h>
+
+1454607522 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Core/GameObject.h
+	<list>
+	<include/glm.h>
+	<include/dll_export.h>
+	<include/utils.h>
+	<Core/Object.h>
+
+1443656935 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/include/utils.h
+
+1417618109 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Core/Object.h
+	<include/dll_export.h>
+
+1454619116 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Audio/SoundFX.cpp
+	"SoundFX.h"
+	<include/gl.h>
+	<Manager/Manager.h>
+	<Manager/EventSystem.h>
+	<Event/TimerEvent.h>
+
+1454619053 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Audio/SoundFX.h
+	<list>
+	<SFML/Audio.hpp>
+	<include/dll_export.h>
+	<Component/AudioSource.h>
+	<Event/EventListener.h>
+
+1457015842 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Event/EventListener.h
+	<string>
+	<include/dll_export.h>
+	<Core/Object.h>
+	<Event/EventType.h>
+
+1454950948 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Event/EventType.h
+
+1457123732 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/include/gl.h
+	<EGL/egl.h>
+	<EGL/eglext.h>
+	<EGL/eglplatform.h>
+	<GL/glew.h>
+	<GL/wglew.h>
+	<GL/glxew.h>
+	<GLFW/glfw3.h>
+	<GLFW/glfw3native.h>
+	<include/dll_export.h>
+
+1454099765 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/EGL/egl.h
+	<EGL/eglplatform.h>
+	<KHR/khrplatform.h>
+	<EGL/eglplatform.h>
+
+1454099771 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/EGL/eglplatform.h
+	<KHR/khrplatform.h>
+	<windows.h>
+	<android/native_window.h>
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+
+1439195753 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/KHR/khrplatform.h
+	<stdint.h>
+	<inttypes.h>
+	<stdint.h>
+
+1454099768 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/EGL/eglext.h
+	<EGL/eglplatform.h>
+
+1374477082 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/GL/glew.h
+	<stddef.h>
+	<inttypes.h>
+	<stdint.h>
+	<inttypes.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+
+1374477082 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/GL/wglew.h
+	<windows.h>
+
+1374477082 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/GL/glxew.h
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+	<X11/Xmd.h>
+	<GL/glew.h>
+
+1426774912 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/GLFW/glfw3.h
+	<stddef.h>
+	<OpenGL/gl3.h>
+	<OpenGL/gl3ext.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/glcorearb.h>
+	<GLES/gl.h>
+	<GLES/glext.h>
+	<GLES2/gl2.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl3.h>
+	<GLES3/gl2ext.h>
+	<GLES3/gl31.h>
+	<GLES3/gl2ext.h>
+	<GL/gl.h>
+	<GL/glext.h>
+	<GL/glu.h>
+
+1439195753 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/GLES3/gl3.h
+	<GLES3/gl3platform.h>
+	<KHR/khrplatform.h>
+
+1439195753 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/GLES3/gl3platform.h
+	<KHR/khrplatform.h>
+
+1439195753 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/GLES3/gl31.h
+	<GLES3/gl3platform.h>
+	<KHR/khrplatform.h>
+
+1426774912 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/libs/GLFW/glfw3native.h
+	<windows.h>
+	<ApplicationServices/ApplicationServices.h>
+	<X11/Xlib.h>
+	<X11/extensions/Xrandr.h>
+	<GL/glx.h>
+	<EGL/egl.h>
+
+1456852690 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Manager/Manager.h
+	<include/dll_export.h>
+	<string>
+
+1457037097 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Manager/EventSystem.h
+	<list>
+	<unordered_map>
+	<string>
+	<functional>
+	<vector>
+	<Event/EventType.h>
+	<Event/EventListener.h>
+
+1452798776 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Event/TimerEvent.h
+	<list>
+	<unordered_map>
+	<string>
+	<vector>
+	<functional>
+	<iostream>
+	<Core/Engine.h>
+	<Manager/Manager.h>
+	<Manager/EventSystem.h>
+	<Event/EventType.h>
+	<Event/EventListener.h>
+	<include/gl.h>
+
+1452729088 /home/red/Desktop/Media/Dropbox/Projects/GameEngine/Engine/Source/Core/Engine.h
+	<cstdlib>
+	<cstdio>
+	<include/dll_export.h>
+	<include/gl.h>
+
+1457129188 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/dll_export.h
+
+1441230660 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/glm.h
+	<glm/glm.hpp>
+	<glm/gtc/type_ptr.hpp>
+	<glm/gtc/matrix_transform.hpp>
+	<glm/gtc/quaternion.hpp>
+	<glm/gtx/quaternion.hpp>
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/glm.hpp
+	"core/_fixes.hpp"
+	<cmath>
+	<climits>
+	<cfloat>
+	<limits>
+	<cstdio>
+	"core/setup.hpp"
+	"./core/_detail.hpp"
+	"./core/_vectorize.hpp"
+	"./core/type.hpp"
+	"./core/func_trigonometric.hpp"
+	"./core/func_exponential.hpp"
+	"./core/func_common.hpp"
+	"./core/func_packing.hpp"
+	"./core/func_geometric.hpp"
+	"./core/func_matrix.hpp"
+	"./core/func_vector_relational.hpp"
+	"./core/func_integer.hpp"
+	"./core/func_noise.hpp"
+	"./core/_swizzle.hpp"
+
+1449881453 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/_fixes.hpp
+	<cmath>
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/setup.hpp
+	<intrin.h>
+	<immintrin.h>
+	<immintrin.h>
+	<smmintrin.h>
+	<pmmintrin.h>
+	<emmintrin.h>
+
+1449881453 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/_detail.hpp
+	"setup.hpp"
+	<cassert>
+	<cstdint>
+
+1449881453 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/_vectorize.hpp
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type.hpp
+	"type_half.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_gentype.hpp"
+	"type_vec1.hpp"
+	"type_vec2.hpp"
+	"type_vec3.hpp"
+	"type_vec4.hpp"
+	"type_mat2x2.hpp"
+	"type_mat2x3.hpp"
+	"type_mat2x4.hpp"
+	"type_mat3x2.hpp"
+	"type_mat3x3.hpp"
+	"type_mat3x4.hpp"
+	"type_mat4x2.hpp"
+	"type_mat4x3.hpp"
+	"type_mat4x4.hpp"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_half.hpp
+	<cstdlib>
+	"type_half.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_half.inl
+	"_detail.hpp"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_float.hpp
+	"type_half.hpp"
+	"setup.hpp"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_int.hpp
+	"setup.hpp"
+	"_detail.hpp"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_gentype.hpp
+	"type_size.hpp"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_size.hpp
+	<cstdlib>
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec1.hpp
+	"type_vec.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_size.hpp"
+	"_swizzle.hpp"
+	"type_vec1.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec.hpp
+	"type_gentype.hpp"
+
+1449881453 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/_swizzle.hpp
+	"_swizzle_func.hpp"
+
+1449881453 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/_swizzle_func.hpp
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec1.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec2.hpp
+	"type_vec.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_size.hpp"
+	"_swizzle.hpp"
+	"type_vec2.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec2.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec3.hpp
+	"type_vec.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_size.hpp"
+	"_swizzle.hpp"
+	"type_vec3.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec3.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec4.hpp
+	"type_vec.hpp"
+	"type_float.hpp"
+	"type_int.hpp"
+	"type_size.hpp"
+	"_swizzle.hpp"
+	"type_vec4.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_vec4.inl
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x2.hpp
+	"type_mat.hpp"
+	"type_mat2x2.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat.hpp
+	"type_gentype.hpp"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x2.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x3.hpp
+	"type_mat.hpp"
+	"type_mat2x3.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x3.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x4.hpp
+	"type_mat.hpp"
+	"type_mat2x4.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat2x4.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x2.hpp
+	"type_mat.hpp"
+	"type_mat3x2.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x2.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x3.hpp
+	"type_mat.hpp"
+	"type_mat3x3.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x3.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x4.hpp
+	"type_mat.hpp"
+	"type_mat3x4.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat3x4.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x2.hpp
+	"type_mat.hpp"
+	"type_mat4x2.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x2.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x3.hpp
+	"type_mat.hpp"
+	"type_mat4x3.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x3.inl
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x4.hpp
+	"type_mat.hpp"
+	"type_mat4x4.inl"
+
+1449881455 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/type_mat4x4.inl
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_trigonometric.hpp
+	"func_trigonometric.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_trigonometric.inl
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_exponential.hpp
+	"func_exponential.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_exponential.inl
+
+1449881453 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_common.hpp
+	"_fixes.hpp"
+	"func_common.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_common.inl
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_packing.hpp
+	"func_packing.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_packing.inl
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_geometric.hpp
+	"func_geometric.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_geometric.inl
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_matrix.hpp
+	"func_matrix.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_matrix.inl
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_vector_relational.hpp
+	"_detail.hpp"
+	"func_vector_relational.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_vector_relational.inl
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_integer.hpp
+	"func_integer.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_integer.inl
+	<intrin.h>
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_noise.hpp
+	"func_noise.inl"
+
+1449881454 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/core/func_noise.inl
+
+1449881411 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/type_ptr.hpp
+	"../glm.hpp"
+	"../gtc/half_float.hpp"
+	"../gtc/quaternion.hpp"
+	<cstring>
+	"type_ptr.inl"
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/half_float.hpp
+	"../glm.hpp"
+	"half_float.inl"
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/half_float.inl
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/quaternion.hpp
+	"../glm.hpp"
+	"../gtc/half_float.hpp"
+	"../gtc/constants.hpp"
+	"quaternion.inl"
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/constants.hpp
+	"../glm.hpp"
+	"../gtc/half_float.hpp"
+	"constants.inl"
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/constants.inl
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/quaternion.inl
+	<limits>
+
+1449881411 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/type_ptr.inl
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/matrix_transform.hpp
+	"../glm.hpp"
+	"matrix_transform.inl"
+
+1449881410 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtc/matrix_transform.inl
+
+1449881413 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtx/quaternion.hpp
+	"../glm.hpp"
+	"../gtc/quaternion.hpp"
+	"quaternion.inl"
+
+1449881413 /media/sf_D/Dropbox/Projects/GameEngine/libs/glm/gtx/quaternion.inl
+	<limits>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio.hpp
+	<SFML/System.hpp>
+	<SFML/Audio/InputSoundFile.hpp>
+	<SFML/Audio/Listener.hpp>
+	<SFML/Audio/Music.hpp>
+	<SFML/Audio/OutputSoundFile.hpp>
+	<SFML/Audio/Sound.hpp>
+	<SFML/Audio/SoundBuffer.hpp>
+	<SFML/Audio/SoundBufferRecorder.hpp>
+	<SFML/Audio/SoundFileFactory.hpp>
+	<SFML/Audio/SoundFileReader.hpp>
+	<SFML/Audio/SoundFileWriter.hpp>
+	<SFML/Audio/SoundRecorder.hpp>
+	<SFML/Audio/SoundSource.hpp>
+	<SFML/Audio/SoundStream.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System.hpp
+	<SFML/Config.hpp>
+	<SFML/System/Clock.hpp>
+	<SFML/System/Err.hpp>
+	<SFML/System/FileInputStream.hpp>
+	<SFML/System/InputStream.hpp>
+	<SFML/System/Lock.hpp>
+	<SFML/System/MemoryInputStream.hpp>
+	<SFML/System/Mutex.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<SFML/System/Sleep.hpp>
+	<SFML/System/String.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/ThreadLocal.hpp>
+	<SFML/System/ThreadLocalPtr.hpp>
+	<SFML/System/Time.hpp>
+	<SFML/System/Utf.hpp>
+	<SFML/System/Vector2.hpp>
+	<SFML/System/Vector3.hpp>
+
+1430987944 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Config.hpp
+	"TargetConditionals.h"
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Clock.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Time.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Export.hpp
+	<SFML/Config.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Time.hpp
+	<SFML/System/Export.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Err.hpp
+	<SFML/System/Export.hpp>
+	<ostream>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/FileInputStream.hpp
+	<SFML/Config.hpp>
+	<SFML/System/Export.hpp>
+	<SFML/System/InputStream.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<cstdio>
+	<string>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/InputStream.hpp
+	<SFML/Config.hpp>
+	<SFML/System/Export.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/NonCopyable.hpp
+	<SFML/System/Export.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Lock.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/MemoryInputStream.hpp
+	<SFML/Config.hpp>
+	<SFML/System/InputStream.hpp>
+	<SFML/System/Export.hpp>
+	<cstdlib>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Mutex.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Sleep.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Time.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/String.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Utf.hpp>
+	<locale>
+	<string>
+	<SFML/System/String.inl>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Utf.hpp
+	<SFML/Config.hpp>
+	<algorithm>
+	<locale>
+	<string>
+	<cstdlib>
+	<SFML/System/Utf.inl>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Utf.inl
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/String.inl
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Thread.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<cstdlib>
+	<SFML/System/Thread.inl>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Thread.inl
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/ThreadLocal.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<cstdlib>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/ThreadLocalPtr.hpp
+	<SFML/System/ThreadLocal.hpp>
+	<SFML/System/ThreadLocalPtr.inl>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/ThreadLocalPtr.inl
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Vector2.hpp
+	<SFML/System/Vector2.inl>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Vector2.inl
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Vector3.hpp
+	<SFML/System/Vector3.inl>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/System/Vector3.inl
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/InputSoundFile.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/Export.hpp
+	<SFML/Config.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/Listener.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/Vector3.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/Music.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundStream.hpp>
+	<SFML/Audio/InputSoundFile.hpp>
+	<SFML/System/Mutex.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+	<vector>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundStream.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundSource.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/Time.hpp>
+	<SFML/System/Mutex.hpp>
+	<cstdlib>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundSource.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/AlResource.hpp>
+	<SFML/System/Vector3.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/AlResource.hpp
+	<SFML/Audio/Export.hpp>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/OutputSoundFile.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<string>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/Sound.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundSource.hpp>
+	<SFML/System/Time.hpp>
+	<cstdlib>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundBuffer.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/AlResource.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+	<vector>
+	<set>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundBufferRecorder.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundBuffer.hpp>
+	<SFML/Audio/SoundRecorder.hpp>
+	<vector>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundRecorder.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/AlResource.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/Time.hpp>
+	<vector>
+	<string>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundFileFactory.hpp
+	<SFML/Audio/Export.hpp>
+	<string>
+	<vector>
+	<SFML/Audio/SoundFileFactory.inl>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundFileFactory.inl
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundFileReader.hpp
+	<SFML/Audio/Export.hpp>
+	<string>
+
+1429780454 /media/sf_D/Dropbox/Projects/GameEngine/libs/SFML/Audio/SoundFileWriter.hpp
+	<SFML/Audio/Export.hpp>
+	<string>
+
+1454532469 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/AudioSource.h
+	<include/dll_export.h>
+	<include/glm.h>
+	<Core/GameObject.h>
+
+1457132897 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/GameObject.h
+	<list>
+	<string>
+	<include/glm.h>
+	<include/dll_export.h>
+	<include/utils.h>
+	<Core/Object.h>
+
+1443656935 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/utils.h
+
+1417618109 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/Object.h
+	<include/dll_export.h>
+
+1457015842 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Event/EventListener.h
+	<string>
+	<include/dll_export.h>
+	<Core/Object.h>
+	<Event/EventType.h>
+
+1454950948 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Event/EventType.h
+
+1457179339 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/gl.h
+	<EGL/egl.h>
+	<EGL/eglext.h>
+	<EGL/eglplatform.h>
+	<GL/glew.h>
+	<GL/wglew.h>
+	<GLFW/glfw3.h>
+	<GLFW/glfw3native.h>
+	<include/dll_export.h>
+
+1454099765 /media/sf_D/Dropbox/Projects/GameEngine/libs/EGL/egl.h
+	<EGL/eglplatform.h>
+	<KHR/khrplatform.h>
+	<EGL/eglplatform.h>
+
+1454099771 /media/sf_D/Dropbox/Projects/GameEngine/libs/EGL/eglplatform.h
+	<KHR/khrplatform.h>
+	<windows.h>
+	<android/native_window.h>
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+
+1439195753 /media/sf_D/Dropbox/Projects/GameEngine/libs/KHR/khrplatform.h
+	<stdint.h>
+	<inttypes.h>
+	<stdint.h>
+
+1454099768 /media/sf_D/Dropbox/Projects/GameEngine/libs/EGL/eglext.h
+	<EGL/eglplatform.h>
+
+1374477082 /media/sf_D/Dropbox/Projects/GameEngine/libs/GL/glew.h
+	<stddef.h>
+	<inttypes.h>
+	<stdint.h>
+	<inttypes.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+
+1374477082 /media/sf_D/Dropbox/Projects/GameEngine/libs/GL/wglew.h
+	<windows.h>
+
+1374477082 /media/sf_D/Dropbox/Projects/GameEngine/libs/GL/glxew.h
+	<X11/Xlib.h>
+	<X11/Xutil.h>
+	<X11/Xmd.h>
+	<GL/glew.h>
+
+1426774912 /media/sf_D/Dropbox/Projects/GameEngine/libs/GLFW/glfw3.h
+	<stddef.h>
+	<OpenGL/gl3.h>
+	<OpenGL/gl3ext.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/glcorearb.h>
+	<GLES/gl.h>
+	<GLES/glext.h>
+	<GLES2/gl2.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl3.h>
+	<GLES3/gl2ext.h>
+	<GLES3/gl31.h>
+	<GLES3/gl2ext.h>
+	<GL/gl.h>
+	<GL/glext.h>
+	<GL/glu.h>
+
+1439195753 /media/sf_D/Dropbox/Projects/GameEngine/libs/GLES3/gl3.h
+	<GLES3/gl3platform.h>
+	<KHR/khrplatform.h>
+
+1439195753 /media/sf_D/Dropbox/Projects/GameEngine/libs/GLES3/gl3platform.h
+	<KHR/khrplatform.h>
+
+1439195753 /media/sf_D/Dropbox/Projects/GameEngine/libs/GLES3/gl31.h
+	<GLES3/gl3platform.h>
+	<KHR/khrplatform.h>
+
+1426774912 /media/sf_D/Dropbox/Projects/GameEngine/libs/GLFW/glfw3native.h
+	<windows.h>
+	<ApplicationServices/ApplicationServices.h>
+	<X11/Xlib.h>
+	<X11/extensions/Xrandr.h>
+	<GL/glx.h>
+	<EGL/egl.h>
+
+1457209512 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/Manager.h
+	<include/dll_export.h>
+
+1457037097 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/EventSystem.h
+	<list>
+	<unordered_map>
+	<string>
+	<functional>
+	<vector>
+	<Event/EventType.h>
+	<Event/EventListener.h>
+
+1457177706 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Event/TimerEvent.h
+	<list>
+	<unordered_map>
+	<string>
+	<vector>
+	<functional>
+	<iostream>
+	<Core/Engine.h>
+	<Manager/Manager.h>
+	<Manager/EventSystem.h>
+	<Event/EventType.h>
+	<Event/EventListener.h>
+	<include/gl.h>
+
+1452729088 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/Engine.h
+	<cstdlib>
+	<cstdio>
+	<include/dll_export.h>
+	<include/gl.h>
+
+1457128814 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/AABB.cpp
+	"AABB.h"
+	<include/gl_utils.h>
+	<include/glm_utils.h>
+	<Component/Transform/Transform.h>
+	<Component/Mesh.h>
+	<Core/Camera/Camera.h>
+	<Core/GameObject.h>
+	<GPU/Shader.h>
+	<Manager/Manager.h>
+	<Manager/ResourceManager.h>
+	<Utils/3D.h>
+
+1439555566 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/AABB.h
+	<include/dll_export.h>
+	<include/glm.h>
+
+1454875039 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/gl_utils.h
+	<include/gl.h>
+	<include/glm.h>
+	<include/utils.h>
+
+1452815958 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/glm_utils.h
+	<include/gl.h>
+	<include/glm.h>
+	<include/math.h>
+	<sstream>
+
+1457132332 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/math.h
+	<math.h>
+
+1454458322 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Transform/Transform.h
+	<list>
+	<include/dll_export.h>
+	<include/glm.h>
+	<Core/Object.h>
+
+1454870659 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Mesh.h
+	<vector>
+	<include/assimp.h>
+	<include/dll_export.h>
+	<include/gl.h>
+	<include/glm.h>
+
+1435857136 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/assimp.h
+	<assimp/Importer.hpp>
+	<assimp/scene.h>
+	<assimp/postprocess.h>
+
+1335136962 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/Importer.hpp
+	"types.h"
+	"config.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/types.h
+	<sys/types.h>
+	<memory.h>
+	<math.h>
+	<stddef.h>
+	"defs.h"
+	"vector3.h"
+	"vector2.h"
+	"color4.h"
+	"matrix3x3.h"
+	"matrix4x4.h"
+	"quaternion.h"
+	<new>
+	<string>
+	"./Compiler/pushpack1.h"
+	"./Compiler/poppack1.h"
+	"vector2.inl"
+	"vector3.inl"
+	"color4.inl"
+	"quaternion.inl"
+	"matrix3x3.inl"
+	"matrix4x4.inl"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/defs.h
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/vector3.h
+	<math.h>
+	"./Compiler/pushpack1.h"
+	"./Compiler/poppack1.h"
+
+1231610288 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/Compiler/pushpack1.h
+
+1231610288 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/Compiler/poppack1.h
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/vector2.h
+	<math.h>
+	"./Compiler/pushpack1.h"
+	"./Compiler/poppack1.h"
+
+1329562440 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/color4.h
+	"./Compiler/pushpack1.h"
+	"./Compiler/poppack1.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/matrix3x3.h
+	"./Compiler/pushpack1.h"
+	"./Compiler/poppack1.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/matrix4x4.h
+	"./Compiler/pushpack1.h"
+	"./Compiler/poppack1.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/quaternion.h
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/vector2.inl
+	"vector2.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/vector3.inl
+	"vector3.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/color4.inl
+	"color4.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/quaternion.inl
+	"quaternion.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/matrix3x3.inl
+	"matrix3x3.h"
+	"matrix4x4.h"
+	<algorithm>
+	<limits>
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/matrix4x4.inl
+	"matrix4x4.h"
+	"matrix3x3.h"
+	"quaternion.h"
+	<algorithm>
+	<limits>
+	<math.h>
+
+1338746494 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/config.h
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/scene.h
+	"types.h"
+	"texture.h"
+	"mesh.h"
+	"light.h"
+	"camera.h"
+	"material.h"
+	"anim.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/texture.h
+	"types.h"
+	"./Compiler/pushpack1.h"
+	"./Compiler/poppack1.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/mesh.h
+	"types.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/light.h
+	"types.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/camera.h
+	"types.h"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/material.h
+	"types.h"
+	"./Compiler/pushpack1.h"
+	"./Compiler/poppack1.h"
+	"material.inl"
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/material.inl
+
+1328288648 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/anim.h
+	"types.h"
+	"quaternion.h"
+
+1335135746 /media/sf_D/Dropbox/Projects/GameEngine/libs/assimp/postprocess.h
+	"types.h"
+
+1453921942 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/Camera/Camera.h
+	<vector>
+	<include/dll_export.h>
+	<include/gl.h>
+	<include/glm.h>
+	<Core/GameObject.h>
+
+1457126236 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/GPU/Shader.h
+	<string>
+	<vector>
+	<list>
+	<functional>
+	<include/dll_export.h>
+	<include/gl.h>
+
+1453763342 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/ResourceManager.h
+	<unordered_map>
+	<include/dll_export.h>
+	<include/pugixml.h>
+
+1446396850 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/pugixml.h
+	<assert.h>
+	<pugixml/pugixml.hpp>
+
+1445188550 /media/sf_D/Dropbox/Projects/GameEngine/libs/pugixml/pugixml.hpp
+	"pugiconfig.hpp"
+	<stddef.h>
+	<exception>
+	<iterator>
+	<iosfwd>
+	<string>
+
+1457106156 /media/sf_D/Dropbox/Projects/GameEngine/libs/pugixml/pugiconfig.hpp
+
+1457129111 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Utils/3D.h
+	<vector>
+	<include/dll_export.h>
+	<include/glm.h>
+
+1457178237 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Animation/AnimationController.cpp
+	"AnimationController.h"
+	<include/utils.h>
+	<include/gl_utils.h>
+	<include/glm_utils.h>
+	<include/assimp_utils.h>
+	<Component/Transform/Transform.h>
+	<Component/SkinnedMesh.h>
+	<GPU/Shader.h>
+	<GPU/Texture.h>
+	<GPU/Material.h>
+	<Core/Camera/Camera.h>
+	<Manager/Manager.h>
+	<Manager/ResourceManager.h>
+	<Manager/TextureManager.h>
+	<Manager/ShaderManager.h>
+	<Manager/SceneManager.h>
+	<SkeletalSystem/SkeletalJoint.h>
+	<Utils/GPU.h>
+
+1455062279 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Animation/AnimationController.h
+	<vector>
+	<include/assimp.h>
+	<include/dll_export.h>
+	<include/gl.h>
+	<include/glm.h>
+	<include/utils.h>
+	<unordered_map>
+
+1452434071 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/assimp_utils.h
+	<include/gl.h>
+	<include/glm.h>
+	<include/assimp.h>
+
+1452434172 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/SkinnedMesh.h
+	<vector>
+	<include/assimp.h>
+	<include/gl.h>
+	<include/glm.h>
+	<include/utils.h>
+	<Component/Mesh.h>
+	<unordered_map>
+
+1457137685 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/GPU/Texture.h
+	<include/gl.h>
+	<include/dll_export.h>
+
+1457121881 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/GPU/Material.h
+	<include/glm.h>
+	<GPU/Shader.h>
+	<GPU/Texture.h>
+
+1431095076 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/TextureManager.h
+	<unordered_map>
+	<string>
+	<vector>
+	<include/dll_export.h>
+
+1454113296 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/ShaderManager.h
+	<unordered_map>
+	<vector>
+	<string>
+	<stack>
+	<include/dll_export.h>
+	<include/utils.h>
+	<include/pugixml.h>
+
+1453245999 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/SceneManager.h
+	<list>
+	<vector>
+	<include/dll_export.h>
+	<include/pugixml.h>
+
+1455067719 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/SkeletalSystem/SkeletalJoint.h
+	<string>
+	<vector>
+	<include/dll_export.h>
+	<Core/GameObject.h>
+
+1457132981 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Utils/GPU.h
+	<include/dll_export.h>
+	<include/gl.h>
+	<include/glm.h>
+	<include/gl_utils.h>
+	<include/utils.h>
+	<vector>
+
+1441369912 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Animation/AnimationSystem.cpp
+	"AnimationSystem.h"
+
+1457132858 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Animation/AnimationSystem.h
+	<include/dll_export.h>
+
+1431716874 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/AudioSource.cpp
+	"AudioSource.h"
+	<include/glm_utils.h>
+
+1399888305 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Component.cpp
+	"Component.h"
+
+1457132921 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Component.h
+	<Core/Object.h>
+
+1457133271 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Mesh.cpp
+	"Mesh.h"
+	<include/utils.h>
+	<include/assimp_utils.h>
+	<GPU/Shader.h>
+	<GPU/Texture.h>
+	<GPU/Material.h>
+	<Manager/Manager.h>
+	<Manager/ResourceManager.h>
+	<Manager/RenderingSystem.h>
+	<Manager/TextureManager.h>
+	<Utils/GPU.h>
+
+1452434200 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/RenderingSystem.h
+	<include/dll_export.h>
+	<Rendering/Rendering.h>
+
+1444519432 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Rendering/Rendering.h
+
+1457138648 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/ObjectInput.cpp
+	"ObjectInput.h"
+	<Core/InputSystem.h>
+	<Core/WindowManager.h>
+	<Core/WindowObject.h>
+
+1457138448 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/ObjectInput.h
+	<Core/Object.h>
+
+1457138423 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Input/InputRules.h
+	<vector>
+	<include/dll_export.h>
+
+1456865018 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/InputSystem.h
+	<list>
+	<unordered_map>
+	<array>
+	<string>
+	<include/dll_export.h>
+	<include/gl.h>
+
+1457209488 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/WindowManager.h
+	<vector>
+	<unordered_map>
+	<include/dll_export.h>
+	<include/gl.h>
+	<include/glm.h>
+
+1457105483 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/WindowObject.h
+	<string>
+	<list>
+	<include/dll_export.h>
+	<include/gl.h>
+	<include/glm.h>
+
+1454636578 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Renderer.cpp
+	"Renderer.h"
+	<Manager/Manager.h>
+	<Manager/RenderingSystem.h>
+
+1454634901 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Renderer.h
+	<include/dll_export.h>
+	<Rendering/Rendering.h>
+
+1457137818 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/SkinnedMesh.cpp
+	"SkinnedMesh.h"
+	<iostream>
+	<include/utils.h>
+	<include/gl_utils.h>
+	<include/glm_utils.h>
+	<include/assimp_utils.h>
+	<Component/Transform/Transform.h>
+	<GPU/Shader.h>
+	<GPU/Texture.h>
+	<GPU/Material.h>
+	<Core/Camera/Camera.h>
+	<Manager/Manager.h>
+	<Manager/ResourceManager.h>
+	<Manager/TextureManager.h>
+	<Manager/ShaderManager.h>
+	<Manager/SceneManager.h>
+	<SkeletalSystem/SkeletalJoint.h>
+	<Utils/GPU.h>
+
+1454638085 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Text.cpp
+	"Text.h"
+	<include/gl.h>
+	<freetype-gl/freetype-gl.h>
+	<freetype-gl/text-buffer.h>
+	<freetype-gl/texture-font.h>
+	<freetype-gl/vertex-buffer.h>
+	<freetype-gl/edtaa3func.h>
+	<freetype-gl/vec234.h>
+	<FreeType/ft2build.h>
+	<Component/Transform/Transform.h>
+	<Component/ObjectInput.h>
+	<Component/Renderer.h>
+	<Component/AABB.h>
+	<Component/Mesh.h>
+	<Manager/Manager.h>
+	<Manager/FontManager.h>
+	<GPU/Shader.h>
+	<Utils/GPU.h>
+
+1454522062 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Text.h
+	<string>
+	<Core/GameObject.h>
+
+1454076558 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/freetype-gl.h
+	"vec234.h"
+	"vector.h"
+	"texture-atlas.h"
+	"texture-font.h"
+
+1453246140 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/vec234.h
+
+1453246140 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/vector.h
+	<stdlib.h>
+	<stddef.h>
+
+1453246140 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/texture-atlas.h
+	<stdlib.h>
+	"vector.h"
+	"vec234.h"
+
+1453246140 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/texture-font.h
+	<stdlib.h>
+	<stdint.h>
+	"vector.h"
+	"texture-atlas.h"
+
+1453246140 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/text-buffer.h
+	"vertex-buffer.h"
+	"font-manager.h"
+	"markup.h"
+	"shader.h"
+
+1454076680 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/vertex-buffer.h
+	"vector.h"
+	"vertex-attribute.h"
+
+1454077015 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/vertex-attribute.h
+	"vector.h"
+
+1453246139 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/font-manager.h
+	"vector.h"
+	"markup.h"
+	"texture-font.h"
+	"texture-atlas.h"
+
+1453246140 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/markup.h
+	"texture-font.h"
+	"vec234.h"
+
+1454077009 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/shader.h
+
+1453246139 /media/sf_D/Dropbox/Projects/GameEngine/libs/freetype-gl/edtaa3func.h
+	<math.h>
+
+1435786984 /media/sf_D/Dropbox/Projects/GameEngine/libs/FreeType/ft2build.h
+	<config/ftheader.h>
+
+1384255660 /media/sf_D/Dropbox/Projects/GameEngine/libs/FreeType/config/ftheader.h
+
+1454078790 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/FontManager.h
+
+1444932656 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Transform/FreezeTransform.cpp
+	"FreezeTransform.h"
+
+1454458350 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Transform/FreezeTransform.h
+	<Component/Transform/Transform.h>
+
+1457178242 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Transform/LimitedTransform.cpp
+	"LimitedTransform.h"
+	<include/glm_utils.h>
+
+1441832980 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Transform/LimitedTransform.h
+	<Component/Transform/Transform.h>
+
+1442346280 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Transform/SkinningJointTransform.cpp
+	"SkinningJointTransform.h"
+	<include/glm_utils.h>
+
+1442346271 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Transform/SkinningJointTransform.h
+	<Component/Transform/Transform.h>
+
+1457178246 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Transform/Transform.cpp
+	"Transform.h"
+	<include/glm_utils.h>
+
+1441195652 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Control/ControlObject.cpp
+	"ControlObject.h"
+
+1441195622 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Control/ControlObject.h
+	<list>
+	<include/glm.h>
+	<include/dll_export.h>
+	<Core/GameObject.h>
+
+1457178254 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/Camera/Camera.cpp
+	"Camera.h"
+	<iostream>
+	<include/glm_utils.h>
+	<include/math.h>
+	<InputComponent/CameraInput.h>
+	<Component/AABB.h>
+	<Component/Mesh.h>
+	<Component/Renderer.h>
+	<Component/ObjectInput.h>
+	<Component/Transform/Transform.h>
+	<GPU/Shader.h>
+	<Lighting/FrustumSplit.h>
+	<Manager/Manager.h>
+	<Manager/ResourceManager.h>
+	<Manager/RenderingSystem.h>
+	<Utils/OpenGL.h>
+	<Utils/3D.h>
+
+1449926395 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/InputComponent/CameraInput.h
+	<include/dll_export.h>
+	<Component/ObjectInput.h>
+
+1453937886 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/FrustumSplit.h
+	<vector>
+	<include/glm.h>
+
+1454876906 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Utils/OpenGL.h
+	<vector>
+	<include/dll_export.h>
+	<include/glm.h>
+	<include/utils.h>
+
+1457178260 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/Camera/ThirdPersonCamera.cpp
+	"ThirdPersonCamera.h"
+	<include/math.h>
+	<Component/Transform/Transform.h>
+	<Component/Mesh.h>
+
+1436735610 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/Camera/ThirdPersonCamera.h
+	<include/glm.h>
+	<include/gl.h>
+	<Core/Camera/Camera.h>
+
+1457047814 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/Engine.cpp
+	"Engine.h"
+	<iostream>
+	<Core/InputSystem.h>
+	<Core/WindowManager.h>
+	<Core/WindowObject.h>
+	<Core/World.h>
+
+1439755471 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/World.h
+
+1457178263 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/GameObject.cpp
+	"GameObject.h"
+	<include/gl_utils.h>
+	<Component/Animation/AnimationController.h>
+	<Component/AudioSource.h>
+	<Component/AABB.h>
+	<Component/Mesh.h>
+	<Component/Renderer.h>
+	<Component/Text.h>
+	<Component/Transform/Transform.h>
+	<Component/ObjectInput.h>
+	<GPU/Shader.h>
+	<Rendering/DirectOpenGL.h>
+	<Manager/DebugInfo.h>
+	<Manager/Manager.h>
+	<Manager/ColorManager.h>
+	<Manager/ResourceManager.h>
+	<Manager/RenderingSystem.h>
+	<UI/ColorPicking/ColorPicking.h>
+	<Utils/OpenGL.h>
+	<Component/Physics.h>
+	<Manager/PhysicsManager.h>
+
+1457209592 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Rendering/DirectOpenGL.h
+	<include/dll_export.h>
+	<include/glm.h>
+	<include/utils.h>
+
+1441839727 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/DebugInfo.h
+	<list>
+	<include/dll_export.h>
+
+1455698844 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/ColorManager.h
+	<include/dll_export.h>
+	<include/glm.h>
+	<memory>
+	<vector>
+
+1452434217 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/UI/ColorPicking/ColorPicking.h
+	<include/glm.h>
+	<include/dll_export.h>
+	<Component/ObjectInput.h>
+	<Event/EventListener.h>
+
+1445809799 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Component/Physics.h
+	<string>
+	<include/dll_export.h>
+	<include/glm.h>
+	<include/havok.h>
+	<Core/Object.h>
+	<Physics2012/Dynamics/Entity/hkpRigidBody.h>
+
+1417622496 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/havok.h
+	<Common/Base/hkBase.h>
+
+1414868371 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/PhysicsManager.h
+	<include/havok.h>
+	<Physics2012/Dynamics/Entity/hkpRigidBody.h>
+
+1454118200 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/GLES/GLESContext.cpp
+	"GLESContext.h"
+	<Core/InputSystem.h>
+	<Core/WindowManager.h>
+	<include/gl.h>
+	<Core/GLES/NativeWin.h>
+	<Manager/Manager.h>
+	<Manager/ConfigFile.h>
+
+1454118198 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/GLES/GLESContext.h
+	<include/dll_export.h>
+	<include/gl.h>
+	<include/glm.h>
+
+1457119403 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/GLES/NativeWin.h
+	<EGL/egl.h>
+
+1456852344 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/ConfigFile.h
+	<include/dll_export.h>
+	<include/glm.h>
+	<Manager/RenderingSystem.h>
+
+1457119358 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/GLES/NativeWin_Win32.cpp
+	"nativewin.h"
+	<windows.h>
+	<windowsx.h>
+
+1457178382 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/InputSystem.cpp
+	"InputSystem.h"
+	<Core/Engine.h>
+	<Core/WindowManager.h>
+	<Core/WindowObject.h>
+	<include/glm.h>
+	<include/pugixml.h>
+	<Core/WindowManager.h>
+	<Manager/Manager.h>
+	<Manager/EventSystem.h>
+	<Component/ObjectInput.h>
+
+1457178266 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/Object.cpp
+	<Core/Object.h>
+
+1457046186 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/WindowManager.cpp
+	"WindowManager.h"
+	<Core/Engine.h>
+	<Core/WindowObject.h>
+	<Manager/DebugInfo.h>
+	<Manager/Manager.h>
+
+1457129927 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Core/WindowObject.cpp
+	"WindowObject.h"
+	"WindowObject.h"
+	<iostream>
+	<include/glm_utils.h>
+	<Core/Engine.h>
+	<Core/InputSystem.h>
+	<Core/WindowManager.h>
+	<Core/GLES/GLESContext.h>
+	<Component/ObjectInput.h>
+
+1457025004 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Debugging/ProfileTimer.cpp
+	"ProfileTimer.h"
+	<iostream>
+	<include/gl.h>
+
+1457024945 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Debugging/ProfileTimer.h
+	<string>
+	<vector>
+	<include/dll_export.h>
+	<include/utils.h>
+
+1457130247 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Debugging/TextureDebugger.cpp
+	"TextureDebugger.h"
+	<iostream>
+	<include/utils.h>
+	<include/glm_utils.h>
+	<include/gl_utils.h>
+	<Core/WindowManager.h>
+	<Core/Camera/Camera.h>
+	<Core/GameObject.h>
+	<Component/Transform/Transform.h>
+	<GPU/Shader.h>
+	<GPU/Texture.h>
+	<GPU/FrameBuffer.h>
+	<Manager/Manager.h>
+	<Manager/ShaderManager.h>
+	<Manager/RenderingSystem.h>
+	<Manager/ResourceManager.h>
+	<Manager/SceneManager.h>
+
+1457138568 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Debugging/TextureDebugger.h
+	<vector>
+	<include/dll_export.h>
+	<include/glm.h>
+	<include/utils.h>
+	<Component/ObjectInput.h>
+
+1457042525 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/GPU/FrameBuffer.h
+	<vector>
+	<include/dll_export.h>
+	<include/glm.h>
+	<include/gl.h>
+
+1457119338 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/DLL/dllmain.cpp
+	<windows.h>
+
+1457178269 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Editor/Gizmo.cpp
+	"Gizmo.h"
+	<Manager/Manager.h>
+	<Manager/ResourceManager.h>
+	<Component/Transform/Transform.h>
+	<Component/Mesh.h>
+	<GPU/Shader.h>
+
+1441143172 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Editor/Gizmo.h
+	<include/dll_export.h>
+	<include/glm.h>
+	<Core/GameObject.h>
+
+1457178272 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Event/EventListener.cpp
+	"EventListener.h"
+	<Manager/Manager.h>
+	<Manager/EventSystem.h>
+
+1452433347 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Event/EventSystem.cpp
+	"EventSystem.h"
+	<include/gl.h>
+	<Manager/DebugInfo.h>
+	<Event/EventListener.h>
+	<Manager/Manager.h>
+
+1452433347 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Event/EventSystem.h
+	<list>
+	<unordered_map>
+	<string>
+	<Event/EventType.h>
+	<Event/EventListener.h>
+
+1454633831 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Event/SimpleTimer.cpp
+	"SimpleTimer.h"
+	<Core/Engine.h>
+	<Manager/Manager.h>
+	<Manager/EventSystem.h>
+	<Event/EventType.h>
+	<Event/EventListener.h>
+
+1452731624 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Event/SimpleTimer.h
+	<list>
+	<functional>
+	<include/dll_export.h>
+	<Event/EventListener.h>
+
+1457042907 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/GPU/FrameBuffer.cpp
+	"FrameBuffer.h"
+	<iostream>
+	<GPU/Shader.h>
+	<GPU/Texture.h>
+	<Core/Engine.h>
+	<Core/WindowObject.h>
+	<include/utils.h>
+
+1457178275 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/GPU/Material.cpp
+	"Material.h"
+
+1457137171 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/GPU/Shader.cpp
+	"Shader.h"
+	<fstream>
+	<iostream>
+
+1457178279 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/GPU/Texture.cpp
+	"Texture.h"
+	<thread>
+	<iostream>
+	<stb/stb_image.h>
+	<stb/stb_image_write.h>
+
+1446592062 /media/sf_D/Dropbox/Projects/GameEngine/libs/stb/stb_image.h
+	"stb_image.h"
+	<stdio.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<stdio.h>
+	<assert.h>
+	<stdint.h>
+	<emmintrin.h>
+	<intrin.h>
+	<arm_neon.h>
+
+1415650920 /media/sf_D/Dropbox/Projects/GameEngine/libs/stb/stb_image_write.h
+	<stdarg.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<assert.h>
+
+1457140815 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/include/gl.cpp
+	"gl.h"
+	<iostream>
+
+1457138700 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Input/InputRules.cpp
+	"InputRules.h"
+	<include/utils.h>
+	<Core/InputSystem.h>
+
+1457043486 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/InputComponent/CameraDebugInput.cpp
+	"CameraDebugInput.h"
+	<Core/WindowObject.h>
+	<Core/Camera/Camera.h>
+
+1449926395 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/InputComponent/CameraDebugInput.h
+	<Component/ObjectInput.h>
+
+1457043493 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/InputComponent/CameraInput.cpp
+	"CameraInput.h"
+	<Component/Transform/Transform.h>
+	<Core/WindowObject.h>
+	<Core/Camera/Camera.h>
+
+1457138941 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/InputComponent/DebugInput.cpp
+	"DebugInput.h"
+	<Core/Engine.h>
+	<Core/InputSystem.h>
+	<GPU/Shader.h>
+	<Manager/AudioManager.h>
+	<Manager/DebugInfo.h>
+	<Manager/EventSystem.h>
+	<Manager/Manager.h>
+	<Manager/RenderingSystem.h>
+	<Manager/SceneManager.h>
+	<Manager/ShaderManager.h>
+	<UI/MenuSystem.h>
+
+1436211112 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/InputComponent/DebugInput.h
+	<include/dll_export.h>
+	<Component/ObjectInput.h>
+	<Event/EventListener.h>
+
+1457209216 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/AudioManager.h
+	<list>
+	<unordered_map>
+	<include/dll_export.h>
+	<include/utils.h>
+	<SFML/Audio.hpp>
+	<Core/Camera/Camera.h>
+
+1428240235 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/UI/MenuSystem.h
+	<unordered_map>
+	<string>
+	<vector>
+	"GameMenu.h"
+	<include/pugixml.h>
+	<include/dll_export.h>
+
+1456873212 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/UI/GameMenu.h
+	<stack>
+	<utility>
+	<Component/ObjectInput.h>
+	<Event/EventListener.h>
+
+1457120644 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/InputComponent/EditorInput.cpp
+	"EditorInput.h"
+	<Manager/Manager.h>
+	<Manager/RenderingSystem.h>
+	<UI/MenuSystem.h>
+
+1452434199 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/InputComponent/EditorInput.h
+	<Core/InputSystem.h>
+	<Component/ObjectInput.h>
+	<Event/EventListener.h>
+
+1457178283 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/DirectionalLight.cpp
+	"DirectionalLight.h"
+	<include/math.h>
+	<Core/Engine.h>
+	<Core/Camera/Camera.h>
+	<Core/GameObject.h>
+	<Component/AABB.h>
+	<Component/Renderer.h>
+	<Component/Transform/Transform.h>
+	<GPU/FrameBuffer.h>
+	<GPU/Shader.h>
+	<Utils/OpenGL.h>
+	<Manager/Manager.h>
+	<Manager/SceneManager.h>
+	<Manager/ShaderManager.h>
+	<Debugging/TextureDebugger.h>
+	<Lighting/FrustumSplit.h>
+
+1453932684 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/DirectionalLight.h
+	<Lighting/Light.h>
+	<Core/Camera/Camera.h>
+
+1442071558 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/Light.h
+	<include/dll_export.h>
+	<include/glm.h>
+	<Core/Object.h>
+	<Core/GameObject.h>
+
+1457129046 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/FrustumSplit.cpp
+	"FrustumSplit.h"
+	<include/math.h>
+	<include/glm.h>
+	<include/glm_utils.h>
+	<Core/Camera/Camera.h>
+	<Core/GameObject.h>
+	<Component/AABB.h>
+	<Component/Mesh.h>
+	<Component/Transform/Transform.h>
+	<GPU/Shader.h>
+	<Lighting/DirectionalLight.h>
+	<Utils/3D.h>
+	<Manager/Manager.h>
+	<Manager/RenderingSystem.h>
+	<Debugging/TextureDebugger.h>
+
+1457178286 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/Light.cpp
+	"Light.h"
+	<Manager/Manager.h>
+	<Manager/ResourceManager.h>
+	<Component/Transform/Transform.h>
+	<Component/Mesh.h>
+	<GPU/Shader.h>
+
+1457178380 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/PointLight.cpp
+	"PointLight.h"
+	<include/glm_utils.h>
+	<Core/Engine.h>
+	<Core/Camera/Camera.h>
+	<Core/GameObject.h>
+	<Component/Transform/Transform.h>
+	<Component/Renderer.h>
+	<GPU/Shader.h>
+	<GPU/Texture.h>
+	<GPU/FrameBuffer.h>
+	<Manager/Manager.h>
+	<Manager/SceneManager.h>
+	<Manager/ShaderManager.h>
+
+1442071599 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/PointLight.h
+	<Lighting/Light.h>
+	<include/gl.h>
+
+1457178311 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/SpotLight.cpp
+	"SpotLight.h"
+	<include/math.h>
+	<Core/Camera/Camera.h>
+	<Core/GameObject.h>
+	<Component/AABB.h>
+	<Component/Renderer.h>
+	<Component/Transform/Transform.h>
+	<GPU/FrameBuffer.h>
+	<GPU/Shader.h>
+	<Manager/Manager.h>
+	<Manager/SceneManager.h>
+	<Manager/ShaderManager.h>
+	<Utils/OpenGL.h>
+
+1453909302 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Lighting/SpotLight.h
+	<Lighting/Light.h>
+	<Core/Camera/Camera.h>
+
+1457140283 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/AudioManager.cpp
+	"AudioManager.h"
+	<string>
+	<iostream>
+	<include/gl.h>
+	<include/utils.h>
+	<Audio/AudioStream.h>
+	<Audio/SoundFX.h>
+	<Manager/DebugInfo.h>
+	<Manager/Manager.h>
+	<Component/Transform/Transform.h>
+
+1457178314 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/ColorManager.cpp
+	"ColorManager.h"
+	<Core/GameObject.h>
+
+1457178317 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/ConfigFile.cpp
+	"ConfigFile.h"
+	<include/glm_utils.h>
+	<include/pugixml.h>
+	<Core/WindowObject.h>
+	<Manager/Manager.h>
+	<Manager/RenderingSystem.h>
+
+1457178171 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/DebugInfo.cpp
+	"DebugInfo.h"
+	<cstdio>
+	<cstring>
+	<string>
+	<include/utils.h>
+	<include/gl_utils.h>
+	<Component/AABB.h>
+	<Component/Transform/Transform.h>
+	<Core/Engine.h>
+	<Core/WindowObject.h>
+	<Core/Camera/Camera.h>
+	<Core/GameObject.h>
+	<GPU/FrameBuffer.h>
+	<GPU/Shader.h>
+	<Manager/SceneManager.h>
+	<Manager/ShaderManager.h>
+	<Manager/Manager.h>
+	<Manager/RenderingSystem.h>
+	<Debugging/TextureDebugger.h>
+	<Rendering/DirectOpenGL.h>
+	<Utils/OpenGL.h>
+
+1457140242 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/EventSystem.cpp
+	"EventSystem.h"
+	<include/gl.h>
+	<Core/Engine.h>
+	<Event/EventListener.h>
+	<Event/TimerEvent.h>
+	<Manager/DebugInfo.h>
+	<Manager/Manager.h>
+
+1457178320 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/FontManager.cpp
+	"FontManager.h"
+	<string>
+	"Manager.h"
+	<Manager/DebugInfo.h>
+	<Core/GameObject.h>
+	<include/gl.h>
+	<freetype-gl/freetype-gl.h>
+	<freetype-gl/text-buffer.h>
+	<freetype-gl/vec234.h>
+	<freetype-gl/texture-font.h>
+	<freetype-gl/vertex-buffer.h>
+	<freetype-gl/edtaa3func.h>
+	<FreeType/ft2build.h>
+
+1457208890 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/Manager.cpp
+	"Manager.h"
+	<iostream>
+	<include/glm_utils.h>
+	<templates/singleton.h>
+	<Component/AABB.h>
+	<Core/Engine.h>
+	<Core/InputSystem.h>
+	<Core/WindowManager.h>
+	<Core/WindowObject.h>
+	<Manager/AudioManager.h>
+	<Manager/ColorManager.h>
+	<Manager/ConfigFile.h>
+	<Manager/DebugInfo.h>
+	<Manager/EventSystem.h>
+	<Manager/FontManager.h>
+	<Manager/RenderingSystem.h>
+	<Manager/ResourceManager.h>
+	<Manager/SceneManager.h>
+	<Manager/ShaderManager.h>
+	<Manager/TextureManager.h>
+	<Debugging/TextureDebugger.h>
+	<Rendering/DirectOpenGL.h>
+	<Manager/HavokCore.h>
+	<Manager/PhysicsManager.h>
+	<UI/DebugOverlayText.h>
+	<UI/MenuSystem.h>
+	<UI/ColorPicking/ColorPicking.h>
+
+1414774136 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/templates/singleton.h
+
+1418224918 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/HavokCore.h
+	<list>
+	<include/dll_export.h>
+
+1452434217 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/UI/DebugOverlayText.h
+	<Event/EventListener.h>
+	<Component/Text.h>
+	<unordered_map>
+	<string>
+
+1457178323 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/RenderingSystem.cpp
+	"RenderingSystem.h"
+	<include/gl.h>
+
+1454941400 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/SceneManager.cpp
+	"SceneManager.h"
+	<iostream>
+	<memory>
+	<Component/Physics.h>
+	<Component/AABB.h>
+	<Component/AudioSource.h>
+	<Component/Mesh.h>
+	<Component/Renderer.h>
+	<Component/Transform/Transform.h>
+	<GPU/Shader.h>
+	<Core/Camera/Camera.h>
+	<Core/GameObject.h>
+	<Lighting/PointLight.h>
+	<Lighting/DirectionalLight.h>
+	<Manager/Manager.h>
+	<Manager/AudioManager.h>
+	<Manager/DebugInfo.h>
+	<Manager/EventSystem.h>
+	<Manager/ResourceManager.h>
+	<Manager/RenderingSystem.h>
+	<Manager/ShaderManager.h>
+	<UI/ColorPicking/ColorPicking.h>
+	<Utils/Serialization.h>
+
+1441646151 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Utils/Serialization.h
+	<vector>
+	<include/dll_export.h>
+	<include/glm.h>
+	<include/pugixml.h>
+	<Component/Transform/Transform.h>
+
+1457178325 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/ShaderManager.cpp
+	"ShaderManager.h"
+	<string>
+	<vector>
+	<assert.h>
+	<include/gl.h>
+	<include/pugixml.h>
+	<include/utils.h>
+	<GPU/Shader.h>
+	<Manager/DebugInfo.h>
+	<Manager/Manager.h>
+
+1457139493 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/ResourceManager.cpp
+	"ResourceManager.h"
+	<iostream>
+	<include/glm.h>
+	<include/glm_utils.h>
+	<include/utils.h>
+	<sstream>
+	<Config/ResourcePath.h>
+	<Core/GameObject.h>
+	<Component/Mesh.h>
+	<Component/SkinnedMesh.h>
+	<Component/Transform/Transform.h>
+	<Component/Renderer.h>
+	<Manager/Manager.h>
+	<Manager/AudioManager.h>
+	<Manager/SceneManager.h>
+	<Manager/ShaderManager.h>
+	<Manager/DebugInfo.h>
+	<Utils/Serialization.h>
+	<include/havok.h>
+	<Component/Physics.h>
+
+1454864523 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Config/ResourcePath.h
+	<string>
+
+1454632916 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Motion/MotionTransition.cpp
+	<include/math.h>
+	<include/glm.h>
+	<include/glm_utils.h>
+	<Core/Engine.h>
+	<Component/Transform/Transform.h>
+
+1441883442 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Prototyping/Prototype.cpp
+
+1457178329 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Manager/TextureManager.cpp
+	"TextureManager.h"
+	<include/utils.h>
+	<Config/ResourcePath.h>
+	<GPU/Texture.h>
+	<Manager/Manager.h>
+	<Manager/DebugInfo.h>
+	<Manager/ResourceManager.h>
+
+1457042699 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Rendering/ShadowMapping.cpp
+	"ShadowMapping.h"
+	<include/gl.h>
+	<Core/GameObject.h>
+	<Component/Renderer.h>
+	<GPU/FrameBuffer.h>
+	<GPU/Shader.h>
+	<Lighting/DirectionalLight.h>
+	<Manager/Manager.h>
+	<Manager/ShaderManager.h>
+	<Manager/SceneManager.h>
+	<Manager/RenderingSystem.h>
+
+1415454993 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Rendering/ShadowMapping.h
+	<include/gl.h>
+
+1457178342 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Rendering/SSAO.cpp
+	"SSAO.h"
+	<include/math.h>
+	<Core/Engine.h>
+	<Core/Camera/Camera.h>
+	<GPU/Texture.h>
+	<GPU/Shader.h>
+	<Manager/Manager.h>
+	<Manager/TextureManager.h>
+	<Manager/ShaderManager.h>
+	<Manager/ResourceManager.h>
+	<Utils/OpenGL.h>
+
+1417620036 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Rendering/SSAO.h
+	<Core/Object.h>
+	<GPU/FrameBuffer.h>
+	<Core/GameObject.h>
+
+1428838607 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Scripting/LuaScripting.cpp
+	"LuaScripting.h"
+
+1428839062 /media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Scripting/LuaScripting.h
+	<include/dll_export.h>
+	<Lua/lua.h>
+	<Lua/lauxlib.h>
+	<Lua/lualib.h>
+
+1419614668 /media/sf_D/Dropbox/Projects/GameEngine/libs/Lua/lua.h
+	<stdarg.h>
+	<stddef.h>
+	"luaconf.h"
+
+1419859676 /media/sf_D/Dropbox/Projects/GameEngine/libs/Lua/luaconf.h
+	<limits.h>
+	<stddef.h>
+	<math.h>
+	<stdint.h>
+
+1414599078 /media/sf_D/Dropbox/Projects/GameEngine/libs/Lua/lauxlib.h
+	<stddef.h>
+	<stdio.h>
+	"lua.h"
+
+1391707954 /media/sf_D/Dropbox/Projects/GameEngine/libs/Lua/lualib.h
+	"lua.h"
+
+1455067726 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/SkeletalSystem/SkeletalJoint.cpp
+	<iostream>
+	<include/gl_utils.h>
+	<include/glm_utils.h>
+	<include/assimp_utils.h>
+	<Utils/OpenGL.h>
+	<Component/AABB.h>
+	<Component/Mesh.h>
+	<Component/Renderer.h>
+	<Component/Transform/Transform.h>
+	<Component/Transform/SkinningJointTransform.h>
+	<GPU/Shader.h>
+	<Rendering/DirectOpenGL.h>
+	<Manager/Manager.h>
+	<Manager/ResourceManager.h>
+	<Manager/ResourceManager.h>
+
+1457105513 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/UI/ColorPicking/ColorPicking.cpp
+	"ColorPicking.h"
+	<iostream>
+	<include/dll_export.h>
+	<include/glm.h>
+	<include/glm_utils.h>
+	<Editor/Gizmo.h>
+	<Core/GameObject.h>
+	<Core/Camera/Camera.h>
+	<Core/WindowManager.h>
+	<Component/AABB.h>
+	<Component/Mesh.h>
+	<Component/SkinnedMesh.h>
+	<Component/Text.h>
+	<Component/Transform/Transform.h>
+	<Component/ObjectInput.h>
+	<Component/Renderer.h>
+	<Component/Physics.h>
+	<Debugging/TextureDebugger.h>
+	<Manager/Manager.h>
+	<Manager/ColorManager.h>
+	<Manager/TextureManager.h>
+	<Manager/ResourceManager.h>
+	<Manager/RenderingSystem.h>
+	<Manager/ShaderManager.h>
+	<Manager/SceneManager.h>
+	<Manager/EventSystem.h>
+	<Rendering/DirectOpenGL.h>
+	<Core/Engine.h>
+	<Core/WindowObject.h>
+	<Core/InputSystem.h>
+	<Core/Camera/Camera.h>
+	<GPU/FrameBuffer.h>
+	<GPU/Texture.h>
+	<GPU/Shader.h>
+	<Utils/OpenGL.h>
+	<Utils/GPU.h>
+
+1457178345 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/UI/DebugOverlayText.cpp
+	"DebugOverlayText.h"
+	<Component/Text.h>
+	<Component/Transform/Transform.h>
+	<Manager/Manager.h>
+	<Manager/ShaderManager.h>
+	<GPU/Shader.h>
+	<GPU/FrameBuffer.h>
+
+1457139633 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Rendering/DirectOpenGL.cpp
+	"DirectOpenGL.h"
+	<include/math.h>
+	<include/gl_utils.h>
+	<Core/GameObject.h>
+	<Component/Transform/Transform.h>
+	<Component/Mesh.h>
+	<GPU/Shader.h>
+	<Component/Renderer.h>
+	<Manager/Manager.h>
+	<Manager/ShaderManager.h>
+	<Manager/SceneManager.h>
+	<Utils/OpenGL.h>
+
+1457178349 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/UI/MenuSystem.cpp
+	"MenuSystem.h"
+	<include/pugixml.h>
+	<Manager/DebugInfo.h>
+	<Manager/Manager.h>
+	<Manager/EventSystem.h>
+	<Component/Text.h>
+	<iostream>
+	<stdio.h>
+	<assert.h>
+
+1453945354 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Utils/3D.cpp
+	"3D.h"
+	<include/math.h>
+	<include/utils.h>
+	<include/glm_utils.h>
+
+1454524613 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Utils/GPU.cpp
+	"GPU.h"
+
+1457178351 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Utils/OpenGL.cpp
+	"OpenGL.h"
+	<include/gl.h>
+	<include/math.h>
+	<Core/Engine.h>
+	<Core/WindowObject.h>
+
+1441646156 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/Utils/Serialization.cpp
+	"Serialization.h"
+	<include/glm_utils.h>
+
+1457139824 source:/media/sf_D/Dropbox/Projects/GameEngine/Engine/Source/UI/GameMenu.cpp
+	"GameMenu.h"
+	<iostream>
+	<include/gl.h>
+	<include/glm.h>
+	<Core/Engine.h>
+	<Core/WindowObject.h>
+	<Core/WindowManager.h>
+	<Core/Camera/Camera.h>
+	<Component/Text.h>
+	<Component/Transform/Transform.h>
+	<Event/EventType.h>
+	<GPU/Shader.h>
+	<Manager/Manager.h>
+	<Manager/AudioManager.h>
+	<Manager/ConfigFile.h>
+	<Manager/ShaderManager.h>
+	<Manager/EventSystem.h>
+	<UI/MenuSystem.h>
+
+1445188550 source:/media/sf_D/Dropbox/Projects/GameEngine/libs/pugixml/pugixml.cpp
+	"pugixml.hpp"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<assert.h>
+	<limits.h>
+	<wchar.h>
+	<math.h>
+	<float.h>
+	<setjmp.h>
+	<istream>
+	<ostream>
+	<string>
+	<new>
+	<stdint.h>
+

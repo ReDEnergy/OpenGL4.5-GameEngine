@@ -6,8 +6,6 @@
 
 #include <Core/Object.h>
 
-using namespace std;
-
 class DLLExport Transform: virtual public Object 
 {
 	friend class LimitedTransform;
@@ -61,11 +59,10 @@ class DLLExport Transform: virtual public Object
 		virtual void RotateLocalOX(float deltaTime);
 
 		virtual void SetLocalPosition(glm::vec3 position);
+		virtual void SetLocalRotation(glm::quat localRotationQ);
+
 		virtual void SetWorldPosition(glm::vec3 position);
 		virtual void SetWorldRotation(glm::quat rotationQ);
-
-		// TODO: Not implemented
-		virtual void SetRelativeRotation(glm::quat relativeRotationQ);
 
 		// Set rotation using degree angles (0 - 360)
 		virtual void SetWorldRotation(glm::vec3 eulerAngles360);
@@ -78,9 +75,9 @@ class DLLExport Transform: virtual public Object
 		// Transform properties
 
 		virtual void Copy(const Transform &source);
-		virtual void SetMoveSpeed(float speed);
-		virtual void SetScaleSpeed(float speed);
-		virtual void SetRotationSpeed(float speed);
+		virtual void SetMoveSpeed(float unitsPerSecond);
+		virtual void SetScaleSpeed(float unitsPerSecond);
+		virtual void SetRotationSpeed(float degreesPerSecond);
 
 		// ****************************
 		// Hierarchy chain
@@ -113,7 +110,7 @@ class DLLExport Transform: virtual public Object
 
 	protected:
 		Transform* _parentNode;
-		list<Transform*> _childNodes;
+		std::list<Transform*> _childNodes;
 
 		glm::vec3 _worldPosition;
 		glm::quat _worldRotation;

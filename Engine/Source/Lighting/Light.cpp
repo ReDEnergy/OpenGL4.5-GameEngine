@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "Light.h"
 
 #include <Manager/Manager.h>
@@ -26,7 +25,7 @@ Light::~Light() {
 
 void Light::Init()
 {
-	mesh = Manager::Resource->GetMesh("sphere");
+	SetMesh(Manager::Resource->GetMesh("sphere"));
 	bulbSize = glm::vec3(0.3f);
 	transform->SetScale(glm::vec3(bulbSize));
 	active = true;
@@ -55,7 +54,8 @@ void Light::RenderForPicking(const Shader * shader) const
 
 void Light::RenderDebug(const Shader *shader) const
 {
-	glUniform4fv(shader->loc_debug_color, 1, glm::value_ptr(diffuseColor)); 
+	return;
+//	glUniform4fv(shader->loc_debug_color, 1, glm::value_ptr(diffuseColor)); 
 	Render(shader);
 }
 

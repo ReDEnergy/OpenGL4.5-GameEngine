@@ -1,5 +1,4 @@
 #pragma once
-#include <include/gl.h>
 #include <include/glm.h>
 #include <include/math.h>
 
@@ -11,9 +10,10 @@
 //#define SEND_UNIFORM(TYPE) glUniform3##TYPE
 
 typedef unsigned char uchar;
-using namespace std;
 
-namespace glm {
+namespace glm
+{
+	using namespace std;
 
 	const glm::vec3 vec3_up		= glm::vec3( 0.0f,  1.0f,  0.0f);
 	const glm::vec3 vec3_down	= glm::vec3( 0.0f, -1.0f,  0.0f);
@@ -112,18 +112,6 @@ namespace glm {
 		return T(glm::vec4(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f));
 	}
 
-	inline void BindUniform4f(GLint location, const glm::vec4 &vec) {
-		glUniform4f(location, vec.x, vec.y, vec.z, vec.t);
-	};
-
-	inline void BindUniform3f(GLint location, const glm::vec3 &vec) {
-		glUniform3f(location, vec.x, vec.y, vec.z);
-	};
-
-	inline void BindUniform2f(GLint location, const glm::vec2 &vec) {
-		glUniform2f(location, vec.x, vec.y);
-	};
-
 	template<class T>
 	inline string Serialize(const T& value, char separator = ' ') {
 		string buffer;
@@ -138,37 +126,37 @@ namespace glm {
 /**
  ** overload ostream operator << for easy printing glm classes
  */
-inline ostream &operator<< (ostream &out, const glm::ivec2 &vec) {
+inline std::ostream &operator<< (std::ostream &out, const glm::ivec2 &vec) {
 	out << "[" << vec.x << " " << vec.y << "]";
 	return out;
 }
 
-inline ostream &operator<< (ostream &out, const glm::vec2 &vec) {
+inline std::ostream &operator<< (std::ostream &out, const glm::vec2 &vec) {
 	out << "[" << vec.x << " " << vec.y << "]";
 	return out;
 }
 
-inline ostream &operator<< (ostream &out, const glm::ivec3 &vec) {
+inline std::ostream &operator<< (std::ostream &out, const glm::ivec3 &vec) {
 	out << "[" << vec.x << " " << vec.y << " " << vec.z << "]";
 	return out;
 }
 
-inline ostream &operator<< (ostream &out, const glm::vec3 &vec) {
+inline std::ostream &operator<< (std::ostream &out, const glm::vec3 &vec) {
 	out << "[" << vec.x << " " << vec.y << " " << vec.z << "]";
 	return out;
 }
 
-inline ostream &operator<< (ostream &out, const glm::ivec4 &vec) {
+inline std::ostream &operator<< (std::ostream &out, const glm::ivec4 &vec) {
 	out << "[" << vec.x << " " << vec.y << " " << vec.z << " " << vec.w << "]";
 	return out;
 }
 
-inline ostream &operator<< (ostream &out, const glm::vec4 &vec) {
+inline std::ostream &operator<< (std::ostream &out, const glm::vec4 &vec) {
 	out << "[" << vec.x << " " << vec.y << " " << vec.z << " " << vec.w << "]";
 	return out;
 }
 
-inline ostream &operator<< (ostream &out, const glm::quat &rot) {
+inline std::ostream &operator<< (std::ostream &out, const glm::quat &rot) {
 	out << "[" << rot.x << " " << rot.y << " " << rot.z << " " << rot.w << "]";
 	return out;
 }

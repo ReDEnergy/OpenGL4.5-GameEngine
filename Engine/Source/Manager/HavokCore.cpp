@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "HavokCore.h"
 
 #include <cstdio>

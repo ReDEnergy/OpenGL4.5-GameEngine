@@ -6,8 +6,6 @@
 
 #include <Core/GameObject.h>
 
-using namespace std;
-
 typedef unsigned int uint;
 
 struct aiNodeAnim;
@@ -26,19 +24,13 @@ class DLLExport SkeletalJoint
 
 		void RenderForPicking(const Shader * shader) const;
 
-		void UpdateSkeletonTPose(const glm::mat4 & globalInverse);
-
-		void UpdateTransformTPose(const glm::mat4 & globalInverse);
+		void UpdateSkeletonBindPose(const glm::mat4 & globalInverse);
+		void UpdateTransformBindPose(const glm::mat4 & globalInverse);
 
 		void UpdateSkeleton(const glm::mat4 &globalInverse);
 		void UpdateTransform(const glm::mat4 &globalInverse);
 
 		uint GetJointID() const;
-
-		void LogDebugInfo() const;
-
-	private:
-		void RenderBone(SkeletalJoint * child) const;
 
 	public:
 		glm::vec3 scale;

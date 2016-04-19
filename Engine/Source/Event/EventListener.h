@@ -5,8 +5,6 @@
 #include <Core/Object.h>
 #include <Event/EventType.h>
 
-using namespace std;
-
 class DLLExport EventListener :
 	virtual public Object
 {
@@ -16,9 +14,9 @@ class DLLExport EventListener :
 		EventListener();
 		virtual ~EventListener();
 
-		virtual void OnEvent(const string& eventID, void *data) {};
-		void SubscribeToEvent(const string& eventID);
-		void UnsubscribeFrom(const string& eventID);
+		virtual void OnEvent(const std::string& eventID, void *data) {};
+		void SubscribeToEvent(const std::string& eventID);
+		void UnsubscribeFrom(const std::string& eventID);
 
 		virtual void OnEvent(EventType Event, void *data) {};
 		void SubscribeToEvent(EventType Event);

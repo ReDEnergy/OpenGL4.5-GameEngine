@@ -1,8 +1,9 @@
-//#include <pch.h>
 #include "DirectionalLight.h"
 
+#include <include/gl.h>
 #include <include/math.h>
 
+#include <Core/Engine.h>
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
 #include <Component/AABB.h>
@@ -12,18 +13,23 @@
 #include <GPU/FrameBuffer.h>
 #include <GPU/Shader.h>
 
+#include <Utils/OpenGL.h>
+
 #include <Manager/Manager.h>
 #include <Manager/SceneManager.h>
 #include <Manager/ShaderManager.h>
+#include <Debugging/TextureDebugger.h>
+
+#include <Lighting/FrustumSplit.h>
 
 using namespace std;
 
 DirectionalLight::DirectionalLight()
 	: GameObject("dir-light")
 {
-	distanceTo = 100.0f;
-	Camera::Init();
+	csmFrustum = nullptr;
 	Init();
+	Camera::Init();
 }
 
 DirectionalLight::~DirectionalLight() 
@@ -32,25 +38,26 @@ DirectionalLight::~DirectionalLight()
 
 void DirectionalLight::Init()
 {
+
 	FBO = new FrameBuffer();
 	FBO->Generate(2048, 2048, 1);
 
-	transform->SetWorldRotation(glm::vec3(45, 0, 0));
-
 	bulbSize = glm::vec3(5);
 	diffuseColor = glm::vec3(0.90f, 0.63f, 0.13f);
-
-	int splits = 5;
-	lightViews.resize(splits);
-	lightProjections.resize(splits);
 }
 
 void DirectionalLight::Update() {
 	Camera::Update();
+	if (csmFrustum)
+		csmFrustum->Update(this);
 }
+
 void DirectionalLight::SetCamera(const Camera* camera)
 {
 	viewCamera = camera;
+	csmFrustum = new FrustumSplit();
+	csmFrustum->SetCamera(viewCamera);
+	csmFrustum->Update(this);
 }
 
 void DirectionalLight::SetDebugView(bool value)
@@ -58,6 +65,10 @@ void DirectionalLight::SetDebugView(bool value)
 	GameObject::SetDebugView(value);
 }
 
+const FrameBuffer * DirectionalLight::GetTextureBuffer() const
+{
+	return FBO;
+}
 
 void DirectionalLight::CastShadows()
 {
@@ -72,14 +83,13 @@ void DirectionalLight::CastShadows()
 	Shader *CSHM = Manager::Shader->GetShader("CSM");
 	CSHM->Use();
 
-	for (unsigned int i = 0; i < viewCamera->splits; i++) {
+	for (unsigned int i = 0; i < 5; i++) {
 
 		glColorMask(i == 0, i == 1, i == 2, i == 3);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		glUniform1i(CSHM->CSM_cascadeID, i);
-		glUniformMatrix4fv(CSHM->loc_view_matrix, 1, false, glm::value_ptr(lightViews[i]));
-		glUniformMatrix4fv(CSHM->loc_projection_matrix, 1, false, glm::value_ptr(lightProjections[i]));
+		csmFrustum->BindViewProjection(CSHM, i);
 
 		for (auto *obj : Manager::Scene->GetFrustrumObjects()) {
 			if (obj->renderer->CastShadow())
@@ -87,9 +97,8 @@ void DirectionalLight::CastShadows()
 		}
 	}
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	FrameBuffer::Unbind();
+	FrameBuffer::Unbind(Engine::Window);
 }
 
 void DirectionalLight::Render(const Shader * shader) const
@@ -100,6 +109,7 @@ void DirectionalLight::Render(const Shader * shader) const
 void DirectionalLight::RenderDebug(const Shader *shader) const
 {
 	Light::RenderDebug(shader);
+	csmFrustum->RenderDebug(shader);
 }
 
 void DirectionalLight::RenderForPicking(const Shader * shader) const
@@ -109,8 +119,6 @@ void DirectionalLight::RenderForPicking(const Shader * shader) const
 
 void DirectionalLight::BakeShadows(const FrameBuffer* const sceneBuffer) const
 {
-	int WORKGROUP_SIZE = 32;
-
 	Shader *sha = Manager::GetShader()->GetShader("CSMShadowMap");
 	sha->Use();
 
@@ -123,15 +131,13 @@ void DirectionalLight::BakeShadows(const FrameBuffer* const sceneBuffer) const
 	BindForUse(sha);
 	glUniform1i(sha->loc_shadowID, 0);
 
-	glDispatchCompute(GLuint(UPPER_BOUND(sceneBuffer->GetResolution().x, WORKGROUP_SIZE)), GLuint(UPPER_BOUND(sceneBuffer->GetResolution().y, WORKGROUP_SIZE)), 1);
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
+	auto resolution = sceneBuffer->GetResolution();
+	OpenGL::DispatchCompute(resolution.x, resolution.y, 1, 32);
 }
 
 void DirectionalLight::BindForUse(const Shader *shader) const
 {
-	glUniform1fv(shader->CSM_SplitDistance, viewCamera->splits, &viewCamera->splitDistances[1]);
-	glUniformMatrix4fv(shader->CSM_LightView, viewCamera->splits, false, glm::value_ptr(lightViews[0]));
-	glUniformMatrix4fv(shader->CSM_LightProjection, viewCamera->splits, false, glm::value_ptr(lightProjections[0]));
+	csmFrustum->BindForUse(shader);
 
 	glm::ivec2 rez = FBO->GetResolution();
 	glUniform2f(shader->loc_shadow_texel_size, 1.0f / rez.x, 1.0f / rez.y);

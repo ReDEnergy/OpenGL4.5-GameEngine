@@ -1,12 +1,11 @@
 #pragma once
-
 #include <include/dll_export.h>
-#include <string>
 
 class AudioManager;
 class ColorManager;
 class ColorPicking;
 class DebugInfo;
+class DirectOpenGL;
 class EventSystem;
 class FontManager;
 class MenuSystem;
@@ -24,21 +23,21 @@ class HavokCore;
 class PhysicsManager;
 #endif
 
-using namespace std;
-
 class Manager
 {
 	private:
-		Manager() {};
-		~Manager() {};
+		Manager() = delete;
+		~Manager() = delete;
 
 	public:
 		DLLExport static void Init();
 		DLLExport static void LoadConfig();
+
 		DLLExport static AudioManager*		GetAudio();
 		DLLExport static ColorPicking*		GetPicker();
 		DLLExport static ColorManager*		GetColor();
 		DLLExport static DebugInfo*			GetDebug();
+		DLLExport static DirectOpenGL*		GetDirectGL();
 		DLLExport static SceneManager*		GetScene();
 		DLLExport static ResourceManager*	GetResource();
 		DLLExport static ShaderManager*		GetShader();
@@ -62,6 +61,7 @@ class Manager
 		static ColorManager		*Color;
 		static ColorPicking		*Picker;
 		static DebugInfo		*Debug;
+		static DirectOpenGL		*DirectGL;
 		static EventSystem		*Event;
 		static FontManager		*Font;
 		static MenuSystem		*Menu;

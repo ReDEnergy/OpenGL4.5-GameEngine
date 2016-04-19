@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug ARM|Win32">
+      <Configuration>Debug ARM</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug ARM|x64">
+      <Configuration>Debug ARM</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug-Physics|Win32">
       <Configuration>Debug-Physics</Configuration>
       <Platform>Win32</Platform>
@@ -48,6 +56,10 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformToolset>v140</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'" Label="Configuration">
     <PlatformToolset>v120</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
@@ -66,11 +78,15 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PlatformToolset>v140</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'" Label="Configuration">
     <PlatformToolset>v120</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -88,9 +104,18 @@
     <Import Project="Property Sheets\freetype-gl.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'" Label="PropertySheets">
+    <Import Project="Property Sheets\MacrosDebug.props" />
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\assimp.props" />
+    <Import Project="Property Sheets\freetype-gl.props" />
+    <Import Project="Property Sheets\glfw.props" />
+    <Import Project="Property Sheets\sfml.props" />
+    <Import Project="Property Sheets\freetype.props" />
+    <Import Project="Property Sheets\OpenGL-ES3.1.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release-Physics|Win32'">
     <Import Project="Property Sheets\include.props" />
@@ -99,7 +124,6 @@
     <Import Project="Property Sheets\freetype-gl.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
     <Import Project="Property Sheets\havok.props" />
@@ -111,7 +135,6 @@
     <Import Project="Property Sheets\freetype-gl.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
   </ImportGroup>
@@ -122,7 +145,16 @@
     <Import Project="Property Sheets\freetype-gl.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
+    <Import Project="Property Sheets\sfml.props" />
+    <Import Project="Property Sheets\freetype.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'" Label="PropertySheets">
+    <Import Project="Property Sheets\include.props" />
+    <Import Project="Property Sheets\MacrosDebug.props" />
+    <Import Project="Property Sheets\assimp.props" />
+    <Import Project="Property Sheets\freetype-gl.props" />
+    <Import Project="Property Sheets\glew.props" />
+    <Import Project="Property Sheets\glfw.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
   </ImportGroup>
@@ -133,7 +165,6 @@
     <Import Project="Property Sheets\freetype-gl.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
   </ImportGroup>
@@ -144,7 +175,6 @@
     <Import Project="Property Sheets\freetype-gl.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
   </ImportGroup>
@@ -155,7 +185,6 @@
     <Import Project="Property Sheets\freetype-gl.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\havok.props" />
     <Import Project="Property Sheets\freetype.props" />
@@ -167,12 +196,15 @@
     <Import Project="Property Sheets\freetype-gl.props" />
     <Import Project="Property Sheets\glew.props" />
     <Import Project="Property Sheets\glfw.props" />
-    <Import Project="Property Sheets\pugixml.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\lib\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">
     <OutDir>..\lib\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
@@ -197,6 +229,10 @@
     <OutDir>..\lib\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">
+    <OutDir>..\lib\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\lib\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
@@ -208,6 +244,22 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>ENGINE_DLL_EXPORTS;_CRT_SECURE_NO_WARNINGS;_DEBUG</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <Optimization>Disabled</Optimization>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link />
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>
+      </SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>ENGINE_DLL_EXPORTS;_CRT_SECURE_NO_WARNINGS;_DEBUG; OPENGL_ES</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
@@ -247,7 +299,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PreprocessorDefinitions>ENGINE_DLL_EXPORTS;_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ENGINE_DLL_EXPORTS;USE_GLFW_NATIVE;_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
       <WarningLevel>Level3</WarningLevel>
@@ -256,9 +308,23 @@
     <Link />
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/APPCONTAINER:NO %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>ENGINE_DLL_EXPORTS;_CRT_SECURE_NO_WARNINGS;_DEBUG</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>ENGINE_DLL_EXPORTS;_CRT_SECURE_NO_WARNINGS;_DEBUG</PreprocessorDefinitions>
@@ -309,17 +375,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\libs\pugixml\pugixml.cpp" />
     <ClCompile Include="..\Source\Audio\AudioStream.cpp" />
     <ClCompile Include="..\Source\Audio\SoundFX.cpp" />
     <ClCompile Include="..\Source\Component\AABB.cpp" />
     <ClCompile Include="..\Source\Component\Animation\AnimationController.cpp" />
     <ClCompile Include="..\Source\Component\AudioSource.cpp" />
     <ClCompile Include="..\Source\Component\Mesh.cpp" />
+    <ClCompile Include="..\Source\Component\MeshRenderer.cpp" />
     <ClCompile Include="..\Source\Component\ObjectInput.cpp" />
     <ClCompile Include="..\Source\Component\Physics.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -335,6 +405,8 @@
     <ClCompile Include="..\Source\Core\Camera\ThirdPersonCamera.cpp" />
     <ClCompile Include="..\Source\Core\Engine.cpp" />
     <ClCompile Include="..\Source\Core\GameObject.cpp" />
+    <ClCompile Include="..\Source\Core\GLES\GLESContext.cpp" />
+    <ClCompile Include="..\Source\Core\GLES\NativeWin_Win32.cpp" />
     <ClCompile Include="..\Source\Core\InputSystem.cpp" />
     <ClCompile Include="..\Source\Core\Object.cpp" />
     <ClCompile Include="..\Source\Core\WindowManager.cpp" />
@@ -353,11 +425,11 @@
     <ClCompile Include="..\Source\InputComponent\CameraDebugInput.cpp" />
     <ClCompile Include="..\Source\InputComponent\CameraInput.cpp" />
     <ClCompile Include="..\Source\InputComponent\DebugInput.cpp" />
-    <ClCompile Include="..\Source\InputComponent\GlobalInput.cpp" />
     <ClCompile Include="..\Source\InputComponent\EditorInput.cpp" />
+    <ClCompile Include="..\Source\InputComponent\ObjectControl.cpp" />
     <ClCompile Include="..\Source\Input\InputRules.cpp" />
-    <ClCompile Include="..\Source\Input\ObjectControl.cpp" />
     <ClCompile Include="..\Source\Lighting\DirectionalLight.cpp" />
+    <ClCompile Include="..\Source\Lighting\FrustumSplit.cpp" />
     <ClCompile Include="..\Source\Lighting\Light.cpp" />
     <ClCompile Include="..\Source\Lighting\PointLight.cpp" />
     <ClCompile Include="..\Source\Lighting\SpotLight.cpp" />
@@ -369,16 +441,20 @@
     <ClCompile Include="..\Source\Manager\FontManager.cpp" />
     <ClCompile Include="..\Source\Manager\HavokCore.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Source\Manager\Manager.cpp" />
     <ClCompile Include="..\Source\Manager\PhysicsManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -387,14 +463,18 @@
     <ClCompile Include="..\Source\Manager\SceneManager.cpp" />
     <ClCompile Include="..\Source\Manager\ShaderManager.cpp" />
     <ClCompile Include="..\Source\Manager\TextureManager.cpp" />
+    <ClCompile Include="..\Source\Motion\MotionTransition.cpp" />
     <ClCompile Include="..\Source\Physics\PhysicsPhantom.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Source\Prototyping\Prototype.cpp" />
+    <ClCompile Include="..\Source\Rendering\DirectOpenGL.cpp" />
     <ClCompile Include="..\Source\Rendering\ShadowMapping.cpp" />
     <ClCompile Include="..\Source\Rendering\SSAO.cpp" />
     <ClCompile Include="..\Source\SkeletalSystem\SkeletalJoint.cpp" />
@@ -408,19 +488,23 @@
     <ClCompile Include="..\Source\Utils\Serialization.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Engine.h" />
+    <ClInclude Include="..\..\libs\pugixml\pugiconfig.hpp" />
+    <ClInclude Include="..\..\libs\pugixml\pugixml.hpp" />
     <ClInclude Include="..\Source\Audio\AudioStream.h" />
     <ClInclude Include="..\Source\Audio\SoundFX.h" />
     <ClInclude Include="..\Source\Component\AABB.h" />
     <ClInclude Include="..\Source\Component\Animation\AnimationController.h" />
     <ClInclude Include="..\Source\Component\AudioSource.h" />
     <ClInclude Include="..\Source\Component\Mesh.h" />
+    <ClInclude Include="..\Source\Component\MeshRenderer.h" />
     <ClInclude Include="..\Source\Component\ObjectInput.h" />
     <ClInclude Include="..\Source\Component\Particles\ParticleEffect.h" />
     <ClInclude Include="..\Source\Component\Physics.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">true</ExcludedFromBuild>
     </ClInclude>
@@ -437,6 +521,8 @@
     <ClInclude Include="..\Source\Core\Camera\ThirdPersonCamera.h" />
     <ClInclude Include="..\Source\Core\Engine.h" />
     <ClInclude Include="..\Source\Core\GameObject.h" />
+    <ClInclude Include="..\Source\Core\GLES\GLESContext.h" />
+    <ClInclude Include="..\Source\Core\GLES\NativeWin.h" />
     <ClInclude Include="..\Source\Core\InputSystem.h" />
     <ClInclude Include="..\Source\Core\Object.h" />
     <ClInclude Include="..\Source\Core\WindowManager.h" />
@@ -445,6 +531,7 @@
     <ClInclude Include="..\Source\Debugging\ProfileTimer.h" />
     <ClInclude Include="..\Source\Debugging\TextureDebugger.h" />
     <ClInclude Include="..\Source\Editor\Gizmo.h" />
+    <ClInclude Include="..\Source\Engine.h" />
     <ClInclude Include="..\Source\Event\EventListener.h" />
     <ClInclude Include="..\Source\Event\EventType.h" />
     <ClInclude Include="..\Source\Event\SimpleTimer.h" />
@@ -460,6 +547,8 @@
     <ClInclude Include="..\Source\include\gl.h" />
     <ClInclude Include="..\Source\include\glm.h" />
     <ClInclude Include="..\Source\include\glm_utils.h" />
+    <ClInclude Include="..\Source\include\gl_defines.h" />
+    <ClInclude Include="..\Source\include\gl_native.h" />
     <ClInclude Include="..\Source\include\gl_utils.h" />
     <ClInclude Include="..\Source\include\havok.h" />
     <ClInclude Include="..\Source\include\math.h" />
@@ -468,11 +557,11 @@
     <ClInclude Include="..\Source\InputComponent\CameraDebugInput.h" />
     <ClInclude Include="..\Source\InputComponent\CameraInput.h" />
     <ClInclude Include="..\Source\InputComponent\DebugInput.h" />
-    <ClInclude Include="..\Source\InputComponent\GlobalInput.h" />
     <ClInclude Include="..\Source\InputComponent\EditorInput.h" />
+    <ClInclude Include="..\Source\InputComponent\ObjectControl.h" />
     <ClInclude Include="..\Source\Input\InputRules.h" />
-    <ClInclude Include="..\Source\Input\ObjectControl.h" />
     <ClInclude Include="..\Source\Lighting\DirectionalLight.h" />
+    <ClInclude Include="..\Source\Lighting\FrustumSplit.h" />
     <ClInclude Include="..\Source\Lighting\Light.h" />
     <ClInclude Include="..\Source\Lighting\PointLight.h" />
     <ClInclude Include="..\Source\Lighting\SpotLight.h" />
@@ -484,16 +573,20 @@
     <ClInclude Include="..\Source\Manager\FontManager.h" />
     <ClInclude Include="..\Source\Manager\HavokCore.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Source\Manager\Manager.h" />
     <ClInclude Include="..\Source\Manager\PhysicsManager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">true</ExcludedFromBuild>
     </ClInclude>
@@ -502,14 +595,18 @@
     <ClInclude Include="..\Source\Manager\SceneManager.h" />
     <ClInclude Include="..\Source\Manager\ShaderManager.h" />
     <ClInclude Include="..\Source\Manager\TextureManager.h" />
+    <ClInclude Include="..\Source\Motion\MotionTransition.h" />
     <ClInclude Include="..\Source\Physics\PhysicsPhantom.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Physics|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Source\Prototyping\Prototype.h" />
+    <ClInclude Include="..\Source\Rendering\DirectOpenGL.h" />
     <ClInclude Include="..\Source\Rendering\Rendering.h" />
     <ClInclude Include="..\Source\Rendering\ShadowMapping.h" />
     <ClInclude Include="..\Source\Rendering\SSAO.h" />

@@ -5,6 +5,11 @@
 
 class FrameBuffer;
 
+// TODO
+// CSM should be moved outside of this class to another class Rendering Technique class
+// But... There will be almost nothing left in this class
+// This class doesn't actually lit anything but only computes shadows... renaming the class might be a good idea
+
 class DLLExport DirectionalLight : public Light, public Camera
 {
 	public:
@@ -22,17 +27,17 @@ class DLLExport DirectionalLight : public Light, public Camera
 
 		void BakeShadows(const FrameBuffer * const sceneBuffer) const;
 
+		const FrameBuffer* GetTextureBuffer() const;
+
 		// Gameobject
 		void SetDebugView(bool value);
 
 	private:
 		void BindForUse(const Shader *shader) const;
 
-	public:
-		const Camera* viewCamera;
+	private:
 		FrameBuffer *FBO;
-		float distanceTo;
-		vector<glm::mat4> lightProjections;
-		vector<glm::mat4> lightViews;
+		FrustumSplit *csmFrustum;
+		const Camera* viewCamera;
 };
 

@@ -6,14 +6,12 @@
 
 #include <include/dll_export.h>
 
-using namespace std;
-
 class Texture;
 
 class DLLExport TextureManager
 {
 	public:
-		Texture* LoadTexture(const string &Path, const char *fileName);
+		Texture* LoadTexture(const std::string &Path, const char *fileName);
 		Texture* GetTexture(const char* name);
 		Texture* GetTexture(unsigned int textureID);
 		void Init();
@@ -24,6 +22,6 @@ class DLLExport TextureManager
 
 	private:
 
-		unordered_map<string, Texture*> mapTextures;
-		vector<Texture*> vTextures;
+		std::unordered_map<std::string, Texture*> mapTextures;
+		std::vector<Texture*> vTextures;
 };

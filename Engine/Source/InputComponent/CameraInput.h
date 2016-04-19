@@ -2,7 +2,6 @@
 #include <include/dll_export.h>
 
 #include <Component/ObjectInput.h>
-using namespace std;
 
 class Camera;
 

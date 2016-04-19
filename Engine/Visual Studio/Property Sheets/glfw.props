@@ -15,6 +15,7 @@
     </PostBuildEvent>
     <ClCompile />
     <ClCompile />
+    <ClCompile />
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

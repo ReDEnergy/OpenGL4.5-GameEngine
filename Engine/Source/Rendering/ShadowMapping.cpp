@@ -41,7 +41,6 @@ void ShadowMapping::Update(DirectionalLight *lightSource) {
 
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	Manager::GetRenderSys()->CullFace(OpenGL::CULL::BACK);
-	FrameBuffer::Unbind();
 }
 
 void ShadowMapping::BindTexelSize(GLint location)

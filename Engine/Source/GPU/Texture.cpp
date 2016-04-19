@@ -1,8 +1,9 @@
-//#include <pch.h>
 #include "Texture.h"
 
 #include <thread>
 #include <iostream>
+
+#include <include/gl.h>
 
 using namespace std;
 
@@ -18,7 +19,11 @@ using uchar = unsigned char;
 const GLint pixelFormat[5] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA };
 const GLint internalFormat[][5] = {
 	{ 0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8 },
+#ifndef OPENGL_ES
 	{ 0, GL_R16, GL_RG16, GL_RGB16, GL_RGBA16 },
+#else
+	{ 0, GL_R16F, GL_RG16F, GL_RGB16F, GL_RGBA16F },
+#endif
 	{ 0, GL_R16F, GL_RG16F, GL_RGB16F, GL_RGBA16F },
 	{ 0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F }
 };
@@ -85,16 +90,27 @@ void increase_global(int n) { for (int i = 0; i<n; ++i) ++global_counter; }
 
 void Texture::SaveToFile(const char * fileName) const
 {
+#ifndef OPENGL_ES
 	unsigned char *data = new unsigned char[width * height * channels];
 	glBindTexture(targetType, textureID);
 	glGetTexImage(targetType, 0, pixelFormat[channels], GL_UNSIGNED_BYTE, (void*)data);
 
 	stbi_write_png(fileName, width, height, channels, data, width * channels);
 	delete data;
+#else
+	cout << "[OpenGL ES] context does not support glGetTexImage" << endl;
+#endif
 	//std::thread([=]() {
 	//	stbi_write_png(fileName, width, height, channels, data, width * channels);
 	//  delete data;
 	//});
+}
+
+void Texture::UploadNewData(const unsigned char *img)
+{
+	Bind();
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, pixelFormat[channels], GL_UNSIGNED_BYTE, img);
+	UnBind();
 }
 
 void Texture::Create2DTexture(const unsigned char* img, int width, int height, int chn)
@@ -127,7 +143,9 @@ void Texture::CreateCubeTexture(const float* data, int width, int height, int ch
 
 	glDeleteTextures(1, &textureID);
 	glGenTextures(1, &textureID);
+#ifndef OPENGL_ES
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+#endif
 	glBindTexture(targetType, textureID);
 	glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, textureMinFilter);
 	glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, textureMagFilter);
@@ -144,10 +162,11 @@ void Texture::CreateCubeTexture(const float* data, int width, int height, int ch
 	UnBind();
 }
 
-void Texture::CreateFrameBufferTexture(int width, int height, int targetID)
+void Texture::CreateFrameBufferTexture(int width, int height, int targetID, int precision /*default is 32*/)
 {
+	int prec = precision == 32 ? 3 : 2;
 	Init2DTexture(width, height, 4);
-	glTexImage2D(targetType, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, 0);
+	glTexImage2D(targetType, 0, internalFormat[prec][4], width, height, 0, pixelFormat[4], GL_FLOAT, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + targetID, GL_TEXTURE_2D, textureID, 0);
 	UnBind();
 }
@@ -182,7 +201,10 @@ void Texture::UnBind() const
 void Texture::BindForWriting(GLenum textureTarget) const
 {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureTarget, textureID, 0);
+#ifndef OPENGL_ES
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+#else
+#endif
 }
 
 void Texture::SetTextureParameters()
@@ -191,7 +213,9 @@ void Texture::SetTextureParameters()
 	glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, textureMagFilter);
 	glTexParameteri(targetType, GL_TEXTURE_WRAP_S, wrappingMode);
 	glTexParameteri(targetType, GL_TEXTURE_WRAP_T, wrappingMode);
+#ifndef OPENGL_ES
 	glTexParameterf(targetType, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
+#endif
 }
 
 unsigned int Texture::GetWidth() const

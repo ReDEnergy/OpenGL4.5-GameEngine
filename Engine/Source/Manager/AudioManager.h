@@ -6,15 +6,11 @@
 #include <include/dll_export.h>
 #include <include/utils.h>
 
-#ifdef ENGINE_DLL_EXPORTS
+#if defined(USE_AUDIO_MANAGER) && defined(ENGINE_DLL_EXPORTS)
 #include <SFML/Audio.hpp>
 #endif
+
 #include <Core/Camera/Camera.h>
-
-using namespace std;
-
-class AudioStream;
-class SoundFX;
 
 enum class AUDIO_TYPE {
 	MUSIC,
@@ -32,19 +28,21 @@ class DLLExport AudioManager
 		void Init();
 		void Update(Camera *player);
 	
-		void PlayStream(const char *streamUID);
 		void PlaySoundFX(const char *soundFX_UID);
 
-		void LoadAudio(const string &fileLocation, const string &UID, AUDIO_TYPE TYPE);
-		void InitSoundFX(const string &buffer, const string &name, float offset, float duration);
+		void LoadAudio(const std::string &fileLocation, const std::string &UID, AUDIO_TYPE TYPE);
+		void InitSoundFX(const std::string &buffer, const std::string &name, float offset, float duration);
 
-		SoundFX* GetSoundEffect(const string & name) const;
-		AudioSource* GetAudioSource(const string &name) const;
+		AudioSource* GetSoundEffect(const std::string & name) const;
+		AudioSource* GetAudioSource(const std::string &name) const;
 
 	private:
-		unordered_map <string, SoundFX*> soundEffects;
-		unordered_map <string, AudioStream*> audioStreams;
-		#ifdef ENGINE_DLL_EXPORTS
-		unordered_map <string, sf::SoundBuffer*> soundBuffers;
+
+		#if defined(USE_AUDIO_MANAGER) && defined(ENGINE_DLL_EXPORTS)
+
+		std::unordered_map <std::string, AudioSource*> soundEffects;
+		std::unordered_map <std::string, AudioSource*> audioStreams;
+		std::unordered_map <std::string, sf::SoundBuffer*> soundBuffers;
+
 		#endif
 };

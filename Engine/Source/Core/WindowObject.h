@@ -1,20 +1,36 @@
 #pragma once
-#include <Windows.h>
+#include <string>
+#include <list>
 
 #include <include/dll_export.h>
-#include <include/gl.h>
 #include <include/glm.h>
+#include <include/gl_defines.h>
 
+#ifdef OPENGL_ES
+class GLESContext;
+#endif
 
-struct WindowProperties
+class ObjectInput;
+
+class DLLExport WindowProperties
 {
-	const char* name;
-	glm::ivec2 resolution;
-	glm::ivec2 position;
-	bool resizable;
-	bool hidden;
-	bool fullScreen;
-	bool centered;
+	public:
+		WindowProperties(bool shareContext = true);
+		bool IsSharedContext() const;
+
+	public:
+		std::string name;
+		glm::ivec2 resolution;
+		glm::ivec2 position;
+		glm::ivec2 cursorPos;
+		float aspectRatio;
+		bool resizable;
+		bool visible;
+		bool fullScreen;
+		bool centered;
+
+	private:
+		const bool sharedContext;
 };
 
 /*
@@ -24,48 +40,103 @@ struct WindowProperties
 class DLLExport WindowObject
 {
 	friend class WindowManager;
+	friend class InputSystem;
+	friend class ObjectInput;
 
 	public:
-		WindowObject(WindowProperties &properties);
+		WindowObject(WindowProperties properties);
 		~WindowObject();
 
+		void ShowPointer();
+		void HidePointer();
+		void DisablePointer();
+		void UseNativeHandles(bool value);
+
+		void Show();
+		void Hide();
+		void Close() const;
+		int ShouldClose() const;
+
+		void SwapBuffers() const;
+		void SetVSync(bool state);
+
+		void CenterPointer();
+		void SetPointerPosition(int mousePosX, int mousePosY);
+		void SetSize(int width, int height);
+		void MakeCurrentContext() const;
+
+		// Window Information
+		glm::ivec2 GetResolution() const;
+
+		// OpenGL State
+		bool IsCoreContext() const;
+		GLFWwindow* GetGLFWWindow() const;
+	
+		// Window Event
+		void PollEvents() const;
+
+		// Get Input State
+		bool KeyHold(int keyCode) const;
+		bool MouseHold(int button) const;
+		int GetSpecialKeyState() const;
+
+		// Event Dispatch - TODO - should be protected
+		void UpdateObserver();
+
+	protected:
+		// Frame time
+		void ComputeFrameTime();
+		
+		// Window Creation
 		void FullScreen();
 		void WindowMode();
-		void ClipPointer(bool state);
-		void HidePointer(bool state);
-		void AllowControl(bool control);
 
-		void SetPointerPosition(glm::ivec2 position);
-		void SetSize(int width, int height);
-		void SetContext();
+		// Subscribe to recive input events
+		void Subscribe(ObjectInput * IC);
 
-		bool IsCoreContext() const;
-
-		// Returns the total number of pixels
-		unsigned int GetResolution() const;
+		// Input Processing
+		void KeyCallback(int key, int scanCode, int action, int mods);
+		void MouseButtonCallback(int button, int action, int mods);
+		void MouseMove(int posX, int posY);
 
 	private:
 		void SetWindowCallbacks();
 
 	public:
-		float aspectRatio;
-		glm::ivec2 resolution;
-		glm::ivec2 pointerPos;
+		WindowProperties props;
 		GLFWwindow* window;
 
-	private:
-		unsigned int totalPixels;
+		// Native handles
+		void *openglHandle;
+		void *nativeRenderingContext;
 
-		WindowProperties prop;
-		glm::ivec2 center;
-		bool coreContext;
+	private:
+
+		// Frame Time
+		double elapsedTime;
+		float deltaFrameTime;
+
+		bool useNativeHandles;
+
+#ifdef OPENGL_ES
+		GLESContext *eglContext;
+#endif
 		bool allowedControl;
 		bool hiddenPointer;
 		bool cursorClip;
-		RECT WindowRECT;
-		
-		// Native Opengl context
-		HDC hdc;
-		HGLRC nativeWGLContext;
 
+		// States for keyboard buttons - PRESSED(true) / RELEASED(false)
+		bool keyStates[384];
+
+		// States for each mouse button - PRESSED(true) / RELEASED(false)
+		bool mouseStates[3];
+
+		// Platform specific key codes - PRESSED(true) / RELEASED(false)
+		bool keyScanCode[512];
+
+		// Special keys (ALT, CTRL, SHIFT, CAPS LOOK, OS KEY) active alogside with normal key or mouse input
+		int keyMods;	
+
+		// Input Observers
+		std::list<ObjectInput*> observers;
 };

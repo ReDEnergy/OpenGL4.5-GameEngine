@@ -5,13 +5,11 @@
 #include <functional>
 
 #include <include/dll_export.h>
-#include <include/gl.h>
+#include <include/gl_defines.h>
 
 #define MAX_2D_TEXTURES 16
 #define MAX_BONES		100
 #define INVALID_LOC -1
-
-using namespace std;
 
 class DLLExport Shader
 {
@@ -21,19 +19,20 @@ class DLLExport Shader
 
 		unsigned int Reload();
 		void ClearShaders();
-		void AddShader(const string &shaderFile, GLenum shaderType);
+		void AddShader(const std::string &shaderFile, GLenum shaderType);
 		unsigned int CreateAndLink();
 
 		void BindTexturesUnits();
 		GLint GetUniformLocation(const char * uniformName) const;
 
-		void OnLoad(function<void()> onLoad);
+		void OnLoad(std::function<void()> onLoad);
 		void Use() const;
+		bool HasCompileErrors() const;
 
 	private:
 		void GetUniforms();
-		static unsigned int CreateShader(const string &shaderFile, GLenum shaderType);
-		static unsigned int CreateProgram(const vector<unsigned int> &shaderObjects);
+		static unsigned int CreateShader(const std::string &shaderFile, GLenum shaderType);
+		static unsigned int CreateProgram(const std::vector<unsigned int> &shaderObjects);
 
 	public:
 		GLuint program;
@@ -75,6 +74,7 @@ class DLLExport Shader
 		GLint loc_z_near;
 
 		// General
+		GLint loc_object_class;
 		GLint loc_resolution;
 
 		// SSAO
@@ -108,14 +108,16 @@ class DLLExport Shader
 
 	private:
 
+		bool compileErrors;
+
 		struct ShaderFile {
-			string file;
+			std::string file;
 			GLenum type;
 		};
 
-		string shaderName;
-		vector<ShaderFile> shaderFiles;
-		list<function<void()>> loadObservers;
+		std::string shaderName;
+		std::vector<ShaderFile> shaderFiles;
+		std::list<std::function<void()>> loadObservers;
 
 		// TODO - add support for user defined uniforms
 		// unordered_map<string, GLint> uniforms;

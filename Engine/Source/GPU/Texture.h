@@ -1,20 +1,6 @@
 #pragma once
-#include <include/gl.h>
+#include <include/gl_defines.h>
 #include <include/dll_export.h>
-
-using namespace std;
-
-enum class WRAPPING_MODE : UINT32
-{
-	REPEAT = GL_REPEAT,
-	CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
-	MIRRORED_REPEAT = GL_MIRRORED_REPEAT
-};
-
-enum class TEXTURE_TYPE {
-	NORMAL_TEXTURE,
-	CUBE_TEXTURE
-};
 
 class DLLExport Texture
 {
@@ -27,11 +13,13 @@ class DLLExport Texture
 		void BindForWriting(GLenum textureTarget) const;
 		void UnBind() const;
 
+		void UploadNewData(const unsigned char* img);
+
 		void Create2DTexture(const unsigned char* img, int width, int height, int chn);
 		void Create2DTexture(const unsigned short* img, int width, int height, int chn);
 		void CreateCubeTexture(const float* data, int width, int height, int chn);
 		void Create2DTextureFloat(const float* data, int width, int height, int chn, int precision = 16);
-		void CreateFrameBufferTexture(int width, int height, int target_id);
+		void CreateFrameBufferTexture(int width, int height, int targetID, int precision = 32);
 		void CreateDepthBufferTexture(int width, int height);
 
 		bool Load2D(const char* fileName, GLenum wrappingMode = GL_REPEAT);

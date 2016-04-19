@@ -1,9 +1,9 @@
-//#include <pch.h>
 #include "RenderingSystem.h"
 
 #include <include/gl.h>
 
-void RenderingSystem::Init() {
+void RenderingSystem::Init()
+{
 	debugParam = 0;
 	states = new bool[10]();
 	prevStates = new bool[10]();
@@ -19,27 +19,33 @@ void RenderingSystem::Init() {
 	// glLineWidth
 	lineWidth = 1;
 
-	glEnable(GL_LINE_SMOOTH);
+	//glEnable(GL_LINE_SMOOTH);
 }
 
-bool RenderingSystem::Is(RenderState STATE) {
+bool RenderingSystem::Is(RenderState STATE)
+{
 	return states[STATE] == true;
 }
 
-void RenderingSystem::Set(RenderState STATE, bool value) {
+void RenderingSystem::Set(RenderState STATE, bool value)
+{
 	SavePreviousState(STATE);
 	states[STATE] = value;
+#ifndef OPENGL_ES
 	if (STATE == RenderState::WIREFRAME)
 		value ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
 	UpdateGlobalState();
 }
 
-void RenderingSystem::Revert(RenderState STATE) {
+void RenderingSystem::Revert(RenderState STATE)
+{
 	bool value = prevStates[STATE];
 	Set(STATE, value);
 }
 
-bool RenderingSystem::Toggle(RenderState STATE) {
+bool RenderingSystem::Toggle(RenderState STATE)
+{
 	SavePreviousState(STATE);
 	states[STATE] = !states[STATE];
 	UpdateGlobalState();
@@ -98,14 +104,17 @@ void RenderingSystem::SetLineWidth(float width)
 	}
 }
 
-void RenderingSystem::UpdateGlobalState() {
+void RenderingSystem::UpdateGlobalState()
+{
 	states[RenderState::FORWARD] = false;
-	if (states[RenderState::WIREFRAME] || !states[RenderState::POST_PROCESS]) {
+	if (states[RenderState::WIREFRAME] || !states[RenderState::POST_PROCESS])
+	{
 		SavePreviousState(RenderState::FORWARD);
 		states[RenderState::FORWARD] = true;
 	}
 }
 
-void RenderingSystem::SavePreviousState(RenderState STATE) {
+void RenderingSystem::SavePreviousState(RenderState STATE)
+{
 	prevStates[STATE] = states[STATE];
 }

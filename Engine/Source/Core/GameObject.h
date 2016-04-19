@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <string>
 
 #include <include/glm.h>
 #include <include/dll_export.h>
@@ -10,6 +11,7 @@
 class AABB;
 class AudioSource;
 class Mesh;
+class MeshRenderer;
 class Shader;
 class Physics;
 class Renderer;
@@ -17,11 +19,10 @@ class Transform;
 class ObjectInput;
 class AnimationController;
 
-using namespace std;
-
 class DLLExport GameObject: virtual public Object
 {
 	friend class SceneManager;
+	friend class ColorPicking;
 	friend class AABB;
 
 	public:
@@ -40,10 +41,10 @@ class DLLExport GameObject: virtual public Object
 		virtual void RenderForPicking(const Shader *shader) const;
 
 		void SetMesh(Mesh *mesh);
+		Mesh* GetMesh() const;
 		virtual void SetDebugView(bool value);
 		virtual void SetAudioSource(AudioSource *source);
 
-		void SetupAABB();
 		bool ColidesWith(GameObject *object);
 		float DistTo(GameObject *object) const;
 
@@ -60,7 +61,7 @@ class DLLExport GameObject: virtual public Object
 
 		// Hierarchy chain
 		GameObject* GetParent() const;
-		list<GameObject*> GetChildren() const;
+		std::list<GameObject*> GetChildren() const;
 		unsigned int GetNumberOfChildren() const;
 		void SetParent(GameObject* object);
 
@@ -68,12 +69,16 @@ class DLLExport GameObject: virtual public Object
 		void RemoveChild(GameObject* object);
 		void RemoveChildren();
 
+	protected:
+		void SetupAABB();
+		virtual void OnSelect() {};
+
 	public:
 		// Unique unit length per color (0.0 - 1.0)
 
 		AudioSource *audioSource;
 		AABB		*aabb;
-		Mesh		*mesh;
+		MeshRenderer *meshRenderer;
 		ObjectInput	*input;
 		Renderer	*renderer;
 		Transform	*transform;
@@ -84,7 +89,7 @@ class DLLExport GameObject: virtual public Object
 		#endif
 
 	protected:
-		string name;
+		std::string name;
 		glm::vec3 colorID;
 		const char *referenceName;
 		unsigned int instanceID;
@@ -92,7 +97,7 @@ class DLLExport GameObject: virtual public Object
 		bool selectable;
 
 		GameObject* _parent;
-		list<GameObject*> _children;
+		std::list<GameObject*> _children;
 };
 
 // TODO idea

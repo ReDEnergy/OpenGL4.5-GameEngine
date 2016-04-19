@@ -5,10 +5,7 @@
 #include <include/assimp.h>
 #endif
 #include <include/dll_export.h>
-#include <include/gl.h>
 #include <include/glm.h>
-
-using namespace std;
 
 class Shader;
 class Texture;
@@ -17,14 +14,14 @@ class GPUBuffers;
 
 static const unsigned int INVALID_MATERIAL = 0xFFFFFFFF;
 
-enum class MeshType
+enum class MESH_TYPE
 {
 	STATIC,
 	MORPHING,
 	SKINNED
 };
 
-enum class LOG_MESH
+enum class MESH_STATUS
 {
 	ERROR_MAX_INFLUENCE,
 	SUCCESS
@@ -52,33 +49,32 @@ class BoundingBox
 {
 	
 	public:
-		BoundingBox(vector<glm::vec3> &positions);
+		BoundingBox(std::vector<glm::vec3> &positions);
 
 	public:
-		vector<glm::vec3> points;
+		std::vector<glm::vec3> points;
 };
 
 class DLLExport Mesh
 {
+	friend class MeshRenderer;
+
 	public:
 		Mesh(const char* meshID = NULL);
 		virtual ~Mesh();
 
 		void ClearData();
 		bool InitFromData();
-		bool InitFromData(vector<glm::vec3>& positions, 
-						vector<glm::vec3>& normals,
-						vector<glm::vec2>& texCoords,
-						vector<unsigned short>& indices);
+		bool InitFromData(std::vector<glm::vec3>& positions,
+						std::vector<glm::vec3>& normals,
+						std::vector<glm::vec2>& texCoords,
+						std::vector<unsigned short>& indices);
 
 		virtual void Update() {};
-		virtual bool LoadMesh(const string& fileLocation, const string& fileName);
-		virtual void Render(const Shader *shader);
-		virtual void RenderInstanced(unsigned int instances);
-		virtual void RenderDebug(const Shader *shader) const;
+		virtual bool LoadMesh(const std::string& fileLocation, const std::string& fileName);
 		virtual void UseMaterials(bool);
 
-		void SetGlPrimitive(unsigned int glPrimitive);
+		void SetGLDrawMode(unsigned int drawMode);
 		void SetCulling(bool value = true);
 		const char* GetMeshID() const;
 
@@ -88,26 +84,27 @@ class DLLExport Mesh
 		virtual bool InitMaterials(const aiScene* pScene);
 		virtual bool InitFromScene(const aiScene* pScene);
 		#endif
+
 	private:
-		string meshID;
+		std::string meshID;
 
 	public:
-		MeshType meshType;
+		MESH_TYPE meshType;
 		glm::vec4 debugColor;
-		vector<glm::vec3> positions;
-		vector<glm::vec3> normals;
-		vector<glm::vec2> texCoords;
-		vector<unsigned short> indices;
+		std::vector<glm::vec3> positions;
+		std::vector<glm::vec3> normals;
+		std::vector<glm::vec2> texCoords;
+		std::vector<unsigned short> indices;
 		BoundingBox *bbox;
 
 	protected:
-		LOG_MESH loadState;
-		string fileLocation;
+		MESH_STATUS loadState;
+		std::string fileLocation;
 
 		bool useMaterial;
-		unsigned int glPrimitive;
+		unsigned int glDrawMode;
 		GPUBuffers *buffers;
 
-		vector<MeshEntry*> meshEntries;
-		vector<Material*> materials;
+		std::vector<MeshEntry> meshEntries;
+		std::vector<Material*> materials;
 };

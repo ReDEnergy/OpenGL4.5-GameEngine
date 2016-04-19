@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "DebugInfo.h"
 
 #include <cstdio>
@@ -23,6 +22,7 @@
 #include <Manager/Manager.h>
 #include <Manager/RenderingSystem.h>
 #include <Debugging/TextureDebugger.h>
+#include <Rendering/DirectOpenGL.h>
 
 #include <Utils/OpenGL.h>
 
@@ -37,7 +37,7 @@ DebugInfo::~DebugInfo() {
 void DebugInfo::Init()
 {
 	FBO = new FrameBuffer();
-	FBO->Generate(Engine::Window->resolution.x, Engine::Window->resolution.y, 1);
+	FBO->Generate(Engine::Window->props.resolution.x, Engine::Window->props.resolution.y, 1);
 	Manager::TextureDBG->SetChannel(2, FBO);
 }
 
@@ -86,24 +86,15 @@ void DebugInfo::Render(const Camera *camera) const
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 
-	glLineWidth(2);
+	auto DirectGL = Manager::GetDirectGL();
+	DirectGL->SetLineWidth(3);
 	for (auto obj: objects)
 	{
+		DirectGL->DrawStandardAxis(obj->transform, S);
 		obj->RenderDebug(S);
 	}
 
-	{
-		// Draw World AXIS
-		float size = 100;
-		glLineWidth(4);
-		glUniformMatrix4fv(S->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
-		glUniform4f(S->loc_debug_color, 0.92f, 0.15f, 0.15f, 1.0f);
-		OpenGL::DrawLine(glm::vec3(0, 0, 0), glm::vec3(size, 0, 0));
-		glUniform4f(S->loc_debug_color, 0.19f, 0.92f, 0.15f, 1.0f);
-		OpenGL::DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, size, 0));
-		glUniform4f(S->loc_debug_color, 0.15f, 0.59f, 0.92f, 1.0f);
-		OpenGL::DrawLine(glm::vec3(0, 0, 0), glm::vec3(0, 0, size));
-		glLineWidth(1);
-	}
-	FrameBuffer::Unbind();
+	Transform x;
+	x.SetScale(glm::vec3(100));
+	DirectGL->DrawStandardAxis(&x, S);
 }

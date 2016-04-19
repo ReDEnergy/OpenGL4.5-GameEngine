@@ -4,8 +4,6 @@
 #include <Component/ObjectInput.h>
 #include <Event/EventListener.h>
 
-using namespace std;
-
 class DLLExport EditorInput :
 	public ObjectInput,
 	public EventListener
@@ -13,6 +11,6 @@ class DLLExport EditorInput :
 	public:
 		EditorInput();
 		void OnKeyPress(int key, int mods);
-		void OnEvent(const string& eventID, void * data);
+		void OnEvent(const std::string& eventID, void * data);
 };
 

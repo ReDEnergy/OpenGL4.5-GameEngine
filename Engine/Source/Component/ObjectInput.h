@@ -1,12 +1,17 @@
 #pragma once
 #include <Core/Object.h>
-#include <Input/InputRules.h>
+
+class WindowObject;
 
 class DLLExport ObjectInput : virtual public Object
 {
 	public:
-		ObjectInput(InputGroup GROUP = InputGroup::IG_GAMEPLAY);
+		ObjectInput();
 		virtual ~ObjectInput();
+
+		void AttachTo(const char* windowName);
+		void AttachTo(WindowObject* windowName);
+
 		virtual void OnInputUpdate(float deltaTime, int mods) {};
 		virtual void OnKeyPress(int key, int mods) {};
 		virtual void OnKeyRelease(int key, int mods) {};
@@ -15,6 +20,24 @@ class DLLExport ObjectInput : virtual public Object
 		virtual bool IsActive();
 
 	protected:
-		InputGroup GROUP;
+		WindowObject *window;
 };
 
+namespace SPECIAL_KEY {
+	enum _SPECIAL_KEY {
+		SHIFT = 1,
+		CTRL = 2,
+		ALT = 4,
+		OS_KEY = 8
+	};
+}
+
+namespace MOUSE_BUTTON {
+	enum _MOUSE_BUTTON {
+		LEFT = 0,
+		RIGHT = 1,
+		MIDDLE = 2,
+		FORWARD = 3,
+		BACK = 4,
+	};
+}

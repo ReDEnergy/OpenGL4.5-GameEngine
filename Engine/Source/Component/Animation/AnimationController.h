@@ -5,13 +5,10 @@
 #include <include/assimp.h>
 #endif
 #include <include/dll_export.h>
-#include <include/gl.h>
 #include <include/glm.h>
 #include <include/utils.h>
 
 #include <unordered_map>
-
-using namespace std;
 
 class Shader;
 class SkeletalJoint;
@@ -25,12 +22,16 @@ class DLLExport AnimationController
 		~AnimationController();
 
 		void Setup(SkinnedMesh *mesh);
-		void Render(const Shader* shader);
+		void BindSkeletonInfo(const Shader* shader) const;
 
 		void Update();
+		void SetDefaultPose();
+		void SetAnimation(unsigned int animationID);
 		void SetAnimation(const char *animationName);
+		void SetAnimationTime(float animationTime);
 		void SetPlayback(bool value);
 		bool TogglePlayback();
+		float GetAnimationTime() const;
 
 	private:
 		void InitControlSkeleton();
@@ -40,11 +41,11 @@ class DLLExport AnimationController
 		void UpdateAnimationNodesMapping();
 		void UpdateJointTransform(SkeletalJoint * joint, float animationTime);
 
-	private:
+	public:
 		uint nrBones;
 		SkinnedMesh *skinnedMesh;
-		unordered_map<string, SkeletalJoint*> skeletalJoints;
-		vector<glm::mat4> boneTransform;
+		std::unordered_map<std::string, SkeletalJoint*> skeletalJoints;
+		std::vector<glm::mat4> boneTransform;
 
 		SkeletalJoint *rootJoint;
 		glm::mat4 rootTransform;
@@ -55,4 +56,5 @@ class DLLExport AnimationController
 		#endif
 		bool playbackState;
 		bool controlState;
+		float animationTime;
 };

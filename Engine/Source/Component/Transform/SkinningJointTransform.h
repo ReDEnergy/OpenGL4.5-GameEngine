@@ -1,8 +1,6 @@
 #pragma once
 #include <Component/Transform/Transform.h>
 
-using namespace std;
-
 class DLLExport SkinningJointTransform
 	: public Transform
 {

@@ -4,7 +4,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <LibraryPath>..\..\libs\freetype-gl\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\libs\freetype-gl\$(PlatformToolset)\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>

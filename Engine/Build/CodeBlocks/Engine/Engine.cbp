@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Engine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option platforms="Unix;" />
+				<Option output="bin/Debug/Engine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option platforms="Unix;" />
+				<Option output="bin/Release/Engine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-fPIC" />
+			<Add option="-DENGINE_DLL_EXPORTS" />
+			<Add option="-D__linux__" />
+			<Add directory="../../../Source" />
+			<Add directory="../../../../libs" />
+			<Add directory="../../../../libs/FreeType" />
+		</Compiler>
+		<Linker>
+			<Add option="-Wl,-soname,libEngine.so" />
+		</Linker>
+		<Unit filename="../../../../libs/pugixml/pugixml.cpp" />
+		<Unit filename="../../../Source/Audio/AudioStream.cpp" />
+		<Unit filename="../../../Source/Audio/AudioStream.h" />
+		<Unit filename="../../../Source/Audio/SoundFX.cpp" />
+		<Unit filename="../../../Source/Audio/SoundFX.h" />
+		<Unit filename="../../../Source/Component/AABB.cpp" />
+		<Unit filename="../../../Source/Component/AABB.h" />
+		<Unit filename="../../../Source/Component/Animation/AnimationController.cpp" />
+		<Unit filename="../../../Source/Component/Animation/AnimationController.h" />
+		<Unit filename="../../../Source/Component/Animation/AnimationSystem.cpp" />
+		<Unit filename="../../../Source/Component/Animation/AnimationSystem.h" />
+		<Unit filename="../../../Source/Component/AudioSource.cpp" />
+		<Unit filename="../../../Source/Component/AudioSource.h" />
+		<Unit filename="../../../Source/Component/Component.cpp" />
+		<Unit filename="../../../Source/Component/Component.h" />
+		<Unit filename="../../../Source/Component/Mesh.cpp" />
+		<Unit filename="../../../Source/Component/Mesh.h" />
+		<Unit filename="../../../Source/Component/ObjectInput.cpp" />
+		<Unit filename="../../../Source/Component/ObjectInput.h" />
+		<Unit filename="../../../Source/Component/Particles/ParticleEffect.h" />
+		<Unit filename="../../../Source/Component/Renderer.cpp" />
+		<Unit filename="../../../Source/Component/Renderer.h" />
+		<Unit filename="../../../Source/Component/SkinnedMesh.cpp" />
+		<Unit filename="../../../Source/Component/SkinnedMesh.h" />
+		<Unit filename="../../../Source/Component/Text.cpp" />
+		<Unit filename="../../../Source/Component/Text.h" />
+		<Unit filename="../../../Source/Component/Transform/FreezeTransform.cpp" />
+		<Unit filename="../../../Source/Component/Transform/FreezeTransform.h" />
+		<Unit filename="../../../Source/Component/Transform/LimitedTransform.cpp" />
+		<Unit filename="../../../Source/Component/Transform/LimitedTransform.h" />
+		<Unit filename="../../../Source/Component/Transform/SkinningJointTransform.cpp" />
+		<Unit filename="../../../Source/Component/Transform/SkinningJointTransform.h" />
+		<Unit filename="../../../Source/Component/Transform/Transform.cpp" />
+		<Unit filename="../../../Source/Component/Transform/Transform.h" />
+		<Unit filename="../../../Source/Config/ResourcePath.h" />
+		<Unit filename="../../../Source/Control/ControlObject.cpp" />
+		<Unit filename="../../../Source/Control/ControlObject.h" />
+		<Unit filename="../../../Source/Core/Camera/Camera.cpp" />
+		<Unit filename="../../../Source/Core/Camera/Camera.h" />
+		<Unit filename="../../../Source/Core/Camera/ThirdPersonCamera.cpp" />
+		<Unit filename="../../../Source/Core/Camera/ThirdPersonCamera.h" />
+		<Unit filename="../../../Source/Core/Engine.cpp" />
+		<Unit filename="../../../Source/Core/Engine.h" />
+		<Unit filename="../../../Source/Core/GLES/GLESContext.cpp" />
+		<Unit filename="../../../Source/Core/GLES/GLESContext.h" />
+		<Unit filename="../../../Source/Core/GLES/NativeWin.h" />
+		<Unit filename="../../../Source/Core/GLES/NativeWin_Win32.cpp" />
+		<Unit filename="../../../Source/Core/GameObject.cpp" />
+		<Unit filename="../../../Source/Core/GameObject.h" />
+		<Unit filename="../../../Source/Core/InputSystem.cpp" />
+		<Unit filename="../../../Source/Core/InputSystem.h" />
+		<Unit filename="../../../Source/Core/Object.cpp" />
+		<Unit filename="../../../Source/Core/Object.h" />
+		<Unit filename="../../../Source/Core/WindowManager.cpp" />
+		<Unit filename="../../../Source/Core/WindowManager.h" />
+		<Unit filename="../../../Source/Core/WindowObject.cpp" />
+		<Unit filename="../../../Source/Core/WindowObject.h" />
+		<Unit filename="../../../Source/Core/World.h" />
+		<Unit filename="../../../Source/DLL/dllmain.cpp" />
+		<Unit filename="../../../Source/Debugging/ProfileTimer.cpp" />
+		<Unit filename="../../../Source/Debugging/ProfileTimer.h" />
+		<Unit filename="../../../Source/Debugging/TextureDebugger.cpp" />
+		<Unit filename="../../../Source/Debugging/TextureDebugger.h" />
+		<Unit filename="../../../Source/Editor/Gizmo.cpp" />
+		<Unit filename="../../../Source/Editor/Gizmo.h" />
+		<Unit filename="../../../Source/Engine.h" />
+		<Unit filename="../../../Source/EngineForward.h" />
+		<Unit filename="../../../Source/Event/EventListener.cpp" />
+		<Unit filename="../../../Source/Event/EventListener.h" />
+		<Unit filename="../../../Source/Event/EventType.h" />
+		<Unit filename="../../../Source/Event/SimpleTimer.cpp" />
+		<Unit filename="../../../Source/Event/SimpleTimer.h" />
+		<Unit filename="../../../Source/Event/TimerEvent.h" />
+		<Unit filename="../../../Source/GPU/FrameBuffer.cpp" />
+		<Unit filename="../../../Source/GPU/FrameBuffer.h" />
+		<Unit filename="../../../Source/GPU/Material.cpp" />
+		<Unit filename="../../../Source/GPU/Material.h" />
+		<Unit filename="../../../Source/GPU/SSBO.h" />
+		<Unit filename="../../../Source/GPU/Shader.cpp" />
+		<Unit filename="../../../Source/GPU/Shader.h" />
+		<Unit filename="../../../Source/GPU/Texture.cpp" />
+		<Unit filename="../../../Source/GPU/Texture.h" />
+		<Unit filename="../../../Source/Input/InputAction.h" />
+		<Unit filename="../../../Source/Input/InputRules.cpp" />
+		<Unit filename="../../../Source/Input/InputRules.h" />
+		<Unit filename="../../../Source/Input/ObjectControl.h" />
+		<Unit filename="../../../Source/InputComponent/CameraDebugInput.cpp" />
+		<Unit filename="../../../Source/InputComponent/CameraDebugInput.h" />
+		<Unit filename="../../../Source/InputComponent/CameraInput.cpp" />
+		<Unit filename="../../../Source/InputComponent/CameraInput.h" />
+		<Unit filename="../../../Source/InputComponent/DebugInput.cpp" />
+		<Unit filename="../../../Source/InputComponent/DebugInput.h" />
+		<Unit filename="../../../Source/InputComponent/EditorInput.cpp" />
+		<Unit filename="../../../Source/InputComponent/EditorInput.h" />
+		<Unit filename="../../../Source/InputComponent/PlayerInput.h" />
+		<Unit filename="../../../Source/Lighting/DirectionalLight.cpp" />
+		<Unit filename="../../../Source/Lighting/DirectionalLight.h" />
+		<Unit filename="../../../Source/Lighting/FrustumSplit.cpp" />
+		<Unit filename="../../../Source/Lighting/FrustumSplit.h" />
+		<Unit filename="../../../Source/Lighting/Light.cpp" />
+		<Unit filename="../../../Source/Lighting/Light.h" />
+		<Unit filename="../../../Source/Lighting/PointLight.cpp" />
+		<Unit filename="../../../Source/Lighting/PointLight.h" />
+		<Unit filename="../../../Source/Lighting/SpotLight.cpp" />
+		<Unit filename="../../../Source/Lighting/SpotLight.h" />
+		<Unit filename="../../../Source/Manager/AudioManager.cpp" />
+		<Unit filename="../../../Source/Manager/AudioManager.h" />
+		<Unit filename="../../../Source/Manager/ColorManager.cpp" />
+		<Unit filename="../../../Source/Manager/ColorManager.h" />
+		<Unit filename="../../../Source/Manager/ConfigFile.cpp" />
+		<Unit filename="../../../Source/Manager/ConfigFile.h" />
+		<Unit filename="../../../Source/Manager/DebugInfo.cpp" />
+		<Unit filename="../../../Source/Manager/DebugInfo.h" />
+		<Unit filename="../../../Source/Manager/EventSystem.cpp" />
+		<Unit filename="../../../Source/Manager/EventSystem.h" />
+		<Unit filename="../../../Source/Manager/FontManager.cpp" />
+		<Unit filename="../../../Source/Manager/FontManager.h" />
+		<Unit filename="../../../Source/Manager/Manager.cpp" />
+		<Unit filename="../../../Source/Manager/Manager.h" />
+		<Unit filename="../../../Source/Manager/RenderingSystem.cpp" />
+		<Unit filename="../../../Source/Manager/RenderingSystem.h" />
+		<Unit filename="../../../Source/Manager/ResourceManager.cpp" />
+		<Unit filename="../../../Source/Manager/ResourceManager.h" />
+		<Unit filename="../../../Source/Manager/SceneManager.cpp" />
+		<Unit filename="../../../Source/Manager/SceneManager.h" />
+		<Unit filename="../../../Source/Manager/ShaderManager.cpp" />
+		<Unit filename="../../../Source/Manager/ShaderManager.h" />
+		<Unit filename="../../../Source/Manager/TextureManager.cpp" />
+		<Unit filename="../../../Source/Manager/TextureManager.h" />
+		<Unit filename="../../../Source/Motion/MotionTransition.cpp" />
+		<Unit filename="../../../Source/Motion/MotionTransition.h" />
+		<Unit filename="../../../Source/Prototyping/Prototype.cpp" />
+		<Unit filename="../../../Source/Prototyping/Prototype.h" />
+		<Unit filename="../../../Source/Rendering/DirectOpenGL.cpp" />
+		<Unit filename="../../../Source/Rendering/DirectOpenGL.h" />
+		<Unit filename="../../../Source/Rendering/Rendering.h" />
+		<Unit filename="../../../Source/Rendering/SSAO.cpp" />
+		<Unit filename="../../../Source/Rendering/SSAO.h" />
+		<Unit filename="../../../Source/Rendering/ShadowMapping.cpp" />
+		<Unit filename="../../../Source/Rendering/ShadowMapping.h" />
+		<Unit filename="../../../Source/SkeletalSystem/SkeletalJoint.cpp" />
+		<Unit filename="../../../Source/SkeletalSystem/SkeletalJoint.h" />
+		<Unit filename="../../../Source/UI/ColorPicking/ColorPicking.cpp" />
+		<Unit filename="../../../Source/UI/ColorPicking/ColorPicking.h" />
+		<Unit filename="../../../Source/UI/DebugOverlayText.cpp" />
+		<Unit filename="../../../Source/UI/DebugOverlayText.h" />
+		<Unit filename="../../../Source/UI/GameMenu.cpp" />
+		<Unit filename="../../../Source/UI/GameMenu.h" />
+		<Unit filename="../../../Source/UI/MenuSystem.cpp" />
+		<Unit filename="../../../Source/UI/MenuSystem.h" />
+		<Unit filename="../../../Source/Utils/3D.cpp" />
+		<Unit filename="../../../Source/Utils/3D.h" />
+		<Unit filename="../../../Source/Utils/GPU.cpp" />
+		<Unit filename="../../../Source/Utils/GPU.h" />
+		<Unit filename="../../../Source/Utils/OpenGL.cpp" />
+		<Unit filename="../../../Source/Utils/OpenGL.h" />
+		<Unit filename="../../../Source/Utils/Serialization.cpp" />
+		<Unit filename="../../../Source/Utils/Serialization.h" />
+		<Unit filename="../../../Source/include/assimp.h" />
+		<Unit filename="../../../Source/include/assimp_utils.h" />
+		<Unit filename="../../../Source/include/dll_export.h" />
+		<Unit filename="../../../Source/include/gl.cpp" />
+		<Unit filename="../../../Source/include/gl.h" />
+		<Unit filename="../../../Source/include/gl_utils.h" />
+		<Unit filename="../../../Source/include/glm.h" />
+		<Unit filename="../../../Source/include/glm_utils.h" />
+		<Unit filename="../../../Source/include/havok.h" />
+		<Unit filename="../../../Source/include/math.h" />
+		<Unit filename="../../../Source/include/pugixml.h" />
+		<Unit filename="../../../Source/include/utils.h" />
+		<Unit filename="../../../Source/templates/singleton.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

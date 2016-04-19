@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "AnimationController.h"
 
 #include <include/utils.h>
@@ -34,6 +33,10 @@ AnimationController::AnimationController()
 {
 	playbackState = true;
 	controlState = true;
+	currentAnimation = nullptr;
+	skinnedMesh = nullptr;
+	rootJoint = nullptr;
+	animationTime = 0;
 }
 
 
@@ -43,15 +46,19 @@ AnimationController::~AnimationController() {
 void AnimationController::Setup(SkinnedMesh * mesh)
 {
 	skinnedMesh = mesh;
-	currentAnimation = nullptr;
 
-	rootJoint = mesh->GetSkeletonInfo(skeletalJoints);
+	skeletalJoints = mesh->GetSkeletonCopy(rootJoint);
 	nrBones = mesh->GetNumberOfBones();
 	boneTransform.resize(nrBones);
 	rootTransform = mesh->GetRootTransform();
 	globalInvTransform = mesh->GetGlobalInverse();
 
 	Manager::Scene->AddObject((GameObject*)rootJoint);
+
+	rootJoint->globalTransform = rootTransform;
+	rootJoint->UpdateSkeletonBindPose(globalInvTransform);
+	UpdateGPUData();
+
 }
 
 void AnimationController::InitControlSkeleton()
@@ -60,10 +67,12 @@ void AnimationController::InitControlSkeleton()
 
 void AnimationController::Update()
 {
+	if (currentAnimation == nullptr)
+		return;
 	if (rootJoint) {
 		if (currentAnimation == nullptr) {
 			rootJoint->globalTransform = rootTransform;
-			rootJoint->UpdateSkeletonTPose(globalInvTransform);
+			rootJoint->UpdateSkeletonBindPose(globalInvTransform);
 			UpdateGPUData();
 			return;
 		}
@@ -79,6 +88,20 @@ void AnimationController::Update()
 	UpdateGPUData();
 }
 
+void AnimationController::SetDefaultPose()
+{
+	currentAnimation = nullptr;
+}
+
+void AnimationController::SetAnimation(unsigned int animationID)
+{
+	auto animation = skinnedMesh->GetAnimationByID(animationID);
+	if (animation) {
+		currentAnimation = animation;
+		UpdateAnimationNodesMapping();
+	}
+}
+
 void AnimationController::SetAnimation(const char * animationName)
 {
 	auto animation = skinnedMesh->GetAnimation(animationName);
@@ -86,6 +109,12 @@ void AnimationController::SetAnimation(const char * animationName)
 		currentAnimation = animation;
 		UpdateAnimationNodesMapping();
 	}
+}
+
+void AnimationController::SetAnimationTime(float animationTime)
+{
+	rootJoint->globalTransform = rootTransform;
+	UpdateJointTransform(rootJoint, animationTime);
 }
 
 void AnimationController::SetPlayback(bool value)
@@ -97,6 +126,11 @@ bool AnimationController::TogglePlayback()
 {
 	playbackState = !playbackState;
 	return playbackState;
+}
+
+float AnimationController::GetAnimationTime() const
+{
+	return animationTime;
 }
 
 void AnimationController::UpdateGPUData()
@@ -111,7 +145,7 @@ void AnimationController::UpdateAnimation()
 {
 	float timeInSeconds = (float)glfwGetTime();
 	float TimeInTicks = timeInSeconds * (float)currentAnimation->mTicksPerSecond;
-	float animationTime = fmod(TimeInTicks, (float)currentAnimation->mDuration);
+	animationTime = fmod(TimeInTicks, (float)currentAnimation->mDuration);
 
 	rootJoint->globalTransform = rootTransform;
 	UpdateJointTransform(rootJoint, animationTime);
@@ -141,12 +175,10 @@ void AnimationController::UpdateJointTransform(SkeletalJoint* joint, float anima
 	}
 }
 
-void AnimationController::Render(const Shader *shader)
+void AnimationController::BindSkeletonInfo(const Shader *shader) const
 {
-	CheckOpenGLError();
 	glUniform1f(shader->loc_animated, currentAnimation ? true : false);
 	if (nrBones)
 		glUniformMatrix4fv(shader->loc_bones, nrBones, GL_FALSE, glm::value_ptr(boneTransform[0]));
-	skinnedMesh->Mesh::Render(shader);
 	CheckOpenGLError();
 }

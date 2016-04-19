@@ -4,8 +4,10 @@
 using namespace std;
 
 #include <include/utils.h>
+#include <include/glm_utils.h>
 #include <include/gl_utils.h>
 
+#include <Core/WindowManager.h>
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
 #include <Component/Transform/Transform.h>
@@ -25,9 +27,9 @@ using namespace std;
 void RenderScreenQuat(GLuint VAO)
 {
 	glBindVertexArray(VAO);
-	glDrawElementsBaseVertex(4, 6, GL_UNSIGNED_SHORT, 0, 0);
+	glDrawElements(4, 6, GL_UNSIGNED_SHORT, 0);
 	glBindVertexArray(0);
-	//CheckOpenGLError();
+	CheckOpenGLError();
 }
 
 TextureDebugger::TextureDebugger()
@@ -42,9 +44,16 @@ TextureDebugger::~TextureDebugger() {
 
 void TextureDebugger::Init()
 {
+	AttachTo(WindowManager::GetDefaultWindow());
+
 	VAO = 0;
+	channelMask = glm::ivec4(1, 1, 1, 0);
 
 	shader = Manager::Shader->GetShader("debug");
+	shader->OnLoad([this]() {
+		loc_channel_mask = shader->GetUniformLocation("channel_mask");
+	});
+	shader->Reload();
 
 	// Rendering Quad
 	renderingQuad = Manager::Resource->GetGameObject("render-quad");
@@ -95,6 +104,15 @@ void TextureDebugger::SetChannel(unsigned int channel, const FrameBuffer * const
 		channels[channel].push_back(frameBuffer->GetTexture(i));
 }
 
+unsigned int TextureDebugger::GetEmptyChannel() const
+{
+	for (int i = 0; i < TEXTURE_DEBUGGER_CHANNELS; i++) {
+		if (channels[i].size() == 0)
+			return i;
+	}
+	return 0;
+}
+
 void TextureDebugger::SetRenderingVAO(unsigned int VAO)
 {
 	this->VAO = VAO;
@@ -109,6 +127,8 @@ void TextureDebugger::Render()
 
 		shader->Use();
 		glUniform1i(shader->loc_debug_id, activeTexture);
+		glUniform4i(loc_channel_mask, channelMask.r, channelMask.g, channelMask.b, channelMask.a);
+		CheckOpenGLError();
 
 		Manager::Scene->GetActiveCamera()->BindProjectionDistances(shader);
 
@@ -160,7 +180,7 @@ bool TextureDebugger::ToggleFullScreen()
 	return fullScreen;
 }
 
-void TextureDebugger::SelectChannel(uint channelID)
+void TextureDebugger::SelectActiveChannel(uint channelID)
 {
 	if (channelID >= 0 && channelID < 11) {
 		if (channels[channelID].size()) {
@@ -175,11 +195,22 @@ void TextureDebugger::SelectChannel(uint channelID)
 	}
 }
 
-void TextureDebugger::SelectTextureChannel(uint textureChannel)
+void TextureDebugger::SelectActiveTexture(uint textureChannel)
 {
 	if (channels[activeChannel].size() > textureChannel && channels[activeChannel][textureChannel]) {
 		activeTexture = textureChannel;  // GL_TEXTURE_0 + offset;
 	}
+}
+
+void TextureDebugger::SetViewMode(glm::ivec4 mask)
+{
+	channelMask = mask;
+	cout << "[Texture Mask]\t" << channelMask << endl;
+}
+
+glm::ivec4 TextureDebugger::GetMask() const
+{
+	return channelMask;
 }
 
 void TextureDebugger::OnKeyPress(int key, int mods)
@@ -207,12 +238,12 @@ void TextureDebugger::OnKeyPress(int key, int mods)
 
 		int val = key - GLFW_KEY_0;
 		if (val >= 0 && val <= 9) {
-			SelectTextureChannel(val);
+			SelectActiveTexture(val);
 		}
 
 		val = key - GLFW_KEY_F1;
 		if (val >= 0 && val < 11) {
-			SelectChannel(val);
+			SelectActiveChannel(val);
 		}
 	}
 }

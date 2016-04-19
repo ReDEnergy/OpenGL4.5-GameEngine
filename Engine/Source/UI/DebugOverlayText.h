@@ -8,7 +8,7 @@
 namespace UIOverlay {
 	class Command : public Object {
 		Command() {};
-		string ID;
+		std::string ID;
 	};
 }
 
@@ -30,11 +30,11 @@ class DLLExport DebugOverlayText //: public EventListener
 
 		void Init();
 		Text* Add(const char *textID, const char *value = NULL);
-		void Toggle(const string messageID, bool state = true);
+		void Toggle(const std::string messageID, bool state = true);
 		void Update();
 		void CacheScores(int number);
 
 	private:
-		unordered_map<string, UIText> messages;
+		std::unordered_map<std::string, UIText> messages;
 };
 

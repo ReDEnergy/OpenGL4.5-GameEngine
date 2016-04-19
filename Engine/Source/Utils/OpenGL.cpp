@@ -1,4 +1,3 @@
-//#include <pch.h>
 #include "OpenGL.h"
 #include <include/gl.h>
 #include <include/math.h>
@@ -6,6 +5,7 @@
 #include <Core/Engine.h>
 #include <Core/WindowObject.h>
 
+/*
 void OpenGL::DrawCircle(const glm::vec3 &center, float radius, int num_segments)
 {
 	if (Engine::Window->IsCoreContext()) return;
@@ -77,28 +77,6 @@ void OpenGL::DrawCone(const glm::vec3 &center, float radius, float height, int n
 	CheckOpenGLError();
 }
 
-void OpenGL::DrawLine(const glm::vec3 &pos)
-{
-	if (Engine::Window->IsCoreContext()) return;
-
-	glBegin(GL_LINES);
-	glVertex3f(0, 0, 0);
-	glVertex3f(pos.x, pos.y, pos.z);
-	glEnd();
-	CheckOpenGLError();
-}
-
-void OpenGL::DrawLine(const glm::vec3 &posA, const glm::vec3 &posB)
-{
-	if (Engine::Window->IsCoreContext()) return;
-
-	glBegin(GL_LINES);
-	glVertex3f(posA.x, posA.y, posA.z);
-	glVertex3f(posB.x, posB.y, posB.z);
-	glEnd();
-	CheckOpenGLError();
-}
-
 void OpenGL::DrawPolygon(vector<glm::vec3> &vertices)
 {
 	if (Engine::Window->IsCoreContext()) return;
@@ -112,6 +90,7 @@ void OpenGL::DrawPolygon(vector<glm::vec3> &vertices)
 	glEnd();
 	CheckOpenGLError();
 }
+*/
 
 DLLExport void OpenGL::DispatchCompute(uint sizeX, uint sizeY, uint sizeZ, uint workGroupSize, bool synchronize)
 {

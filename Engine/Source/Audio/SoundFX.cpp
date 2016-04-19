@@ -1,3 +1,4 @@
+#ifdef USE_AUDIO_MANAGER
 #include "SoundFX.h"
 
 #include <include/gl.h>
@@ -5,10 +6,10 @@
 #include <Manager/EventSystem.h>
 #include <Event/TimerEvent.h>
 
-SoundFX::SoundFX(sf::SoundBuffer &buffer)
+SoundFX::SoundFX(sf::SoundBuffer *buffer)
+	: offset(0), buffer(buffer)
 {
-	offset = 0;
-	sound.setBuffer(buffer);
+	sound.setBuffer(*buffer);
 	duration = sound.getBuffer()->getDuration().asSeconds();
 	sound3D = sound.getBuffer()->getChannelCount() > 1 ? false : true;
 
@@ -16,10 +17,10 @@ SoundFX::SoundFX(sf::SoundBuffer &buffer)
 	SubscribeToEvent(EventType::STOP_SOUND_FX);
 }
 
-SoundFX::SoundFX(sf::SoundBuffer &buffer, float offset, float duration)
-	: offset(offset), duration(duration)
+SoundFX::SoundFX(sf::SoundBuffer *buffer, float offset, float duration)
+	: offset(offset), duration(duration), buffer(buffer)
 {
-	sound.setBuffer(buffer);
+	sound.setBuffer(*buffer);
 	float length = sound.getBuffer()->getDuration().asSeconds();
 	if (duration > length)
 		duration = length;
@@ -43,6 +44,26 @@ float SoundFX::GetVolume() const
 	return volume;
 }
 
+short int* SoundFX::GetBuffer() const
+{
+	return (short int*)buffer->getSamples();
+}
+
+float SoundFX::GetDuration() const
+{
+	return duration;
+}
+
+unsigned int SoundFX::GetChannelCount() const
+{
+	return buffer->getChannelCount();
+}
+
+unsigned int SoundFX::GetSampleRate() const
+{
+	return buffer->getSampleRate();
+}
+
 void SoundFX::Play()
 {
 	sound.setPlayingOffset(sf::seconds(offset));
@@ -52,7 +73,6 @@ void SoundFX::Play()
 
 void SoundFX::Update()
 {
-
 }
 
 void SoundFX::Pause()
@@ -67,3 +87,4 @@ void SoundFX::OnEvent(EventType Event, void *data)
 		Pause();
 	}
 }
+#endif

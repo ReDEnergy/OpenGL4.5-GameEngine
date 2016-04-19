@@ -13,10 +13,6 @@
 #include <Event/EventType.h>
 #include <Event/EventListener.h>
 
-#include <include/gl.h>
-
-using namespace std;
-
 template <class T>
 class TimerEvent
 {
@@ -70,7 +66,7 @@ class TimerEvent
 			timePassed += frameTime;
 			if (timePassed > triggerInterval) {
 				timePassed = 0;
-				Manager::Event->EmitAsync(channel, data);
+				Manager::GetEvent()->EmitAsync(channel, data);
 				for (auto &listener : listeners) {
 					listener();
 				}
@@ -79,7 +75,7 @@ class TimerEvent
 			return false;
 		}
 
-		void OnTrigger(function<void()> onUpdate) {
+		void OnTrigger(std::function<void()> onUpdate) {
 			listeners.push_back(onUpdate);
 		}
 
@@ -89,7 +85,7 @@ class TimerEvent
 		float paused;
 		float timePassed;
 		float triggerInterval;
-		list<function<void()>> listeners;
+		std::list<std::function<void()>> listeners;
 };
 
 template <class ChannelType>
@@ -140,7 +136,7 @@ class TimerManager
 		}
 
 	private:
-		list<TimerEvent<ChannelType>*> toRemove;
-		list<TimerEvent<ChannelType>*> toAdd;
-		list<TimerEvent<ChannelType>*> events;
+		std::list<TimerEvent<ChannelType>*> toRemove;
+		std::list<TimerEvent<ChannelType>*> toAdd;
+		std::list<TimerEvent<ChannelType>*> events;
 };

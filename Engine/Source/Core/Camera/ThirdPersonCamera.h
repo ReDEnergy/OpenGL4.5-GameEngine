@@ -1,6 +1,5 @@
 #pragma once
 #include <include/glm.h>
-#include <include/gl.h>
 #include <Core/Camera/Camera.h>
 
 class ThirdPersonCamera : public Camera

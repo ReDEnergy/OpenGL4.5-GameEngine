@@ -4,8 +4,6 @@
 #include <Component/ObjectInput.h>
 #include <Event/EventListener.h>
 
-using namespace std;
-
 class DLLExport DebugInput
 	: public ObjectInput,
 	public EventListener

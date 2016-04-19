@@ -30,7 +30,7 @@ class DLLExport SpotLight : public Light, public Camera
 
 	public:
 		FrameBuffer *FBO;
-		vector<glm::mat4> lightProjections;
-		vector<glm::mat4> lightViews;
+		std::vector<glm::mat4> lightProjections;
+		std::vector<glm::mat4> lightViews;
 };
 

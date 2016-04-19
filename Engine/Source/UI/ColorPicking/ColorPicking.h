@@ -24,8 +24,6 @@ namespace ENUM_GIZMO_EVENT {
 }
 typedef ENUM_GIZMO_EVENT::GE GIZMO_EVENT;
 
-
-
 class DLLExport ColorPicking
 	: public ObjectInput
 	, public EventListener
@@ -51,7 +49,8 @@ class DLLExport ColorPicking
 		void OnEvent(EventType Event, void *data);
 
 	private:
-		void GetPickedObject();
+		void PickObject();
+		void GetPickedObject(const glm::ivec3 &colorID);
 
 		void UpdateGizmo(bool picking = false);
 		void UpdateGizmoPosition();
@@ -68,6 +67,7 @@ class DLLExport ColorPicking
 
 	private:
 		Shader *cpShader;
+		Shader *cpShaderSk;
 		Shader *gizmoShader;
 
 		glm::ivec2 mousePosition;

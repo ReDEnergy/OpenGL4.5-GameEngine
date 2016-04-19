@@ -77,9 +77,6 @@
     <Filter Include="Engine\Debugging">
       <UniqueIdentifier>{1eebe426-444e-4bd2-81a9-ed5fa4391779}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Export header">
-      <UniqueIdentifier>{4f494037-d3f0-49d2-ad52-1fbc884b6c1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\DLL">
       <UniqueIdentifier>{1c3a8b04-2482-432b-bae4-25dfe0b30d8a}</UniqueIdentifier>
     </Filter>
@@ -94,6 +91,18 @@
     </Filter>
     <Filter Include="Engine\GPU">
       <UniqueIdentifier>{9fbcfe3b-4b84-4d7c-8648-d77b2675da87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\GLES">
+      <UniqueIdentifier>{85c7604f-322d-4cf6-9db0-2976da646cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Motion">
+      <UniqueIdentifier>{b66ef2c5-87b6-4319-bcbf-7929ff5dfe85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs">
+      <UniqueIdentifier>{f4b9de5d-3dab-4ee9-8649-1f728500cbda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\pugixml">
+      <UniqueIdentifier>{6420507a-c4a2-4259-b88a-a086065e126d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -244,12 +253,6 @@
     <ClCompile Include="..\Source\UI\GameMenu.cpp">
       <Filter>Engine\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Input\ObjectControl.cpp">
-      <Filter>Engine\InputComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InputComponent\GlobalInput.cpp">
-      <Filter>Engine\InputComponent</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Audio\SoundFX.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
@@ -315,6 +318,30 @@
     </ClCompile>
     <ClCompile Include="..\Source\include\gl.cpp">
       <Filter>Engine\include</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Lighting\FrustumSplit.cpp">
+      <Filter>Engine\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Core\GLES\GLESContext.cpp">
+      <Filter>Engine\Core\GLES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Core\GLES\NativeWin_Win32.cpp">
+      <Filter>Engine\Core\GLES</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Motion\MotionTransition.cpp">
+      <Filter>Engine\Motion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Rendering\DirectOpenGL.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libs\pugixml\pugixml.cpp">
+      <Filter>libs\pugixml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InputComponent\ObjectControl.cpp">
+      <Filter>Engine\InputComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Component\MeshRenderer.cpp">
+      <Filter>Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -501,12 +528,6 @@
     <ClInclude Include="..\Source\include\utils.h">
       <Filter>Engine\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Input\ObjectControl.h">
-      <Filter>Engine\InputComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InputComponent\GlobalInput.h">
-      <Filter>Engine\InputComponent</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Audio\SoundFX.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
@@ -558,9 +579,6 @@
     <ClInclude Include="..\Source\Prototyping\Prototype.h">
       <Filter>Engine\Prototyping</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Engine.h">
-      <Filter>Export header</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Component\Transform\SkinningJointTransform.h">
       <Filter>Engine\Components\Transform</Filter>
     </ClInclude>
@@ -590,6 +608,40 @@
     </ClInclude>
     <ClInclude Include="..\Source\Debugging\ProfileTimer.h">
       <Filter>Engine\Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Lighting\FrustumSplit.h">
+      <Filter>Engine\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Core\GLES\GLESContext.h">
+      <Filter>Engine\Core\GLES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Core\GLES\NativeWin.h">
+      <Filter>Engine\Core\GLES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Motion\MotionTransition.h">
+      <Filter>Engine\Motion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Rendering\DirectOpenGL.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\pugixml\pugiconfig.hpp">
+      <Filter>libs\pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libs\pugixml\pugixml.hpp">
+      <Filter>libs\pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InputComponent\ObjectControl.h">
+      <Filter>Engine\InputComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\include\gl_native.h">
+      <Filter>Engine\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\include\gl_defines.h">
+      <Filter>Engine\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Engine.h" />
+    <ClInclude Include="..\Source\Component\MeshRenderer.h">
+      <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,8 +3,6 @@
 #include <include/dll_export.h>
 #include <Rendering/Rendering.h>
 
-using namespace std;
-
 class DLLExport RenderingSystem
 {
 	public:

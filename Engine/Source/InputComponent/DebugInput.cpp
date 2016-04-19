@@ -1,5 +1,6 @@
-//#include <pch.h>
 #include "DebugInput.h"
+
+#include <include/gl.h>
 
 #include <Core/Engine.h>
 #include <Core/InputSystem.h>
@@ -16,7 +17,6 @@
 #include <UI/MenuSystem.h>
 
 DebugInput::DebugInput()
-	: ObjectInput(InputGroup::IG_DEBUG)
 {
 }
 
@@ -25,22 +25,22 @@ void DebugInput::OnKeyPress(int key, int mods) {
 		switch (key)
 		{
 			case GLFW_KEY_C:
-				Manager::Event->EmitAsync(EventType::SWITCH_CAMERA, nullptr);
+				Manager::GetEvent()->EmitAsync(EventType::SWITCH_CAMERA, nullptr);
 				return;
 
 			case GLFW_KEY_I:
-				printf("\n\nActive objects: %d\n\n", Manager::Scene->GetActiveObjects().size());
+				printf("\n\nActive objects: %u\n\n", static_cast<unsigned int>(Manager::Scene->GetActiveObjects().size()));
 				return;
 
 			case GLFW_KEY_V:
-				Manager::Debug->Toggle();
+				Manager::GetDebug()->Toggle();
 				return;
 		}
 	}
 
 	if (key == GLFW_KEY_F5)
 	{
-		Manager::Shader->Reload();
+		Manager::GetShader()->Reload();
 		return;
 	}
 }
