@@ -1,24 +1,38 @@
-/**/*.lnk
+# General
+**/*.lnk
+
+# Build system
+**/bin
+**/obj
+**/lib
+
+# Visual Studio
 /**/*.sdf
 /**/*.suo
 /**/*.opensdf
 /**/*.opendb
-/**/obj
 /**/ipch
+
+# CodeBlocks
+**/*.layout
+
+# Libraries
 /**/havok
 /**/Kinect
 /**/LeapMotion
 /**/Release-Physics
 /**/Debug-Physics
-/Tools
+
+# Application
 /Other
 /Resources
-/Sensors
 /Research
-
-/Engine/lib
+/Sensors
+/Tools
 /GameProject/x86
 /GameProject/x64
 
+
 /libs/Qt
 /libs/PhysX
+/GameProject/*.lnk
