@@ -273,7 +273,7 @@ void Transform::UpdateRelativeRotation()
 
 void Transform::SetLocalRotation(glm::quat localRotationQ)
 {
-	glm::quat localRotation = _parentNode->_worldRotation * localRotationQ;
+	glm::quat localRotation = _parentNode ? _parentNode->_worldRotation * localRotationQ : localRotationQ;
 	SetWorldRotation(localRotation);
 }
 
