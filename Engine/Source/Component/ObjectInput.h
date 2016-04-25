@@ -5,19 +5,22 @@ class WindowObject;
 
 class DLLExport ObjectInput : virtual public Object
 {
+	friend class WindowObject;
+
 	public:
 		ObjectInput();
 		virtual ~ObjectInput();
 
 		void AttachTo(const char* windowName);
 		void AttachTo(WindowObject* windowName);
+		virtual bool IsActive();
 
+	protected:
 		virtual void OnInputUpdate(float deltaTime, int mods) {};
 		virtual void OnKeyPress(int key, int mods) {};
 		virtual void OnKeyRelease(int key, int mods) {};
 		virtual void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {};
 		virtual void OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods) {};
-		virtual bool IsActive();
 
 	protected:
 		WindowObject *window;
