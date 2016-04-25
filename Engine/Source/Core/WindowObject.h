@@ -91,7 +91,7 @@ class DLLExport WindowObject
 		void FullScreen();
 		void WindowMode();
 
-		// Subscribe to recive input events
+		// Subscribe to receive input events
 		void Subscribe(ObjectInput * IC);
 
 		// Input Processing
