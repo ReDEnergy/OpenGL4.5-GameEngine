@@ -35,3 +35,6 @@ void Singleton<T>::Destroy() {
 
 template<class T>
 Singleton<T>* Singleton<T>::pInstance = nullptr;
+
+#define SINGLETON(Class) Singleton<Class>::Instance()
+
