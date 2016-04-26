@@ -13,7 +13,6 @@ class DLLExport ObjectInput : virtual public Object
 
 		void AttachTo(const char* windowName);
 		void AttachTo(WindowObject* windowName);
-		virtual bool IsActive();
 
 	protected:
 		virtual void OnInputUpdate(float deltaTime, int mods) {};

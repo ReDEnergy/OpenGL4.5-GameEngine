@@ -13,11 +13,6 @@ ObjectInput::~ObjectInput()
 {
 }
 
-bool ObjectInput::IsActive()
-{
-	return (window) ? true : false;
-}
-
 void ObjectInput::AttachTo(const char * windowName)
 {
 	window = WindowManager::GetWindowObjectByName(windowName);
