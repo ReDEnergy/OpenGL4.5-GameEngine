@@ -8,6 +8,7 @@
 
 #define SET_BIT(item, bit) (item) |= (1 << (bit))
 #define CLEAR_BIT(item, bit) (item) &= ~(1 << (bit))
+#define IS_BIT_SET(item, bit) (((item) & (1 << (bit))) != 0)
 
 typedef unsigned int uint;
 typedef unsigned char uchar;
