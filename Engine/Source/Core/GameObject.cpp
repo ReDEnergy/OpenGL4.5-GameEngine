@@ -58,14 +58,16 @@ GameObject::GameObject(const char *referenceObject)
 GameObject::GameObject(const GameObject &obj)
 {
 	Clear();
-	referenceName = obj.referenceName;
-	shader	= obj.shader;
-	input	= obj.input;
-	renderer = new Renderer(*obj.renderer);
-	transform = new Transform(*obj.transform);
+	referenceName	= obj.referenceName;
+	shader			= obj.shader;
+	input			= obj.input;
+	renderer		= new Renderer(*obj.renderer);
+	transform		= new Transform(*obj.transform);
 
-	if (obj.meshRenderer)
-		SetMesh(obj.meshRenderer->mesh);
+	if (obj.meshRenderer) {
+		meshRenderer = new MeshRenderer(*obj.meshRenderer);
+		SetupAABB();
+	}
 	Init();
 
 	#ifdef PHYSICS_ENGINE
@@ -123,7 +125,6 @@ void GameObject::SetMesh(Mesh * mesh)
 {
 	SAFE_FREE(meshRenderer);
 	meshRenderer = new MeshRenderer(*mesh);
-
 	SetupAABB();
 }
 

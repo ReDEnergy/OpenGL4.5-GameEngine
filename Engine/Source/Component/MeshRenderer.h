@@ -10,6 +10,7 @@ class DLLExport MeshRenderer
 {
 	public:
 		MeshRenderer(Mesh& mesh);
+		MeshRenderer(MeshRenderer& meshRenderer);
 		virtual ~MeshRenderer();
 
 		virtual void Render(const Shader *shader) const;

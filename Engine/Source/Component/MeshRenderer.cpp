@@ -25,6 +25,14 @@ MeshRenderer::MeshRenderer(Mesh& mesh)
 	glVAO = mesh.buffers->VAO;
 }
 
+MeshRenderer::MeshRenderer(MeshRenderer & meshRenderer)
+{
+	this->mesh = meshRenderer.mesh;
+	useMaterial = meshRenderer.useMaterial;
+	glDrawMode = meshRenderer.glDrawMode;
+	glVAO = meshRenderer.glVAO;
+}
+
 MeshRenderer::~MeshRenderer() {
 }
 
