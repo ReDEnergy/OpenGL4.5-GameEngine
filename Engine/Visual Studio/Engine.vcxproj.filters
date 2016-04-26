@@ -298,9 +298,6 @@
     <ClCompile Include="..\Source\Prototyping\Prototype.cpp">
       <Filter>Engine\Prototyping</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Component\Transform\SkinningJointTransform.cpp">
-      <Filter>Engine\Components\Transform</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\UI\ColorPicking\ColorPicking.cpp">
       <Filter>Engine\UI\ColorPicking</Filter>
     </ClCompile>
@@ -578,9 +575,6 @@
     </ClInclude>
     <ClInclude Include="..\Source\Prototyping\Prototype.h">
       <Filter>Engine\Prototyping</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Component\Transform\SkinningJointTransform.h">
-      <Filter>Engine\Components\Transform</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\UI\ColorPicking\ColorPicking.h">
       <Filter>Engine\UI\ColorPicking</Filter>

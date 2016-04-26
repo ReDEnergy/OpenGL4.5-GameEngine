@@ -12,7 +12,6 @@ using namespace std;
 #include <Component/Mesh.h>
 #include <Component/Renderer.h>
 #include <Component/Transform/Transform.h>
-#include <Component/Transform/SkinningJointTransform.h>
 #include <GPU/Shader.h>
 
 #include <Rendering/DirectOpenGL.h>
@@ -26,10 +25,7 @@ SkeletalJoint::SkeletalJoint(const char * name, uint jointID)
 	: GameObject(name)
 	, jointID(jointID)
 {
-	//SAFE_FREE(transform);
-	transform = new SkinningJointTransform();
 	auto mesh = Manager::GetResource()->GetMesh("box");
-	SetName(name);
 	SetMesh(mesh);
 	renderer->SetRenderingLayer(RenderingLayer::ON_TOP);
 }
@@ -38,8 +34,6 @@ SkeletalJoint::SkeletalJoint(const SkeletalJoint& joint)
 	: GameObject(joint.GetName())
 	, jointID(joint.jointID)
 {
-	//SAFE_FREE(transform);
-	transform = new SkinningJointTransform();
 	auto mesh = Manager::GetResource()->GetMesh("box");
 	SetMesh(mesh);
 	renderer->SetRenderingLayer(RenderingLayer::ON_TOP);
@@ -94,46 +88,12 @@ void SkeletalJoint::RenderForPicking(const Shader * shader) const
 	GameObject::RenderForPicking(shader);
 }
 
-void SkeletalJoint::UpdateSkeletonBindPose(const glm::mat4 & globalInverse)
+void SkeletalJoint::UpdateSkeleton()
 {
-	transform->ForceUpdate();
-	UpdateTransformBindPose(globalInverse);
+	finalTransformation = transform->GetModel() * boneOffset;
 	for (auto child : _children) {
-		((SkeletalJoint*)child)->UpdateSkeletonBindPose(globalInverse);
+		((SkeletalJoint*)child)->UpdateSkeleton();
 	}
-}
-
-void SkeletalJoint::UpdateTransformBindPose(const glm::mat4 &globalInverse)
-{
-	if (_parent) {
-		globalTransform = ((SkeletalJoint*)_parent)->globalTransform;
-	}
-	globalTransform *= TPoseOffset * transform->GetModel();
-	((SkinningJointTransform*)transform)->SetFakeModel(globalTransform);
-	finalTransformation = globalInverse * globalTransform * boneOffset;
-
-	// TODO investigate with other skinned meshes if globalInverse is required or not.... 
-	// it shouldn't as long as the asset is exported corectly - vertical oriented
-	//finalTransformation = globalInverse * globalTransform * boneOffset;
-}
-
-void SkeletalJoint::UpdateSkeleton(const glm::mat4 & globalInverse)
-{
-	transform->ForceUpdate();
-	UpdateTransform(globalInverse);
-	for (auto child : _children) {
-		((SkeletalJoint*)child)->UpdateSkeleton(globalInverse);
-	}
-}
-
-void SkeletalJoint::UpdateTransform(const glm::mat4 &globalInverse)
-{
-	if (_parent) {
-		globalTransform = ((SkeletalJoint*)_parent)->globalTransform;
-	}
-	globalTransform *= transform->GetModel();
-	((SkinningJointTransform*)transform)->SetFakeModel(globalTransform);
-	finalTransformation = globalInverse * globalTransform * boneOffset;
 }
 
 uint SkeletalJoint::GetJointID() const

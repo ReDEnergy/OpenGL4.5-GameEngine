@@ -55,8 +55,7 @@ void AnimationController::Setup(SkinnedMesh * mesh)
 
 	Manager::Scene->AddObject((GameObject*)rootJoint);
 
-	rootJoint->globalTransform = rootTransform;
-	rootJoint->UpdateSkeletonBindPose(globalInvTransform);
+	rootJoint->UpdateSkeleton();
 	UpdateGPUData();
 
 }
@@ -69,17 +68,11 @@ void AnimationController::Update()
 {
 	if (currentAnimation == nullptr)
 		return;
-	if (rootJoint) {
-		if (currentAnimation == nullptr) {
-			rootJoint->globalTransform = rootTransform;
-			rootJoint->UpdateSkeletonBindPose(globalInvTransform);
-			UpdateGPUData();
-			return;
-		}
-
-		if (playbackState == false) {
-			rootJoint->globalTransform = rootTransform;
-			rootJoint->UpdateSkeleton(globalInvTransform);
+	if (rootJoint)
+	{
+		if (playbackState == false)
+		{
+			rootJoint->UpdateSkeleton();
 			UpdateGPUData();
 			return;
 		}
@@ -90,7 +83,9 @@ void AnimationController::Update()
 
 void AnimationController::SetDefaultPose()
 {
-	currentAnimation = nullptr;
+	playbackState = false;
+	SetJointToBindPose(rootJoint);
+	UpdateGPUData();
 }
 
 void AnimationController::SetAnimation(unsigned int animationID)
@@ -113,7 +108,7 @@ void AnimationController::SetAnimation(const char * animationName)
 
 void AnimationController::SetAnimationTime(float animationTime)
 {
-	rootJoint->globalTransform = rootTransform;
+	//rootJoint->globalTransform = rootTransform;
 	UpdateJointTransform(rootJoint, animationTime);
 }
 
@@ -147,8 +142,9 @@ void AnimationController::UpdateAnimation()
 	float TimeInTicks = timeInSeconds * (float)currentAnimation->mTicksPerSecond;
 	animationTime = fmod(TimeInTicks, (float)currentAnimation->mDuration);
 
-	rootJoint->globalTransform = rootTransform;
+	//rootJoint->globalTransform = rootTransform;
 	UpdateJointTransform(rootJoint, animationTime);
+	//rootJoint->UpdateSkeleton(rootTransform);
 }
 
 void AnimationController::UpdateAnimationNodesMapping()
@@ -166,12 +162,24 @@ void AnimationController::UpdateJointTransform(SkeletalJoint* joint, float anima
 	glm::vec3 scale = assimp::CalcInterpolatedScaling(joint->pAnimationNode, animationTime, currentAnimation->mDuration);
 
 	// Update transform
-	joint->transform->SetWorldPosition(position);
-	joint->transform->SetWorldRotationAndScale(rotation, scale);
-	joint->UpdateTransform(globalInvTransform);
+	joint->transform->SetLocalPosition(position / 100.0f);
+	joint->transform->SetLocalRotation(rotation);
+	joint->transform->SetScale(glm::vec3(0.01f));
+	joint->finalTransformation = joint->transform->GetModel() * joint->boneOffset;
 
 	for (auto J : joint->GetChildren()) {
 		UpdateJointTransform((SkeletalJoint*)J, animationTime);
+	}
+}
+
+void AnimationController::SetJointToBindPose(SkeletalJoint* joint)
+{
+	// Update transform
+	joint->transform->SetLocalRotation(glm::quat());
+	joint->finalTransformation = joint->transform->GetModel() * joint->boneOffset;
+
+	for (auto J : joint->GetChildren()) {
+		SetJointToBindPose((SkeletalJoint*)J);
 	}
 }
 

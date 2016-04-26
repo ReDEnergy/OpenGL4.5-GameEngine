@@ -398,7 +398,6 @@
     <ClCompile Include="..\Source\Component\Text.cpp" />
     <ClCompile Include="..\Source\Component\Transform\FreezeTransform.cpp" />
     <ClCompile Include="..\Source\Component\Transform\LimitedTransform.cpp" />
-    <ClCompile Include="..\Source\Component\Transform\SkinningJointTransform.cpp" />
     <ClCompile Include="..\Source\Component\Transform\Transform.cpp" />
     <ClCompile Include="..\Source\Control\ControlObject.cpp" />
     <ClCompile Include="..\Source\Core\Camera\Camera.cpp" />
@@ -513,7 +512,6 @@
     <ClInclude Include="..\Source\Component\Text.h" />
     <ClInclude Include="..\Source\Component\Transform\FreezeTransform.h" />
     <ClInclude Include="..\Source\Component\Transform\LimitedTransform.h" />
-    <ClInclude Include="..\Source\Component\Transform\SkinningJointTransform.h" />
     <ClInclude Include="..\Source\Component\Transform\Transform.h" />
     <ClInclude Include="..\Source\Config\ResourcePath.h" />
     <ClInclude Include="..\Source\Control\ControlObject.h" />

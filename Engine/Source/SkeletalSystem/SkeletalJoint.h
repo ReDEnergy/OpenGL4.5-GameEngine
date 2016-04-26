@@ -24,11 +24,7 @@ class DLLExport SkeletalJoint
 
 		void RenderForPicking(const Shader * shader) const;
 
-		void UpdateSkeletonBindPose(const glm::mat4 & globalInverse);
-		void UpdateTransformBindPose(const glm::mat4 & globalInverse);
-
-		void UpdateSkeleton(const glm::mat4 &globalInverse);
-		void UpdateTransform(const glm::mat4 &globalInverse);
+		void UpdateSkeleton();
 
 		uint GetJointID() const;
 
@@ -36,7 +32,7 @@ class DLLExport SkeletalJoint
 		glm::vec3 scale;
 		glm::mat4 TPoseOffset;
 		glm::mat4 boneOffset;
-		glm::mat4 globalTransform;
+		//glm::mat4 globalTransform;
 		glm::mat4 finalTransformation;
 		const aiNodeAnim* pAnimationNode;
 

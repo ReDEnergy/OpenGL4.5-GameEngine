@@ -41,6 +41,8 @@ class DLLExport AnimationController
 		void UpdateAnimationNodesMapping();
 		void UpdateJointTransform(SkeletalJoint * joint, float animationTime);
 
+		void SetJointToBindPose(SkeletalJoint * joint);
+
 	public:
 		uint nrBones;
 		SkinnedMesh *skinnedMesh;
