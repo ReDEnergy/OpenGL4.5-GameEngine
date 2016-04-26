@@ -28,6 +28,7 @@ class DLLExport WindowProperties
 		bool visible;
 		bool fullScreen;
 		bool centered;
+		bool hideOnClose;
 
 	private:
 		const bool sharedContext;
@@ -47,25 +48,25 @@ class DLLExport WindowObject
 		WindowObject(WindowProperties properties);
 		~WindowObject();
 
-		void ShowPointer();
-		void HidePointer();
-		void DisablePointer();
-		void UseNativeHandles(bool value);
-
 		void Show();
 		void Hide();
-		void Close() const;
+		void Close();
 		int ShouldClose() const;
+
+		void ShowPointer();
+		void CenterPointer();
+		void SetPointerPosition(int mousePosX, int mousePosY);
+		void HidePointer();
+		void DisablePointer();
 
 		void SwapBuffers() const;
 		void SetVSync(bool state);
 
-		void CenterPointer();
-		void SetPointerPosition(int mousePosX, int mousePosY);
-		void SetSize(int width, int height);
 		void MakeCurrentContext() const;
+		void UseNativeHandles(bool value);
 
 		// Window Information
+		void SetSize(int width, int height);
 		glm::ivec2 GetResolution() const;
 
 		// OpenGL State
@@ -111,7 +112,6 @@ class DLLExport WindowObject
 		void *nativeRenderingContext;
 
 	private:
-
 		// Frame Time
 		double elapsedTime;
 		float deltaFrameTime;

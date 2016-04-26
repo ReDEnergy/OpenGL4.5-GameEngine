@@ -26,6 +26,7 @@ WindowProperties::WindowProperties(bool shareContext)
 	centered = true;
 	fullScreen = false;
 	visible = true;
+	hideOnClose = false;
 }
 
 bool WindowProperties::IsSharedContext() const
@@ -56,6 +57,73 @@ WindowObject::WindowObject(WindowProperties properties)
 WindowObject::~WindowObject()
 {
 	glfwDestroyWindow(window);
+}
+
+void WindowObject::Show()
+{
+	props.visible = true;
+	glfwShowWindow(window);
+	MakeCurrentContext();
+}
+
+void WindowObject::Hide()
+{
+	props.visible = false;
+	glfwHideWindow(window);
+}
+
+void WindowObject::SetVSync(bool state)
+{
+	#if defined(_WIN32) && !defined(OPENGL_ES)
+	wglSwapIntervalEXT(state);
+	#elif
+	glfwSwapInterval(state);
+	#endif
+}
+
+void WindowObject::Close()
+{
+	props.hideOnClose ? Hide() : glfwSetWindowShouldClose(window, 1);
+}
+
+int WindowObject::ShouldClose() const
+{
+	#ifdef OPENGL_ES
+	if (eglContext) return 0;
+	#endif
+	return glfwWindowShouldClose(window);
+}
+
+void WindowObject::ShowPointer()
+{
+	hiddenPointer = false;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void WindowObject::HidePointer()
+{
+	hiddenPointer = true;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
+void WindowObject::DisablePointer()
+{
+	hiddenPointer = true;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void WindowObject::CenterPointer()
+{
+	props.cursorPos.x = props.resolution.x / 2;
+	props.cursorPos.y = props.resolution.y / 2;
+	glfwSetCursorPos(window, props.cursorPos.x, props.cursorPos.y);
+}
+
+void WindowObject::SetPointerPosition(int mousePosX, int mousePosY)
+{
+	props.cursorPos.x = mousePosX;
+	props.cursorPos.y = mousePosY;
+	glfwSetCursorPos(window, mousePosX, mousePosY);
 }
 
 void WindowObject::PollEvents() const
@@ -133,14 +201,6 @@ void WindowObject::SetWindowCallbacks()
 	glfwSetKeyCallback(window, InputSystem::KeyCallback);
 	glfwSetMouseButtonCallback(window, InputSystem::MouseClick);
 	glfwSetCursorPosCallback(window, InputSystem::CursorMove);
-}
-
-void WindowObject::SetSize(int width, int height)
-{
-	glfwSetWindowSize(window, width, height);
-	props.resolution = glm::ivec2(width, height);
-	props.aspectRatio = float(width) / height;
-	glViewport(0, 0, width, height);
 }
 
 GLFWwindow * WindowObject::GetGLFWWindow() const
@@ -233,45 +293,22 @@ void WindowObject::MakeCurrentContext() const
 	CheckOpenGLError();
 }
 
+void WindowObject::SetSize(int width, int height)
+{
+	glfwSetWindowSize(window, width, height);
+	props.resolution = glm::ivec2(width, height);
+	props.aspectRatio = float(width) / height;
+	glViewport(0, 0, width, height);
+}
+
 glm::ivec2 WindowObject::GetResolution() const
 {
 	return props.resolution;
 }
 
-void WindowObject::ShowPointer()
-{
-	hiddenPointer = false;
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-}
-
-void WindowObject::HidePointer()
-{
-	hiddenPointer = true;
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-}
-
-void WindowObject::DisablePointer()
-{
-	hiddenPointer = true;
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-}
-
 void WindowObject::UseNativeHandles(bool value)
 {
 	useNativeHandles = value;
-}
-
-void WindowObject::Show()
-{
-	props.visible = true;
-	glfwShowWindow(window);
-	MakeCurrentContext();
-}
-
-void WindowObject::Hide()
-{
-	props.visible = false;
-	glfwHideWindow(window);
 }
 
 void WindowObject::SwapBuffers() const
@@ -283,40 +320,4 @@ void WindowObject::SwapBuffers() const
 	#endif
 
 	CheckOpenGLError();
-}
-
-void WindowObject::SetVSync(bool state)
-{
-	#if defined(_WIN32) && !defined(OPENGL_ES)
-		wglSwapIntervalEXT(state);
-	#elif
-		glfwSwapInterval(state);
-	#endif
-}
-
-void WindowObject::Close() const
-{
-	glfwSetWindowShouldClose(window, 1);
-}
-
-int WindowObject::ShouldClose() const
-{
-#ifdef OPENGL_ES
-	if (eglContext) return 0;
-#endif
-	return glfwWindowShouldClose(window);
-}
-
-void WindowObject::CenterPointer()
-{
-	props.cursorPos.x = props.resolution.x / 2;
-	props.cursorPos.y = props.resolution.y / 2;
-	glfwSetCursorPos(window, props.cursorPos.x, props.cursorPos.y);
-}
-
-void WindowObject::SetPointerPosition(int mousePosX, int mousePosY)
-{
-	props.cursorPos.x = mousePosX;
-	props.cursorPos.y = mousePosY;
-	glfwSetCursorPos(window, mousePosX, mousePosY);
 }
