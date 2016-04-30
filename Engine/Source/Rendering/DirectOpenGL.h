@@ -18,6 +18,7 @@ class DLLExport DirectOpenGL
 		void Init();
 
 		void Use(Shader *shader = nullptr);
+		Shader * GetActiveShader() const;
 		void SetLineWidth(float width) const;
 		void SetDrawColor(uchar red, uchar green, uchar blue) const;
 		void SetDrawColor(uint shaderLocation, uchar red, uchar green, uchar blue) const;

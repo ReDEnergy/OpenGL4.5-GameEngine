@@ -78,7 +78,7 @@ void PointLight::CastShadows()
 		camera->BindViewMatrix(VSM->loc_view_matrix);
 		camera->BindProjectionMatrix(VSM->loc_projection_matrix);
 
-		for (auto *obj : Manager::Scene->GetActiveObjects()) {
+		for (auto *obj : Manager::Scene->GetSceneObjects()) {
 			if (obj->renderer->CastShadow())
 				obj->Render(VSM);
 		}

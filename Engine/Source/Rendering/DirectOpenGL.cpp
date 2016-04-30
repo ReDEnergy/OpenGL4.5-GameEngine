@@ -51,6 +51,11 @@ void DirectOpenGL::Use(Shader * shader)
 	activeShader->Use();
 }
 
+Shader * DirectOpenGL::GetActiveShader() const
+{
+	return activeShader;
+}
+
 void DirectOpenGL::SetLineWidth(float width) const
 {
 	glLineWidth(width);

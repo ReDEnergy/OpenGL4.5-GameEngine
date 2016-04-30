@@ -55,7 +55,7 @@ void SceneManager::LoadScene(const char *fileName)
 	sceneFile = fileName;
 
 	frustumObjects.clear();
-	activeObjects.clear();
+	sceneObjects.clear();
 	lights.clear();
 	toRemove.clear();
 
@@ -136,7 +136,7 @@ void SceneManager::Update()
 	if (shouldAdd || shouldRemove) {
 		if (shouldAdd) {
 			for (auto obj: toAdd) {
-				activeObjects.push_back(obj);
+				sceneObjects.push_back(obj);
 				obj->SetDebugView(true);
 			}
 			toAdd.clear();
@@ -149,7 +149,7 @@ void SceneManager::Update()
 					obj->SetParent(nullptr);
 				}
 				else {
-					activeObjects.remove(obj);
+					sceneObjects.remove(obj);
 				}
 			}
 			toRemove.clear();
@@ -161,7 +161,7 @@ void SceneManager::Update()
 	}
 	toDelete.clear();
 
-	for (auto obj : activeObjects) {
+	for (auto obj : sceneObjects) {
 		obj->Update();
 	}
 
@@ -206,7 +206,7 @@ void SceneManager::RemoveObject(GameObject * obj, bool destroy)
 
 void SceneManager::FrameEnded()
 {
-	for (auto obj : activeObjects) {
+	for (auto obj : sceneObjects) {
 		obj->transform->ClearMotionState();
 	}
 
@@ -215,7 +215,7 @@ void SceneManager::FrameEnded()
 
 GameObject* SceneManager::GetGameObject(char *refID, unsigned int instanceID)
 {
-	for (auto obj : activeObjects) {
+	for (auto obj : sceneObjects) {
 		if (obj->instanceID == instanceID &&
 			strcmp(obj->referenceName, refID) == 0)
 			return obj;
@@ -223,9 +223,9 @@ GameObject* SceneManager::GetGameObject(char *refID, unsigned int instanceID)
 	return nullptr;
 }
 
-const list<GameObject*>& SceneManager::GetActiveObjects() const
+const list<GameObject*>& SceneManager::GetSceneObjects() const
 {
-	return activeObjects;
+	return sceneObjects;
 }
 
 const list<GameObject*>& SceneManager::GetFrustrumObjects() const
@@ -306,12 +306,21 @@ void SceneManager::Render(Camera * camera)
 			}
 		}
 	}
+
+	for (auto &callback : postRenderCallbacks) {
+		callback(*camera);
+	}
+}
+
+void SceneManager::OnPostRender(std::function<void(Camera &camera)> callback)
+{
+	postRenderCallbacks.push_back(callback);
 }
 
 void SceneManager::FrustumCulling(Camera *camera)
 {
 	frustumObjects.clear();
-	for (auto obj: activeObjects) {
+	for (auto obj: sceneObjects) {
 		if (camera->ColidesWith(obj))
 			frustumObjects.push_back(obj);
 	}
@@ -326,7 +335,7 @@ void SceneManager::LightSpaceCulling(Camera * camera, DirectionalLight * light)
 		//camera->UpdateBoundingBox(light);
 	}
 
-	for (auto obj : activeObjects) {
+	for (auto obj : sceneObjects) {
 		if (obj->aabb && (sunMotion || obj->transform->GetMotionState())) {
 			obj->aabb->Update(light->transform->GetWorldRotation());
 		}

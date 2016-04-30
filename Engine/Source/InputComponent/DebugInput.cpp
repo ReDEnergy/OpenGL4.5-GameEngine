@@ -29,7 +29,7 @@ void DebugInput::OnKeyPress(int key, int mods) {
 				return;
 
 			case GLFW_KEY_I:
-				printf("\n\nActive objects: %u\n\n", static_cast<unsigned int>(Manager::Scene->GetActiveObjects().size()));
+				printf("\n\nActive objects: %u\n\n", static_cast<unsigned int>(Manager::Scene->GetSceneObjects().size()));
 				return;
 
 			case GLFW_KEY_V:

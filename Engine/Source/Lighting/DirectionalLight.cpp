@@ -46,7 +46,8 @@ void DirectionalLight::Init()
 	diffuseColor = glm::vec3(0.90f, 0.63f, 0.13f);
 }
 
-void DirectionalLight::Update() {
+void DirectionalLight::Update()
+{
 	Camera::Update();
 	if (csmFrustum)
 		csmFrustum->Update(this);

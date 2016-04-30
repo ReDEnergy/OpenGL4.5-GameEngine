@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <vector>
+#include <functional>
 
 #include <include/dll_export.h>
 #include <include/pugixml.h>
@@ -34,7 +35,7 @@ class DLLExport SceneManager
 		void FrameEnded();
 
 		GameObject* GetGameObject(char *refID, unsigned int instanceID);
-		const std::list<GameObject*>& GetActiveObjects() const;
+		const std::list<GameObject*>& GetSceneObjects() const;
 		const std::list<GameObject*>& GetFrustrumObjects() const;
 		const std::vector<PointLight*>& GetPointLights() const;
 
@@ -42,6 +43,7 @@ class DLLExport SceneManager
 		void SetActiveCamera(Camera *camera);
 
 		void Render(Camera *camera);
+		void OnPostRender(std::function<void(Camera& camera)> callback);
 
 	private:
 		Shader *R2T;
@@ -54,7 +56,9 @@ class DLLExport SceneManager
 		Camera *activeCamera;
 
 		std::vector<PointLight*> lights;
-		std::list<GameObject*> activeObjects;
+		std::list<GameObject*> sceneObjects;
 		std::list<GameObject*> frustumObjects;
 
+
+		std::list<std::function<void(Camera& camera)>> postRenderCallbacks;
 };
