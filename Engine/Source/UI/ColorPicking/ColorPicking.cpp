@@ -191,7 +191,7 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 
 		case GIZMO_EVENT::ROTATE:
 		{
-			glm::vec3 rotation_vector = currentAxis * glm::vec3(deltaX - deltaY);
+			glm::vec3 rotation_vector = currentAxis * glm::vec3(static_cast<float>(deltaX - deltaY));
 			auto speed = selectedObject->transform->GetRotationSpeed();
 			selectedObject->transform->SetRotationSpeed(0.3f);
 			if (rotateMode == GIZMO_EVENT::ROTATE_WORLD)
@@ -212,7 +212,7 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 		case GIZMO_EVENT::SCALE:
 		{
 			selectedObject->transform->SetScale(selectedObject->transform->GetScale() + currentAxis *
-				glm::vec3(deltaX - deltaY) / glm::vec3(200.0f));
+				glm::vec3(static_cast<float>(deltaX - deltaY)) / glm::vec3(200.0f));
 			break;
 		}
 		default:
@@ -248,7 +248,7 @@ void ColorPicking::OnKeyPress(int key, int mod)
 			cout << "[name]: " << selectedObject->GetName() << endl;
 			cout << "[world pos]: " << selectedObject->transform->GetWorldPosition() << endl;
 			cout << "[local pos]: " << selectedObject->transform->GetLocalPosition() << endl;
-			cout << "[world euler]: " << selectedObject->transform->GetRotationEuler() * TO_DEGREES << endl;
+			cout << "[world euler]: " << selectedObject->transform->GetRotationEulerRad() * TO_DEGREES << endl;
 			cout << "[local quat]: " << selectedObject->transform->GetRelativeRotation() << endl;
 			cout << "[world quat]: " << selectedObject->transform->GetWorldRotation() << endl;
 			cout << "[scale]: " << selectedObject->transform->GetScale() << endl;
@@ -281,7 +281,7 @@ void ColorPicking::OnKeyPress(int key, int mod)
 		}
 		case GLFW_KEY_E: {
 			GEVENT = GIZMO_EVENT::ROTATE;
-			cout << "[world euler]: " << selectedObject->transform->GetRotationEuler() * TO_DEGREES << endl;
+			cout << "[world euler]: " << selectedObject->transform->GetRotationEulerRad() * TO_DEGREES << endl;
 			cout << "[local quat]: " << selectedObject->transform->GetRelativeRotation() << endl;
 			cout << "[world quat]: " << selectedObject->transform->GetWorldRotation() << endl;
 			cout << endl;
@@ -356,6 +356,7 @@ void ColorPicking::SetSelectedObject(GameObject * object)
 {
 	if (object)
 		object->OnSelect();
+
 	Manager::Event->EmitAsync(EventType::EDITOR_OBJECT_SELECTED, object);
 
 	if (selectedObject == object) {
@@ -515,7 +516,7 @@ void ColorPicking::DrawSceneForPicking() const
 	glDisable(GL_DEPTH_TEST);
 	cpShader->Use();
 
-	for (auto obj : Manager::Scene->GetActiveObjects()) {
+	for (auto obj : Manager::Scene->GetSceneObjects()) {
 		if (obj->renderer->GetRenderingLayer() == RenderingLayer::ON_TOP)
 			obj->RenderForPicking(cpShader);
 	}

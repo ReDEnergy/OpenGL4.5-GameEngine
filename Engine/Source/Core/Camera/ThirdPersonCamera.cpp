@@ -60,7 +60,7 @@ void ThirdPersonCamera::SwitchView(CameraType cameraType)
 	if (type == CameraType::ThirdPerson) {
 		type = CameraType::FirstPerson;
 		transform->SetWorldPosition(transform->GetWorldPosition() - transform->GetLocalOZVector() * targetDist);
-		UpdatePitch(-transform->GetRotationEuler().x);
+		UpdatePitch(-transform->GetRotationEulerRad().x);
 		return;
 	}
 }

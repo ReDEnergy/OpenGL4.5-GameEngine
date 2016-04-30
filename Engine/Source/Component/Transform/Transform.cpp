@@ -120,14 +120,14 @@ glm::quat Transform::GetRelativeRotation() const
 	return _relativeRotation;
 }
 
-glm::vec3 Transform::GetRotationEuler() const
+glm::vec3 Transform::GetRotationEulerRad() const
 {
-	return glm::eulerAngles(_worldRotation) * TO_RADIANS;
+	return glm::eulerAngles(_worldRotation);
 }
 
 glm::vec3 Transform::GetRotationEuler360() const
 {
-	return glm::eulerAngles(_worldRotation);
+	return glm::eulerAngles(_worldRotation) * TO_DEGREES;
 }
 
 glm::vec3 Transform::GetScale() const

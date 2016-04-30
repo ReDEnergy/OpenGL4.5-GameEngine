@@ -30,7 +30,7 @@ class DLLExport Transform: virtual public Object
 		virtual glm::vec3 GetWorldPosition() const;
 		virtual glm::quat GetWorldRotation() const;
 		virtual glm::quat GetRelativeRotation() const;
-		virtual glm::vec3 GetRotationEuler() const;
+		virtual glm::vec3 GetRotationEulerRad() const;
 		virtual glm::vec3 GetRotationEuler360() const;
 
 		virtual glm::vec3 GetLocalOYVector() const;

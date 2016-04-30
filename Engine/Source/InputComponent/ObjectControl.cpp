@@ -41,7 +41,7 @@ void ObjectControl::OnKeyPress(int key, int mods)
 			return;
 		case GLFW_KEY_KP_3:
 			cout << "position" << transform->GetWorldPosition() << endl;
-			cout << "rotation" << transform->GetRotationEuler() << endl;
+			cout << "rotation" << transform->GetRotationEulerRad() << endl;
 			cout << "scale" << transform->GetScale() << endl;
 			return;
 	}

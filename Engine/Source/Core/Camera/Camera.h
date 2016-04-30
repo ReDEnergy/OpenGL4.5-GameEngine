@@ -17,7 +17,7 @@ class FrustumSplit;
 
 struct ProjectionInfo
 {
-	float FoV;
+	float FoVy;
 	float zNear;
 	float zFar;
 	float aspectRatio;
@@ -59,6 +59,7 @@ class DLLExport Camera: virtual public GameObject {
 		void MoveInDirection(glm::vec3 direction, float deltaTime);
 
 		// Bind shader uniforms
+		void BindMVP(const Shader *shader) const;
 		void BindPosition(int location) const;
 		void BindViewMatrix(int location) const;
 		void BindProjectionMatrix(int location) const;
@@ -66,10 +67,12 @@ class DLLExport Camera: virtual public GameObject {
 
 		void RenderDebug(const Shader *shader) const;
 
-		void SetPerspective(float FOV, float aspectRatio, float zNear, float zFar);
+		void SetPerspective(float FoVy, float aspectRatio, float zNear, float zFar);
 		void SetOrthgraphic(float width, float height, float zNear, float zFar);
 		void SetProjection(const ProjectionInfo &PI);
 		ProjectionInfo GetProjectionInfo() const;
+		float GetFieldOfViewY() const;
+		float GetFieldOfViewX() const;
 
 		bool ColidesWith(GameObject *object);
 
@@ -104,7 +107,7 @@ class DLLExport Camera: virtual public GameObject {
 		// Perspective properties
 		float zNear;
 		float zFar;
-		float FOV;
+		float FoVy;
 		float aspectRatio;
 		bool isPerspective;
 		float ortographicWidth;

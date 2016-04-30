@@ -4,11 +4,6 @@
 
 #include <sstream>
 
-// TODO
-//#define CONCAT_I(a,b) a##b
-//#define CONCAT(a,b) CONCAT_I(a, b)
-//#define SEND_UNIFORM(TYPE) glUniform3##TYPE
-
 typedef unsigned char uchar;
 
 namespace glm
@@ -84,7 +79,7 @@ namespace glm
 
 	template<class T>
 	istream& operator>>(istream& is, T& vec) {
-		unsigned int i = 0;
+		int i = 0;
 		for (; i < vec.length(); ++i) {
 			is >> vec[i];
 			if (!is) {
@@ -159,4 +154,45 @@ inline std::ostream &operator<< (std::ostream &out, const glm::vec4 &vec) {
 inline std::ostream &operator<< (std::ostream &out, const glm::quat &rot) {
 	out << "[" << rot.x << " " << rot.y << " " << rot.z << " " << rot.w << "]";
 	return out;
+}
+
+/**
+** overload ostream operator >> for easy reading glm values
+*/
+
+static char skipChar;
+
+inline std::istream &operator>> (std::istream &in, glm::ivec2 &vec) {
+	in >> skipChar >> vec.x >> vec.y >> skipChar;
+	return in;
+}
+
+inline std::istream &operator>> (std::istream &in, glm::vec2 &vec) {
+	in >> skipChar >> vec.x >> vec.y >> skipChar;
+	return in;
+}
+
+inline std::istream &operator>> (std::istream &in, glm::ivec3 &vec) {
+	in >> skipChar >> vec.x >> vec.y >> vec.z >> skipChar;
+	return in;
+}
+
+inline std::istream &operator>> (std::istream &in, glm::vec3 &vec) {
+	in >> skipChar >> vec.x >> vec.y >> vec.z >> skipChar;
+	return in;
+}
+
+inline std::istream &operator>> (std::istream &in, glm::ivec4 &vec) {
+	in >> skipChar >> vec.x >> vec.y >> vec.z >> vec.w >> skipChar;
+	return in;
+}
+
+inline std::istream &operator>> (std::istream &in, glm::vec4 &vec) {
+	in >> skipChar >> vec.x >> vec.y >> vec.z >> vec.w >> skipChar;
+	return in;
+}
+
+inline std::istream &operator>> (std::istream &in, glm::quat &rot) {
+	in >> skipChar >> rot.x >> rot.y >> rot.z >> rot.w >> skipChar;
+	return in;
 }

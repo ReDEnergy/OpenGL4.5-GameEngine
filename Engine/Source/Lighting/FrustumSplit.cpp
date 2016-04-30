@@ -102,7 +102,7 @@ void FrustumSplit::SplitFrustrum()
 	splitDistances[0] = PI.zNear;
 	vector<glm::vec3> planes;
 
-	auto points = Utils3D::GetPerspectiveSection(splitDistances[0], PI.FoV, PI.aspectRatio);
+	auto points = Utils3D::GetPerspectiveSection(splitDistances[0], PI.FoVy, PI.aspectRatio);
 	for (auto point : points)
 		planes.push_back(point);
 
@@ -111,7 +111,7 @@ void FrustumSplit::SplitFrustrum()
 
 	for (unsigned int i = 1; i <= nrFrustumSections; i++) {
 		splitDistances[i] = (float)pow(M_E, ((i * scale) / nrFrustumSections)) + PI.zNear;
-		auto points = Utils3D::GetPerspectiveSection(splitDistances[i], PI.FoV, PI.aspectRatio);
+		auto points = Utils3D::GetPerspectiveSection(splitDistances[i], PI.FoVy, PI.aspectRatio);
 		for (auto point : points)
 			planes.push_back(point);
 	}

@@ -62,7 +62,7 @@ void SpotLight::Update()
 	Camera::Update();
 	//if (splits > 1) {
 	//	for (unsigned int i = 0; i < splits; i++) {
-	//		lightProjections[i] = glm::perspective(FOV, aspectRatio, splitDistances[i], splitDistances[i + 1]);
+	//		lightProjections[i] = glm::perspective(FoVy, aspectRatio, splitDistances[i], splitDistances[i + 1]);
 	//		lightViews[i] = View;
 	//	}
 	//}
@@ -83,7 +83,7 @@ void SpotLight::CastShadows()
 	BindViewMatrix(CSHM->loc_view_matrix);
 	BindProjectionMatrix(CSHM->loc_projection_matrix);
 
-	for (auto *obj : Manager::Scene->GetActiveObjects()) {
+	for (auto *obj : Manager::Scene->GetSceneObjects()) {
 		if (obj->renderer->CastShadow())
 			obj->Render(CSHM);
 	}

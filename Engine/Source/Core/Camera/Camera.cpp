@@ -43,7 +43,7 @@ void Camera::Init()
 	// Default perspective
 	zNear = 0.01f;
 	zFar = 50;
-	FOV = 40;
+	FoVy = 40;
 	aspectRatio = 1.6f;
 
 	// not used for now
@@ -73,7 +73,8 @@ void Camera::Update()
 	if (transform->GetMotionState())
 	{
 		glm::vec3 target = transform->GetWorldPosition() - transform->GetLocalOZVector();
-		View = glm::lookAt(transform->GetWorldPosition(), target, transform->GetLocalOYVector());
+		auto up = transform->GetLocalOYVector();
+		View = glm::lookAt(transform->GetWorldPosition(), target, up);
 	}
 }
 
@@ -179,11 +180,18 @@ void Camera::Log() const
 {
 	cout.precision(2);
 	cout << "Camera =>" << endl;
-	cout << "Rotation: " << transform->GetRotationEuler() << endl;
+	cout << "Rotation: " << transform->GetRotationEulerRad() << endl;
 	cout << "Position: " << transform->GetWorldPosition() << endl;
 	cout << "Forward : " << -transform->GetLocalOZVector() << endl;
 	cout << "Up      : " << transform->GetLocalOYVector() << endl;
 	cout << "--------------------------------------------------" << endl;
+}
+
+void Camera::BindMVP(const Shader * shader) const
+{
+	BindPosition(shader->loc_eye_pos);
+	BindViewMatrix(shader->loc_view_matrix);
+	BindProjectionMatrix(shader->loc_projection_matrix);
 }
 
 void Camera::BindPosition(int location) const
@@ -205,14 +213,14 @@ void Camera::BindProjectionMatrix(int location) const
 ///////////////////////////////////////////////////////////////////////////////
 // Frustum methods
 
-void Camera::SetPerspective(float FOV, float aspectRatio, float zNear, float zFar)
+void Camera::SetPerspective(float FoVy, float aspectRatio, float zNear, float zFar)
 {
 	isPerspective = true;
 	this->zFar = zFar;
 	this->zNear = zNear;
 	this->aspectRatio = aspectRatio;
-	this->FOV = FOV;
-	Projection = glm::perspective(FOV, aspectRatio, zNear, zFar);
+	this->FoVy = FoVy;
+	Projection = glm::perspective(RADIANS(FoVy), aspectRatio, zNear, zFar);
 	ComputeFrustum();
 }
 
@@ -229,7 +237,7 @@ void Camera::SetOrthgraphic(float width, float height, float zNear, float zFar)
 void Camera::SetProjection(const ProjectionInfo & PI)
 {
 	if (PI.isPerspective) {
-		SetPerspective(PI.FoV, PI.aspectRatio, PI.zNear, PI.zFar);
+		SetPerspective(PI.FoVy, PI.aspectRatio, PI.zNear, PI.zFar);
 	}
 	else {
 		SetOrthgraphic(PI.width, PI.height, PI.zNear, PI.zFar);
@@ -239,7 +247,7 @@ void Camera::SetProjection(const ProjectionInfo & PI)
 ProjectionInfo Camera::GetProjectionInfo() const
 {
 	ProjectionInfo P;
-	P.FoV = FOV;
+	P.FoVy = FoVy;
 	P.aspectRatio = aspectRatio;
 	P.zFar = zFar;
 	P.zNear = zNear;
@@ -247,6 +255,16 @@ ProjectionInfo Camera::GetProjectionInfo() const
 	P.width = ortographicWidth;
 	P.height = ortographicWidth / aspectRatio;
 	return P;
+}
+
+float Camera::GetFieldOfViewY() const
+{
+	return FoVy;
+}
+
+float Camera::GetFieldOfViewX() const
+{
+	return FoVy * aspectRatio;
 }
 
 bool Camera::ColidesWith(GameObject * object)
@@ -274,8 +292,8 @@ void Camera::ComputeFrustum()
 		Utils3D::PushQuadTriangle(fmesh->indices, 4, 0, 3, 7);
 		Utils3D::PushQuadTriangle(fmesh->indices, 5, 6, 2, 1);
 
-		fmesh->positions = Utils3D::GetPerspectiveSection(zNear, FOV, aspectRatio);
-		auto points = Utils3D::GetPerspectiveSection(zFar, FOV, aspectRatio);
+		fmesh->positions = Utils3D::GetPerspectiveSection(zNear, FoVy, aspectRatio);
+		auto points = Utils3D::GetPerspectiveSection(zFar, FoVy, aspectRatio);
 		for (auto point : points) {
 			fmesh->positions.push_back(point);
 		}
@@ -284,8 +302,8 @@ void Camera::ComputeFrustum()
 	}
 	else {
 		auto fmesh = frustum->GetMesh();
-		fmesh->positions = Utils3D::GetPerspectiveSection(zNear, FOV, aspectRatio);
-		auto points = Utils3D::GetPerspectiveSection(zFar, FOV, aspectRatio);
+		fmesh->positions = Utils3D::GetPerspectiveSection(zNear, FoVy, aspectRatio);
+		auto points = Utils3D::GetPerspectiveSection(zFar, FoVy, aspectRatio);
 		for (auto point : points) {
 			fmesh->positions.push_back(point);
 		}
