@@ -67,8 +67,8 @@ void Manager::Init()
 	WindowManager::Init();
 
 	// Init Managers
-	Config		= Singleton<ConfigFile>::Instance();
-	RenderSys	= Singleton<RenderingSystem>::Instance();
+	Config		= SINGLETON(ConfigFile);
+	RenderSys	= SINGLETON(RenderingSystem);
 	RenderSys->Init();
 
 	// Load configuration
@@ -76,27 +76,27 @@ void Manager::Init()
 	Engine::Window = new WindowObject(*(Config->windowProperties));
 
 	// Init Managers
-	Debug		= Singleton<DebugInfo>::Instance();
-	DebugText	= Singleton<DebugOverlayText>::Instance();
+	Debug		= SINGLETON(DebugInfo);
+	DebugText	= SINGLETON(DebugOverlayText);
 	
-	Audio		= Singleton<AudioManager>::Instance();
-	Event		= Singleton<EventSystem>::Instance();
-	Color		= Singleton<ColorManager>::Instance();
-	Picker		= Singleton<ColorPicking>::Instance();
-	Font		= Singleton<FontManager>::Instance();
-	TextureDBG	= Singleton<TextureDebugger>::Instance();
-	DirectGL	= Singleton<DirectOpenGL>::Instance();
-	Texture		= Singleton<TextureManager>::Instance();
+	Audio		= SINGLETON(AudioManager);
+	Event		= SINGLETON(EventSystem);
+	Color		= SINGLETON(ColorManager);
+	Picker		= SINGLETON(ColorPicking);
+	Font		= SINGLETON(FontManager);
+	TextureDBG	= SINGLETON(TextureDebugger);
+	DirectGL	= SINGLETON(DirectOpenGL);
+	Texture		= SINGLETON(TextureManager);
 
 #ifdef PHYSICS_ENGINE
-	Havok = Singleton<HavokCore>::Instance();
-	Physics = Singleton<PhysicsManager>::Instance();
+	Havok = SINGLETON(HavokCore);
+	Physics = SINGLETON(PhysicsManager);
 #endif
 
-	Resource	= Singleton<ResourceManager>::Instance();
-	Shader		= Singleton<ShaderManager>::Instance();
-	Scene		= Singleton<SceneManager>::Instance();
-	Menu		= Singleton<MenuSystem>::Instance();
+	Resource	= SINGLETON(ResourceManager);
+	Shader		= SINGLETON(ShaderManager);
+	Scene		= SINGLETON(SceneManager);
+	Menu		= SINGLETON(MenuSystem);
 
 	CheckOpenGLError();
 
