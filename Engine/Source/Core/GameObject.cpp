@@ -58,6 +58,7 @@ GameObject::GameObject(const char *referenceObject)
 GameObject::GameObject(const GameObject &obj)
 {
 	Clear();
+	name			= obj.name;
 	referenceName	= obj.referenceName;
 	shader			= obj.shader;
 	input			= obj.input;
@@ -118,6 +119,7 @@ void GameObject::Init()
 	{
 		animation = new AnimationController();
 		animation->Setup((SkinnedMesh*)meshRenderer->mesh);
+		animation->SetAnimation((uint)0);
 	}
 }
 
@@ -340,7 +342,7 @@ void GameObject::SetAudioSource(AudioSource *source)
 
 void GameObject::SetName(const char * name)
 {
-	this->name = string(name);
+	this->name = name;
 }
 
 const char* GameObject::GetName() const
