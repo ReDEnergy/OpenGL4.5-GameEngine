@@ -33,6 +33,8 @@ class DLLExport AnimationController
 		bool TogglePlayback();
 		float GetAnimationTime() const;
 
+		const std::unordered_map<std::string, SkeletalJoint*>& GetJointsList() const;
+
 	private:
 		void InitControlSkeleton();
 

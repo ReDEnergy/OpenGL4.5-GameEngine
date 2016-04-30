@@ -128,6 +128,11 @@ float AnimationController::GetAnimationTime() const
 	return animationTime;
 }
 
+const std::unordered_map<std::string, SkeletalJoint*>& AnimationController::GetJointsList() const
+{
+	return skeletalJoints;
+}
+
 void AnimationController::UpdateGPUData()
 {
 	for (auto &bone : skeletalJoints) {
