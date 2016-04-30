@@ -34,7 +34,10 @@ class DLLExport SceneManager
 
 		void FrameEnded();
 
-		GameObject* GetGameObject(char *refID, unsigned int instanceID);
+		// Very expensive if the scene is big
+		// It should be called rearely and the output should be cached
+		GameObject* GetGameObject(char *objectName) const;
+
 		const std::list<GameObject*>& GetSceneObjects() const;
 		const std::list<GameObject*>& GetFrustrumObjects() const;
 		const std::vector<PointLight*>& GetPointLights() const;
@@ -58,7 +61,6 @@ class DLLExport SceneManager
 		std::vector<PointLight*> lights;
 		std::list<GameObject*> sceneObjects;
 		std::list<GameObject*> frustumObjects;
-
 
 		std::list<std::function<void(Camera& camera)>> postRenderCallbacks;
 };

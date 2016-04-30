@@ -213,11 +213,10 @@ void SceneManager::FrameEnded()
 	activeCamera->transform->ClearMotionState();
 }
 
-GameObject* SceneManager::GetGameObject(char *refID, unsigned int instanceID)
+GameObject * SceneManager::GetGameObject(char * objectName) const
 {
 	for (auto obj : sceneObjects) {
-		if (obj->instanceID == instanceID &&
-			strcmp(obj->referenceName, refID) == 0)
+		if (obj->name.compare(objectName) == 0)
 			return obj;
 	}
 	return nullptr;
