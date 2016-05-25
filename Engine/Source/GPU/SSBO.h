@@ -5,6 +5,11 @@
 #include <include/gl.h>
 #include <string>
 
+#ifdef CLEAR_USING_COMPUTE_SHADER
+	#include <Manager/Manager.h>
+	#include <Manager/ShaderManager.h>
+#endif
+
 template <class StorageEntry>
 class SSBO
 {
@@ -35,6 +40,13 @@ class SSBO
 		{
 			Bind();
 			glBufferData(GL_SHADER_STORAGE_BUFFER, memorySize, data, GL_DYNAMIC_DRAW);
+			Unbind();
+		}
+
+		void SetBufferSubData(const StorageEntry *data, int offset, int size)
+		{
+			Bind();
+			glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size * sizeof(StorageEntry), data);
 			Unbind();
 		}
 
@@ -69,7 +81,7 @@ class SSBO
 			// Clear Buffer Object using a compute shader
 			// Reason: Intel HD4000 OpenGL glClearBufferdata (Surface PRO) will crash the program
 			// Observation: It might be faster using a compute shader (tested on: AMD R9 280x and Intel HD 4000)
-			#ifdef CLEAR_USING_COMPUTE_SHADER 
+			#ifdef CLEAR_USING_COMPUTE_SHADER
 			{
 				Shader *S = Manager::GetShader()->GetShader("ClearBuffer");
 				S->Use();
