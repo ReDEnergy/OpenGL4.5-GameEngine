@@ -22,10 +22,8 @@ Mesh::Mesh(const char* meshID)
 		this->meshID.assign(meshID);
 	meshType = MESH_TYPE::STATIC;
 	useMaterial = true;
-	debugColor = glm::vec4(1);
 	glDrawMode = GL_TRIANGLES;
 	buffers = new GPUBuffers();
-	bbox = nullptr;
 }
 
 Mesh::~Mesh() {
@@ -87,8 +85,7 @@ bool Mesh::InitFromData()
 		*buffers = UtilsGPU::UploadData(positions, normals, indices);
 	}
 
-	SAFE_FREE(bbox);
-	bbox = new BoundingBox(positions);
+	ComputeBoundingBox();
 
 	return buffers->VAO != 0;
 }
@@ -171,7 +168,7 @@ void Mesh::InitMesh(const aiMesh* paiMesh)
 			indices.push_back(Face.mIndices[3]);
 	}
 
-	bbox = new BoundingBox(positions);
+	ComputeBoundingBox();
 }
 
 bool Mesh::InitMaterials(const aiScene* pScene)
@@ -225,49 +222,33 @@ const char * Mesh::GetMeshID() const
 	return meshID.c_str();
 }
 
-BoundingBox::BoundingBox(vector<glm::vec3> &positions)
+glm::vec3 Mesh::GetCenterPoint() const
+{
+	return meshCenter;
+}
+
+glm::vec3 Mesh::GetHalfSize() const
+{
+	return halfSize;
+}
+
+void Mesh::ComputeBoundingBox()
 {
 	glm::vec3 maxValue = positions[0];
 	glm::vec3 minValue = positions[0];
 
 	for (auto point : positions) {
 		// find max
-		if (point.x > maxValue.x)
-			maxValue.x = point.x;
-		if (point.y > maxValue.y)
-			maxValue.y = point.y;
-		if (point.z > maxValue.z)
-			maxValue.z = point.z;
+		if (point.x > maxValue.x)	maxValue.x = point.x;
+		if (point.y > maxValue.y)	maxValue.y = point.y;
+		if (point.z > maxValue.z)	maxValue.z = point.z;
 
 		// find min
-		if (point.x < minValue.x)
-			minValue.x = point.x;
-		if (point.y < minValue.y)
-			minValue.y = point.y;
-		if (point.z < minValue.z)
-			minValue.z = point.z;
+		if (point.x < minValue.x)	minValue.x = point.x;
+		if (point.y < minValue.y)	minValue.y = point.y;
+		if (point.z < minValue.z)	minValue.z = point.z;
 	}
 
-	glm::vec3 halfSize = (maxValue - minValue) / 2.0f;
-	glm::vec3 center = (maxValue + minValue) / 2.0f;
-
-	points.push_back(center + halfSize * glm::vec3( 1,  1,  1));
-	points.push_back(center + halfSize * glm::vec3( 1,  1, -1));
-	points.push_back(center + halfSize * glm::vec3( 1, -1,  1));
-	points.push_back(center + halfSize * glm::vec3( 1, -1, -1));
-
-	points.push_back(center + halfSize * glm::vec3(-1,  1,  1));
-	points.push_back(center + halfSize * glm::vec3(-1,  1, -1));
-	points.push_back(center + halfSize * glm::vec3(-1, -1,  1));
-	points.push_back(center + halfSize * glm::vec3(-1, -1, -1));
-
+	halfSize = (maxValue - minValue) / 2.0f;
+	meshCenter = (maxValue + minValue) / 2.0f;
 }
-
-// Code for rendering mesh BBOX (needs mesh transform info)
-//BoundingBox::Render(glm::quat rotationQ) {
-	//auto q = obj->transform->rotationQ;
-	//glm::vec3 newCenter = glm::rotate(q, center) * obj->transform->scale;
-	//transform->SetScale(halfSize * obj->transform->scale * 2.0f);
-	//transform->SetPosition(newCenter + obj->transform->position);
-	//transform->SetRotation(q);
-//}

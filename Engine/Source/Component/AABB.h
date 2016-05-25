@@ -19,7 +19,9 @@ class DLLExport AABB
 
 		static void Init();
 		void Render(const Shader *shader) const;
+		void RenderObjectBoundingBox(const Shader * shader) const;
 		void Update(glm::quat rotationQ = glm::quat(1.0f, 0, 0, 0));
+		void ComputeLocal();
 		bool Overlaps(AABB *aabb);
 
 	private:

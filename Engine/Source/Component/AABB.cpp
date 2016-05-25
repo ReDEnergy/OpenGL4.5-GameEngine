@@ -1,5 +1,7 @@
 #include "AABB.h"
 
+#include <vector>
+
 #include <include/gl_utils.h>
 #include <include/glm_utils.h>
 
@@ -13,7 +15,33 @@
 #include <Manager/ResourceManager.h>
 #include <Utils/3D.h>
 
+using namespace std;
+
 static GameObject* box = nullptr;
+
+vector<glm::vec3> BBOX =
+{
+	glm::vec3( 1,  1,  1),
+	glm::vec3( 1,  1, -1),
+	glm::vec3( 1, -1,  1),
+	glm::vec3( 1, -1, -1),
+
+	glm::vec3(-1,  1,  1),
+	glm::vec3(-1,  1, -1),
+	glm::vec3(-1, -1,  1),
+	glm::vec3(-1, -1, -1)
+};
+
+inline void GetBoundingLimits(const glm::vec3 &point, glm::vec3 &limitMin, glm::vec3 &limitMax)
+{
+	if (point.x > limitMax.x)	limitMax.x = point.x;
+	if (point.y > limitMax.y)	limitMax.y = point.y;
+	if (point.z > limitMax.z)	limitMax.z = point.z;
+
+	if (point.x < limitMin.x)	limitMin.x = point.x;
+	if (point.y < limitMin.y)	limitMin.y = point.y;
+	if (point.z < limitMin.z)	limitMin.z = point.z;
+}
 
 AABB::AABB(GameObject *obj)
 	: gameObj(obj)
@@ -67,46 +95,57 @@ void AABB::UpdateChildren(const glm::quat & rotationQ)
 
 void AABB::Update(glm::quat rotationQ)
 {
-	auto q = glm::inverse(rotationQ) * gameObj->transform->GetWorldRotation();
+	auto rotation = gameObj->transform->GetWorldRotation();
+	auto position = gameObj->transform->GetWorldPosition();
+	auto scale = gameObj->transform->GetScale();
+
 	auto mesh = gameObj->meshRenderer->mesh;
 
-	glm::vec3 minValue, maxValue = glm::rotate(q, mesh->bbox->points[0]);
+	auto objHalfSize = mesh->GetHalfSize() * scale;
+	auto meshCenter = mesh->GetCenterPoint();
 
-	for (auto point: mesh->bbox->points) {
+	auto q = glm::inverse(rotationQ) * rotation;
 
-		point = glm::rotate(q, point);
-
-		// find max
-		if (point.x > maxValue.x)
-			maxValue.x = point.x;
-		if (point.y > maxValue.y)
-			maxValue.y = point.y;
-		if (point.z > maxValue.z)
-			maxValue.z = point.z;
-
-		// find min
-		if (point.x < minValue.x)
-			minValue.x = point.x;
-		if (point.y < minValue.y)
-			minValue.y = point.y;
-		if (point.z < minValue.z)
-			minValue.z = point.z;
+	glm::vec3 minValue(0), maxValue(0);
+	for (auto point : BBOX) {
+		point *= objHalfSize;
+		auto pt = glm::rotate(q, point);
+		GetBoundingLimits(pt, minValue, maxValue);
 	}
 
-	halfSize = (maxValue - minValue) / 2.0f * gameObj->transform->GetScale();
-	center = (maxValue + minValue) / 2.0f * gameObj->transform->GetScale();
-	center = glm::rotate(rotationQ, center);
+	halfSize = (maxValue - minValue) / 2.0f;
+	auto centerOffset = position - meshCenter;
+	centerOffset = glm::rotate(rotation, meshCenter * scale);
 
-	transform->SetScale(halfSize * 2.0f);
-	transform->SetWorldPosition(center + gameObj->transform->GetWorldPosition());
-	transform->SetWorldRotation(rotationQ);
+	transform->SetWorldPosition(centerOffset + position);
+	transform->SetWorldRotationAndScale(rotationQ, halfSize * 2.0f);
 
 	UpdateChildren(rotationQ);
 }
 
+void AABB::ComputeLocal()
+{
+	auto rotation = gameObj->transform->GetWorldRotation();
+	auto position = gameObj->transform->GetWorldPosition();
+	auto scale = gameObj->transform->GetScale();
+	auto mesh = gameObj->GetMesh();
+
+	auto objSize = mesh->GetHalfSize() * scale * 2.0f;
+	auto meshCenter = mesh->GetCenterPoint();
+	auto offset = glm::rotate(rotation, meshCenter * scale);
+
+	transform->SetScale(objSize);
+	transform->SetWorldPosition(offset + position);
+	transform->SetWorldRotation(rotation);
+
+	for (auto obj : gameObj->_children) {
+		if (obj->aabb)
+			obj->aabb->ComputeLocal();
+	}
+}
+
 void AABB::Render(const Shader *shader) const
 {
-	GL_Utils::SetColorUnit(shader->loc_debug_color, gameObj->GetColorID());
 	box->transform = transform;
 	box->Render(shader);
 	for (auto obj : gameObj->_children) {
@@ -114,3 +153,14 @@ void AABB::Render(const Shader *shader) const
 			obj->aabb->Render(shader);
 	}
 }
+
+void AABB::RenderObjectBoundingBox(const Shader *shader) const
+{
+	box->transform = transform;
+	box->Render(shader);
+	for (auto obj : gameObj->_children) {
+		if (obj->aabb)
+			obj->aabb->RenderObjectBoundingBox(shader);
+	}
+}
+

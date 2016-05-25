@@ -42,19 +42,6 @@ struct MeshEntry
 	unsigned int materialIndex;
 };
 
-/**
- * BoundingBox for original mesh vertices data
- */
-class BoundingBox
-{
-	
-	public:
-		BoundingBox(std::vector<glm::vec3> &positions);
-
-	public:
-		std::vector<glm::vec3> points;
-};
-
 class DLLExport Mesh
 {
 	friend class MeshRenderer;
@@ -78,7 +65,12 @@ class DLLExport Mesh
 		void SetCulling(bool value = true);
 		const char* GetMeshID() const;
 
+		glm::vec3 GetCenterPoint() const;
+		glm::vec3 GetHalfSize() const;
+
 	protected:
+		void ComputeBoundingBox();
+
 		#ifdef ENGINE_DLL_EXPORTS
 		virtual void InitMesh(const aiMesh* paiMesh);
 		virtual bool InitMaterials(const aiScene* pScene);
@@ -87,15 +79,15 @@ class DLLExport Mesh
 
 	private:
 		std::string meshID;
+		glm::vec3 halfSize;
+		glm::vec3 meshCenter;
 
 	public:
 		MESH_TYPE meshType;
-		glm::vec4 debugColor;
 		std::vector<glm::vec3> positions;
 		std::vector<glm::vec3> normals;
 		std::vector<glm::vec2> texCoords;
 		std::vector<unsigned short> indices;
-		BoundingBox *bbox;
 
 	protected:
 		MESH_STATUS loadState;
