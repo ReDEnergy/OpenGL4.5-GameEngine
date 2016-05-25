@@ -29,6 +29,7 @@ class DLLExport WindowProperties
 		bool fullScreen;
 		bool centered;
 		bool hideOnClose;
+		bool vSync;
 
 	private:
 		const bool sharedContext;
@@ -61,6 +62,7 @@ class DLLExport WindowObject
 
 		void SwapBuffers() const;
 		void SetVSync(bool state);
+		bool ToggleVSync();
 
 		void MakeCurrentContext() const;
 		void UseNativeHandles(bool value);
