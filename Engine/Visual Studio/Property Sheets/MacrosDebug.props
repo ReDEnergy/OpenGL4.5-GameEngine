@@ -3,6 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <EngineConfiguration>Debug</EngineConfiguration>
+    <GLConfiguration>Release</GLConfiguration>
+    <LibraryConfiguration>Release</LibraryConfiguration>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
@@ -12,6 +14,12 @@
     <BuildMacro Include="EngineConfiguration">
       <Value>$(EngineConfiguration)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="GLConfiguration">
+      <Value>$(GLConfiguration)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibraryConfiguration">
+      <Value>$(LibraryConfiguration)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

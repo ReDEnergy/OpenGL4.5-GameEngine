@@ -5,7 +5,7 @@
   <PropertyGroup>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\libs\assimp\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\libs\assimp\$(PlatformTarget)\$(LibraryConfiguration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

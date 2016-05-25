@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <LibraryPath>..\..\libs\GL\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\libs\GL\$(PlatformTarget)\$(GLConfiguration);$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
@@ -12,8 +12,9 @@
       </Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile />
     <ClCompile />
     <ClCompile />
   </ItemDefinitionGroup>

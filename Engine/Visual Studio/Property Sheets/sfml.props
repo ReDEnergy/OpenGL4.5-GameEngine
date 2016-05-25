@@ -5,7 +5,7 @@
   <PropertyGroup>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\libs\SFML\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\libs\SFML\$(PlatformTarget)\$(LibraryConfiguration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

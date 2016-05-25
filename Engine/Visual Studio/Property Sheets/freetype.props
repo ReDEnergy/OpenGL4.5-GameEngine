@@ -4,12 +4,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <LibraryPath>..\..\libs\FreeType\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\libs\FreeType\$(PlatformTarget)\$(LibraryConfiguration);$(LibraryPath)</LibraryPath>
     <IncludePath>..\..\libs\FreeType;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalDependencies>freetype26.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile />
   </ItemDefinitionGroup>

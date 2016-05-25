@@ -8,21 +8,27 @@
 		<Build>
 			<Target title="Debug">
 				<Option platforms="Unix;" />
-				<Option output="bin/Debug/Engine" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
+				<Option output="../../../lib/$(Platform)/Debug/Engine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/$(Platform)/Debug/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-Wmissing-include-dirs" />
 					<Add option="-g" />
 					<Add option="-D_DEBUG" />
 				</Compiler>
+				<Environment>
+					<Variable name="Platform" value="Linux" />
+				</Environment>
 			</Target>
 			<Target title="Release">
 				<Option platforms="Unix;" />
-				<Option output="bin/Release/Engine" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
+				<Option output="../../../lib/$(Platform)/Release/Engine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/$(Platform)/Release/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -33,13 +39,53 @@
 				<Linker>
 					<Add option="-s" />
 				</Linker>
+				<Environment>
+					<Variable name="Platform" value="Linux" />
+				</Environment>
+			</Target>
+			<Target title="Debug-ARM">
+				<Option platforms="Unix;" />
+				<Option output="../../../lib/$(Platform)/Debug/Engine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/$(Platform)/Debug/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-Wmissing-include-dirs" />
+					<Add option="-g" />
+					<Add option="-D_DEBUG" />
+				</Compiler>
+				<Environment>
+					<Variable name="Platform" value="ARM" />
+				</Environment>
+			</Target>
+			<Target title="Release-ARM">
+				<Option platforms="Unix;" />
+				<Option output="../../../lib/$(Platform)/Release/Engine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/$(Platform)/Release/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+				<Environment>
+					<Variable name="Platform" value="ARM" />
+				</Environment>
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add option="-fPIC" />
+			<Add option="-std=c++14" />
 			<Add option="-DENGINE_DLL_EXPORTS" />
 			<Add option="-D__linux__" />
 			<Add directory="../../../Source" />
@@ -49,7 +95,6 @@
 		<Linker>
 			<Add option="-Wl,-soname,libEngine.so" />
 		</Linker>
-		<Unit filename="../../../../libs/pugixml/pugixml.cpp" />
 		<Unit filename="../../../Source/Audio/AudioStream.cpp" />
 		<Unit filename="../../../Source/Audio/AudioStream.h" />
 		<Unit filename="../../../Source/Audio/SoundFX.cpp" />
@@ -66,9 +111,12 @@
 		<Unit filename="../../../Source/Component/Component.h" />
 		<Unit filename="../../../Source/Component/Mesh.cpp" />
 		<Unit filename="../../../Source/Component/Mesh.h" />
+		<Unit filename="../../../Source/Component/MeshRenderer.cpp" />
+		<Unit filename="../../../Source/Component/MeshRenderer.h" />
 		<Unit filename="../../../Source/Component/ObjectInput.cpp" />
 		<Unit filename="../../../Source/Component/ObjectInput.h" />
 		<Unit filename="../../../Source/Component/Particles/ParticleEffect.h" />
+		<Unit filename="../../../Source/Component/Physics.h" />
 		<Unit filename="../../../Source/Component/Renderer.cpp" />
 		<Unit filename="../../../Source/Component/Renderer.h" />
 		<Unit filename="../../../Source/Component/SkinnedMesh.cpp" />
@@ -79,8 +127,6 @@
 		<Unit filename="../../../Source/Component/Transform/FreezeTransform.h" />
 		<Unit filename="../../../Source/Component/Transform/LimitedTransform.cpp" />
 		<Unit filename="../../../Source/Component/Transform/LimitedTransform.h" />
-		<Unit filename="../../../Source/Component/Transform/SkinningJointTransform.cpp" />
-		<Unit filename="../../../Source/Component/Transform/SkinningJointTransform.h" />
 		<Unit filename="../../../Source/Component/Transform/Transform.cpp" />
 		<Unit filename="../../../Source/Component/Transform/Transform.h" />
 		<Unit filename="../../../Source/Config/ResourcePath.h" />
@@ -92,10 +138,8 @@
 		<Unit filename="../../../Source/Core/Camera/ThirdPersonCamera.h" />
 		<Unit filename="../../../Source/Core/Engine.cpp" />
 		<Unit filename="../../../Source/Core/Engine.h" />
-		<Unit filename="../../../Source/Core/GLES/GLESContext.cpp" />
 		<Unit filename="../../../Source/Core/GLES/GLESContext.h" />
 		<Unit filename="../../../Source/Core/GLES/NativeWin.h" />
-		<Unit filename="../../../Source/Core/GLES/NativeWin_Win32.cpp" />
 		<Unit filename="../../../Source/Core/GameObject.cpp" />
 		<Unit filename="../../../Source/Core/GameObject.h" />
 		<Unit filename="../../../Source/Core/InputSystem.cpp" />
@@ -131,10 +175,8 @@
 		<Unit filename="../../../Source/GPU/Shader.h" />
 		<Unit filename="../../../Source/GPU/Texture.cpp" />
 		<Unit filename="../../../Source/GPU/Texture.h" />
-		<Unit filename="../../../Source/Input/InputAction.h" />
 		<Unit filename="../../../Source/Input/InputRules.cpp" />
 		<Unit filename="../../../Source/Input/InputRules.h" />
-		<Unit filename="../../../Source/Input/ObjectControl.h" />
 		<Unit filename="../../../Source/InputComponent/CameraDebugInput.cpp" />
 		<Unit filename="../../../Source/InputComponent/CameraDebugInput.h" />
 		<Unit filename="../../../Source/InputComponent/CameraInput.cpp" />
@@ -143,6 +185,8 @@
 		<Unit filename="../../../Source/InputComponent/DebugInput.h" />
 		<Unit filename="../../../Source/InputComponent/EditorInput.cpp" />
 		<Unit filename="../../../Source/InputComponent/EditorInput.h" />
+		<Unit filename="../../../Source/InputComponent/ObjectControl.cpp" />
+		<Unit filename="../../../Source/InputComponent/ObjectControl.h" />
 		<Unit filename="../../../Source/InputComponent/PlayerInput.h" />
 		<Unit filename="../../../Source/Lighting/DirectionalLight.cpp" />
 		<Unit filename="../../../Source/Lighting/DirectionalLight.h" />
@@ -189,6 +233,8 @@
 		<Unit filename="../../../Source/Rendering/SSAO.h" />
 		<Unit filename="../../../Source/Rendering/ShadowMapping.cpp" />
 		<Unit filename="../../../Source/Rendering/ShadowMapping.h" />
+		<Unit filename="../../../Source/Scripting/LuaScripting.cpp" />
+		<Unit filename="../../../Source/Scripting/LuaScripting.h" />
 		<Unit filename="../../../Source/SkeletalSystem/SkeletalJoint.cpp" />
 		<Unit filename="../../../Source/SkeletalSystem/SkeletalJoint.h" />
 		<Unit filename="../../../Source/UI/ColorPicking/ColorPicking.cpp" />
@@ -212,10 +258,11 @@
 		<Unit filename="../../../Source/include/dll_export.h" />
 		<Unit filename="../../../Source/include/gl.cpp" />
 		<Unit filename="../../../Source/include/gl.h" />
+		<Unit filename="../../../Source/include/gl_defines.h" />
+		<Unit filename="../../../Source/include/gl_native.h" />
 		<Unit filename="../../../Source/include/gl_utils.h" />
 		<Unit filename="../../../Source/include/glm.h" />
 		<Unit filename="../../../Source/include/glm_utils.h" />
-		<Unit filename="../../../Source/include/havok.h" />
 		<Unit filename="../../../Source/include/math.h" />
 		<Unit filename="../../../Source/include/pugixml.h" />
 		<Unit filename="../../../Source/include/utils.h" />
