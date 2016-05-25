@@ -10,7 +10,8 @@ namespace pugi
 		xml_parse_result result = doc->load_file(fileName);
 		if (!result) {
 			printf("Error loading XLM file: %s\n", result.description());
-			assert(false);
+			delete doc;
+			return nullptr;
 		}
 		return doc;
 	}

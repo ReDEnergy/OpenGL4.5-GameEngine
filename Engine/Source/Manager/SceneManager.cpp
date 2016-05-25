@@ -135,7 +135,7 @@ void SceneManager::Update()
 
 	if (shouldAdd || shouldRemove) {
 		if (shouldAdd) {
-			for (auto obj: toAdd) {
+			for (auto &obj: toAdd) {
 				sceneObjects.push_back(obj);
 				obj->SetDebugView(true);
 			}
@@ -143,7 +143,7 @@ void SceneManager::Update()
 		}
 
 		if (shouldRemove) {
-			for (auto obj: toRemove) {
+			for (auto &obj: toRemove) {
 				obj->SetDebugView(false);
 				if (obj->GetParent()) {
 					obj->SetParent(nullptr);
@@ -161,7 +161,7 @@ void SceneManager::Update()
 	}
 	toDelete.clear();
 
-	for (auto obj : sceneObjects) {
+	for (auto &obj : sceneObjects) {
 		obj->Update();
 	}
 
@@ -316,33 +316,41 @@ void SceneManager::OnPostRender(std::function<void(Camera &camera)> callback)
 	postRenderCallbacks.push_back(callback);
 }
 
-void SceneManager::FrustumCulling(Camera *camera)
+void SceneManager::FrustumCulling(Camera *gameCamera)
 {
 	frustumObjects.clear();
 	for (auto obj: sceneObjects) {
-		if (camera->ColidesWith(obj))
+		if (gameCamera->ColidesWith(obj))
 			frustumObjects.push_back(obj);
 	}
 }
 
-void SceneManager::LightSpaceCulling(Camera * camera, DirectionalLight * light)
+void SceneManager::LightSpaceCulling(Camera * gameCamera, Camera * light)
 {
 	bool sunMotion = light->transform->GetMotionState();
 	// Update Camera BoundingBox if camera has moved or the sun direction is changed
-	bool change = camera->transform->GetMotionState() || sunMotion;
+	bool change = gameCamera->transform->GetMotionState() || sunMotion;
 	if (change) {
-		//camera->UpdateBoundingBox(light);
+		//gameCamera->UpdateBoundingBox(light);
 	}
 
-	for (auto obj : sceneObjects) {
-		if (obj->aabb && (sunMotion || obj->transform->GetMotionState())) {
-			obj->aabb->Update(light->transform->GetWorldRotation());
+	auto DBG = Manager::GetDebug();
+	auto boundingBoxMode = DBG->GetBoundingBoxMode();
+
+	if (boundingBoxMode == DebugInfo::BBOX_MODE::OBJECT_SAPCE) {
+		for (auto obj : sceneObjects) {
+			if (obj->transform->GetMotionState()) {
+				obj->aabb->ComputeLocal();
+			}
+		}
+	}
+	else {
+		for (auto obj : sceneObjects) {
+			if (obj->aabb && (sunMotion || obj->transform->GetMotionState())) {
+				obj->aabb->Update(light->transform->GetWorldRotation());
+			}
 		}
 	}
 
-	FrustumCulling(camera);
-
-	// TODO - should move this somwhere else
-	// Keep tracking of lighting object in scene somewhere ?!
-	light->transform->ClearMotionState();
+	FrustumCulling(gameCamera);
 }

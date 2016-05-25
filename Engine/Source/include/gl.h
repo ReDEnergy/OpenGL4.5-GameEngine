@@ -38,8 +38,9 @@
 #define SilentCheckOpenGLError()
 #endif
 
-#define OPENGL_ACQUIRE_LOCK OpenGL::AcquireLock();
-#define OPENGL_RELEASE_LOCK OpenGL::ReleaseLock();
+#define OPENGL_RAII_LOCK() OpenGL::RAII_Lock glLock;
+#define OPENGL_ACQUIRE_LOCK() OpenGL::AcquireLock();
+#define OPENGL_RELEASE_LOCK() OpenGL::ReleaseLock();
 
 namespace OpenGL
 {
@@ -51,4 +52,16 @@ namespace OpenGL
 	// OpenGL lock
 	DLLExport void AcquireLock();
 	DLLExport void ReleaseLock();
+
+	// OpenGL lock RAII helper class
+	class DLLExport RAII_Lock
+	{
+		public:
+			RAII_Lock() {
+				AcquireLock();
+			}
+			~RAII_Lock() {
+				ReleaseLock();
+			}
+	};
 };

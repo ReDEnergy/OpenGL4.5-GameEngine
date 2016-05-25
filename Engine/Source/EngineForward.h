@@ -19,6 +19,9 @@ class SkinnedMesh;
 class Transform;
 class Renderer;
 
+template <class T>
+class ParticleEffect;
+
 // Debugging
 class ProfileTimer;
 
@@ -72,6 +75,7 @@ class GPUBuffers;
 // Rendering
 template <class StorageEntry>
 class SSBO;
+
 class SSAO;
 
 class ShadowMapping;

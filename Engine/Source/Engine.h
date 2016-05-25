@@ -46,10 +46,13 @@
 #include <Component/Mesh.h>
 #include <Component/MeshRenderer.h>
 #include <Component/ObjectInput.h>
-#include <Component/Particles/ParticleEffect.h>
 #include <Component/Text.h>
 #include <Component/SkinnedMesh.h>
 #include <Component/Renderer.h>
+
+#ifdef GL_ENABLED
+#include <Component/Particles/ParticleEffect.h>
+#endif
 
 #ifdef PHYSICS_ENGINE
 #include <Component/Physics.h>
@@ -135,7 +138,7 @@
 #include <Prototyping/Prototype.h>
 
 // Templates
-#include <templates/Singleton.h>
+#include <templates/singleton.h>
 
 #ifdef GL_ENABLED
 	// WARNING! GL is exposed

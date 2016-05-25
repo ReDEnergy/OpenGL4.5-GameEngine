@@ -194,10 +194,10 @@ void GameObject::Render(const Shader *shader) const
 	if (renderer->IsRendered()) {
 		glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
 
-		auto transparency = renderer->GetOpacity();
-		if (transparency != 1 && shader->loc_transparency >= 0) {
+		auto opacity = renderer->GetOpacity();
+		if (opacity != 100 && shader->loc_transparency >= 0) {
 			glUniform1ui(shader->loc_object_class, 1);
-			glUniform1f(shader->loc_transparency, transparency);
+			glUniform1f(shader->loc_transparency, opacity);
 		}
 		else {
 			glUniform1ui(shader->loc_object_class, 0);
@@ -229,15 +229,9 @@ void GameObject::RenderInstanced(const Shader *shader, unsigned int instances) c
 
 void GameObject::RenderDebug(const Shader * shader) const
 {
-	if (meshRenderer) {
-		renderer->Use();
-		meshRenderer->RenderDebug(shader);
-	}
-	if (aabb) {
-		Manager::RenderSys->Set(RenderState::WIREFRAME, true);
-		aabb->Render(shader);
-		Manager::RenderSys->Revert(RenderState::WIREFRAME);
-	}
+	//if (meshRenderer) {
+	//	renderer->Use();
+	//}
 }
 
 void GameObject::RenderForPicking(const Shader * shader) const
@@ -369,5 +363,5 @@ list<GameObject*> GameObject::GetChildren() const
 
 unsigned int GameObject::GetNumberOfChildren() const
 {
-	return _children.size();
+	return static_cast<unsigned int>(_children.size());
 }

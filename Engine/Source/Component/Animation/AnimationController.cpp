@@ -164,7 +164,7 @@ void AnimationController::UpdateJointTransform(SkeletalJoint* joint, float anima
 	// Interpolate transformation between 2 keyframes
 	glm::vec3 position = assimp::CalcInterpolatedPosition(joint->pAnimationNode, animationTime, currentAnimation->mDuration);
 	glm::quat rotation = assimp::CalcInterpolatedRotation(joint->pAnimationNode, animationTime, currentAnimation->mDuration);
-	glm::vec3 scale = assimp::CalcInterpolatedScaling(joint->pAnimationNode, animationTime, currentAnimation->mDuration);
+	//glm::vec3 scale = assimp::CalcInterpolatedScaling(joint->pAnimationNode, animationTime, currentAnimation->mDuration);
 
 	// Update transform
 	joint->transform->SetLocalPosition(position / 100.0f);

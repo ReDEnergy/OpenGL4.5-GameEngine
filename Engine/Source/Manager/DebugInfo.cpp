@@ -26,8 +26,10 @@
 
 #include <Utils/OpenGL.h>
 
-DebugInfo::DebugInfo() {
+DebugInfo::DebugInfo()
+{
 	debugView = false;
+	bboxMode = BBOX_MODE::LIGHT_SPACE;
 }
 
 DebugInfo::~DebugInfo() {
@@ -48,18 +50,19 @@ void DebugInfo::InitManager(const char *info)
 #endif
 }
 
-void DebugInfo::Add(GameObject *obj) {
+void DebugInfo::Add(GameObject *obj)
+{
 	objects.push_back(obj);
 }
 
-void DebugInfo::Remove(GameObject *obj) {
+void DebugInfo::Remove(GameObject *obj)
+{
 	objects.remove(obj);
 }
 
 void DebugInfo::Update(const Camera * camera)
 {
 	if (!debugView) return;
-	
 	Render(camera);
 }
 
@@ -69,9 +72,24 @@ bool DebugInfo::Toggle()
 	return debugView;
 }
 
+void DebugInfo::SetBoundingBoxMode(BBOX_MODE mode)
+{
+	bboxMode = mode;
+
+	for (auto &obj : objects) {
+		if (obj->aabb)
+			obj->aabb->ComputeLocal();
+	}
+}
+
 bool DebugInfo::GetActiveState() const
 {
 	return debugView;
+}
+
+DebugInfo::BBOX_MODE DebugInfo::GetBoundingBoxMode() const
+{
+	return bboxMode;
 }
 
 void DebugInfo::Render(const Camera *camera) const
@@ -86,15 +104,42 @@ void DebugInfo::Render(const Camera *camera) const
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 
+	// TODO: Instantiated rendering
+	// - use a simplified box not one with 12 triangles - should be only 6 quads
+
+	GL_Utils::SetColorUnit(S->loc_debug_color, 1, 1, 1);
+
+	Manager::RenderSys->Set(RenderState::WIREFRAME, true);
+
+	if (bboxMode == BBOX_MODE::OBJECT_SAPCE) {
+		for (auto &obj : objects)
+		{
+			obj->aabb->RenderObjectBoundingBox(S);
+		}
+	} else {
+		for (auto &obj : objects)
+		{
+			obj->aabb->Render(S);
+		}
+	}
+
+	Manager::RenderSys->Revert(RenderState::WIREFRAME);
+
+	// TODO: Instantiated rendering
 	auto DirectGL = Manager::GetDirectGL();
 	DirectGL->SetLineWidth(3);
-	for (auto obj: objects)
+	for (auto &obj: objects)
 	{
 		DirectGL->DrawStandardAxis(obj->transform, S);
-		obj->RenderDebug(S);
 	}
 
 	Transform x;
 	x.SetScale(glm::vec3(100));
 	DirectGL->DrawStandardAxis(&x, S);
+
+
+	for (auto &obj : objects)
+	{
+		obj->RenderDebug(S);
+	}
 }

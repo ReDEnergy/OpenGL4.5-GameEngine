@@ -170,7 +170,8 @@ void Camera::MoveInDirection(glm::vec3 dir, float deltaTime)
 }
 
 // Move camera to a certain position
-void Camera::SetPosition(glm::vec3 pos) {
+void Camera::SetPosition(glm::vec3 pos)
+{
 	transform->SetWorldPosition(pos);
 	Camera::Update();
 }

@@ -9,6 +9,14 @@ class Camera;
 
 class DLLExport DebugInfo
 {
+	public:
+		enum class BBOX_MODE
+		{
+			CAMERA_SPACE,
+			OBJECT_SAPCE,
+			LIGHT_SPACE
+		};
+
 	protected:
 		DebugInfo();
 		~DebugInfo();
@@ -21,8 +29,10 @@ class DLLExport DebugInfo
 		void Remove(GameObject *obj);
 		void Update(const Camera *camera);
 		bool Toggle();
+		void SetBoundingBoxMode(BBOX_MODE mode);
 
 		bool GetActiveState() const;
+		BBOX_MODE GetBoundingBoxMode() const;
 
 	private:
 		void Render(const Camera *camera) const;
@@ -32,5 +42,6 @@ class DLLExport DebugInfo
 
 	private:
 		bool debugView;
+		BBOX_MODE bboxMode;
 		std::list<GameObject*> objects;
 };

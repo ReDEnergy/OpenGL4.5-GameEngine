@@ -33,10 +33,11 @@ MeshRenderer::MeshRenderer(MeshRenderer & meshRenderer)
 	glVAO = meshRenderer.glVAO;
 }
 
-MeshRenderer::~MeshRenderer() {
-}
+MeshRenderer::~MeshRenderer()
+{}
 
-void MeshRenderer::UseMaterials(bool value) {
+void MeshRenderer::UseMaterials(bool value)
+{
 	useMaterial = value;
 }
 
@@ -117,9 +118,4 @@ void MeshRenderer::RenderInstanced(unsigned int instances) const
 	}
 	glBindVertexArray(0);
 	CheckOpenGLError();
-}
-
-void MeshRenderer::RenderDebug(const Shader *shader) const
-{
-
 }

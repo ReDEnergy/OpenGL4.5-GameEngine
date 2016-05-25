@@ -50,7 +50,7 @@ class DLLExport EventSystem
 
 		void UnSubscribe(EventListener *E);
 
-		// Support for dinamic channels with direct messaging
+		// Support for dynamic channels with direct messaging
 		void Subscribe(const char* channelID, const std::string& eventID, std::function<void(void*)> listener);
 		void EmitAsync(const char* channelID, const std::string& eventID, void *data);
 		void EmitSync(const char* channelID, const std::string& eventID, void *data);

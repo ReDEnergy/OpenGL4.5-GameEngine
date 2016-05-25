@@ -20,16 +20,19 @@ class DLLExport Renderer
 		virtual ~Renderer();
 
 		bool CastShadow() const;
-		RenderingLayer GetRenderingLayer();
 		bool IsTransparent() const;
-		float GetOpacity() const;
+		unsigned char GetOpacity() const;
 		bool IsRendered() const;
 
 		void Use() const;
 		void SetCulling(OpenGL::CULL face);
 		void SetCastShadow(bool value);
 		void SetRenderingLayer(RenderingLayer layer);
-		void SetOpacity(float value);
+		RenderingLayer GetRenderingLayer();
+
+		// Set oppacity value should be between 0 and 100
+		void SetOpacity(unsigned char value);
+
 		void SetIsRendered(bool value);
 		void SetUseAlphaChannel(bool value);
 
@@ -38,7 +41,7 @@ class DLLExport Renderer
 		RenderingLayer layer;
 		bool alphaChannel;
 		bool castSadows;
-		float opacity;
+		unsigned char opacity;
 		bool isRendered;
 };
 

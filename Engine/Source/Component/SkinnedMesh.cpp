@@ -45,7 +45,7 @@ bool SkinnedMesh::LoadMesh(const std::string& fileLocation, const std::string& f
 	this->fileLocation = fileLocation;
 	string file = (fileLocation + '/' + fileName).c_str();
 
-	unsigned int flags = 
+	unsigned int flags =
 		//aiProcess_CalcTangentSpace | // calculate tangents and bitangents if possible
 		//aiProcess_JoinIdenticalVertices | // join identical vertices/ optimize indexing
 		//aiProcess_ValidateDataStructure | // perform a full validation of the loader's output
@@ -62,7 +62,7 @@ bool SkinnedMesh::LoadMesh(const std::string& fileLocation, const std::string& f
 		aiProcess_GenSmoothNormals | // generate smooth normal vectors if not existing
 		//aiProcess_SplitLargeMeshes | // split large, unrenderable meshes into submeshes
 		aiProcess_Triangulate | // triangulate polygons with more than 3 edges
-		aiProcess_FlipUVs | 
+		aiProcess_FlipUVs |
 		//aiProcess_ConvertToLeftHanded | // convert everything to D3D left handed space
 		//aiProcess_SortByPType | // make 'clean' meshes which consist of a single typ of primitives
 		0;
@@ -208,7 +208,7 @@ aiAnimation * SkinnedMesh::GetAnimation(const char * name) const
 
 aiAnimation * SkinnedMesh::GetAnimationByID(uint animationID) const
 {
-	int k = 0;
+	unsigned int k = 0;
 	for (auto &animation : animations) {
 		if (k == animationID)
 			return animation.second;

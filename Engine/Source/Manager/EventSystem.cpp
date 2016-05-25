@@ -20,11 +20,11 @@ EventSystem::~EventSystem() {
 
 }
 
-void EventSystem::Subscribe(EventListener *E, const string & eventID) {
+void EventSystem::Subscribe(EventListener *E, const string &eventID) {
 	 listeners[eventID].push_back(E);
 }
 
-void EventSystem::UnSubscribe(EventListener * E, const string & eventID)
+void EventSystem::UnSubscribe(EventListener * E, const string &eventID)
 {
 	auto listenerList = listeners.find(eventID);
 	if (listenerList != listeners.end()) {

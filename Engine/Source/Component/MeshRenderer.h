@@ -15,7 +15,6 @@ class DLLExport MeshRenderer
 
 		virtual void Render(const Shader *shader) const;
 		virtual void RenderInstanced(unsigned int instances) const;
-		virtual void RenderDebug(const Shader *shader) const;
 		virtual void UseMaterials(bool);
 
 		void InitForNewContext();

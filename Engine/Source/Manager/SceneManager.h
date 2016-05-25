@@ -25,8 +25,8 @@ class DLLExport SceneManager
 			 
 		void GlobalUpdate();
 		void Update();
-		void FrustumCulling(Camera *camera);
-		void LightSpaceCulling(Camera *camera, DirectionalLight *light);
+		void FrustumCulling(Camera *gameCamera);
+		void LightSpaceCulling(Camera *gameCamera, Camera *light);
 
 		void AddObject(GameObject *obj);
 		void AddPointLight(PointLight *light);
@@ -35,7 +35,7 @@ class DLLExport SceneManager
 		void FrameEnded();
 
 		// Very expensive if the scene is big
-		// It should be called rearely and the output should be cached
+		// It should be called rarely and the output should be cached
 		GameObject* GetGameObject(char *objectName) const;
 
 		const std::list<GameObject*>& GetSceneObjects() const;
