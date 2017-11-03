@@ -5,9 +5,13 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include <mutex>
+#include <thread>
 
 #include <Event/EventType.h>
 #include <Event/EventListener.h>
+
+class EventChannel;
 
 template <class T>
 class TimerManager;
@@ -30,6 +34,7 @@ class EventQueueElem
 		void *data;
 };
 
+
 class DLLExport EventSystem
 {
 	protected:
@@ -51,6 +56,8 @@ class DLLExport EventSystem
 		void UnSubscribe(EventListener *E);
 
 		// Support for dynamic channels with direct messaging
+		void LogUnsafeEvents(bool value);
+		void ProcessChannelEventsInMainUpdate(const char* channelID, bool value);
 		void Subscribe(const char* channelID, const std::string& eventID, std::function<void(void*)> listener);
 		void EmitAsync(const char* channelID, const std::string& eventID, void *data);
 		void EmitSync(const char* channelID, const std::string& eventID, void *data);
@@ -72,13 +79,20 @@ class DLLExport EventSystem
 
 	private:
 
-		struct ChannelListeners {
-			std::vector < std::function<void(void*)>> funcListeners;
-		};
+		bool logUnsafeEvents;
 
+		// thread safe synchronization mechanism
+		std::mutex _mutex_channels;
+
+		//struct ChannelListeners {
+		//	std::vector < std::function<void(void*)>> funcListeners;
+		//};
 		// Channel based events
-		std::unordered_map<std::string, std::unordered_map<std::string, ChannelListeners>> channelListeners;
-		std::unordered_map<std::string, std::unordered_map<std::string, std::vector<void*>>> channelData;
+		//std::unordered_map<std::string, std::unordered_map<std::string, ChannelListeners>> channelListeners;
+		//std::unordered_map<std::string, std::unordered_map<std::string, std::vector<void*>>> channelData;
+
+		std::list<std::string> channelProcessingList;
+		std::unordered_map<std::string, EventChannel*> channels;
 
 		std::unordered_map<std::string, std::list<EventListener*>> listeners;
 		std::list<EventListener*> listenersEnum[static_cast<unsigned int>(EventType::SIZE)];
@@ -86,6 +100,4 @@ class DLLExport EventSystem
 
 		std::vector<EventQueueElem<EventType>> eventQueueEnum;
 		std::vector<EventQueueElem<std::string>> eventQueueString;
-
-
 };

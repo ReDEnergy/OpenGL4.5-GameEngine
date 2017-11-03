@@ -19,18 +19,18 @@ class Singleton: public T {
 template<class T>
 T* Singleton<T>::Instance() {
 	if ( pInstance == nullptr ) {
-        pInstance = new Singleton<T>();
+		pInstance = new Singleton<T>();
 		std::atexit(Destroy);
-    }
-    return static_cast<T*>(pInstance);
+	}
+	return static_cast<T*>(pInstance);
 }
 
 template<class T>
 void Singleton<T>::Destroy() {
 	if (pInstance != nullptr ) {
 		delete pInstance;
-        pInstance = nullptr;
-    }
+		pInstance = nullptr;
+	}
 }
 
 template<class T>

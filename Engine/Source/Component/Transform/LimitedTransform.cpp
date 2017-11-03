@@ -1,10 +1,11 @@
 #include "LimitedTransform.h"
 
 #include <include/glm_utils.h>
+#include <Math/quaterion.h>
 
-LimitedTransform::LimitedTransform() {
-	limitMax = glm::vec3(60);
-	limitMin = glm::vec3(-60);
+LimitedTransform::LimitedTransform()
+{
+	constraintAxis = glm::vec3();
 }
 
 LimitedTransform::LimitedTransform(const Transform &transform)
@@ -14,35 +15,47 @@ LimitedTransform::LimitedTransform(const Transform &transform)
 LimitedTransform::~LimitedTransform() {
 }
 
+void LimitedTransform::LimitAxisRotation(glm::vec3 axis)
+{
+	constraintAxis = axis;
+	applyLimits = (constraintAxis != glm::vec3());
+	if (axis.x && axis.y == 0 && axis.z == 0) { RotLimitFunc = ClosestQuatX; return; }
+	if (axis.y && axis.x == 0 && axis.z == 0) { RotLimitFunc = ClosestQuatY; return; }
+	if (axis.z && axis.x == 0 && axis.y == 0) { RotLimitFunc = ClosestQuatZ; return; }
+	if (axis.x == 0 && axis.y && axis.z) { RotLimitFunc = ClosestQuatYZ; return; }
+	if (axis.y == 0 && axis.x && axis.z) { RotLimitFunc = ClosestQuatZX; return; }
+	if (axis.z == 0 && axis.x && axis.y) { RotLimitFunc = ClosestQuatXY; return; }
+
+	// if no match was found do not restrict rotations
+	applyLimits = false;
+}
+
 void LimitedTransform::SetWorldRotation(glm::quat rotationQ)
 {
-	/*
-	glm::vec3 euler = glm::eulerAngles(rotationQ);
-
-	for (int i = 0; i < 3; i++) {
-		if (euler[i] > limitMax[i]) {
-			euler[i] = limitMax[i];
-		}
-		if (euler[i] < limitMin[i]) {
-			euler[i] = limitMin[i];
-		}
+	if (applyLimits)
+	{
+		auto parentRot = _parentNode ? _parentNode->_worldRotation : glm::quat();
+		auto relativeRot = glm::inverse(parentRot) * rotationQ;
+		_relativeRotation = RotLimitFunc(relativeRot);
+		_worldRotation = parentRot * _relativeRotation;
+		UpdateChildrenRotation();
+		UpdateWorldModel();
 	}
-
-	glm::quat rotq = glm::quat(euler * TO_RADIANS);
-
-	//cout << "rot: " << euler << endl;
-	//cout << "quat: " << rotationQ << endl;
-	//cout << "nquat: " << rotq << endl;
-	//cout << endl;
-
-	if (_childNodes.size()) {
-		glm::quat diffQ = rotq * glm::inverse(_worldRotation);
-		for (auto c : _childNodes) {
-			c->UpdateChildRotation(diffQ);
-		}
+	else
+	{
+		Transform::SetWorldRotation(rotationQ);
 	}
-	_worldRotation = rotq;
-	UpdateWorldModel();
-	*/
-	Transform::SetWorldRotation(rotationQ);
+}
+
+void LimitedTransform::SetRelativeRotation(const glm::quat & rotationQ)
+{
+	if (applyLimits)
+	{
+		auto rotation = RotLimitFunc(rotationQ);
+		Transform::SetRelativeRotation(rotation);
+	}
+	else
+	{
+		Transform::SetRelativeRotation(rotationQ);
+	}
 }

@@ -18,20 +18,20 @@ class DLLExport AABB
 		~AABB();
 
 		static void Init();
+
+		const Transform* GetTransform() const;
 		void Render(const Shader *shader) const;
 		void RenderObjectBoundingBox(const Shader * shader) const;
-		void Update(glm::quat rotationQ = glm::quat(1.0f, 0, 0, 0));
+		void Update(const glm::quat &rotationQ);
 		void ComputeLocal();
 		bool Overlaps(AABB *aabb);
 
 	private:
 		void UpdateChildren(const glm::quat &rotationQ);
 
-	public:
+	private:
 		Transform *transform;
 		GameObject *gameObj;
-
-	private:
 		glm::vec3 center;
 		glm::vec3 halfSize;
 };

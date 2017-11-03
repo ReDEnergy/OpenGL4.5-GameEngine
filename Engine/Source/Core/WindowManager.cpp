@@ -1,6 +1,7 @@
 #include "WindowManager.h"
 
-#include <include/gl.h>
+#include <iostream>
+
 #include <Core/Engine.h>
 #include <Core/WindowObject.h>
 
@@ -21,15 +22,26 @@ void WindowManager::Init()
 	sharedContextWindow = nullptr;
 }
 
-void WindowManager::OnClose(GLFWwindow * W)
+WindowObject* WindowManager::GetShaderdWindowContext()
+{
+	return sharedContextWindow;
+}
+
+void WindowManager::OnGLFWClose(GLFWwindow * W)
 {
 	WindowObject *Wobj = GetWindowObject(W);
 	Wobj->Close();
 }
 
-WindowObject* WindowManager::GetShaderdWindowContext()
+void WindowManager::OnGLFWResize(GLFWwindow *W, int width, int height)
 {
-	return sharedContextWindow;
+	WindowObject *Wobj = GetWindowObject(W);
+	Wobj->SetSize(width, height);
+}
+
+void WindowManager::OnGLFWError(int error, const char * description)
+{
+	cout << "[GLFW ERROR]\t" << error << "\t" << description << endl;
 }
 
 void WindowManager::RegisterWindow(WindowObject *W)
@@ -60,17 +72,14 @@ WindowObject* WindowManager::GetWindowObject(GLFWwindow* W)
 {
 	if (windowList.empty())
 		return nullptr;
+
+	if (W == nullptr)
+		return windowList[0];
 	
 	for (auto window : windowList) {
 		if (window->window == W)
 			return window;
 	}
-	return windowList[0];
-}
 
-void WindowManager::OnResize(GLFWwindow *W, int width, int height)
-{
-	WindowObject *Wobj = GetWindowObject(W);
-	Wobj->SetSize(width, height);
-	glViewport(0, 0, width, height);
+	return windowList[0];
 }

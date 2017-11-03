@@ -20,6 +20,7 @@ FrameBuffer::FrameBuffer()
 	depthTexture = nullptr;
 	textures = nullptr;
 	DrawBuffers = nullptr;
+	clearColor = glm::vec4(0, 0, 0, 1);
 }
 
 FrameBuffer::~FrameBuffer()
@@ -89,13 +90,20 @@ void FrameBuffer::Bind(bool clearBuffer) const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	glViewport(0, 0, width, height);
-	if (clearBuffer)
-		FrameBuffer::Clear();
+	if (clearBuffer) {
+		glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
 }
 
 void FrameBuffer::SendResolution(Shader *shader) const
 {
 	glUniform2i(shader->loc_resolution, width, height);
+}
+
+void FrameBuffer::SetClearColor(glm::vec4 clearColor)
+{
+	this->clearColor = std::move(clearColor);
 }
 
 glm::ivec2 FrameBuffer::GetResolution() const {
@@ -139,10 +147,17 @@ void FrameBuffer::BindAllTextures() const
 	}
 }
 
-void FrameBuffer::Unbind(WindowObject *window)
+void FrameBuffer::Unbind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, window->props.resolution.x, window->props.resolution.y);
+}
+
+void FrameBuffer::Unbind(const glm::ivec2 &viewportSize, bool clearBuffer)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, viewportSize.x, viewportSize.y);
+	if (clearBuffer)
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	CheckOpenGLError();
 }
 

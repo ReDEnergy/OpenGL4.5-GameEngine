@@ -31,7 +31,10 @@ class DLLExport DebugOverlayText //: public EventListener
 		void Init();
 		Text* Add(const char *textID, const char *value = NULL);
 		void Toggle(const std::string messageID, bool state = true);
-		void Update();
+
+		// Renders to the current framebuffer attached
+		void Render() const;
+
 		void CacheScores(int number);
 
 	private:

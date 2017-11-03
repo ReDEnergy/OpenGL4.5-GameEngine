@@ -40,7 +40,7 @@ void DebugOverlayText::Toggle(const string messageID, bool state)
 	}
 }
 
-void DebugOverlayText::Update()
+void DebugOverlayText::Render() const
 {
 	Shader *shader = Manager::Shader->GetShader("font");
 	shader->Use();

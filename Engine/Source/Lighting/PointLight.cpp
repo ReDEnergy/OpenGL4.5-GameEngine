@@ -4,6 +4,7 @@
 #include <include/glm_utils.h>
 
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
 #include <Component/Transform/Transform.h>
@@ -68,7 +69,7 @@ void PointLight::CastShadows()
 	VSM->Use();
 
 	for (unsigned int i = 0; i < 6; i++) {
-		cubeTexture->BindForWriting(cameraDirections[i].cubeMapFace);
+		cubeTexture->BindToTarget(cameraDirections[i].cubeMapFace);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// TODO 
@@ -86,7 +87,7 @@ void PointLight::CastShadows()
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	FrameBuffer::Unbind(Engine::Window);
+	FrameBuffer::Unbind();
 }
 
 void PointLight::InitCaster()

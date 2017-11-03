@@ -13,16 +13,22 @@ class ObjectInput;
 class Shader;
 class Transform;
 
-namespace ENUM_GIZMO_EVENT {
-	enum GE {
+namespace WorldControl
+{
+	enum class ControlMode {
+		LOCAL,
+		WORLD
+	};
+
+	enum class GizmoMode
+	{
 		MOVE,
 		ROTATE,
-		SCALE,
-		ROTATE_LOCAL,
-		ROTATE_WORLD
+		SCALE
 	};
+
+	#define GIZMO_MODE_ID(x) (static_cast<unsigned int>(x))
 }
-typedef ENUM_GIZMO_EVENT::GE GIZMO_EVENT;
 
 class DLLExport ColorPicking
 	: public ObjectInput
@@ -33,22 +39,30 @@ class DLLExport ColorPicking
 		~ColorPicking();
 
 		void Init();
-		void Update(const Camera* activeCamera);
-		void OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods);
-		void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY);
-		void OnKeyPress(int key, int mod);
+		void Update(Camera* activeCamera);
 
 		void FocusCamera();
 		void SetSelectedObject(GameObject *object);
 		void ClearSelection();
 		bool HasActiveSelection() const;
 		GameObject* GetSelectedObject() const;
+		void TriggerMouseSelection(int mouseX, int mouseY);
 
 		void DrawSceneForPicking() const;
 
-		void OnEvent(EventType Event, void *data);
+		void ToggleControlMode();
+		void SetControlMode(WorldControl::ControlMode MODE);
+		WorldControl::ControlMode GetControlMode() const;
+
+		void SetGizmoMode(WorldControl::GizmoMode MODE);
+		WorldControl::GizmoMode GetGizmoMode() const;
 
 	private:
+		void OnMouseBtnPress(int mouseX, int mouseY, int button, int mods);
+		void OnMouseBtnRelease(int mouseX, int mouseY, int button, int mods);
+		void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY);
+		void OnKeyPress(int key, int mod);
+
 		void PickObject();
 		void GetPickedObject(const glm::ivec3 &colorID);
 
@@ -72,7 +86,7 @@ class DLLExport ColorPicking
 
 		glm::ivec2 mousePosition;
 
-		GIZMO_EVENT GEVENT;
+		WorldControl::GizmoMode gizmo_MODE;
 		Gizmo *gizmoObject;
 		Transform *holdTransform;
 
@@ -88,7 +102,8 @@ class DLLExport ColorPicking
 
 		glm::vec3 currentAxis;
 
-		const Camera *activeCamera;
+		Camera *activeCamera;
 		GameObject	*selectedObject;
-		GIZMO_EVENT rotateMode;
+
+		WorldControl::ControlMode controlMode;
 };

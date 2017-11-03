@@ -1,16 +1,22 @@
 #include "EventSystem.h"
 
 #include <Core/Engine.h>
+
 #include <Event/EventListener.h>
+#include <Event/EventChannel.h>
 #include <Event/TimerEvent.h>
+
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
+
+#include <Threading/utils.h>
 
 using uint = unsigned int;
 using namespace std;
 
 EventSystem::EventSystem()
 {
+	logUnsafeEvents = false;
 	Manager::Debug->InitManager("Event");
 	dynamicTimers = new TimerManager<string>();
 	standardTimers = new TimerManager<EventType>();
@@ -92,32 +98,68 @@ void EventSystem::UnSubscribe(EventListener * E)
 	}
 }
 
+void EventSystem::LogUnsafeEvents(bool value)
+{
+	logUnsafeEvents = value;
+	#ifdef _DEBUG	
+	for (auto &channel : channels) {
+		channel.second->LogUnsafeEvents(logUnsafeEvents);
+	}
+	#endif
+}
+
+void EventSystem::ProcessChannelEventsInMainUpdate(const char * channelID, bool value)
+{
+	value ? channelProcessingList.push_back(channelID) : channelProcessingList.remove(channelID);
+}
+
 void EventSystem::Subscribe(const char* channelID, const string & eventID, function<void(void*)> listener)
 {
-	channelListeners[channelID][eventID].funcListeners.push_back(listener);
+	EventChannel *eventChannel = nullptr;
+	auto it = channels.find(channelID);
+	if (it != channels.end()) {
+		eventChannel = it->second;
+	}
+	else {
+		eventChannel = new EventChannel(channelID);
+		channels[channelID] = eventChannel;
+	}
+	eventChannel->Subscribe(eventID, listener);
 }
 
 void EventSystem::EmitAsync(const char * channelID, const string & eventID, void * data)
 {
-	channelData[channelID][eventID].push_back(data);
+	//cout << "[EmitSync][" << channelID << "][" << eventID << "]" << endl;
+	auto it = channels.find(channelID);
+	if (it != channels.end()) {
+		it->second->EmitAsync(eventID, data);
+	}
+	#ifdef _DEBUG
+	else {
+		cout << "Channel [" << channelID << "] was not registered!" << endl;
+	}
+	#endif
 }
 
 void EventSystem::EmitSync(const char * channelID, const string & eventID, void * data)
 {
-	auto it = channelListeners.find(channelID);
-	if (it != channelListeners.end()) {
-		for (auto &func : it->second[eventID].funcListeners) {
-			func(data);
-		}
+	//cout << "[EmitSync][" << channelID << "][" << eventID << "]" << endl;
+	auto it = channels.find(channelID);
+	if (it != channels.end()) {
+		it->second->EmitSync(eventID, data);
 	}
+	#ifdef _DEBUG
+	else {
+		cout << "Channel [" << channelID << "] was not registered!" << endl;
+	}
+	#endif
 }
 
 void EventSystem::Update()
 {
-	float frameTime = Engine::GetLastFrameTime();
 	ProcessEvents();
-	dynamicTimers->Update(frameTime);
-	standardTimers->Update(frameTime);
+	dynamicTimers->Update(0);
+	standardTimers->Update(0);
 }
 
 void EventSystem::Clear() {
@@ -152,19 +194,16 @@ void EventSystem::ProcessEvents()
 			E.Process();
 		};
 	}
+
+	for (auto &chn : channelProcessingList) {
+		ProcessChannelEvents(chn.c_str());
+	}
 }
 
 void EventSystem::ProcessChannelEvents(const char * channelID)
 {
-	auto it = channelData.find(channelID);
-	if (it != channelData.end()) {
-		for (auto &lists : it->second) {
-			for (auto &data : it->second[lists.first]) {
-				for (auto &listener : channelListeners[channelID][lists.first].funcListeners) {
-					listener(data);
-				}
-			}
-			channelData[channelID][lists.first].clear();
-		}
+	auto it = channels.find(channelID);
+	if (it != channels.end()) {
+		it->second->ProcessEvents();
 	}
 }

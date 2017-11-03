@@ -14,4 +14,3 @@ mkdir %dest%
 xcopy /Y /D /S "%libs%\GL\%target%\%library-conf%\*.dll" %dest%
 xcopy /Y /D /S "%libs%\GLFW\%target%\%library-conf%\*.dll" %dest%
 xcopy /Y /D /S "%libs%\assimp\%target%\%library-conf%\*.dll" %dest%
-xcopy /Y /D /S "%libs%\OpenGL\%target%\*.dll" %dest%

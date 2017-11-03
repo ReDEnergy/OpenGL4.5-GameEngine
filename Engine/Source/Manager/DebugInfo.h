@@ -27,14 +27,13 @@ class DLLExport DebugInfo
 
 		void Add(GameObject *obj);
 		void Remove(GameObject *obj);
-		void Update(const Camera *camera);
 		bool Toggle();
+
 		void SetBoundingBoxMode(BBOX_MODE mode);
 
 		bool GetActiveState() const;
 		BBOX_MODE GetBoundingBoxMode() const;
 
-	private:
 		void Render(const Camera *camera) const;
 
 	public:

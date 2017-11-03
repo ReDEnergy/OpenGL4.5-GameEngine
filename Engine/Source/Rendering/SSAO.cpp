@@ -4,6 +4,7 @@
 #include <include/math.h>
 
 #include <Core/Engine.h>
+#include <Core/WindowObject.h>
 #include <Core/Camera/Camera.h>
 #include <GPU/Texture.h>
 #include <GPU/Shader.h>
@@ -34,7 +35,7 @@ SSAO::SSAO()
 		kernel[i] *= scale;
 	}
 
-	ScreenQuad = Manager::Resource->GetGameObject("render-quad");
+	screenQuad = Manager::Resource->GetGameObject("render-quad");
 	RandomNoise1 = Manager::Texture->GetTexture("random.jpg");
 	RandomNoise2 = Manager::Texture->GetTexture("noise.png");
 
@@ -47,7 +48,7 @@ SSAO::~SSAO() {
 void SSAO::Init(int width, int height)
 {
 	ssaoFBO.Generate(width, height, 1);
-	computeTexture->Create2DTextureFloat(NULL, width, height, 4);
+	computeTexture->Create2DTexture(width, height, 4, 16, GL_FLOAT);
 }
 
 void SSAO::Update(const FrameBuffer *FBO, const Camera *camera) const
@@ -75,12 +76,12 @@ void SSAO::Update(const FrameBuffer *FBO, const Camera *camera) const
 	RandomNoise1->BindToTextureUnit(GL_TEXTURE3);
 	RandomNoise2->BindToTextureUnit(GL_TEXTURE4);
 
-	ScreenQuad->Render(ssao);
+	screenQuad->Render(ssao);
 
 	// Finish TASK
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
-	FrameBuffer::Unbind(Engine::Window);
+	FrameBuffer::Unbind();
 
 	// -- COMPUTE SHADER
 	Shader *S = Manager::Shader->GetShader("ssaoBlur");

@@ -6,6 +6,8 @@
 
 #define NR_MAX_RULES 10
 
+using namespace std;
+
 INPUT_RULE InputRules::activeRule = INPUT_RULE::R_GAMEPLAY;
 vector<int> InputRules::rulesConfig(NR_MAX_RULES, 0);
 vector<INPUT_RULE> InputRules::rules;

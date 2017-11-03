@@ -34,8 +34,10 @@ GameMenu::GameMenu()
 	activePage = Manager::GetMenu()->pages["in_game_menu"];
 	activeEntryIndex = 0;
 
+	auto window = WindowManager::GetDefaultWindow();
+
 	HUDCamera = new Camera();
-	HUDCamera->SetPerspective(25.0f, Engine::Window->props.aspectRatio, 0.1f, 50.0f);
+	HUDCamera->SetPerspective(25.0f, window->props.aspectRatio, 0.1f, 50.0f);
 	//HUDCamera->SetOrthgraphic(10, 10, 0.1f, 50.0f);
 	HUDCamera->SetPosition(glm::vec3(0, 0, 10.0f));
 	HUDCamera->transform->SetWorldRotation(glm::vec3(0, 0, 0));
@@ -80,8 +82,7 @@ void GameMenu::Render() const
 
 	Shader *shader = Manager::GetShader()->GetShader("font");
 	shader->Use();
-	HUDCamera->BindProjectionMatrix(shader->loc_projection_matrix);
-	HUDCamera->BindViewMatrix(shader->loc_view_matrix);
+	HUDCamera->BindViewProj(shader);
 	glUniform3f(shader->text_color, 0.967f, 0.333f, 0.486f);
 
 	Manager::GetRenderSys()->SetGlobalCulling(OpenGL::CULL::NONE);
@@ -184,7 +185,7 @@ void GameMenu::OnKeyPress(int key, int mods)
 
 		case GLFW_KEY_UP:
 			if (activeEntryIndex == 0)
-				activeEntryIndex = activePage->entries.size() - 1;
+				activeEntryIndex = static_cast<uint>(activePage->entries.size() - 1);
 			else
 				activeEntryIndex--;
 			return;
@@ -196,11 +197,11 @@ void GameMenu::OnKeyPress(int key, int mods)
 				case MenuEntryType::TOGGLE: {
 					activeEntry->Trigger();
 					break;
-                }
+				}
 				case MenuEntryType::ACTION: {
 					Manager::GetEvent()->EmitAsync(activeEntry->actionID.c_str(), nullptr);
 					break;
-                }
+				}
 				case MenuEntryType::PAGE: {
 					MenuPage *page = Manager::GetMenu()->pages[activeEntry->actionID];
 					if (page) {
@@ -211,7 +212,7 @@ void GameMenu::OnKeyPress(int key, int mods)
 					}
 					break;
 				}
-                default:
+				default:
 					break;
 			}
 	}

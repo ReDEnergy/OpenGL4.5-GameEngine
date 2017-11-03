@@ -60,6 +60,9 @@ class DLLExport WindowObject
 		void HidePointer();
 		void DisablePointer();
 
+		void SetWindowPosition(glm::ivec2 position);
+		void CenterWindow();
+
 		void SwapBuffers() const;
 		void SetVSync(bool state);
 		bool ToggleVSync();
@@ -84,7 +87,7 @@ class DLLExport WindowObject
 		int GetSpecialKeyState() const;
 
 		// Event Dispatch - TODO - should be protected
-		void UpdateObserver();
+		void UpdateObservers();
 
 	protected:
 		// Frame time
@@ -115,8 +118,9 @@ class DLLExport WindowObject
 
 	private:
 		// Frame Time
+		unsigned int frameID;
 		double elapsedTime;
-		float deltaFrameTime;
+		double deltaFrameTime;
 
 		bool useNativeHandles;
 
@@ -127,16 +131,25 @@ class DLLExport WindowObject
 		bool hiddenPointer;
 		bool cursorClip;
 
-		// States for keyboard buttons - PRESSED(true) / RELEASED(false)
-		bool keyStates[384];
+		// Mouse button callback
+		int mouseButtonCallback;			// Bit field for button callback
+		int mouseButtonAction;				// Bit field for button state
+		int mouseButtonStates;				// Bit field for mouse button state
 
-		// States for each mouse button - PRESSED(true) / RELEASED(false)
-		bool mouseStates[3];
+		// Mouse move event
+		bool mouseMoved;
+		int mouseDeltaX;
+		int mouseDeltaY;
+
+		// States for keyboard buttons - PRESSED(true) / RELEASED(false)
+		int registeredKeyEvents;
+		int keyEvents[128];
+		bool keyStates[384];
 
 		// Platform specific key codes - PRESSED(true) / RELEASED(false)
 		bool keyScanCode[512];
 
-		// Special keys (ALT, CTRL, SHIFT, CAPS LOOK, OS KEY) active alogside with normal key or mouse input
+		// Special keys (ALT, CTRL, SHIFT, CAPS LOOK, OS KEY) active alongside with normal key or mouse input
 		int keyMods;	
 
 		// Input Observers

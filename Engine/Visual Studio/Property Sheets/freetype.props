@@ -6,11 +6,13 @@
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <LibraryPath>..\..\libs\FreeType\$(PlatformTarget)\$(LibraryConfiguration);$(LibraryPath)</LibraryPath>
     <IncludePath>..\..\libs\FreeType;$(IncludePath)</IncludePath>
+    <_PropertySheetDisplayName>freetype</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
       <AdditionalDependencies>freetype_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile />
     <ClCompile />
   </ItemDefinitionGroup>
   <ItemGroup />

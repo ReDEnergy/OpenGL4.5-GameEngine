@@ -16,8 +16,9 @@ class DLLExport WindowManager
 
 	public:
 		static void Init();
-		static void OnClose(GLFWwindow *W);
-		static void OnResize(GLFWwindow *W, int width, int height);
+		static void OnGLFWClose(GLFWwindow *W);
+		static void OnGLFWResize(GLFWwindow *W, int width, int height);
+		static void OnGLFWError(int error, const char* description);
 		static void RegisterWindow(WindowObject * W);
 		static WindowObject* Create(WindowProperties &properties);
 		static WindowObject* GetDefaultWindow();

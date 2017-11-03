@@ -47,7 +47,9 @@ class DLLExport Camera: virtual public GameObject {
 		void UpdateSpeed(float offset = 0.2f);
 
 		// Translate Camera - local axis
-		void SetPosition(glm::vec3 position);
+		void SetPosition(const glm::vec3 &position);
+		void SetRotation(const glm::quat &worldRotation);
+		void SetPositionAndRotation(const glm::vec3 &position, const glm::quat &worldRotation);
 
 		// Translate Camera - world axis
 		void MoveForward(float deltaTime);
@@ -59,7 +61,7 @@ class DLLExport Camera: virtual public GameObject {
 		void MoveInDirection(glm::vec3 direction, float deltaTime);
 
 		// Bind shader uniforms
-		void BindMVP(const Shader *shader) const;
+		void BindViewProj(const Shader *shader) const;
 		void BindPosition(int location) const;
 		void BindViewMatrix(int location) const;
 		void BindProjectionMatrix(int location) const;

@@ -139,6 +139,8 @@ void SkinnedMesh::InitMesh(const aiMesh* paiMesh, uint index)
 
 	uint *bonesPerVertex = new uint[boneData.size()]();
 
+	glm::mat4 boneOffset;
+
 	for (unsigned int i = 0; i < paiMesh->mNumBones; i++) {
 		unsigned int boneIndex = 0;
 		string boneName(paiMesh->mBones[i]->mName.data);
@@ -149,7 +151,8 @@ void SkinnedMesh::InitMesh(const aiMesh* paiMesh, uint index)
 
 			// TODO - keep boneOffset and TPoseOffset in the SkinnedMesh class - must be used by all instances
 			auto SKJ = new SkeletalJoint(boneName.c_str(), boneIndex);
-			assimp::CopyMatix(paiMesh->mBones[i]->mOffsetMatrix, SKJ->boneOffset);
+			assimp::CopyMatix(paiMesh->mBones[i]->mOffsetMatrix, boneOffset);
+			SKJ->SetBoneOffset(boneOffset);
 
 			skeletalJoints[boneName] = SKJ;
 			nrBones++;
@@ -180,7 +183,7 @@ void SkinnedMesh::InitMesh(const aiMesh* paiMesh, uint index)
 		if (parent != skeletalJoints.end()) {
 			parent->second->AddChild(joint.second);
 		}
-		assimp::CopyMatix(node->mTransformation, joint.second->TPoseOffset);
+		//assimp::CopyMatix(node->mTransformation, joint.second->TPoseOffset);
 	}
 
 	// Get Root Joint

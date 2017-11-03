@@ -5,6 +5,7 @@
 #include <Component/Animation/AnimationController.h>
 #include <Component/AudioSource.h>
 #include <Component/AABB.h>
+#include <Component/GameScript.h>
 #include <Component/Mesh.h>
 #include <Component/MeshRenderer.h>
 #include <Component/Renderer.h>
@@ -26,7 +27,7 @@
 
 #ifdef PHYSICS_ENGINE
 #include <Component/Physics.h>
-#include <Manager/PhysicsManager.h>
+#include <Physics/PhysicsManager.h>
 #endif
 
 using namespace std;
@@ -60,8 +61,6 @@ GameObject::GameObject(const GameObject &obj)
 	Clear();
 	name			= obj.name;
 	referenceName	= obj.referenceName;
-	shader			= obj.shader;
-	input			= obj.input;
 	renderer		= new Renderer(*obj.renderer);
 	transform		= new Transform(*obj.transform);
 
@@ -72,10 +71,7 @@ GameObject::GameObject(const GameObject &obj)
 	Init();
 
 	#ifdef PHYSICS_ENGINE
-	if (obj.physics) {
-		physics = new Physics(this);
-		physics->body = Manager::Physics->GetCopyOf(obj.physics->body);
-	}
+//	physics = new Physics(this);
 	#endif
 }
 
@@ -85,6 +81,10 @@ GameObject::~GameObject()
 		SAFE_FREE(child);
 	}
 	_children.clear();
+
+	for (auto script : _scripts) {
+		SAFE_FREE(script);
+	}
 
 	Manager::Debug->Remove(this);
 	SAFE_FREE(transform);
@@ -98,10 +98,8 @@ void GameObject::Clear()
 	aabb = nullptr;
 	animation = nullptr;
 	audioSource = nullptr;
-	input = nullptr;
 	meshRenderer = nullptr;
 	renderer = nullptr;
-	shader = nullptr;
 	transform = nullptr;
 	#ifdef PHYSICS_ENGINE
 	physics = nullptr;
@@ -140,7 +138,7 @@ void GameObject::SetupAABB()
 	if (meshRenderer) {
 		SAFE_FREE(aabb);
 		aabb = new AABB(this);
-		aabb->Update();
+		aabb->Update(glm::quat());
 	}
 }
 
@@ -151,6 +149,10 @@ void GameObject::Update()
 		physics->Update();
 	}
 	#endif
+
+	for (auto &script : _scripts) {
+		script->Update();
+	}
 
 	if (animation)
 		animation->Update();
@@ -165,56 +167,39 @@ void GameObject::Update()
 	}
 }
 
-bool GameObject::ColidesWith(GameObject *object)
+bool GameObject::ColidesWith(const GameObject &object) const
 {
-	if (!object->aabb)
+	if (!object.aabb)
 		return false;
-	return aabb->Overlaps(object->aabb);
-}
-
-void GameObject::Render() const
-{
-	if (!shader) return;
-	if (renderer->IsRendered()) {
-		glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
-
-		if (meshRenderer) {
-			renderer->Use();
-			meshRenderer->Render(shader);
-		}
-
-		for (auto child : _children) {
-			child->Render();
-		}
-	}
+	return aabb->Overlaps(object.aabb);
 }
 
 void GameObject::Render(const Shader *shader) const
 {
-	if (renderer->IsRendered()) {
+	if (renderer->IsRendered() && meshRenderer) {
 		glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
-
-		auto opacity = renderer->GetOpacity();
-		if (opacity != 100 && shader->loc_transparency >= 0) {
-			glUniform1ui(shader->loc_object_class, 1);
-			glUniform1f(shader->loc_transparency, opacity);
-		}
-		else {
-			glUniform1ui(shader->loc_object_class, 0);
-		}
+		glUniform1ui(shader->loc_object_class, 0);
 
 		if (animation) {
 			animation->BindSkeletonInfo(shader);
 		}
 
-		if (meshRenderer) {
-			renderer->Use();
-			meshRenderer->Render(shader);
-		}
+		renderer->Use();
+		meshRenderer->Render();
 	}
+}
 
-	for (auto child : _children) {
-		child->Render(shader);
+void GameObject::RenderTransparent(const Shader * shader) const
+{
+	if (renderer->IsRendered() && meshRenderer) {
+		glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
+
+		auto opacity = renderer->GetOpacity();
+		glUniform1ui(shader->loc_object_class, 1);
+		glUniform1f(shader->loc_transparency, opacity);
+
+		renderer->Use();
+		meshRenderer->Render();
 	}
 }
 
@@ -243,19 +228,13 @@ void GameObject::RenderForPicking(const Shader * shader) const
 		animation->BindSkeletonInfo(shader);
 	}
 
-	if (meshRenderer && selectable) {
-		renderer->Use();
-		meshRenderer->Render(shader);
+	if (selectable)
+	{
+		if (meshRenderer) {
+			renderer->Use();
+			meshRenderer->Render();
+		}
 	}
-
-	for (auto child : _children) {
-		child->RenderForPicking(shader);
-	}
-}
-
-void GameObject::UseShader(Shader *shader)
-{
-	this->shader = shader;
 }
 
 void GameObject::LogDebugInfo() const
@@ -271,8 +250,9 @@ void GameObject::SetParent(GameObject *object)
 {
 	if (_parent)
 		_parent->RemoveChild(this);
-	if (object)
+	if (object) {
 		object->AddChild(this);
+	}
 }
 
 void GameObject::AddChild(GameObject * object)
@@ -281,14 +261,13 @@ void GameObject::AddChild(GameObject * object)
 		object->_parent->RemoveChild(object);
 
 	object->_parent = this;
-	object->transform->SetParent(this->transform);
-	this->transform->AddChild(object->transform);
+	transform->AddChild(object->transform);
 	_children.push_back(object);
 }
 
 void GameObject::RemoveChild(GameObject * object)
 {
-	object->transform->SetParent(nullptr);
+	object->_parent = nullptr;
 	transform->RemoveChild(object->transform);
 	_children.remove(object);
 }
@@ -296,13 +275,12 @@ void GameObject::RemoveChild(GameObject * object)
 void GameObject::RemoveChildren()
 {
 	for (auto child : _children) {
-		child->transform->SetParent(nullptr);
 		transform->RemoveChild(child->transform);
 	}
 	_children.clear();
 }
 
-GameObject* GameObject::IdentifyByColor(glm::vec3 colorID)
+GameObject* GameObject::IdentifyByColor(const glm::vec3 &colorID)
 {
 	if (this->colorID == colorID) {
 		return (selectable ? this : nullptr);
@@ -334,9 +312,9 @@ void GameObject::SetAudioSource(AudioSource *source)
 	audioSource->SetPosition(transform->GetWorldPosition());
 }
 
-void GameObject::SetName(const char * name)
+void GameObject::SetName(std::string name)
 {
-	this->name = name;
+	this->name = std::move(name);
 }
 
 const char* GameObject::GetName() const
@@ -344,11 +322,9 @@ const char* GameObject::GetName() const
 	return name.c_str();
 }
 
-float GameObject::DistTo(GameObject *object) const
+float GameObject::DistTo(const GameObject &object) const
 {
-	glm::vec3 d = transform->GetWorldPosition() - object->transform->GetWorldPosition();
-	float d2 = (d.x * d.x) + (d.y * d.y) + (d.z * d.z);
-	return sqrt(d2);
+	return transform->DistanceTo(object.transform);
 }
 
 GameObject * GameObject::GetParent() const
@@ -356,7 +332,7 @@ GameObject * GameObject::GetParent() const
 	return _parent;
 }
 
-list<GameObject*> GameObject::GetChildren() const
+const list<GameObject*>& GameObject::GetChildren() const
 {
 	return _children;
 }
@@ -364,4 +340,42 @@ list<GameObject*> GameObject::GetChildren() const
 unsigned int GameObject::GetNumberOfChildren() const
 {
 	return static_cast<unsigned int>(_children.size());
+}
+
+void GameObject::AddScript(GameScript *script)
+{
+	if (script)
+	{
+		script->AttachTo(this);
+		_scripts.push_back(script);
+	}
+}
+
+void GameObject::RemoveScript(GameScript *script)
+{
+	if (script) {
+		script->Detach();
+		_scripts.remove(script);
+	}
+}
+
+const std::list<GameScript*>& GameObject::GetScripts() const
+{
+	return _scripts;
+}
+
+void GameObject::TriggerEnter(GameObject * object)
+{
+	if (!object) return;
+
+	for (auto script : _scripts) {
+		script->OnTriggerEnter(object);
+	}
+}
+
+void GameObject::TriggerExit(GameObject * object)
+{
+	for (auto script : _scripts) {
+		script->OnTriggerExit(object);
+	}
 }

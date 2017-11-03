@@ -49,7 +49,7 @@ void FontManager::Init() {
 	// texture_font_delete( font );
 
 	unsigned char *map;
-    map = MakeDistanceMap(fatlas->data, fatlas->width, fatlas->height);
+    map = MakeDistanceMap(fatlas->data, static_cast<uint32_t>(fatlas->width), static_cast<uint32_t>(fatlas->height));
     memcpy(fatlas->data, map, fatlas->width * fatlas->height * sizeof(unsigned char) );
     free(map);
 

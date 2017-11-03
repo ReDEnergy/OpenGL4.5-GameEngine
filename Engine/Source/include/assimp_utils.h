@@ -28,7 +28,7 @@ namespace assimp {
 			assert(factor >= 0.0f && factor <= 1.0f);
 		#endif
 		aiVector3D delta = end - start;
-		return (start + factor * delta);
+		return (start + delta * factor);
 	}
 
 	inline uint GetNextAnimationKey(uint currentKey, uint maxKeys)
@@ -38,20 +38,20 @@ namespace assimp {
 
 	// Seems that assimp sets the minimum number of keys = 2
 	// Safe mode - we return the maximum number of keys - 1
-	inline uint FindPositionKeyID(float animationTime, const aiNodeAnim* pNodeAnim)
+	inline uint FindPositionKeyID(double animationTime, const aiNodeAnim* pNodeAnim)
 	{
 		for (uint i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
-			if (animationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
+			if (animationTime < pNodeAnim->mPositionKeys[i + 1].mTime) {
 				return i;
 			}
 		}
 		return pNodeAnim->mNumPositionKeys - 1;
 	}
 
-	inline uint FindRotationKeyID(float animationTime, const aiNodeAnim* pNodeAnim)
+	inline uint FindRotationKeyID(double animationTime, const aiNodeAnim* pNodeAnim)
 	{
 		for (uint i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++) {
-			if (animationTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime) {
+			if (animationTime < pNodeAnim->mRotationKeys[i + 1].mTime) {
 				return i;
 			}
 		}
@@ -59,10 +59,10 @@ namespace assimp {
 		return pNodeAnim->mNumRotationKeys - 1;
 	}
 
-	inline uint FindScalingKeyID(float animationTime, const aiNodeAnim* pNodeAnim)
+	inline uint FindScalingKeyID(double animationTime, const aiNodeAnim* pNodeAnim)
 	{
 		for (uint i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++) {
-			if (animationTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) {
+			if (animationTime < pNodeAnim->mScalingKeys[i + 1].mTime) {
 				return i;
 			}
 		}
@@ -82,7 +82,7 @@ namespace assimp {
 		return NULL;
 	}
 
-	inline glm::vec3 CalcInterpolatedPosition(const aiNodeAnim* pNodeAnim, float animationTime, double animationDuration)
+	inline glm::vec3 CalcInterpolatedPosition(const aiNodeAnim* pNodeAnim, double animationTime, double animationDuration)
 	{
 		if (pNodeAnim->mNumPositionKeys == 1) {
 			auto &value = pNodeAnim->mPositionKeys[0].mValue;
@@ -94,21 +94,21 @@ namespace assimp {
 		uint keyID = FindPositionKeyID(animationTime, pNodeAnim);
 		uint nextKeyID = GetNextAnimationKey(keyID, pNodeAnim->mNumPositionKeys);
 
-		float keyDeltaTime = 0;
+		double keyDeltaTime = 0;
 		if (nextKeyID == 0) {
-			keyDeltaTime = float(animationDuration - positionKeys[keyID].mTime + positionKeys[0].mTime);
+			keyDeltaTime = animationDuration - positionKeys[keyID].mTime + positionKeys[0].mTime;
 		}
 		else {
-			keyDeltaTime = float(positionKeys[nextKeyID].mTime - positionKeys[keyID].mTime);
+			keyDeltaTime = positionKeys[nextKeyID].mTime - positionKeys[keyID].mTime;
 		}
 
-		float factor = (animationTime - (float)positionKeys[keyID].mTime) / keyDeltaTime;
+		auto factor = static_cast<float>((animationTime - positionKeys[keyID].mTime) / keyDeltaTime);
 
 		auto value = lerp(positionKeys[keyID].mValue, positionKeys[nextKeyID].mValue, factor);
 		return glm::vec3(value.x, value.y, value.z);
 	}
 
-	inline glm::quat CalcInterpolatedRotation(const aiNodeAnim* pNodeAnim, float animationTime, double animationDuration)
+	inline glm::quat CalcInterpolatedRotation(const aiNodeAnim* pNodeAnim, double animationTime, double animationDuration)
 	{
 		// we need at least two values to interpolate...
 		if (pNodeAnim->mNumRotationKeys == 1) {
@@ -121,15 +121,15 @@ namespace assimp {
 		uint rotKeyID = FindRotationKeyID(animationTime, pNodeAnim);
 		uint nextRotKeyID = GetNextAnimationKey(rotKeyID, pNodeAnim->mNumRotationKeys);
 
-		float keyDeltaTime = 0;
+		double keyDeltaTime = 0;
 		if (nextRotKeyID == 0) {
-			keyDeltaTime = float(animationDuration - rotationKeys[rotKeyID].mTime + rotationKeys[0].mTime);
+			keyDeltaTime = animationDuration - rotationKeys[rotKeyID].mTime + rotationKeys[0].mTime;
 		}
 		else {
-			keyDeltaTime = float(rotationKeys[nextRotKeyID].mTime - rotationKeys[rotKeyID].mTime);
+			keyDeltaTime = rotationKeys[nextRotKeyID].mTime - rotationKeys[rotKeyID].mTime;
 		}
 
-		float factor = (animationTime - (float)rotationKeys[rotKeyID].mTime) / keyDeltaTime;
+		auto factor = static_cast<float>((animationTime - rotationKeys[rotKeyID].mTime) / keyDeltaTime);
 		assert(factor >= 0.0f && factor <= 1.0f);
 
 		const aiQuaternion &startRotationQ = rotationKeys[rotKeyID].mValue;
@@ -140,7 +140,7 @@ namespace assimp {
 		return glm::quat(value.w, value.x, value.y, value.z);
 	}
 
-	inline glm::vec3 CalcInterpolatedScaling(const aiNodeAnim* pNodeAnim, float animationTime, double animationDuration)
+	inline glm::vec3 CalcInterpolatedScaling(const aiNodeAnim* pNodeAnim, double animationTime, double animationDuration)
 	{
 		if (pNodeAnim->mNumScalingKeys == 1) {
 			auto &value = pNodeAnim->mScalingKeys[0].mValue;
@@ -152,15 +152,15 @@ namespace assimp {
 		uint keyID = FindScalingKeyID(animationTime, pNodeAnim);
 		uint nextKeyID = GetNextAnimationKey(keyID, pNodeAnim->mNumScalingKeys);
 
-		float keyDeltaTime = 0;
+		double keyDeltaTime = 0;
 		if (nextKeyID == 0) {
-			keyDeltaTime = float(animationDuration - scalingKeys[keyID].mTime + scalingKeys[0].mTime);
+			keyDeltaTime = animationDuration - scalingKeys[keyID].mTime + scalingKeys[0].mTime;
 		}
 		else {
-			keyDeltaTime = float(scalingKeys[nextKeyID].mTime - scalingKeys[keyID].mTime);
+			keyDeltaTime = scalingKeys[nextKeyID].mTime - scalingKeys[keyID].mTime;
 		}
 
-		float factor = (animationTime - (float)scalingKeys[keyID].mTime) / keyDeltaTime;
+		auto factor = static_cast<float>((animationTime - scalingKeys[keyID].mTime) / keyDeltaTime);
 
 		auto value = lerp(scalingKeys[keyID].mValue, scalingKeys[nextKeyID].mValue, factor);
 		return glm::vec3(value.x, value.y, value.z);

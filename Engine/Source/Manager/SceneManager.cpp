@@ -14,7 +14,9 @@
 #include <Component/MeshRenderer.h>
 #include <Component/Renderer.h>
 #include <Component/Transform/Transform.h>
+
 #include <GPU/Shader.h>
+#include <GPU/Texture.h>
 
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
@@ -38,6 +40,12 @@ using namespace std;
 SceneManager::SceneManager()
 {
 	activeCamera = nullptr;
+	sceneOrigin = new GameObject("Scene");
+
+	//frustumObjects.reserve(1000);
+	//normalRender.reserve(1000);
+	//skinnedRender.reserve(1000);
+	//alphaRender.reserve(1000);
 }
 
 SceneManager::~SceneManager() {
@@ -55,8 +63,7 @@ void SceneManager::LoadScene(const char *fileName)
 	sceneFile = fileName;
 
 	frustumObjects.clear();
-	sceneObjects.clear();
-	lights.clear();
+	pointLights.clear();
 	toRemove.clear();
 
 	// Load document
@@ -111,7 +118,7 @@ void SceneManager::LoadScene(const char *fileName)
 		L->SetArea(area);
 		Serialization::ReadTransform(transformInfo, *L->transform);
 
-		this->lights.push_back(L);
+		this->pointLights.push_back(L);
 		AddObject(L);
 	}
 
@@ -136,7 +143,7 @@ void SceneManager::Update()
 	if (shouldAdd || shouldRemove) {
 		if (shouldAdd) {
 			for (auto &obj: toAdd) {
-				sceneObjects.push_back(obj);
+				obj->SetParent(sceneOrigin);
 				obj->SetDebugView(true);
 			}
 			toAdd.clear();
@@ -148,9 +155,6 @@ void SceneManager::Update()
 				if (obj->GetParent()) {
 					obj->SetParent(nullptr);
 				}
-				else {
-					sceneObjects.remove(obj);
-				}
 			}
 			toRemove.clear();
 		}
@@ -161,9 +165,7 @@ void SceneManager::Update()
 	}
 	toDelete.clear();
 
-	for (auto &obj : sceneObjects) {
-		obj->Update();
-	}
+	sceneOrigin->Update();
 
 	if (activeCamera)
 		activeCamera->Update();
@@ -173,20 +175,43 @@ void SceneManager::AddObject(GameObject *obj)
 {
 	if (obj == nullptr) return;
 
+	// Ignore command if objects already in scene hierarchy
+	auto parent = obj->GetParent();
+	while (parent) {
+		if (parent == sceneOrigin) {
+			sceneOrigin->AddChild(obj);
+			return;
+		}
+		parent = parent->GetParent();
+	}
+
+	// Add GameObject to scene map
+	auto &list = objectMap[obj->GetName()];
+	if (list.size() != 0) {
+		cout << "[SceneManager][Warning] GameObject \""<< obj->GetName() << "\" is not unique!" << endl;
+	}
+	//objectMap[obj->GetName()].push_back(obj);
+	list.push_back(obj);
+
+	// Add GameObject to temp list
 	toAdd.push_back(obj);
+
 	#ifdef PHYSICS_ENGINE
-	if (obj->physics)
-		obj->physics->AddToWorld();
+	//if (obj->physics)
+		//obj->physics->AddToWorld();
 	#endif
 }
 
 void SceneManager::AddPointLight(PointLight * light)
 {
-	lights.push_back(light);
+	pointLights.push_back(light);
 }
 
 void SceneManager::RemoveObject(GameObject * obj, bool destroy)
 {
+	if (obj == nullptr)
+		return;
+
 	// TODO - investigate if this can be treated by the PickerClass
 	if (Manager::Picker->GetSelectedObject() == obj) {
 		Manager::Picker->ClearSelection();
@@ -197,44 +222,47 @@ void SceneManager::RemoveObject(GameObject * obj, bool destroy)
 	}
 
 	toRemove.push_back(obj);
+	objectMap[obj->GetName()].remove(obj);
 
 #ifdef PHYSICS_ENGINE
-	if (obj->physics)
-		obj->physics->RemoveFromWorld();
+	//if (obj->physics)
+	//	obj->physics->RemoveFromWorld();
 #endif
+}
+
+GameObject * SceneManager::GetOrigin() const
+{
+	return sceneOrigin;
 }
 
 void SceneManager::FrameEnded()
 {
-	for (auto obj : sceneObjects) {
-		obj->transform->ClearMotionState();
-	}
-
+	sceneOrigin->transform->ClearMotionState();
 	activeCamera->transform->ClearMotionState();
 }
 
-GameObject * SceneManager::GetGameObject(char * objectName) const
+GameObject* SceneManager::FindGameObject(char * objectName) const
 {
-	for (auto obj : sceneObjects) {
-		if (obj->name.compare(objectName) == 0)
-			return obj;
+	auto it = objectMap.find(objectName);
+	if (it != objectMap.end() && it->second.size()) {
+		return it->second.front();
 	}
 	return nullptr;
 }
 
 const list<GameObject*>& SceneManager::GetSceneObjects() const
 {
-	return sceneObjects;
+	return sceneOrigin->GetChildren();
 }
 
-const list<GameObject*>& SceneManager::GetFrustrumObjects() const
+const vector<GameObject*>& SceneManager::GetFrustrumObjects() const
 {
 	return frustumObjects;
 }
 
 const vector<PointLight*>& SceneManager::GetPointLights() const
 {
-	return lights;
+	return pointLights;
 }
 
 Camera * SceneManager::GetActiveCamera()
@@ -244,30 +272,27 @@ Camera * SceneManager::GetActiveCamera()
 
 void SceneManager::SetActiveCamera(Camera * camera)
 {
+	if (camera == nullptr)
+		return;
+
 	activeCamera = camera;
+	activeCamera->renderer->SetIsRendered(false);
+	activeCamera->SetDebugView(false);
 }
 
 void SceneManager::Render(Camera * camera)
 {
-	R2T->Use();
-	camera->BindPosition(R2T->loc_eye_pos);
-	camera->BindViewMatrix(R2T->loc_view_matrix);
-	camera->BindProjectionMatrix(R2T->loc_projection_matrix);
+	// Render simple objects
+	{
+		R2T->Use();
+		camera->BindViewProj(R2T);
 
-	glDepthMask(GL_TRUE);
-	glEnable(GL_DEPTH_TEST);
+		glDepthMask(GL_TRUE);
+		glEnable(GL_DEPTH_TEST);
 
-	list<GameObject*> transparentObjects;
-
-	for (auto *obj : frustumObjects) {
-		if (obj->meshRenderer && obj->meshRenderer->mesh->meshType == MESH_TYPE::STATIC)
+		for (auto obj : normalRender)
 		{
-			if (obj->renderer->IsTransparent()) {
-				transparentObjects.push_back(obj);
-			}
-			else {
-				obj->Render(R2T);
-			}
+			obj->Render(R2T);
 		}
 	}
 
@@ -277,16 +302,13 @@ void SceneManager::Render(Camera * camera)
 		glBlendEquation(GL_FUNC_ADD);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		for (auto *obj : transparentObjects) {
-			if (obj->meshRenderer && obj->meshRenderer->mesh->meshType == MESH_TYPE::STATIC)
-			{
-				obj->Render(R2T);
-			}
+		for (auto *obj : alphaRender) {
+			obj->RenderTransparent(R2T);
 		}
 
 		glUniform1f(R2T->loc_transparency, 0.3f);
-		for (auto *obj : lights) {
-			obj->Render(R2T);
+		for (auto *obj : pointLights) {
+			obj->RenderTransparent(R2T);
 		}
 
 		glDisable(GL_BLEND);
@@ -295,14 +317,10 @@ void SceneManager::Render(Camera * camera)
 	// Render Skinned meshes
 	if (R2TSk) {
 		R2TSk->Use();
-		camera->BindPosition(R2TSk->loc_eye_pos);
-		camera->BindViewMatrix(R2TSk->loc_view_matrix);
-		camera->BindProjectionMatrix(R2TSk->loc_projection_matrix);
+		camera->BindViewProj(R2TSk);
 
-		for (auto *obj : frustumObjects) {
-			if (obj->meshRenderer && obj->meshRenderer->mesh->meshType == MESH_TYPE::SKINNED) {
-				obj->Render(R2TSk);
-			}
+		for (auto *obj : skinnedRender) {
+			obj->Render(R2TSk);
 		}
 	}
 
@@ -311,46 +329,113 @@ void SceneManager::Render(Camera * camera)
 	}
 }
 
+void SceneManager::RenderDeferredLights(Camera *camera, Texture *worldPositions, Texture *worldNormals) const
+{
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ONE);
+	Shader *DF = Manager::GetShader()->GetShader("deferred");
+	DF->Use();
+
+	camera->BindViewProj(DF);
+	glUniform2i(DF->loc_resolution, worldPositions->GetWidth(), worldPositions->GetHeight());
+
+	worldPositions->BindToTextureUnit(GL_TEXTURE0);
+	worldNormals->BindToTextureUnit(GL_TEXTURE1);
+
+	for (auto light : pointLights) {
+		auto FACE = camera->DistTo(*light) < light->effectRadius ? OpenGL::CULL::FRONT : OpenGL::CULL::BACK;
+		light->renderer->SetCulling(FACE);
+		light->RenderDeferred(DF);
+	}
+
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
+}
+
 void SceneManager::OnPostRender(std::function<void(Camera &camera)> callback)
 {
 	postRenderCallbacks.push_back(callback);
 }
 
+void SceneManager::PrepareObjectForRendering(GameObject * object)
+{
+	if (object->meshRenderer)
+	{
+		frustumObjects.push_back(object);
+		auto type = object->meshRenderer->mesh->meshType;
+		if (type == MESH_TYPE::STATIC) {
+			if (object->renderer->IsTransparent()) {
+				alphaRender.push_back(object);
+			}
+			else {
+				normalRender.push_back(object);
+			}
+		}
+		else if (type == MESH_TYPE::SKINNED)
+		{
+			skinnedRender.push_back(object);
+		}
+	}
+	for (auto &child : object->GetChildren())
+	{
+		PrepareObjectForRendering(child);
+	}
+}
+
+void SceneManager::PrepareSceneForRendering(Camera * camera)
+{
+	frustumObjects.resize(0);
+	normalRender.resize(0);
+	skinnedRender.resize(0);
+	alphaRender.resize(0);
+	PrepareObjectForRendering(sceneOrigin);
+}
+
 void SceneManager::FrustumCulling(Camera *gameCamera)
 {
-	frustumObjects.clear();
-	for (auto obj: sceneObjects) {
-		if (gameCamera->ColidesWith(obj))
-			frustumObjects.push_back(obj);
-	}
+	PrepareSceneForRendering(gameCamera);
+	//frustumObjects.clear();
+	//for (auto obj: sceneOrigin->GetChildren()) {
+	//		frustumObjects.push_back(obj);
+	//}
 }
 
 void SceneManager::LightSpaceCulling(Camera * gameCamera, Camera * light)
 {
 	bool sunMotion = light->transform->GetMotionState();
 	// Update Camera BoundingBox if camera has moved or the sun direction is changed
-	bool change = gameCamera->transform->GetMotionState() || sunMotion;
-	if (change) {
-		//gameCamera->UpdateBoundingBox(light);
-	}
 
 	auto DBG = Manager::GetDebug();
 	auto boundingBoxMode = DBG->GetBoundingBoxMode();
 
 	if (boundingBoxMode == DebugInfo::BBOX_MODE::OBJECT_SAPCE) {
-		for (auto obj : sceneObjects) {
+		sceneOrigin->aabb->ComputeLocal();
+		for (auto obj : sceneOrigin->GetChildren()) {
 			if (obj->transform->GetMotionState()) {
 				obj->aabb->ComputeLocal();
 			}
 		}
 	}
 	else {
-		for (auto obj : sceneObjects) {
-			if (obj->aabb && (sunMotion || obj->transform->GetMotionState())) {
-				obj->aabb->Update(light->transform->GetWorldRotation());
+		auto lightPosition = light->transform->GetWorldRotation();
+		if (sunMotion) {
+			for (auto obj : sceneOrigin->GetChildren()) {
+				if (obj->aabb) {
+					obj->aabb->Update(lightPosition);
+				}
+			}
+		}
+		else {
+			for (auto obj : sceneOrigin->GetChildren()) {
+				if (obj->aabb && obj->transform->GetMotionState()) {
+					obj->aabb->Update(lightPosition);
+				}
 			}
 		}
 	}
 
 	FrustumCulling(gameCamera);
 }
+

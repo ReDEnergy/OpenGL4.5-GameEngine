@@ -124,6 +124,8 @@ template <class T>
 void ParticleEffect<T>::Generate(unsigned int particleCount, const T &initValue)
 {
 	this->particleCount = particleCount;
+
+	SAFE_FREE(particles);
 	particles = new SSBO<T>(particleCount);
 
 	std::vector<unsigned int> indices;

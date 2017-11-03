@@ -18,8 +18,8 @@ class DLLExport MotionTransition
 		void OnEvent(EventType Event, void *data);
 
 	private:
-		float duration;
-		float startTime;
+		double duration;
+		double startTime;
 		float transitionTime;
 
 		Transform *source;

@@ -19,7 +19,7 @@ class DebugOverlayText;
 class TextureDebugger;
 
 #ifdef PHYSICS_ENGINE
-class HavokCore;
+class PhysXCore;
 class PhysicsManager;
 #endif
 
@@ -50,8 +50,8 @@ class Manager
 		DLLExport static DebugOverlayText*	GetDebugText();
 
 		#ifdef PHYSICS_ENGINE
-		DLLExport static HavokCore* GetHavok();
-		DLLExport static PhysicsManager* GetPhysics();
+		DLLExport static PhysicsManager*	GetPhysics();
+		//DLLExport static PhysXCore*		GetPhysics();
 		#endif
 
 		#ifdef ENGINE_DLL_EXPORTS
@@ -75,8 +75,8 @@ class Manager
 		static DebugOverlayText	*DebugText;
 
 		#ifdef PHYSICS_ENGINE
-		static HavokCore *Havok;
-		static PhysicsManager *Physics;
+		static PhysXCore		*PhysicsCore;
+		static PhysicsManager	*PhysicsSystem;
 		#endif
 
 		#endif

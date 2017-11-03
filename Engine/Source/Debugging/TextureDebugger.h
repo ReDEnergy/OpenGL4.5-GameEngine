@@ -29,7 +29,6 @@ class DLLExport TextureDebugger
 		void PushToChannel(unsigned int channel, const Texture* texture);
 		void SetChannel(unsigned int channel, const FrameBuffer* const frameBuffer);
 		unsigned int GetEmptyChannel() const;
-		void SetRenderingVAO(unsigned int VAO);
 		void Render();
 
 		bool Toggle();

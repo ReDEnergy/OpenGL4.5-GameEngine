@@ -41,7 +41,7 @@ void FrustumSplit::Update(DirectionalLight *Ref)
 
 	for (unsigned int i = 0; i < nrFrustumSections; i++) {
 		zones[i]->aabb->Update(Ref->transform->GetWorldRotation());
-		Transform *T = zones[i]->aabb->transform;
+		auto T = zones[i]->aabb->GetTransform();
 		float size = max(T->GetScale().x, T->GetScale().y);
 
 		// Change frustum area ViewProjection matrixes

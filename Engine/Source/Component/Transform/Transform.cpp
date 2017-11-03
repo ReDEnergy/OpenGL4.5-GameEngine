@@ -2,18 +2,20 @@
 
 #include <include/glm_utils.h>
 
+#include <iostream>
+
 Transform::Transform()
 {
 	_localPosition = glm::vec3(0);
 	_worldPosition = glm::vec3(0);
-	_worldRotation = glm::quat(1.0f, 0, 0, 0);
+	_worldRotation = glm::quat();
+	_invWorldRotation = glm::quat();
+
 	_localScale = glm::vec3(1.0f);
 
 	_rotateSpeed = 1;
 	_moveSpeed = 1;
 	_scaleSpeed = 0.02f;
-
-	_motionState = false;
 
 	Init();
 }
@@ -23,6 +25,8 @@ Transform::Transform(const Transform &transform)
 	_localPosition = transform._localPosition;
 	_worldPosition = transform._worldPosition;
 	_worldRotation = transform._worldRotation;
+	_invWorldRotation = glm::inverse(_worldRotation);
+
 	_localScale = transform._localScale;
 
 	_moveSpeed = transform._moveSpeed;
@@ -40,19 +44,48 @@ float Transform::DistanceTo(Transform * transform)
 	return glm::distance(_worldPosition, transform->GetWorldPosition());
 }
 
+float Transform::DistanceTo(const glm::vec3 & position)
+{
+	return glm::distance(_worldPosition, position);
+}
+
+float Transform::Distance2To(Transform * transform)
+{
+	return glm::distance2(_worldPosition, transform->GetWorldPosition());
+}
+
+float Transform::Distance2To(const glm::vec3 & position)
+{
+	return glm::distance2(_worldPosition, position);
+}
+
+glm::vec3 Transform::GetRelativePositionOf(const Transform & transform)
+{
+	return glm::rotate(_invWorldRotation, transform._worldPosition - _worldPosition);
+}
+
 void Transform::Init()
 {
-	_parentNode = nullptr;
 	_relativeRotation = glm::quat();
+
+	_parentNode = nullptr;
 	_motionState = false;
+	_updateHierarchy = true;
+	_modelIsOutdated = true;
+
 	UpdateWorldModel();
+}
+
+void Transform::SetHierarchyUpdate(bool value)
+{
+	_updateHierarchy = value;
 }
 
 void Transform::ClearMotionState()
 {
 	_motionState = false;
-	for (auto c : _childNodes) {
-		c->ClearMotionState();
+	for (auto C : _childNodes) {
+		C->ClearMotionState();
 	}
 }
 
@@ -61,40 +94,41 @@ bool Transform::GetMotionState() const
 	return _motionState;
 }
 
-// World Scaling: First apply rotation then scale the matrix
-//_worldModel = glm::scale(glm::mat4(1.0), _worldScale);
-//_worldModel *= glm::toMat4(_worldRotation);
-
-void Transform::UpdateWorldModel()
+void Transform::ComputeWorldModel()
 {
 	_worldModel = glm::toMat4(_worldRotation);
 	_worldModel[0] *= _localScale[0];
 	_worldModel[1] *= _localScale[1];
 	_worldModel[2] *= _localScale[2];
 	UpdateModelPosition();
+	_modelIsOutdated = false;
+}
+
+void Transform::UpdateWorldModel()
+{
+	_modelIsOutdated = true;
+	_motionState = true;
 }
 
 void Transform::UpdateModelPosition()
 {
-	_worldModel[3][0] = _worldPosition[0];
-	_worldModel[3][1] = _worldPosition[1];
-	_worldModel[3][2] = _worldPosition[2];
+	memcpy(&_worldModel[3], &_worldPosition, 12);
 	_motionState = true;
 }
 
 void Transform::ForceUpdate()
 {
-	UpdateWorldModel();
+	ComputeWorldModel();
 }
 
-void Transform::Move(const glm::vec3 offset)
+void Transform::Move(const glm::vec3 &offset)
 {
 	_worldPosition += offset;
 	SetWorldPosition(_worldPosition);
 	UpdateWorldModel();
 }
 
-void Transform::Move(const glm::vec3 dir, float deltaTime) {
+void Transform::Move(const glm::vec3 &dir, float deltaTime) {
 	_worldPosition += glm::normalize(dir) * _moveSpeed * deltaTime;
 	SetWorldPosition(_worldPosition);
 	UpdateWorldModel();
@@ -135,8 +169,10 @@ glm::vec3 Transform::GetScale() const
 	return _localScale;
 }
 
-const glm::mat4& Transform::GetModel() const
+const glm::mat4& Transform::GetModel()
 {
+	if (_modelIsOutdated)
+		ComputeWorldModel();
 	return _worldModel;
 }
 
@@ -171,27 +207,33 @@ float Transform::GetRotationSpeed() const
 }
 
 void Transform::RotateWorldOX(float deltaTime) {
-	SetWorldRotation(glm::AxisAngle(1, 0, 0, _rotateSpeed * deltaTime) * _worldRotation);
+	auto diff = glm::AxisAngle(1, 0, 0, _rotateSpeed * deltaTime);
+	SetWorldRotation(diff * _worldRotation);
 }
 
 void Transform::RotateWorldOY(float deltaTime) {
-	SetWorldRotation(glm::AxisAngle(0, 1, 0, _rotateSpeed * deltaTime) * _worldRotation);
+	auto diff = glm::AxisAngle(0, 1, 0, _rotateSpeed * deltaTime);
+	SetWorldRotation(diff * _worldRotation);
 }
 
 void Transform::RotateWorldOZ(float deltaTime) {
-	SetWorldRotation(glm::AxisAngle(0, 0, 1, _rotateSpeed * deltaTime) * _worldRotation);
+	auto diff = glm::AxisAngle(0, 0, 1, _rotateSpeed * deltaTime);
+	SetWorldRotation(diff * _worldRotation);
 }
 
 void Transform::RotateLocalOX(float deltaTime) {
-	SetWorldRotation(_worldRotation * glm::AxisAngle(1, 0, 0, _rotateSpeed * deltaTime));
+	auto diff = glm::AxisAngle(1, 0, 0, _rotateSpeed * deltaTime);
+	SetWorldRotation(_worldRotation * diff);
 }
 
 void Transform::RotateLocalOY(float deltaTime) {
-	SetWorldRotation(_worldRotation * glm::AxisAngle(0, 1, 0, _rotateSpeed * deltaTime));
+	auto diff = glm::AxisAngle(0, 1, 0, _rotateSpeed * deltaTime);
+	SetWorldRotation(_worldRotation * diff);
 }
 
 void Transform::RotateLocalOZ(float deltaTime) {
-	SetWorldRotation(_worldRotation * glm::AxisAngle(0, 0, 1, _rotateSpeed * deltaTime));
+	auto diff = glm::AxisAngle(0, 0, 1, _rotateSpeed * deltaTime);
+	SetWorldRotation(_worldRotation * diff);
 }
 
 void Transform::Copy(const Transform & source)
@@ -218,7 +260,7 @@ void Transform::SetRotationSpeed(float speed)
 
 void Transform::SetWorldPosition(glm::vec3 position)
 {
-	_worldPosition = position;
+	_worldPosition = std::move(position);
 	UpdateLocalPosition();
 	UpdateChildsPosition();
 	UpdateModelPosition();
@@ -226,7 +268,7 @@ void Transform::SetWorldPosition(glm::vec3 position)
 
 void Transform::SetLocalPosition(glm::vec3 position)
 {
-	_localPosition = position;
+	_localPosition = std::move(position);
 	UpdateWorldPosition();
 	UpdateChildsPosition();
 	UpdateModelPosition();
@@ -239,70 +281,74 @@ void Transform::UpdateWorldPosition()
 
 void Transform::UpdateLocalPosition()
 {
-	_localPosition = _parentNode ? glm::rotate(glm::inverse(_parentNode->_worldRotation), _worldPosition - _parentNode->_worldPosition) : _worldPosition;
+	_localPosition = _parentNode ? glm::rotate(_parentNode->_invWorldRotation, _worldPosition - _parentNode->_worldPosition) : _worldPosition;
 }
 
 void Transform::UpdateChildsPosition()
 {
+	if (!_updateHierarchy) return;
 	for (auto c : _childNodes) {
 		c->SetLocalPosition(c->_localPosition);
 	}
 }
 
-void Transform::SetWorldRotation(glm::vec3 eulerAngles360)
+void Transform::SetWorldRotation(const glm::vec3 &eulerAngles360)
 {
-	glm::vec3 worldEuler = glm::vec3(eulerAngles360) * TO_RADIANS;
-	SetWorldRotation(glm::quat(worldEuler));
+	SetWorldRotation(glm::quat(eulerAngles360 * TO_RADIANS));
 }
 
 void Transform::SetWorldRotation(glm::quat rotationQ)
 {
-	auto inv = glm::inverse(_worldRotation);
-	_worldRotation = rotationQ;
-	glm::quat diffQ = rotationQ * inv;
-	UpdateChildrenRotation(diffQ);
+	_worldRotation = std::move(rotationQ);
+	_invWorldRotation = glm::inverse(_worldRotation);
+	UpdateChildrenRotation();
 	UpdateRelativeRotation();
 	UpdateWorldModel();
 }
 
 void Transform::UpdateRelativeRotation()
 {
-	glm::quat parentRot = _parentNode ? _parentNode->_worldRotation : glm::quat();
-	_relativeRotation = glm::inverse(parentRot) * _worldRotation;
+	glm::quat invParentRot = _parentNode ? _parentNode->_invWorldRotation : glm::quat();
+	_relativeRotation = invParentRot * _worldRotation;
 }
 
-void Transform::SetLocalRotation(glm::quat localRotationQ)
+void Transform::SetRelativeRotation(const glm::vec3 &eulerAngles360)
 {
-	glm::quat localRotation = _parentNode ? _parentNode->_worldRotation * localRotationQ : localRotationQ;
-	SetWorldRotation(localRotation);
+	SetRelativeRotation(glm::quat(eulerAngles360 * TO_RADIANS));
 }
 
-void Transform::SetWorldRotationAndScale(glm::quat rotationQ, glm::vec3 scale)
+void Transform::SetRelativeRotation(const glm::quat &localRotationQ)
 {
-	_localScale = scale;
+	auto worldRotation = _parentNode ? _parentNode->_worldRotation * localRotationQ : localRotationQ;
+	SetWorldRotation(worldRotation);
+}
+
+void Transform::SetWorldRotationAndScale(const glm::quat &rotationQ, glm::vec3 scale)
+{
+	_localScale = std::move(scale);
 	SetWorldRotation(rotationQ);
 }
 
-void Transform::UpdateChildRotation(const glm::quat &diffQ)
+void Transform::UpdateWorldInfo()
 {
-	_worldRotation = diffQ * _worldRotation;
+	_worldRotation = _parentNode->_worldRotation * _relativeRotation;
 	_worldPosition = _parentNode->_worldPosition + glm::rotate(_parentNode->_worldRotation, _localPosition);
-	_relativeRotation = glm::inverse(_parentNode->_worldRotation) * _worldRotation;
-	UpdateChildrenRotation(diffQ);
-	UpdateRelativeRotation();
+	_invWorldRotation = glm::inverse(_worldRotation);
+	UpdateChildrenRotation();
 	UpdateWorldModel();
 }
 
-void Transform::UpdateChildrenRotation(glm::quat diffQ)
+void Transform::UpdateChildrenRotation()
 {
+	if (!_updateHierarchy) return;
 	for (auto c : _childNodes) {
-		c->UpdateChildRotation(diffQ);
+		c->UpdateWorldInfo();
 	}
 }
 
 void Transform::SetScale(glm::vec3 scale)
 {
-	_localScale = scale;
+	_localScale = std::move(scale);
 	UpdateWorldModel();
 }
 
@@ -314,16 +360,15 @@ void Transform::Scale(float deltaTime) {
 void Transform::AddChild(Transform * transform)
 {
 	_childNodes.push_back(transform);
+	transform->_parentNode = this;
 	transform->SetWorldPosition(transform->_worldPosition);
+	transform->SetWorldRotation(transform->_worldRotation);
 }
 
 void Transform::RemoveChild(Transform * transform)
 {
 	_childNodes.remove(transform);
-}
-
-void Transform::SetParent(Transform * transform)
-{
-	_parentNode = transform;
-	SetWorldPosition(_worldPosition);
+	transform->_parentNode = nullptr;
+	transform->SetWorldPosition(transform->_worldPosition);
+	transform->SetWorldRotation(transform->_worldRotation);
 }

@@ -29,8 +29,8 @@ struct VertexBoneData
 
 	void Reset()
 	{
-		ZERO_MEM(IDs);
-		ZERO_MEM(Weights);
+		memset(IDs, 0, sizeof(IDs));
+		memset(Weights, 0, sizeof(IDs));
 	}
 
 	void SetBoneData(uint index, uint BoneID, float Weight);

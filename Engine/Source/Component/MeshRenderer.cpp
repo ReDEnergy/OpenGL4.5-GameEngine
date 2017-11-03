@@ -51,9 +51,8 @@ void MeshRenderer::SetGLDrawMode(GLenum drawMode)
 	glDrawMode = drawMode;
 }
 
-void MeshRenderer::Render(const Shader *shader) const
+void MeshRenderer::Render() const
 {
-	CheckOpenGLError();
 	glBindVertexArray(glVAO);
 	for (unsigned int i = 0 ; i < mesh->meshEntries.size() ; i++) {
 
@@ -78,7 +77,6 @@ void MeshRenderer::Render(const Shader *shader) const
 		glDrawElementsBaseVertex(glDrawMode, mesh->meshEntries[i].nrIndices,
 								GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * mesh->meshEntries[i].baseIndex),
 								mesh->meshEntries[i].baseVertex);
-		CheckOpenGLError();
 		#endif
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
@@ -88,7 +86,6 @@ void MeshRenderer::Render(const Shader *shader) const
 
 void MeshRenderer::RenderInstanced(unsigned int instances) const
 {
-	CheckOpenGLError();
 	instances = instances < 1 ? 1 : instances;
 	glBindVertexArray(glVAO);
 	for (unsigned int i = 0; i < mesh->meshEntries.size(); i++) {

@@ -28,7 +28,7 @@ class DLLExport AnimationController
 		void SetDefaultPose();
 		void SetAnimation(unsigned int animationID);
 		void SetAnimation(const char *animationName);
-		void SetAnimationTime(float animationTime);
+		void SetAnimationTime(double animationTime);
 		void SetPlayback(bool value);
 		bool TogglePlayback();
 		float GetAnimationTime() const;
@@ -41,7 +41,7 @@ class DLLExport AnimationController
 		void UpdateGPUData();
 		void UpdateAnimation();
 		void UpdateAnimationNodesMapping();
-		void UpdateJointTransform(SkeletalJoint * joint, float animationTime);
+		void UpdateJointTransform(SkeletalJoint * joint, double animationTime);
 
 		void SetJointToBindPose(SkeletalJoint * joint);
 
@@ -60,5 +60,5 @@ class DLLExport AnimationController
 		#endif
 		bool playbackState;
 		bool controlState;
-		float animationTime;
+		double animationTime;
 };

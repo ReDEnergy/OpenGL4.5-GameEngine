@@ -14,10 +14,6 @@
 #include <include/math.h>
 #include <include/utils.h>
 
-#ifdef PHYSICS_ENGINE
-#include <include/havok.h>
-#endif
-
 // Audio
 #ifdef USE_AUDIO_MANAGER
 #include <Audio/SoundFX.h>
@@ -40,6 +36,7 @@
 #include <Component/AABB.h>
 #include <Component/Animation/AnimationController.h>
 #include <Component/AudioSource.h>
+#include <Component/GameScript.h>
 #include <Component/Transform/Transform.h>
 #include <Component/Transform/FreezeTransform.h>
 #include <Component/Transform/LimitedTransform.h>
@@ -92,8 +89,8 @@
 #include <Debugging/ProfileTimer.h>
 
 #ifdef PHYSICS_ENGINE
-#include <Manager/HavokCore.h>
-#include <Manager/PhysicsManager.h>
+#include <Physics/PhysXCore.h>
+#include <Physics/PhysicsManager.h>
 #endif
 
 // UI Managers
@@ -138,6 +135,7 @@
 #include <Prototyping/Prototype.h>
 
 // Templates
+#include <templates/instance.h>
 #include <templates/singleton.h>
 
 #ifdef GL_ENABLED

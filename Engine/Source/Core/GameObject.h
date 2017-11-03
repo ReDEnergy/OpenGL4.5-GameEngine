@@ -10,6 +10,7 @@
 
 class AABB;
 class AudioSource;
+class GameScript;
 class Mesh;
 class MeshRenderer;
 class Shader;
@@ -34,8 +35,8 @@ class DLLExport GameObject: virtual public Object
 		void Init();
 		void Clear();
 
-		virtual void Render() const;
 		virtual void Render(const Shader *shader) const;
+		virtual void RenderTransparent(const Shader *shader) const;
 		virtual void RenderInstanced(const Shader *shader, unsigned int instances) const;
 		virtual void RenderDebug(const Shader *shader) const;
 		virtual void RenderForPicking(const Shader *shader) const;
@@ -45,29 +46,35 @@ class DLLExport GameObject: virtual public Object
 		virtual void SetDebugView(bool value);
 		virtual void SetAudioSource(AudioSource *source);
 
-		bool ColidesWith(GameObject *object);
-		float DistTo(GameObject *object) const;
+		bool ColidesWith(const GameObject &object) const;
+		float DistTo(const GameObject &object) const;
 
-		void SetName(const char* name);
+		void SetName(std::string name);
 		const char* GetName() const;
 
 		virtual void Update();
-		virtual void UseShader(Shader *shader);
 		virtual void LogDebugInfo() const;
 
 		glm::vec3 GetColorID() const;
-		GameObject* IdentifyByColor(glm::vec3 colorID);
+		GameObject* IdentifyByColor(const glm::vec3 &colorID);
 		void SetSelectable(bool value);
 
 		// Hierarchy chain
 		GameObject* GetParent() const;
-		std::list<GameObject*> GetChildren() const;
+		const std::list<GameObject*>& GetChildren() const;
 		unsigned int GetNumberOfChildren() const;
 		void SetParent(GameObject* object);
 
 		void AddChild(GameObject* object);
 		void RemoveChild(GameObject* object);
 		void RemoveChildren();
+
+		void AddScript(GameScript *script);
+		void RemoveScript(GameScript *script);
+		const std::list<GameScript*>& GetScripts() const;
+
+		void TriggerEnter(GameObject *object);
+		void TriggerExit(GameObject *object);
 
 	protected:
 		void SetupAABB();
@@ -79,25 +86,27 @@ class DLLExport GameObject: virtual public Object
 		AudioSource *audioSource;
 		AABB		*aabb;
 		MeshRenderer *meshRenderer;
-		ObjectInput	*input;
+
+	public:
 		Renderer	*renderer;
 		Transform	*transform;
-		Shader		*shader;
 		AnimationController * animation;
 		#ifdef PHYSICS_ENGINE
 		Physics		*physics;
 		#endif
 
 	protected:
-		std::string name;
-		glm::vec3 colorID;
 		const char *referenceName;
+		GameObject *_parent;
+
+		glm::vec3 colorID;
 		unsigned int instanceID;
 		bool debugView;
 		bool selectable;
 
-		GameObject* _parent;
+		std::string name;
 		std::list<GameObject*> _children;
+		std::list<GameScript*> _scripts;
 };
 
 // TODO idea

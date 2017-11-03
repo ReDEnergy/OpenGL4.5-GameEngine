@@ -17,8 +17,8 @@ MotionTransition::MotionTransition(Transform *source, Transform * endState, floa
 
 void MotionTransition::Update() {
 
-	float deltaTime = Engine::GetElapsedTime() - startTime;
-	float transitionTime = deltaTime / duration;
+	auto deltaTime = Engine::GetElapsedTime() - startTime;
+	float transitionTime = static_cast<float>(deltaTime / duration);
 
 	if (transitionTime < 1) {
 		auto position = glm::mix(startState->GetWorldPosition(), endState->GetWorldPosition(), transitionTime);

@@ -20,6 +20,7 @@ class DLLExport Transform: virtual public Object
 		// ****************************
 		// Transform motion state
 
+		void SetHierarchyUpdate(bool value);
 		void ClearMotionState();
 		bool GetMotionState() const;
 
@@ -38,7 +39,7 @@ class DLLExport Transform: virtual public Object
 		virtual glm::vec3 GetLocalOZVector() const;
 
 		virtual glm::vec3 GetScale() const;
-		virtual const glm::mat4& GetModel() const;
+		virtual const glm::mat4& GetModel();
 
 		virtual float GetMoveSpeed() const;
 		virtual float GetScaleSpeed() const;
@@ -47,27 +48,30 @@ class DLLExport Transform: virtual public Object
 		// ****************************
 		// Continuous transform methods
 
-		virtual void Move(const glm::vec3 offset);
-		virtual void Move(const glm::vec3 dir, float deltaTime);
+		virtual void Move(const glm::vec3 &offset);
+		virtual void Move(const glm::vec3 &dir, float deltaTime);
 		virtual void Scale(float deltaTime);
 
-		virtual void RotateLocalOY(float deltaTime);
-		virtual void RotateLocalOZ(float deltaTime);
+		// Rotations
 		virtual void RotateWorldOX(float deltaTime);
 		virtual void RotateWorldOY(float deltaTime);
 		virtual void RotateWorldOZ(float deltaTime);
 		virtual void RotateLocalOX(float deltaTime);
+		virtual void RotateLocalOY(float deltaTime);
+		virtual void RotateLocalOZ(float deltaTime);
 
+		// Positions
 		virtual void SetLocalPosition(glm::vec3 position);
-		virtual void SetLocalRotation(glm::quat localRotationQ);
-
 		virtual void SetWorldPosition(glm::vec3 position);
-		virtual void SetWorldRotation(glm::quat rotationQ);
 
-		// Set rotation using degree angles (0 - 360)
-		virtual void SetWorldRotation(glm::vec3 eulerAngles360);
-		virtual void SetWorldRotationAndScale(glm::quat rotationQ, glm::vec3 scale);
-		
+		// Rotations
+		virtual void SetWorldRotation(glm::quat rotationQ);
+		virtual void SetWorldRotation(const glm::vec3 &eulerAngles360);
+		virtual void SetWorldRotationAndScale(const glm::quat &rotationQ, glm::vec3 scale);
+
+		virtual void SetRelativeRotation(const glm::vec3 &eulerAngles360);
+		virtual void SetRelativeRotation(const glm::quat &localRotationQ);
+
 		virtual void SetScale(glm::vec3 scale);
 		virtual void ForceUpdate();
 
@@ -84,11 +88,15 @@ class DLLExport Transform: virtual public Object
 
 		void AddChild(Transform *transform);
 		void RemoveChild(Transform *transform);
-		void SetParent(Transform *transform);
 
 		// ****************************
 		// Transform operations
 		float DistanceTo(Transform *transform);
+		float DistanceTo(const glm::vec3 &position);
+		float Distance2To(Transform *transform);
+		float Distance2To(const glm::vec3 &position);
+		glm::vec3 GetRelativePositionOf(const Transform &transform);
+		//glm::vec3 GetDirectionTowards(Transform *transform);
 
 	protected:
 		virtual void Init();
@@ -96,32 +104,30 @@ class DLLExport Transform: virtual public Object
 		// ****************************
 		// Should be called only by the owner
 
+		virtual void ComputeWorldModel();
 		virtual void UpdateWorldModel();
 		virtual void UpdateWorldPosition();
 		virtual void UpdateLocalPosition();
 		virtual void UpdateRelativeRotation();
-		virtual void UpdateChildRotation(const glm::quat &diffQ);
 
+		virtual void UpdateWorldInfo();
 		virtual void UpdateChildsPosition();
-		virtual void UpdateChildrenRotation(glm::quat diffQ);
+		virtual void UpdateChildrenRotation();
 
 	private:
 		virtual void UpdateModelPosition();
 
 	protected:
-		Transform* _parentNode;
-		std::list<Transform*> _childNodes;
-
-		glm::vec3 _worldPosition;
-		glm::quat _worldRotation;
 		glm::mat4 _worldModel;
 
-		// INFO: Relative position and location do not influence one another
-		// Position relative to parent coordinate system
-		glm::vec3 _localPosition;
-
-		// Rotation relative to parent rotation
+		// Rotations
+		glm::quat _worldRotation;
 		glm::quat _relativeRotation;
+		glm::quat _invWorldRotation;
+
+		// Positions
+		glm::vec3 _worldPosition;
+		glm::vec3 _localPosition;
 
 		// Scale relative to the object, not influenced by rotations
 		glm::vec3 _localScale;
@@ -129,5 +135,11 @@ class DLLExport Transform: virtual public Object
 		float _rotateSpeed;
 		float _moveSpeed;
 		float _scaleSpeed;
+
 		bool _motionState;
+		bool _modelIsOutdated;
+		bool _updateHierarchy;
+
+		Transform* _parentNode;
+		std::list<Transform*> _childNodes;
 };

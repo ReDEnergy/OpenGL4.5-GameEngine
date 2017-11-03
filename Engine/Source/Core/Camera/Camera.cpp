@@ -58,6 +58,7 @@ void Camera::Init()
 
 	transform->SetMoveSpeed(20.0f);
 	transform->SetRotationSpeed(50);
+	transform->SetScale(glm::vec3(0.1f));
 	renderer->SetCastShadow(false);
 
 	SetMesh(Manager::GetResource()->GetMesh("box"));
@@ -84,6 +85,25 @@ void Camera::UpdateSpeed(float offset)
 	if (speed <= minSpeed || speed >= maxSpeed)
 		return;
 	transform->SetMoveSpeed(speed);
+}
+
+void Camera::SetPosition(const glm::vec3 & position)
+{
+	transform->SetWorldPosition(position);
+	Camera::Update();
+}
+
+void Camera::SetRotation(const glm::quat & worldRotation)
+{
+	transform->SetWorldRotation(worldRotation);
+	Camera::Update();
+}
+
+void Camera::SetPositionAndRotation(const glm::vec3 & position, const glm::quat & worldRotation)
+{
+	transform->SetWorldPosition(position);
+	transform->SetWorldRotation(worldRotation);
+	Camera::Update();
 }
 
 /*
@@ -119,9 +139,10 @@ void Camera::RotateOX(float deltaTime)
 
 void Camera::RotateOY(float deltaTime)
 {
+	// TODO - add rotation limits
 	if (deltaTime == 0)
 		return;
-	 SetYaw(deltaTime * sensitivityOY);
+	SetYaw(deltaTime * sensitivityOY);
 }
 
 void Camera::RotateOZ(float deltaTime) {
@@ -169,13 +190,6 @@ void Camera::MoveInDirection(glm::vec3 dir, float deltaTime)
 	transform->Move(dir, deltaTime);
 }
 
-// Move camera to a certain position
-void Camera::SetPosition(glm::vec3 pos)
-{
-	transform->SetWorldPosition(pos);
-	Camera::Update();
-}
-
 // Print information about camera
 void Camera::Log() const
 {
@@ -188,9 +202,10 @@ void Camera::Log() const
 	cout << "--------------------------------------------------" << endl;
 }
 
-void Camera::BindMVP(const Shader * shader) const
+void Camera::BindViewProj(const Shader * shader) const
 {
-	BindPosition(shader->loc_eye_pos);
+	if (shader->loc_eye_pos)
+		BindPosition(shader->loc_eye_pos);
 	BindViewMatrix(shader->loc_view_matrix);
 	BindProjectionMatrix(shader->loc_projection_matrix);
 }
@@ -222,7 +237,6 @@ void Camera::SetPerspective(float FoVy, float aspectRatio, float zNear, float zF
 	this->aspectRatio = aspectRatio;
 	this->FoVy = FoVy;
 	Projection = glm::perspective(RADIANS(FoVy), aspectRatio, zNear, zFar);
-	ComputeFrustum();
 }
 
 void Camera::SetOrthgraphic(float width, float height, float zNear, float zFar)

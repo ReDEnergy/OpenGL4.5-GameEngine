@@ -104,6 +104,9 @@
     <Filter Include="libs\pugixml">
       <UniqueIdentifier>{6420507a-c4a2-4259-b88a-a086065e126d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Threading">
+      <UniqueIdentifier>{b506bc5b-d9e5-4dee-a36a-1e87044ca4ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Component\AABB.cpp">
@@ -235,16 +238,7 @@
     <ClCompile Include="..\Source\Lighting\SpotLight.cpp">
       <Filter>Engine\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Physics\PhysicsPhantom.cpp">
-      <Filter>Engine\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Component\Physics.cpp">
-      <Filter>Engine\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\PhysicsManager.cpp">
-      <Filter>Engine\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\HavokCore.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Component\SkinnedMesh.cpp">
@@ -340,6 +334,24 @@
     <ClCompile Include="..\Source\Component\MeshRenderer.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Core\World.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Component\GameScript.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Physics\PhysXRagdoll.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Physics\PhysXCore.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Physics\PhysicsManager.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Event\EventChannel.cpp">
+      <Filter>Engine\Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Component\AABB.h">
@@ -406,9 +418,6 @@
       <Filter>Engine\include</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\include\glm_utils.h">
-      <Filter>Engine\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\include\havok.h">
       <Filter>Engine\include</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\include\math.h">
@@ -501,16 +510,7 @@
     <ClInclude Include="..\Source\Lighting\SpotLight.h">
       <Filter>Engine\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Physics\PhysicsPhantom.h">
-      <Filter>Engine\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\HavokCore.h">
-      <Filter>Engine\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Component\Physics.h">
-      <Filter>Engine\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\PhysicsManager.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\UI\GameMenu.h">
@@ -636,6 +636,30 @@
     <ClInclude Include="..\Source\Engine.h" />
     <ClInclude Include="..\Source\Component\MeshRenderer.h">
       <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Component\GameScript.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Physics\PhysX.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Physics\PhysXRagdoll.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Physics\PhysXCore.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Physics\PhysicsManager.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Threading\utils.h">
+      <Filter>Engine\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Event\EventChannel.h">
+      <Filter>Engine\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\templates\instance.h">
+      <Filter>Engine\templates</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

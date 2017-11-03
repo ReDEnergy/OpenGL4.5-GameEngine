@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <PxConfig>DEBUG</PxConfig>
+    <PxVersion>3.3</PxVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>PhysX.debug</_PropertySheetDisplayName>
+    <LibraryPath>..\..\libs\PhysX $(PxVersion)\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\libs\PhysX $(PxVersion)\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>PhysX3$(PxConfig)_$(PlatformTarget).lib;PhysX3Common$(PxConfig)_$(PlatformTarget).lib;PhysX3Cooking$(PxConfig)_$(PlatformTarget).lib;PhysX3Extensions$(PxConfig).lib;PhysXProfileSDK$(PxConfig).lib;PhysXVisualDebuggerSDK$(PxConfig).lib;PxTask$(PxConfig).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <PreprocessorDefinitions>PHYSICS_ENGINE;PHYSX_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="PxConfig">
+      <Value>$(PxConfig)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PxVersion">
+      <Value>$(PxVersion)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

@@ -93,7 +93,7 @@ void AABB::UpdateChildren(const glm::quat & rotationQ)
 	}
 }
 
-void AABB::Update(glm::quat rotationQ)
+void AABB::Update(const glm::quat &rotationQ)
 {
 	auto rotation = gameObj->transform->GetWorldRotation();
 	auto position = gameObj->transform->GetWorldPosition();
@@ -142,6 +142,11 @@ void AABB::ComputeLocal()
 		if (obj->aabb)
 			obj->aabb->ComputeLocal();
 	}
+}
+
+const Transform * AABB::GetTransform() const
+{
+	return transform;
 }
 
 void AABB::Render(const Shader *shader) const

@@ -33,7 +33,7 @@ class SSBO
 		~SSBO()
 		{
 			glDeleteBuffers(1, &ssbo);
-			SAFE_FREE(data);
+			SAFE_FREE_ARRAY(data);
 		};
 
 		void SetBufferData(const StorageEntry *data, GLenum usage = GL_DYNAMIC_DRAW)

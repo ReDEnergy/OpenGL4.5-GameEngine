@@ -11,6 +11,7 @@
 #include <Component/Transform/Transform.h>
 
 #include <Core/Engine.h>
+#include <Core/WindowManager.h>
 #include <Core/WindowObject.h>
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
@@ -39,7 +40,8 @@ DebugInfo::~DebugInfo() {
 void DebugInfo::Init()
 {
 	FBO = new FrameBuffer();
-	FBO->Generate(Engine::Window->props.resolution.x, Engine::Window->props.resolution.y, 1);
+	auto window = WindowManager::GetDefaultWindow();
+	FBO->Generate(window->props.resolution.x, window->props.resolution.y, 1);
 	Manager::TextureDBG->SetChannel(2, FBO);
 }
 
@@ -58,12 +60,6 @@ void DebugInfo::Add(GameObject *obj)
 void DebugInfo::Remove(GameObject *obj)
 {
 	objects.remove(obj);
-}
-
-void DebugInfo::Update(const Camera * camera)
-{
-	if (!debugView) return;
-	Render(camera);
 }
 
 bool DebugInfo::Toggle()
@@ -94,15 +90,16 @@ DebugInfo::BBOX_MODE DebugInfo::GetBoundingBoxMode() const
 
 void DebugInfo::Render(const Camera *camera) const
 {
-	Shader *S = Manager::Shader->GetShader("simple");
-	S->Use();
-
-	camera->BindViewMatrix(S->loc_view_matrix);
-	camera->BindProjectionMatrix(S->loc_projection_matrix);
+	if (!debugView) return;
 
 	FBO->Bind();
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
+
+	Shader *S = Manager::Shader->GetShader("simple");
+	S->Use();
+
+	camera->BindViewProj(S);
 
 	// TODO: Instantiated rendering
 	// - use a simplified box not one with 12 triangles - should be only 6 quads
@@ -142,4 +139,6 @@ void DebugInfo::Render(const Camera *camera) const
 	{
 		obj->RenderDebug(S);
 	}
+
+	FrameBuffer::Unbind();
 }

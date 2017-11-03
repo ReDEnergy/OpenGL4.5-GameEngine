@@ -23,7 +23,6 @@
 #include <Utils/Serialization.h>
 
 #ifdef PHYSICS_ENGINE
-#include <include/havok.h>
 #include <Component/Physics.h>
 #endif
 
@@ -131,7 +130,7 @@ void ResourceManager::LoadPrefabObjects(const pugi::xml_document &doc)
 	{
 		objName = obj.child_value("name");
 		meshName = obj.child_value("mesh");
-		auto shaderInfo = obj.child("shader");
+		//auto shaderInfo = obj.child("shader");
 		auto transformInfo = obj.child("transform");
 		auto renderingInfo = obj.child("rendering");
 
@@ -141,17 +140,10 @@ void ResourceManager::LoadPrefabObjects(const pugi::xml_document &doc)
 			GO->SetMesh(_meshes[meshName]);
 		}
 
-		if (shaderInfo) {
-			GO->UseShader(Manager::Shader->GetShader(shaderInfo.text().get()));
-		}
+		//if (shaderInfo) {
+		//	GO->UseShader(Manager::Shader->GetShader(shaderInfo.text().get()));
+		//}
 
-		#ifdef PHYSICS_ENGINE
-		auto physicsInfo = obj.child("physics");
-		if (physicsInfo) {
-			GO->physics = new Physics(GO);
-			GO->physics->LoadHavokFile(RESOURCE_PATH::PHYSICS + physicsInfo.child_value("file"));
-		}
-		#endif
 		if (renderingInfo) {
 			auto shadowInfo = renderingInfo.child("shadow");
 			if (shadowInfo)
@@ -171,9 +163,11 @@ void ResourceManager::LoadPrefabObjects(const pugi::xml_document &doc)
 
 GameObject* ResourceManager::GetGameObject(const char *name) const
 {
-	if (_objects.find(name) != _objects.end())
-		return new GameObject(*_objects.at(name));
-	return nullptr;
+	GameObject* obj = nullptr;
+	if (_objects.find(name) != _objects.end()) {
+		obj = new GameObject(*_objects.at(name));
+	}
+	return obj;
 }
 
 GameObject* ResourceManager::GetPropObject(const char * name) const

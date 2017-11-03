@@ -7,10 +7,10 @@
 
 struct LapInfo
 {
-	LapInfo(const char* label, double time)
+	LapInfo(std::string label, double time)
 		: label(label), time(time) {};
 
-	const char* label;
+	std::string label;
 	double time;
 };
 
@@ -20,11 +20,10 @@ class DLLExport ProfileTimer
 		ProfileTimer();
 		~ProfileTimer();
 
-	public:
-		void Start();
-		void Stop();
+		void Start(const char* label = "Start");
+		void Stop(const char* label = "Stop");
+		void Lap(const char* label = "Lap");
 		void Reset();
-		void Lap(const char* label = nullptr);
 		void Print();
 
 		bool IsActive() const;

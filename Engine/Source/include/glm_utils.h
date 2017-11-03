@@ -42,6 +42,29 @@ namespace glm
 		return glm::quat(w, x, y, z);
 	}
 
+	// Convert a quaternion to axis angle
+	inline glm::vec4 GetAxisAngle(glm::quat &rotation, int precision = 0)
+	{
+		float angle = acos(rotation.w);
+
+		if (angle == 0) {
+			return glm::vec4(1, 0, 0, 0);
+		}
+
+		auto t = sqrt(1 - rotation.w * rotation.w);
+
+		angle = static_cast<float>(angle * 180 / M_PI);
+
+		if (precision) {
+			auto x = round(rotation.x / t * precision) / precision;
+			auto y = round(rotation.y / t * precision) / precision;
+			auto z = round(rotation.z / t * precision) / precision;
+			return glm::vec4(x, y, z, round(angle));
+		}
+
+		return glm::vec4(rotation.x / t, rotation.y / t, rotation.z / t, round(angle));
+	}
+
 	// Rotate a Point around OY (0, 1, 0) with a specific angle(radians)
 	inline glm::vec3 RotateOY(const glm::vec3 P, float radians) {
 		glm::vec3 R;

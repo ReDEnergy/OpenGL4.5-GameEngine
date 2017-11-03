@@ -17,7 +17,9 @@ class DLLExport DirectOpenGL
 	public:
 		void Init();
 
-		void Use(Shader *shader = nullptr);
+		void UseShader(Shader *shader = nullptr);
+		void UseDefaultShader();
+		void BindActiveViewProj() const;
 		Shader * GetActiveShader() const;
 		void SetLineWidth(float width) const;
 		void SetDrawColor(uchar red, uchar green, uchar blue) const;
@@ -25,11 +27,12 @@ class DLLExport DirectOpenGL
 		void SetStartLinePosition(const glm::vec3 & position) const;
 		void DrawLine(float lenght, glm::quat rotation) const;
 		void DrawLine(const glm::vec3& from, const glm::vec3& to) const;
-		void DrawStandardAxis(const Transform * transform, const Shader * shader) const;
-		void DrawStandardAxis(const Transform * transform) const;
+		void DrawStandardAxis(const Transform * transform, const Shader * shader, float length = 1) const;
+		void DrawStandardAxis(const Transform * transform, float length = 1) const;
 
 	private:
 		Shader *drawShader;
+		Shader *defaultShader;
 		Shader *activeShader;
 		GameObject *line;
 };

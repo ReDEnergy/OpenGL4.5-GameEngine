@@ -13,13 +13,12 @@ class DLLExport MeshRenderer
 		MeshRenderer(MeshRenderer& meshRenderer);
 		virtual ~MeshRenderer();
 
-		virtual void Render(const Shader *shader) const;
+		virtual void Render() const;
 		virtual void RenderInstanced(unsigned int instances) const;
 		virtual void UseMaterials(bool);
 
 		void InitForNewContext();
 		void SetGLDrawMode(unsigned int drawMode);
-		void SetCulling(bool value = true);
 
 	public:
 		Mesh *mesh;

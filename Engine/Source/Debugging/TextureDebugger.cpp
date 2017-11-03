@@ -59,7 +59,7 @@ void TextureDebugger::Init()
 	renderingQuad = Manager::Resource->GetGameObject("render-quad");
 	renderingQuad->transform->SetScale(glm::vec3(0.5));
 	renderingQuad->transform->SetWorldPosition(glm::vec3(0.5, 0.5, 0));
-	renderingQuad->UseShader(shader);
+	//renderingQuad->UseShader(shader);
 
 	for (unsigned i = 0; i < TEXTURE_DEBUGGER_CHANNELS; i++) {
 		channels[i].reserve(MAX_NR_TEXTURES);
@@ -113,11 +113,6 @@ unsigned int TextureDebugger::GetEmptyChannel() const
 	return 0;
 }
 
-void TextureDebugger::SetRenderingVAO(unsigned int VAO)
-{
-	this->VAO = VAO;
-}
-
 void TextureDebugger::Render()
 {
 	if (Manager::RenderSys->Is(RenderState::DEBUG))
@@ -132,20 +127,14 @@ void TextureDebugger::Render()
 
 		Manager::Scene->GetActiveCamera()->BindProjectionDistances(shader);
 
-		unsigned int size = channels[activeChannel].size();
-		for (unsigned int i = 0; i < size; i++)
+		size_t size = channels[activeChannel].size();
+		for (size_t i = 0; i < size; i++)
 		{
 			if (channels[activeChannel][i])
 				channels[activeChannel][i]->BindToTextureUnit(GL_TEXTURE0 + i);
 		}
 
-		if (VAO) {
-			glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(renderingQuad->transform->GetModel()));
-			RenderScreenQuat(VAO);
-		}
-		else {
-			renderingQuad->Render(shader);
-		}
+		renderingQuad->Render(shader);
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(GL_TRUE);

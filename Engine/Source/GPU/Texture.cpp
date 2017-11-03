@@ -16,6 +16,12 @@ using uchar = unsigned char;
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 
+void write_image_thread(const char* fileName, uint width, uint height, uint channels, const uchar *data)
+{
+	stbi_write_png(fileName, width, height, channels, data, width * channels);
+	delete data;
+}
+
 const GLint pixelFormat[5] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA };
 const GLint internalFormat[][5] = {
 	{ 0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8 },
@@ -35,6 +41,9 @@ Texture::Texture()
 	channels = 0;
 	textureID = 0;
 	targetType = GL_TEXTURE_2D;
+
+	pixelDataType = GL_UNSIGNED_BYTE;
+
 	wrappingMode = GL_REPEAT;
 	textureMinFilter = GL_LINEAR;
 	textureMagFilter = GL_LINEAR;
@@ -78,64 +87,53 @@ bool Texture::Load2D(const char* fileName, GLenum wrapping_mode)
 	return true;
 }
 
-void write_image_thread(const char* fileName, uint width, uint height, uint channels, const uchar *data)
-{
-	stbi_write_png(fileName, width, height, channels, data, width * channels);
-	delete data;
-}
-
-int global_counter = 0;
-
-void increase_global(int n) { for (int i = 0; i<n; ++i) ++global_counter; }
-
 void Texture::SaveToFile(const char * fileName) const
 {
-#ifndef OPENGL_ES
-	unsigned char *data = new unsigned char[width * height * channels];
-	glBindTexture(targetType, textureID);
-	glGetTexImage(targetType, 0, pixelFormat[channels], GL_UNSIGNED_BYTE, (void*)data);
+	#ifndef OPENGL_ES
+		unsigned char *data = new uchar[width * height * channels * bitsPerPixel];
+		glBindTexture(targetType, textureID);
+		glGetTexImage(targetType, 0, pixelFormat[channels], pixelDataType, (void*)data);
 
-	stbi_write_png(fileName, width, height, channels, data, width * channels);
-	delete data;
-#else
-	cout << "[OpenGL ES] context does not support glGetTexImage" << endl;
-#endif
+		stbi_write_png(fileName, width, height, channels, data, width * channels * bitsPerPixel);
+		SAFE_FREE_ARRAY(data);
+	#else
+		cout << "[OpenGL ES] context does not support glGetTexImage" << endl;
+	#endif
 	//std::thread([=]() {
 	//	stbi_write_png(fileName, width, height, channels, data, width * channels);
 	//  delete data;
 	//});
 }
 
-void Texture::UploadNewData(const unsigned char *img)
+void Texture::Create2DTexture(uint width, uint height, uint chn, uint bpp, GLenum dataType)
 {
+	bitsPerPixel = bpp;
+	pixelDataType = dataType;
+	GLint format = internalFormat[bpp / 8 - 1][chn];
+	Init2DTexture(width, height, chn);
+	glTexImage2D(targetType, 0, format, width, height, 0, pixelFormat[chn], pixelDataType, nullptr);
+	UnBind();
+}
+
+void Texture::Create2DTextureFromNative(GLuint textureID, uint width, uint height, uint chn)
+{
+	this->textureID = textureID;
+	this->width = width;
+	this->height = height;
+}
+
+void Texture::UploadImage(const void * img)
+{
+	if (!textureID) return;
+
+	SetOptimalPixelUnpacking();
+
 	Bind();
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, pixelFormat[channels], GL_UNSIGNED_BYTE, img);
+	glTexSubImage2D(targetType, 0, 0, 0, width, height, pixelFormat[channels], pixelDataType, img);
 	UnBind();
 }
 
-void Texture::Create2DTexture(const unsigned char* img, int width, int height, int chn)
-{
-	Init2DTexture(width, height, chn);
-	glTexImage2D(targetType, 0, internalFormat[0][chn], width, height, 0, pixelFormat[chn], GL_UNSIGNED_BYTE, (void*)img);
-	UnBind();
-}
-
-void Texture::Create2DTexture(const unsigned short* img, int width, int height, int chn)
-{
-	Init2DTexture(width, height, chn);
-	glTexImage2D(targetType, 0, internalFormat[1][chn], width, height, 0, pixelFormat[chn], GL_UNSIGNED_SHORT, (void*)img);
-	UnBind();
-}
-
-void Texture::Create2DTextureFloat(const float* data, int width, int height, int chn, int precision /*= 16*/)
-{
-	int prec = precision == 32 ? 3 : 2;
-	Init2DTexture(width, height, chn);
-	glTexImage2D(targetType, 0, internalFormat[prec][chn], width, height, 0, pixelFormat[chn], GL_FLOAT, (void*)data);
-	UnBind();
-}
-
-void Texture::CreateCubeTexture(const float* data, int width, int height, int chn)
+void Texture::CreateCubeTexture(const float* data, uint width, uint height, uint chn)
 {
 	this->width = width;
 	this->height = height;
@@ -162,23 +160,23 @@ void Texture::CreateCubeTexture(const float* data, int width, int height, int ch
 	UnBind();
 }
 
-void Texture::CreateFrameBufferTexture(int width, int height, int targetID, int precision /*default is 32*/)
+void Texture::CreateFrameBufferTexture(uint width, uint height, uint targetID, uint precision /*default is 32*/)
 {
+	bitsPerPixel = precision;
 	int prec = precision == 32 ? 3 : 2;
 	Init2DTexture(width, height, 4);
-	glTexImage2D(targetType, 0, internalFormat[prec][4], width, height, 0, pixelFormat[4], GL_FLOAT, 0);
+	glTexImage2D(targetType, 0, internalFormat[prec][4], width, height, 0, pixelFormat[4], GL_UNSIGNED_BYTE, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + targetID, GL_TEXTURE_2D, textureID, 0);
 	UnBind();
 }
 
-void Texture::CreateDepthBufferTexture(int width, int height)
+void Texture::CreateDepthBufferTexture(uint width, uint height)
 {
 	Init2DTexture(width, height, 1);
-	glTexImage2D(targetType, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexImage2D(targetType, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, textureID, 0);
 	UnBind();
 }
-
 
 void Texture::Bind() const
 {
@@ -192,19 +190,19 @@ void Texture::BindToTextureUnit(GLenum TextureUnit) const
 	glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
-void Texture::UnBind() const
-{
-	glBindTexture(targetType, 0);
-	CheckOpenGLError();
-}
-
-void Texture::BindForWriting(GLenum textureTarget) const
+void Texture::BindToTarget(GLenum textureTarget) const
 {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureTarget, textureID, 0);
 #ifndef OPENGL_ES
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 #else
 #endif
+}
+
+void Texture::UnBind() const
+{
+	glBindTexture(targetType, 0);
+	CheckOpenGLError();
 }
 
 void Texture::SetTextureParameters()
@@ -218,6 +216,16 @@ void Texture::SetTextureParameters()
 #endif
 }
 
+void Texture::SetOptimalPixelUnpacking()
+{
+	static const int pack_alignment[4] = { 4, 1, 1, 1 };
+
+	// Set optimal unpacking alignment
+	int stride = width * channels * (bitsPerPixel / 8);
+	int alignment = pack_alignment[stride % 4];
+	glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+}
+
 unsigned int Texture::GetWidth() const
 {
 	return width;
@@ -228,7 +236,7 @@ unsigned int Texture::GetHeight() const
 	return height;
 }
 
-void Texture::GetSize(unsigned int &width,unsigned int &height) const
+void Texture::GetSize(uint &width, uint &height) const
 {
 	width = this->width;
 	height = this->height;
@@ -248,6 +256,7 @@ void Texture::SetWrappingMode(GLenum mode)
 		glTexParameteri(targetType, GL_TEXTURE_WRAP_T, mode);
 		glTexParameteri(targetType, GL_TEXTURE_WRAP_R, mode);
 	}
+	CheckOpenGLError();
 }
 
 void Texture::SetFiltering(GLenum minFilter, GLenum magFilter)
@@ -265,28 +274,26 @@ void Texture::SetFiltering(GLenum minFilter, GLenum magFilter)
 			glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, magFilter);
 			textureMagFilter = magFilter;
 		}
+
+		CheckOpenGLError();
 	}
 }
 
-void Texture::SetTextureData(const unsigned char * img) const
-{
-	glBindTexture(targetType, textureID);
-	glTexImage2D(targetType, 0, internalFormat[0][channels], width, height, 0, pixelFormat[channels], GL_UNSIGNED_BYTE, (void*)img);
-	UnBind();
-}
-
-void Texture::Init2DTexture(unsigned int width, unsigned int height, unsigned int channels)
+void Texture::Init2DTexture(uint width, uint height, uint channels)
 {
 	this->width = width;
 	this->height = height;
 	this->channels = channels;
 
-	CheckOpenGLError();
 	if (textureID)
 		glDeleteTextures(1, &textureID);
 	glGenTextures(1, &textureID);
 	glBindTexture(targetType, textureID);
+
 	SetTextureParameters();
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+	// Set optimal unpacking alignment
+	SetOptimalPixelUnpacking();
+
 	CheckOpenGLError();
 }

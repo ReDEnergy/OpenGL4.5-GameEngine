@@ -1,7 +1,6 @@
 #ifdef USE_AUDIO_MANAGER
 #include "SoundFX.h"
 
-#include <include/gl.h>
 #include <Manager/Manager.h>
 #include <Manager/EventSystem.h>
 #include <Event/TimerEvent.h>

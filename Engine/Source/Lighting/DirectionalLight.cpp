@@ -6,6 +6,7 @@
 #include <Core/Engine.h>
 #include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
+#include <Core/WindowObject.h>
 #include <Component/AABB.h>
 #include <Component/Renderer.h>
 #include <Component/Transform/Transform.h>
@@ -49,7 +50,7 @@ void DirectionalLight::Init()
 void DirectionalLight::Update()
 {
 	Camera::Update();
-	if (csmFrustum)
+	if (csmFrustum && viewCamera->transform->GetMotionState())
 		csmFrustum->Update(this);
 }
 
@@ -99,7 +100,7 @@ void DirectionalLight::CastShadows()
 	}
 
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	FrameBuffer::Unbind(Engine::Window);
+	FrameBuffer::Unbind();
 }
 
 void DirectionalLight::Render(const Shader * shader) const

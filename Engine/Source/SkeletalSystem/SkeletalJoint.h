@@ -9,6 +9,7 @@
 typedef unsigned int uint;
 
 struct aiNodeAnim;
+struct aiAnimation;
 
 class DLLExport SkeletalJoint
 	: public GameObject
@@ -17,6 +18,10 @@ class DLLExport SkeletalJoint
 		SkeletalJoint(const char* name, uint jointID = 0);
 		SkeletalJoint(const SkeletalJoint &joint);
 		~SkeletalJoint();
+
+		void SetBoneOffset(glm::mat4 offset);
+		void UpdateBoneTransform();
+		const glm::mat4& GetBoneTransform() const;
 
 		void Render(const Shader *shader) const;
 		void RenderBones(const Shader *shader) const;
@@ -27,13 +32,19 @@ class DLLExport SkeletalJoint
 		void UpdateSkeleton();
 
 		uint GetJointID() const;
+		float GetBoneLength() const;
+		void ComputeBoneLength();
 
-	public:
-		glm::vec3 scale;
-		glm::mat4 TPoseOffset;
+		void FindAnimationNode(const aiAnimation *animation);
+		const aiNodeAnim* GetAssimpAnimationNode() const;
+
+	private:
+		void Init();
+
+	private:
+		float boneLength;
 		glm::mat4 boneOffset;
-		//glm::mat4 globalTransform;
-		glm::mat4 finalTransformation;
+		glm::mat4 boneTransformation;
 		const aiNodeAnim* pAnimationNode;
 
 	private:

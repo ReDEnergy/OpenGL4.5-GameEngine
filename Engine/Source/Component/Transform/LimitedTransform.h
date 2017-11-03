@@ -1,5 +1,7 @@
 #pragma once
 #include <Component/Transform/Transform.h>
+#include <functional>
+#include <include/glm.h>
 
 class DLLExport LimitedTransform
 	: public Transform
@@ -9,10 +11,13 @@ class DLLExport LimitedTransform
 		LimitedTransform(const Transform &trasform);
 		virtual ~LimitedTransform();
 
-		void SetWorldRotation(glm::quat rotationQ);
+		void LimitAxisRotation(glm::vec3 axis);
+
+		void SetWorldRotation(glm::quat rotationQ) override;
+		void SetRelativeRotation(const glm::quat &rotationQ) override;
 
 	private:
-		glm::vec3 limitMax;
-		glm::vec3 limitMin;
-
+		bool applyLimits;
+		glm::vec3 constraintAxis;
+		std::function<glm::quat(const glm::quat &rot)> RotLimitFunc;
 };

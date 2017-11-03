@@ -29,10 +29,13 @@ class DLLExport FrameBuffer
 		unsigned int GetNumberOfRenderTargets() const;
 
 		glm::ivec2 GetResolution() const;
+
 		void SendResolution(Shader *shader) const;
 
-		static void Unbind(WindowObject *window);
+		void SetClearColor(glm::vec4 clearColor);
 		static void Clear();
+		static void Unbind();
+		static void Unbind(const glm::ivec2 &viewportSize, bool clearBuffer = false);
 		static void SetOffScreenBuffer(FrameBuffer *buffer);
 		static FrameBuffer* GetOffScreenBuffer();
 
@@ -49,4 +52,5 @@ class DLLExport FrameBuffer
 		int width;
 		int height;
 		unsigned int nrTextures;
+		glm::vec4 clearColor;
 };

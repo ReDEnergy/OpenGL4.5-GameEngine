@@ -12,6 +12,7 @@
 #include <GPU/Texture.h>
 #include <GPU/Material.h>
 
+#include <Core/Engine.h>
 #include <Core/Camera/Camera.h>
 
 #include <Manager/Manager.h>
@@ -106,7 +107,7 @@ void AnimationController::SetAnimation(const char * animationName)
 	}
 }
 
-void AnimationController::SetAnimationTime(float animationTime)
+void AnimationController::SetAnimationTime(double animationTime)
 {
 	//rootJoint->globalTransform = rootTransform;
 	UpdateJointTransform(rootJoint, animationTime);
@@ -125,7 +126,7 @@ bool AnimationController::TogglePlayback()
 
 float AnimationController::GetAnimationTime() const
 {
-	return animationTime;
+	return static_cast<float>(animationTime);
 }
 
 const std::unordered_map<std::string, SkeletalJoint*>& AnimationController::GetJointsList() const
@@ -137,40 +138,40 @@ void AnimationController::UpdateGPUData()
 {
 	for (auto &bone : skeletalJoints) {
 		auto id = bone.second->GetJointID();
-		boneTransform[id] = bone.second->finalTransformation;
+		boneTransform[id] = bone.second->GetBoneTransform();
 	}
 }
 
 void AnimationController::UpdateAnimation()
 {
-	float timeInSeconds = (float)glfwGetTime();
-	float TimeInTicks = timeInSeconds * (float)currentAnimation->mTicksPerSecond;
-	animationTime = fmod(TimeInTicks, (float)currentAnimation->mDuration);
+	auto timeInSeconds = Engine::GetElapsedTime();
+	auto TimeInTicks = timeInSeconds * currentAnimation->mTicksPerSecond;
+	animationTime = fmod(TimeInTicks, currentAnimation->mDuration);
 
 	//rootJoint->globalTransform = rootTransform;
-	UpdateJointTransform(rootJoint, animationTime);
+	UpdateJointTransform(rootJoint, static_cast<float>(animationTime));
 	//rootJoint->UpdateSkeleton(rootTransform);
 }
 
 void AnimationController::UpdateAnimationNodesMapping()
 {
 	for (auto &bone : skeletalJoints) {
-		bone.second->pAnimationNode = assimp::FindNodeAnim(currentAnimation, bone.first);
+		bone.second->FindAnimationNode(currentAnimation);
 	}
 }
 
-void AnimationController::UpdateJointTransform(SkeletalJoint* joint, float animationTime)
+void AnimationController::UpdateJointTransform(SkeletalJoint* joint, double animationTime)
 {
 	// Interpolate transformation between 2 keyframes
-	glm::vec3 position = assimp::CalcInterpolatedPosition(joint->pAnimationNode, animationTime, currentAnimation->mDuration);
-	glm::quat rotation = assimp::CalcInterpolatedRotation(joint->pAnimationNode, animationTime, currentAnimation->mDuration);
+	glm::vec3 position = assimp::CalcInterpolatedPosition(joint->GetAssimpAnimationNode(), animationTime, currentAnimation->mDuration);
+	glm::quat rotation = assimp::CalcInterpolatedRotation(joint->GetAssimpAnimationNode(), animationTime, currentAnimation->mDuration);
 	//glm::vec3 scale = assimp::CalcInterpolatedScaling(joint->pAnimationNode, animationTime, currentAnimation->mDuration);
 
 	// Update transform
 	joint->transform->SetLocalPosition(position / 100.0f);
-	joint->transform->SetLocalRotation(rotation);
+	joint->transform->SetRelativeRotation(rotation);
 	joint->transform->SetScale(glm::vec3(0.01f));
-	joint->finalTransformation = joint->transform->GetModel() * joint->boneOffset;
+	joint->UpdateBoneTransform();
 
 	for (auto J : joint->GetChildren()) {
 		UpdateJointTransform((SkeletalJoint*)J, animationTime);
@@ -180,8 +181,8 @@ void AnimationController::UpdateJointTransform(SkeletalJoint* joint, float anima
 void AnimationController::SetJointToBindPose(SkeletalJoint* joint)
 {
 	// Update transform
-	joint->transform->SetLocalRotation(glm::quat());
-	joint->finalTransformation = joint->transform->GetModel() * joint->boneOffset;
+	joint->transform->SetRelativeRotation(glm::quat());
+	joint->UpdateBoneTransform();
 
 	for (auto J : joint->GetChildren()) {
 		SetJointToBindPose((SkeletalJoint*)J);

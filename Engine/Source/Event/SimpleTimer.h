@@ -17,7 +17,7 @@ class DLLExport SimpleTimer
 		void Stop();
 		void Update();
 		bool IsActive();
-		void SetDuration(float duration);
+		void SetDuration(double duration);
 		void OnExpire(std::function<void()> func);
 
 	private:
@@ -25,7 +25,7 @@ class DLLExport SimpleTimer
 
 	private:
 		bool isActive;
-		float duration;
-		float startTime;
+		double duration;
+		double startTime;
 		std::list<std::function<void()>> onExprire;
 };

@@ -36,7 +36,7 @@ void SimpleTimer::Stop()
 	UnsubscribeFrom(EventType::FRAME_UPDATE);
 }
 
-void SimpleTimer::SetDuration(float duration)
+void SimpleTimer::SetDuration(double duration)
 {
 	this->duration = duration;
 }
@@ -48,7 +48,7 @@ bool SimpleTimer::IsActive()
 
 void SimpleTimer::Update()
 {
-	float delta = Engine::GetElapsedTime() - startTime;
+	auto delta = Engine::GetElapsedTime() - startTime;
 	if (delta > duration) {
 		for (auto &func : onExprire) {
 			func();

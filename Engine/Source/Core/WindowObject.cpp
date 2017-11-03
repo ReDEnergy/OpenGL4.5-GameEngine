@@ -1,10 +1,9 @@
 #include "WindowObject.h"
-#include "WindowObject.h"
-#include "WindowObject.h"
 
 #include <iostream>
 #include <include/gl.h>
 #include <include/glm_utils.h>
+#include <include/utils.h>
 
 #include <Core/Engine.h>
 #include <Core/InputSystem.h>
@@ -13,6 +12,8 @@
 #include <Component/ObjectInput.h>
 
 #include <include/gl_native.h>
+
+using namespace std;
 
 WindowProperties::WindowProperties(bool shareContext)
 	: sharedContext(shareContext)
@@ -38,6 +39,8 @@ bool WindowProperties::IsSharedContext() const
 WindowObject::WindowObject(WindowProperties properties)
 	: props(std::move(properties))
 {
+	frameID = 0;
+	deltaFrameTime = 0;
 	useNativeHandles = false;
 	props.aspectRatio = float(props.resolution.x) / props.resolution.y;
 
@@ -47,9 +50,13 @@ WindowObject::WindowObject(WindowProperties properties)
 	CheckOpenGLError();
 
 	// Set default state
-	memset(mouseStates, 0, 3);
+	mouseButtonAction = 0;
+	mouseButtonStates = 0;
+	registeredKeyEvents = 0;
 	memset(keyStates, 0, 384);
 	memset(keyScanCode, 0, 512);
+
+	SetWindowCallbacks();
 
 	// Register window
 	WindowManager::RegisterWindow(this);
@@ -120,6 +127,23 @@ void WindowObject::DisablePointer()
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
+void WindowObject::SetWindowPosition(glm::ivec2 position)
+{
+	props.position = position;
+	glfwSetWindowPos(window, position.x, position.y);
+}
+
+void WindowObject::CenterWindow()
+{
+	props.centered = true;
+
+	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode *videoDisplay = glfwGetVideoMode(monitor);
+	auto screenSize = glm::ivec2(videoDisplay->width, videoDisplay->height);
+
+	SetWindowPosition((screenSize - props.resolution) / 2);
+}
+
 void WindowObject::CenterPointer()
 {
 	props.cursorPos.x = props.resolution.x / 2;
@@ -141,8 +165,9 @@ void WindowObject::PollEvents() const
 
 void WindowObject::ComputeFrameTime()
 {
-	auto currentTime = glfwGetTime();
-	deltaFrameTime = float(currentTime - elapsedTime);
+	frameID++;
+	auto currentTime = Engine::GetElapsedTime();
+	deltaFrameTime = currentTime - elapsedTime;
 	elapsedTime = currentTime;
 }
 
@@ -153,7 +178,6 @@ void WindowObject::FullScreen()
 	window = glfwCreateWindow(videoDisplay->width, videoDisplay->height, props.name.c_str(), monitor, NULL);
 	glfwMakeContextCurrent(window);
 	SetSize(videoDisplay->width, videoDisplay->height);
-	SetWindowCallbacks();
 }
 
 void WindowObject::WindowMode()
@@ -185,27 +209,25 @@ void WindowObject::WindowMode()
 	assert(window != nullptr);
 	glfwMakeContextCurrent(window);
 
-	if (props.centered) {
-		GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-		const GLFWvidmode *videoDisplay = glfwGetVideoMode(monitor);
-		auto screenSize = glm::ivec2(videoDisplay->width, videoDisplay->height);
-		props.position = (screenSize - props.resolution) / 2;
-	}
-
 	#ifdef _WIN32
 		openglHandle = wglGetCurrentDC();
 		nativeRenderingContext = glfwGetWGLContext(window);
 	#endif
 
-	glfwSetWindowPos(window, props.position.x, props.position.y);
+	if (props.centered) {
+		CenterWindow();
+		GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode *videoDisplay = glfwGetVideoMode(monitor);
+		auto screenSize = glm::ivec2(videoDisplay->width, videoDisplay->height);
+		props.position = (screenSize - props.resolution) / 2;
+	}
 	SetSize(props.resolution.x, props.resolution.y);
-	SetWindowCallbacks();
 }
 
 void WindowObject::SetWindowCallbacks()
 {
-	glfwSetWindowCloseCallback(window, WindowManager::OnClose);
-	glfwSetWindowSizeCallback(window, WindowManager::OnResize);
+	glfwSetWindowCloseCallback(window, WindowManager::OnGLFWClose);
+	glfwSetWindowSizeCallback(window, WindowManager::OnGLFWResize);
 	glfwSetKeyCallback(window, InputSystem::KeyCallback);
 	glfwSetMouseButtonCallback(window, InputSystem::MouseClick);
 	glfwSetCursorPosCallback(window, InputSystem::CursorMove);
@@ -223,7 +245,7 @@ bool WindowObject::KeyHold(int keyCode) const
 
 bool WindowObject::MouseHold(int button) const
 {
-	return mouseStates[button];
+	return IS_BIT_SET(mouseButtonStates, button);
 }
 
 int WindowObject::GetSpecialKeyState() const
@@ -238,52 +260,88 @@ void WindowObject::Subscribe(ObjectInput *IC)
 
 void WindowObject::KeyCallback(int key, int scanCode, int action, int mods)
 {
-	keyStates[key] = action ? true : false;
 	keyMods = mods;
-
-	if (action == GLFW_PRESS) {
-		for (auto obs : observers)
-				obs->OnKeyPress(key, mods);
-		return;
-	}
-	if (action == GLFW_RELEASE) {
-		for (auto obs : observers)
-			obs->OnKeyRelease(key, mods);
-	}
+	keyStates[key] = action ? true : false;
+	keyEvents[registeredKeyEvents] = key;
+	registeredKeyEvents++;
 }
 
 void WindowObject::MouseButtonCallback(int button, int action, int mods)
 {
-	// TODO treat input
+	// Only button events and mods are kept
+	// Mouse position is the current frame position
 	keyMods = mods;
-	mouseStates[button] = action ? true : false;
-	for (auto obs : observers) {
-		obs->OnMouseBtnEvent(props.cursorPos.x, props.cursorPos.y, button, action, mods);
-	}
+	SET_BIT(mouseButtonAction, button);
+	action ? SET_BIT(mouseButtonStates, button) : CLEAR_BIT(mouseButtonStates, button);
 }
 
 void WindowObject::MouseMove(int posX, int posY)
 {
-	int deltaX = posX - props.cursorPos.x;
-	int deltaY = posY - props.cursorPos.y;
-	props.cursorPos = glm::ivec2(posX, posY);
-
-	for (auto obs : observers) {
-		obs->OnMouseMove(props.cursorPos.x, props.cursorPos.y, deltaX, deltaY);
+	// Save information for processing later on the Update thread
+	if (mouseMoved) {
+		mouseDeltaX += posX - props.cursorPos.x;
+		mouseDeltaY += posY - props.cursorPos.y;
 	}
+	else {
+		mouseMoved = true;
+		mouseDeltaX = posX - props.cursorPos.x;
+		mouseDeltaY = posY - props.cursorPos.y;
+	}
+	props.cursorPos = glm::ivec2(posX, posY);
 }
 
-void WindowObject::UpdateObserver()
+void WindowObject::UpdateObservers()
 {
 	ComputeFrameTime();
-	for (auto obs : observers) {
-			obs->OnInputUpdate(deltaFrameTime, keyMods);
+
+	// Mouse move event
+	if (mouseMoved) {
+		mouseMoved = false;
+		for (auto obs : observers) {
+			obs->OnMouseMove(props.cursorPos.x, props.cursorPos.y, mouseDeltaX, mouseDeltaY);
+		}
 	}
+
+	// Mouse button press event
+	auto pressEvent = mouseButtonAction & mouseButtonStates;
+	if (pressEvent)
+	{
+		auto pressEvent = mouseButtonAction & mouseButtonStates;
+		for (auto obs : observers) {
+			obs->OnMouseBtnPress(props.cursorPos.x, props.cursorPos.y, pressEvent, keyMods);
+		}
+	}
+
+	// Mouse button release event
+	auto releaseEvent = mouseButtonAction & (~mouseButtonStates);
+	if (releaseEvent)
+	{
+		for (auto obs : observers) {
+			obs->OnMouseBtnRelease(props.cursorPos.x, props.cursorPos.y, releaseEvent, keyMods);
+		}
+	}
+
+	// Key events
+	if (registeredKeyEvents)
+	{
+		for (int i = 0; i < registeredKeyEvents; i++) {
+			for (auto obs : observers)
+				keyStates[keyEvents[i]] ? obs->OnKeyPress(keyEvents[i], keyMods) : obs->OnKeyRelease(keyEvents[i], keyMods);
+		}
+		registeredKeyEvents = 0;
+	}
+
+	// Continuous events
+	for (auto obs : observers) {
+			obs->OnInputUpdate(static_cast<float>(deltaFrameTime), keyMods);
+	}
+
+	mouseButtonAction = 0;
 }
 
 void WindowObject::MakeCurrentContext() const
 {
-	// glfw current context ?! Maybe because of HDC!
+	// GLFW current context ?! Maybe because of HDC!
 	glfwMakeContextCurrent(window);
 
 	#ifdef OPENGL_ES
@@ -326,6 +384,5 @@ void WindowObject::SwapBuffers() const
 	#else
 		glfwSwapBuffers(window);
 	#endif
-
 	CheckOpenGLError();
 }

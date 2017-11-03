@@ -90,7 +90,7 @@ void Text::Render(const Shader *shader) const
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, atlasTextureID);
 
-		meshRenderer->Render(shader);
+		meshRenderer->Render();
 	}
 
 	for (auto child : _children) {
@@ -106,7 +106,7 @@ void Text::InitText()
 	size_t i;
 	unsigned int index = 0;
 	vec2 cue = {0, 0};
-	unsigned int len = content.length();
+	auto len = content.length();
 
 	mesh->ClearData();
 

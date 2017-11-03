@@ -25,7 +25,7 @@ class DLLExport FreezeTransform
 		virtual void SetWorldPosition(glm::vec3 position) {};
 		virtual void SetWorldRotation(glm::quat rotationQ) {};
 
-		virtual void SetLocalRotation(glm::quat localRotationQ) {};
+		virtual void SetRelativeRotation(glm::quat localRotationQ) {};
 
 		// Set rotation using degree angles (0 - 360)
 		void SetWorldRotation(glm::vec3 eulerAngles360) {};

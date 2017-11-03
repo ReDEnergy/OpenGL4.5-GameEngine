@@ -30,8 +30,8 @@
 #include <Rendering/DirectOpenGL.h>
 
 #ifdef PHYSICS_ENGINE
-#include <Manager/HavokCore.h>
-#include <Manager/PhysicsManager.h>
+#include <Physics/PhysicsManager.h>
+#include <Physics/PhysXCore.h>
 #endif
 
 #include <UI/DebugOverlayText.h>
@@ -56,8 +56,8 @@ TextureDebugger*	Manager::TextureDBG = nullptr;
 RenderingSystem*	Manager::RenderSys = nullptr;
 
 #ifdef PHYSICS_ENGINE
-HavokCore*			Manager::Havok = nullptr;
-PhysicsManager*		Manager::Physics = nullptr;
+PhysXCore*			Manager::PhysicsCore = nullptr;
+PhysicsManager*		Manager::PhysicsSystem = nullptr;
 #endif
 
 void Manager::Init()
@@ -73,7 +73,20 @@ void Manager::Init()
 
 	// Load configuration
 	Config->Load("config.xml");
-	Engine::Window = new WindowObject(*(Config->windowProperties));
+
+	// Create the default window
+	auto window = new WindowObject(*(Config->windowProperties));
+
+	// Init OpenGL
+	#ifndef OPENGL_ES
+		glewExperimental = true;
+	#endif // !OPENGL_ES
+	GLenum err = glewInit();
+	if (GLEW_OK != err) 	// Serious problem
+	{
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+		exit(0);
+	}
 
 	// Init Managers
 	Debug		= SINGLETON(DebugInfo);
@@ -88,10 +101,10 @@ void Manager::Init()
 	DirectGL	= SINGLETON(DirectOpenGL);
 	Texture		= SINGLETON(TextureManager);
 
-#ifdef PHYSICS_ENGINE
-	Havok = SINGLETON(HavokCore);
-	Physics = SINGLETON(PhysicsManager);
-#endif
+	#ifdef PHYSICS_ENGINE
+	PhysicsCore = SINGLETON(PhysXCore);
+	PhysicsSystem = SINGLETON(PhysicsManager);
+	#endif
 
 	Resource	= SINGLETON(ResourceManager);
 	Shader		= SINGLETON(ShaderManager);
@@ -106,23 +119,16 @@ void Manager::Init()
 // Load configuration file
 void Manager::LoadConfig()
 {
-	////////////////////////////////////////
-	// TODO inspect if I can move these
-
-	#ifndef OPENGL_ES
-		glewExperimental = true;
-		glewInit();
-	#endif
-
-	Engine::Window->MakeCurrentContext();
-	Engine::Window->SetVSync(RenderSys->Is(RenderState::VSYNC));
+	auto window = WindowManager::GetDefaultWindow();
+	window->MakeCurrentContext();
+	window->SetVSync(RenderSys->Is(RenderState::VSYNC));
 	CheckOpenGLError();
 
 	////////////////////////////////////////
 
 	Debug->Init();
 	#ifdef PHYSICS_ENGINE
-	Havok->Init();
+	PhysicsCore->Init();
 	#endif
 
 
@@ -218,13 +224,8 @@ DebugOverlayText * Manager::GetDebugText()
 }
 
 #ifdef PHYSICS_ENGINE
-HavokCore* Manager::GetHavok()
-{
-	return Havok;
-}
-
 PhysicsManager* Manager::GetPhysics()
 {
-	return Physics;
+	return PhysicsSystem;
 }
 #endif

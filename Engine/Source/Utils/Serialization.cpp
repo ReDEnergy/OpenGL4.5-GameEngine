@@ -9,8 +9,10 @@ DLLExport void Serialization::ReadTransform(pugi::xml_node node, Transform & T)
 	pugi::xml_node prop;
 
 	prop = node.child("position");
-	if (prop)
-		T.SetWorldPosition(glm::ExtractVector<glm::vec3>(prop.text().get()));
+	if (prop) {
+		auto pos = glm::ExtractVector<glm::vec3>(prop.text().get());
+		T.SetWorldPosition(pos);
+	}
 
 	prop = node.child("rotation");
 	if (prop) {

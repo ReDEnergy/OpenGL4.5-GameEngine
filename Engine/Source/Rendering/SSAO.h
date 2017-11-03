@@ -23,7 +23,7 @@ class DLLExport SSAO {
 		int kernelSize;
 		glm::vec3 kernel[64];
 
-		GameObject *ScreenQuad;
+		GameObject *screenQuad;
 		Texture *RandomNoise1;
 		Texture *RandomNoise2;
 		Texture *computeTexture;

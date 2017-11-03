@@ -2,8 +2,6 @@
 #include <vector>
 #include <include/dll_export.h>
 
-using namespace std;
-
 enum class INPUT_GROUP : unsigned int
 {
 	IG_ENGINE,
@@ -26,8 +24,8 @@ class DLLExport InputRules
 {
 	private:
 		static INPUT_RULE activeRule;
-		static vector<int> rulesConfig;
-		static vector<INPUT_RULE> rules;
+		static std::vector<int> rulesConfig;
+		static std::vector<INPUT_RULE> rules;
 
 	public:
 		static void Init();

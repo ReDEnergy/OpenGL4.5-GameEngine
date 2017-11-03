@@ -3,9 +3,11 @@
 #include <include/math.h>
 #include <include/gl_utils.h>
 
+#include <Core/Camera/Camera.h>
 #include <Core/GameObject.h>
 #include <Component/Transform/Transform.h>
 #include <Component/Mesh.h>
+#include <Component/MeshRenderer.h>
 #include <GPU/Shader.h>
 #include <Component/Renderer.h>
 
@@ -45,10 +47,26 @@ void DirectOpenGL::Init()
 	line->SetMesh(lineMesh);
 }
 
-void DirectOpenGL::Use(Shader * shader)
+void DirectOpenGL::UseShader(Shader * shader)
 {
-	activeShader = shader ? shader : drawShader;
+	if (shader == nullptr) {
+		UseDefaultShader();
+		return;
+	}
+	activeShader = shader;
 	activeShader->Use();
+}
+
+void DirectOpenGL::UseDefaultShader()
+{
+	activeShader = drawShader;
+	activeShader->Use();
+}
+
+void DirectOpenGL::BindActiveViewProj() const
+{
+	auto camera = Manager::GetScene()->GetActiveCamera();
+	if (camera) camera->BindViewProj(activeShader);
 }
 
 Shader * DirectOpenGL::GetActiveShader() const
@@ -95,28 +113,27 @@ void DirectOpenGL::DrawLine(const glm::vec3 & from, const glm::vec3 & to) const
 	line->Render(activeShader);
 }
 
-void DirectOpenGL::DrawStandardAxis(const Transform * transform, const Shader* shader) const
+void DirectOpenGL::DrawStandardAxis(const Transform * transform, const Shader* shader, float length) const
 {
 	if (!shader) return;
 
 	SetStartLinePosition(transform->GetWorldPosition());
 	auto rotation = transform->GetWorldRotation();
-	auto length = transform->GetScale();
 
 	// OY axis
 	GL_Utils::SetColorUnit(shader->loc_debug_color, 0, 1, 0);
-	DrawLine(length.y, rotation);
+	DrawLine(length, rotation);
 
 	// OX axis
 	GL_Utils::SetColorUnit(shader->loc_debug_color, 1, 0, 0);
-	DrawLine(length.x, rotation * glm::quat(-0.7071f, 0, 0, 0.7071f));
+	DrawLine(length, rotation * glm::quat(-0.7071f, 0, 0, 0.7071f));
 
 	// OZ axis
 	GL_Utils::SetColorUnit(shader->loc_debug_color, 0, 0, 1);
-	DrawLine(length.z, rotation * glm::quat(0, 0, 0.7071f, 0.7071f));
+	DrawLine(length, rotation * glm::quat(0, 0, 0.7071f, 0.7071f));
 }
 
-void DirectOpenGL::DrawStandardAxis(const Transform * transform) const
+void DirectOpenGL::DrawStandardAxis(const Transform * transform, float length) const
 {
-	DrawStandardAxis(transform, activeShader);
+	DrawStandardAxis(transform, activeShader, length);
 }
