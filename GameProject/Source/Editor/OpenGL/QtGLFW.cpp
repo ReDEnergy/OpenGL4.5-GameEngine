@@ -5,6 +5,8 @@
 #include <QGuiApplication>
 #include <include/gl.h>
 
+using namespace std;
+
 QtGLFW::QtGLFW()
 {
 	mouseButtons[Qt::MouseButton::LeftButton] = GLFW_MOUSE_BUTTON_LEFT;

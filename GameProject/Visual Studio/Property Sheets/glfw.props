@@ -4,7 +4,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <LibraryPath>..\..\libs\GLFW\$(PlatformTarget)\$(EngineConfiguration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\libs\GLFW\$(PlatformTarget)\$(GLConfiguration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

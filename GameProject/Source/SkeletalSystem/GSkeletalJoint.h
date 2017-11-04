@@ -1,7 +1,7 @@
 #pragma once
 
 class Transform;
-class SkeletalTracking;
+class KinectSkeletalTracking;
 
 #include <Core/GameObject.h>
 
@@ -14,9 +14,13 @@ class GSkeletalJoint
 
 		void Render(const Shader * shader) const;
 		void RenderForPicking(const Shader *shader) const;
-		void RenderBones(const Shader *shader) const;
-		void ReadSensorRotationState(SkeletalTracking * tracking, bool ignoreNonTracked = false);
-		void ReadSensorPositionState(SkeletalTracking * tracking, bool ignoreNonTracked = false);
+		void RenderSkeleton(Camera & camera) const;
+		void RenderBones() const;
+
+#ifdef KINECT_SENSOR
+		void ReadSensorRotationState(KinectSkeletalTracking * tracking, bool ignoreNonTracked = false);
+		void ReadSensorPositionState(KinectSkeletalTracking * tracking, bool ignoreNonTracked = false);
+#endif
 
 		void SetJointID(uint jointID);
 		void Update();

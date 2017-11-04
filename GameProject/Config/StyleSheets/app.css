@@ -1,14 +1,52 @@
-/*
-QDockWidget {
-	titlebar-close-icon: url(Resources/Icons/power.png);
+QMainWindow {
+	font-size: 12px;
 }
-*/
 
 QMainWindow::separator {
-	width: 2px;
+	width: 1px;
 }
 
-QWidget {
+QTabBar
+{
+	margin-top: 0px;
+	padding-top:10px;
+	border: 1px solid #DDD;
+}
+
+QTabBar::tab {
+}
+
+QTabBar::tab::selected {
+}
+
+QDockWidget {
+	min-height: 200px;
+	min-width: 250px;
+	/*titlebar-close-icon: url(Resources/Icons/power.png);*/
+	color: #333;
+	background: #F5F5F5;
+}
+
+QDockWidget::title {
+	text-align: center;
+	padding-left: 35px;
+}
+
+QDockWidget::close-button, QDockWidget::float-button {
+    subcontrol-position: top right;
+    subcontrol-origin: margin;
+    position: absolute;
+    top: 0px;
+	right: 0px;
+	bottom: 0px;
+    width: 24px;
+}
+
+QDockWidget::float-button {
+    right: 24px;
+}
+
+QWidget#Body {
 }
 
 QComboBox {
@@ -24,3 +62,100 @@ QComboBox QAbstractItemView::item {
 QToolButton {
 	height: 30px;
 }
+
+
+/**
+ * SimpleFloatInput
+ */
+
+QWidget[SimpleFloatInput] {
+	max-height: 2em;
+	min-height: 2em;
+}
+ 
+QWidget[SimpleFloatInput] QLabel {
+	min-height: 1.8em;
+	min-width: 70px;
+	padding-left: 10px;
+}
+
+QWidget[SimpleFloatInput] QLineEdit {
+	min-width: 70px;
+	min-height: 1.4em;
+	max-height: 1.6em;
+	padding: 0.2em 0.3em;
+}
+
+/*
+ * SimpleTextBox
+ */
+
+QWidget[SimpleTextBox] QLabel {
+	min-height: 1.8em;
+	min-width: 70px;
+	padding-left: 10px;
+}
+
+QWidget[SimpleTextBox] QLineEdit {
+	min-width: 70px;
+	min-height: 1.4em;
+	padding: 0.2em 0.3em;
+}
+
+/*
+ * SimpleDropDown
+ */
+
+QWidget[SimpleDropDown] QLabel {
+	min-width: 70px;
+	max-width: 70px;
+	padding-left: 10px;
+}
+
+QWidget[SimpleDropDown] QComboBox {
+	min-height: 1.8em;
+	padding-left: 10px;
+}
+
+QWidget[SimpleDropDown] QComboBox:selected {
+}
+
+QWidget[SimpleDropDown] QComboBox QAbstractItemView::items {
+	padding-left: 10px;
+}
+
+QWidget[SimpleDropDown] QComboBox QAbstractItemView::item {
+	height: 1.8em;
+	padding-left: 20px;
+}
+
+/**
+ * SimpleCheckBox
+ */
+
+QWidget[SimpleCheckBox] QWidget {
+	min-height: 2em;
+}
+
+QWidget[SimpleCheckBox] QLabel {
+	min-width: 80px;
+	max-width: 80px;
+	padding-left: 10px;
+}
+
+/*
+ * GLMVecComponent
+ */
+ 
+QWidget[GLMVecComponent] QLabel[Name] {
+	min-height: 1.8em;
+	min-width: 70px;
+	padding-left: 10px;
+}
+
+QWidget[GLMVecComponent] QLineEdit {
+	min-height: 1.4em;
+	padding: 0.2em 0.3em;
+}
+
+

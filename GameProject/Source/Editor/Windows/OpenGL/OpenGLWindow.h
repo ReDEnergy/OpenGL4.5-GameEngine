@@ -6,6 +6,22 @@ class QtGLFW;
 class QWidget;
 class WindowObject;
 
+struct Viewport
+{
+	Viewport()
+	{
+		x = y = 0;
+		width = height = 1;
+	}
+	Viewport(int x, int y, int width, int height)
+		: x(x), y(y), width(width), height(height) {}
+
+	int x;
+	int y;
+	int width;
+	int height;
+};
+
 class OpenGLWindow : public QWindow
 {
 	public:
@@ -16,6 +32,7 @@ class OpenGLWindow : public QWindow
 		void EndFrame();
 		QOpenGLContext* GetContext();
 		bool SetAsCurrentContext();
+		void SetViewport(int x, int y, int width, int height);
 
 	public:
 		virtual void CenterCursor();
@@ -27,6 +44,7 @@ class OpenGLWindow : public QWindow
 	private:
 		void KeyEvent(QKeyEvent* e, bool state);
 		void MouseEvent(QMouseEvent * e, bool state);
+		void SubmitMouseClick(QMouseEvent * e);
 
 	protected:
 		virtual void keyPressEvent(QKeyEvent* e);
@@ -43,6 +61,7 @@ class OpenGLWindow : public QWindow
 		QWidget *container;
 
 	private:
+		Viewport viewport;
 		QtGLFW *qtGLFWEvents;
 		WindowObject* sharedContext;
 		bool focused;

@@ -1,6 +1,5 @@
 #pragma once
 #include <unordered_map>
-using namespace std;
 
 class QtGLFW
 {
@@ -13,5 +12,5 @@ class QtGLFW
 
 	private:
 		int mouseButtons[16];
-		unordered_map<int, int> keyboardButtons;
+		std::unordered_map<int, int> keyboardButtons;
 };

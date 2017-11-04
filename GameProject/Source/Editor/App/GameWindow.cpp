@@ -6,7 +6,7 @@
 using namespace std;
 
 #include <Editor/Windows/OpenGL/OpenGLWindow.h>
-#include <Editor/UI/GUI.h>
+#include <Editor/UI/DockWindowManager.h>
 #include <Utils/GPU.h>
 
 #include <QOpenGLContext>
@@ -19,7 +19,6 @@ GameWindow::GameWindow()
 	setWindowTitle("3D Scene");
 
 	InitUI();
-	GUI::Set(QT_INSTACE::_3D_SCENE_WINDOW, (void*) this);
 
 	LoadStyleSheet("game-window.css");
 	SubscribeToEvent(EventType::FRAME_END);
@@ -33,23 +32,33 @@ void GameWindow::InitUI()
 	qtLayout->addWidget(qtOpenGLWindow->container);
 }
 
+void GameWindow::InitUIState()
+{
+	auto FBO = FrameBuffer::GetOffScreenBuffer();
+	auto resolution = FBO->GetResolution();
+	auto aspectRatio = static_cast<float>(resolution.x) / resolution.y;
+
+	resize(height() * aspectRatio, height());
+}
+
 void GameWindow::DockedEvent(bool state)
 {
-	auto res = Engine::Window->GetResolution();
-	if (state == true) {
-		setFixedSize(Engine::Window->GetResolution().x, Engine::Window->GetResolution().y);
-	}
-	else {
-		setMinimumHeight(Engine::Window->GetResolution().y + 22);
-	}
+	//auto res = Engine::Window->GetResolution();
+	//if (state == true) {
+	//	setFixedSize(Engine::Window->GetResolution().x, Engine::Window->GetResolution().y);
+	//}
+	//else {
+	//	setMinimumHeight(Engine::Window->GetResolution().y + 22);
+	//}
 }
 
 void GameWindow::Init()
 {
 	auto value = qtOpenGLWindow->SetAsCurrentContext();
-	auto mesh = Manager::GetResource()->GetMesh("screen-quad");
-	buffer = new GPUBuffers();
-	*buffer = UtilsGPU::UploadData(mesh->positions, mesh->normals, mesh->texCoords, mesh->indices);
+	CheckOpenGLError();
+
+	renderQuad = Manager::GetResource()->GetGameObject("render-quad");
+	renderQuad->meshRenderer->InitForNewContext();
 
 	auto nativeHandle = qtOpenGLWindow->GetContext()->nativeHandle();
 	auto windowsNative = nativeHandle.value<QWGLNativeContext>();
@@ -59,42 +68,62 @@ void GameWindow::Init()
 	CheckOpenGLError();
 }
 
+void GameWindow::UpdateUI()
+{
+	Render();
+}
+
 void GameWindow::Render()
 {
 	auto FBO = FrameBuffer::GetOffScreenBuffer();
 	if (!FBO) return;
 
-	auto value = qtOpenGLWindow->SetAsCurrentContext();
-	glGetError();
+	// Compute the correct viewport based on original texture aspect ratio
+	// TODO - do this only on-resize
+	auto resolution = FBO->GetResolution();
+	auto aspectRatio = static_cast<float>(resolution.x) / resolution.y;
 
-	//FrameBuffer::Unbind(Engine::Window);
-	{
-		Shader *screen = Manager::GetShader()->GetShader("screen");
-		screen->Use();
-		auto resolution = Engine::Window->GetResolution();
-		glUniform2i(screen->loc_resolution, resolution.x, resolution.y);
-		FBO->BindTexture(0, GL_TEXTURE0);
-		RenderQuad();
+	auto width = qtOpenGLWindow->width();
+	auto height = qtOpenGLWindow->height();
+
+	// TODO - should also consider aspect ratio of the Qt window
+	// There should be 4 cases based on the aspect ration of the original texture and the output window
+	
+	if (aspectRatio > 1) {
+		auto diffWidth = height * aspectRatio - width;
+		auto offsetLeft = diffWidth / 2;
+		qtOpenGLWindow->SetViewport(-offsetLeft, 0, width + diffWidth, height);
+	}
+	else {
+		auto diffHeight = width - height * aspectRatio;
+		auto offsetTop = aspectRatio * diffHeight / 2;
+		qtOpenGLWindow->SetViewport(0, -offsetTop, width, height + 2 * offsetTop);
 	}
 
-	qtOpenGLWindow->EndFrame();
+	OPENGL_RAII_LOCK();
+	auto value = qtOpenGLWindow->SetAsCurrentContext();
 	CheckOpenGLError();
-}
 
-void GameWindow::RenderQuad()
-{
-	glBindVertexArray(buffer->VAO);
-	glDrawElementsBaseVertex(4, 6, GL_UNSIGNED_SHORT, 0, 0);
-	glBindVertexArray(0);
+	Shader *screen = Manager::GetShader()->GetShader("screen");
+	screen->Use();
+	FBO->BindTexture(0, GL_TEXTURE0);
+	renderQuad->Render(screen);
+
+	qtOpenGLWindow->EndFrame();
 	CheckOpenGLError();
 }
 
 void GameWindow::OnEvent(EventType Event, void * data)
 {
 	if (EventType::FRAME_END == Event) {
-		Render();
+		//Render();
 	}
 	//if (EventType::FRAME_SYNC == Event) {
 	//	qtOpenGLWindow->SetAsCurrentContext();
 	//}
+}
+
+void GameWindow::resizeEvent(QResizeEvent * e)
+{
+	cout << "[Window] [Resize] " << e->size().width() << ", "<< e->size().height() << endl;
 }

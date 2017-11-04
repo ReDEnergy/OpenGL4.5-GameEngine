@@ -2,6 +2,8 @@
 
 #define Diffuse	u_texture_0
 
+layout(location = 0) in vec2 tex_coord;
+
 uniform sampler2D u_texture_0;	// Diffuse texture
 uniform sampler2D u_texture_1;	// Deferred light
 uniform sampler2D u_texture_2;	// Shadows
@@ -37,19 +39,19 @@ vec4 component(sampler2D textureID, vec2 coord, int channel);
 
 // TODO - make Alpha blending if alpha channel different than 1
 
-vec4 DebugView(vec2 text_coord) {
-	float ds = texture(u_texture_4, text_coord).r;
-	float dd = texture(u_texture_6, text_coord).r;
-	vec4 color = texture(u_texture_5, text_coord);
+vec4 DebugView(vec2 tex_coord) {
+	float ds = texture(u_texture_4, tex_coord).r;
+	float dd = texture(u_texture_6, tex_coord).r;
+	vec4 color = texture(u_texture_5, tex_coord);
 	if (dd < ds || (dd == 1.0 && color != vec4(0)))
-		return texture(u_texture_5, text_coord);
+		return texture(u_texture_5, tex_coord);
 	return vec4(0);
 }
 
-float SoftShadow(vec2 text_coord) {
-	float depth = linearDepth(u_texture_4, text_coord);
+float SoftShadow(vec2 tex_coord) {
+	float depth = linearDepth(u_texture_4, tex_coord);
 	if (depth > 40)
-		return texture(u_texture_0, text_coord).a;
+		return texture(u_texture_0, tex_coord).a;
 
 	float sum = 0;
 	float kernel = 5;
@@ -58,7 +60,7 @@ float SoftShadow(vec2 text_coord) {
 	int size = int(kernel / 2);
 	for (int i=-size; i<=size; i++) {
 		for (int j=-size; j<=size; j++) {
-			float shadow = texture(u_texture_0, text_coord + ivec2(i, j) / resolution).a;
+			float shadow = texture(u_texture_0, tex_coord + ivec2(i, j) / resolution).a;
 			sum += shadow;
 		}
 	}
@@ -66,15 +68,14 @@ float SoftShadow(vec2 text_coord) {
 	return sum/(kernel * kernel);
 }
 
-void main() {
-	vec2 text_coord = gl_FragCoord.xy / resolution;
-
-	vec4 diffuse = texture(u_texture_0, text_coord);
-	// diffuse.rgb *= SoftShadow(text_coord);
+void main()
+{
+	vec4 diffuse = texture(u_texture_0, tex_coord);
+	// diffuse.rgb *= SoftShadow(tex_coord);
 
 	///////////////////////////////////////////////////////////////////////////
 	// Bake Shadows
-	// vec4 shadow = texture(u_texture_2, text_coord);
+	// vec4 shadow = texture(u_texture_2, tex_coord);
 	// diffuse.rgb *= shadow.r;
 	// diffuse.rgb *= shadow.g;
 	// diffuse.rgb *= shadow.b;
@@ -83,7 +84,7 @@ void main() {
 	///////////////////////////////////////////////////////////////////////////
 	// Bake Ambient Occlusion
 	if (active_ssao) {
-		float ao = texture(u_texture_3, text_coord).x;
+		float ao = texture(u_texture_3, tex_coord).x;
 		vec4 ssao = vec4(1.0) - vec4(ao, ao, ao, 1.0);
 		out_color = clamp((diffuse - ssao), 0.0, 1.0);
 	} else {
@@ -92,23 +93,23 @@ void main() {
 	
 	///////////////////////////////////////////////////////////////////////////
 	// Split-screen AO and blurred AO
-	// out_color = out_color = text_coord.x < 0.5 ? ssao : ao;
+	// out_color = out_color = tex_coord.x < 0.5 ? ssao : ao;
 
 	///////////////////////////////////////////////////////////////////////////
 	// Bake Light
-	vec4 light = texture(u_texture_1, text_coord);
+	vec4 light = texture(u_texture_1, tex_coord);
 	vec4 ambient = vec4(0.8);
 	out_color *= (light + ambient);
 	
 	///////////////////////////////////////////////////////////////////////////
 	// Creates a fake alpha blending
 	if (debug_view == 1)
-		out_color += DebugView(text_coord);
+		out_color += DebugView(tex_coord);
 		
 	//Gizmo - BUG - until not used final image is darker
 	if (active_selection)
 	{
-		vec4 gizmo_add = texture(u_texture_7, text_coord);
+		vec4 gizmo_add = texture(u_texture_7, tex_coord);
 		if (gizmo_add != vec4(0, 0, 0, 1))
 			out_color = gizmo_add + out_color * 0.5;
 	}	

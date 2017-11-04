@@ -3,8 +3,8 @@
 #include <iostream>
 
 #include <Editor/Windows/Interface/GenericList.h>
-#include <Editor/UI/GUI.h>
 
+#include <QListWidget>
 #include <QLayout>
 #include <QMenu>
 #include <QAction>

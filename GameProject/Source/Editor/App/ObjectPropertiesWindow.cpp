@@ -1,42 +1,47 @@
 #include <pch.h>
 #include "ObjectPropertiesWindow.h"
 
-#include <functional>
-
-#include <Editor/UI/GUI.h>
-#include <Editor/Interface/SimpleTextBox.h>
+#include <Editor/UI/DockWindowManager.h>
+#include <Editor/Interface/QtSimpleWidgets.h>
 
 // QT
 #include <QComboBox>
+#include <QLabel>
 #include <QLayout>
 #include <QPushButton>
 #include <QStyledItemDelegate>
+
+using namespace std;
 
 static GameObject* defaultObject;
 
 ObjectPropertiesWindow::ObjectPropertiesWindow()
 {
-	setWindowTitle("Object");
+	Configure("ObjectProperties");
 	forceUpdate = false;
 	defaultObject = new GameObject();
+	defaultObject->SetName("NO SELECTION");
 	context = defaultObject;
-
-	InitUI();
 
 	SubscribeToEvent(EventType::EDITOR_OBJECT_SELECTED);
 	SubscribeToEvent(EventType::EDITOR_NO_SELECTION);
 	SubscribeToEvent(EventType::FRAME_END);
+
+	appChannel = new ObjectPropertiesUIChannel();
+	GUI::GUIControl::RegisterChannel(appChannel, GUI::CommChannel::OBJECT_PROP);
 }
 
 void ObjectPropertiesWindow::InitUI()
 {
+	SetScrollable(true);
+
 	qtLayout->setSpacing(5);
 	qtLayout->setAlignment(Qt::AlignTop);
 
 	{
 		objectName = new SimpleTextBox("Name");
-		objectName->OnUserEdit([this](const char* value) {
-			context->SetName(value);
+		objectName->OnUserEdit([this](string value) {
+			context->SetName(std::move(value));
 		});
 		qtLayout->addWidget(objectName);
 	}
@@ -65,77 +70,223 @@ void ObjectPropertiesWindow::InitUI()
 		qtLayout->addWidget(zone);
 	}
 
+
+	worldPosition = new GLMVecComponent<glm::vec3>("Position", glm::vec3());
+	worldPosition->OnUserEdit([this](glm::vec3 val) {
+		context->transform->SetWorldPosition(val);
+	});
+	qtLayout->addWidget(worldPosition);
+
+	worldScale = new GLMVecComponent<glm::vec3>("Scale", glm::vec3());
+	worldScale->OnUserEdit([this](glm::vec3 val) {
+		context->transform->SetScale(val);
+	});
+	qtLayout->addWidget(worldScale);
+
+	worldEuler = new GLMVecComponent<glm::vec3>("Rotation", glm::vec3());
+	worldEuler->OnUserEdit([this](glm::vec3 val) {
+		context->transform->SetWorldRotation(val);
+	});
+	qtLayout->addWidget(worldEuler);
+
+	worldQuat = new GLMVecComponent<glm::quat>("Quat", glm::quat());
+	worldQuat->OnUserEdit([this](glm::quat val) {
+		context->transform->SetWorldRotation(val);
+	});
+	qtLayout->addWidget(worldQuat);
+
 	{
-		worldPosition = new GLMVecComponent<glm::vec3>("Position:", glm::vec3());
-		worldPosition->OnUserEdit([this](glm::vec3 val) {
-			context->transform->SetWorldPosition(val);
-		});
-		qtLayout->addWidget(worldPosition);
-
-		worldEuler = new GLMVecComponent<glm::vec3>("Rotation:", glm::vec3());
-		worldEuler->OnUserEdit([this](glm::vec3 val) {
-			context->transform->SetWorldRotation(val);
-		});
-		qtLayout->addWidget(worldEuler);
-
-		worldScale = new GLMVecComponent<glm::vec3>("Scale:", glm::vec3());
-		worldScale->OnUserEdit([this](glm::vec3 val) {
-			context->transform->SetScale(val);
-		});
-		qtLayout->addWidget(worldScale);
-
-		worldQuat = new GLMVecComponent<glm::quat>("Quat:", glm::quat());
-		worldQuat->OnUserEdit([this](glm::quat val) {
-			context->transform->SetWorldRotation(val);
-		});
-		qtLayout->addWidget(worldQuat);
+		auto zone = new QLabel("Relative properties");
+		zone->setAlignment(Qt::AlignCenter);
+		zone->setMargin(5);
+		qtLayout->addWidget(zone);
 	}
+
+	localPosition = new GLMVecComponent<glm::vec3>("Local pos", glm::vec3());
+	localPosition->OnUserEdit([this](glm::vec3 val) {
+		context->transform->SetLocalPosition(val);
+	});
+	qtLayout->addWidget(localPosition);
+
+	localEuler = new GLMVecComponent<glm::vec3>("Local rot", glm::vec3());
+	localEuler->OnUserEdit([this](glm::vec3 val) {
+		std::cout << val << std::endl;
+		context->transform->SetRelativeRotation(val);
+	});
+	qtLayout->addWidget(localEuler);
+
+	localQuat = new GLMVecComponent<glm::quat>("Local quat", glm::quat());
+	localQuat->OnUserEdit([this](glm::quat val) {
+		context->transform->SetRelativeRotation(val);
+	});
+	qtLayout->addWidget(localQuat);
+
+	limitAxis = new GLMVecComponent<glm::vec3>("Limit axis", glm::vec3());
+	limitAxis->OnUserEdit([this](glm::vec3 value) {
+		auto T = dynamic_cast<LimitedTransform*>(context->transform);
+		if (T) T->LimitAxisRotation(value);
+	});
+	qtLayout->addWidget(limitAxis);
+
+	limitAxis = new GLMVecComponent<glm::vec3>("Limit axis", glm::vec3());
+	limitAxis->OnUserEdit([this](glm::vec3 value) {
+		auto T = dynamic_cast<LimitedTransform*>(context->transform);
+		if (T) T->LimitAxisRotation(value);
+	});
+	qtLayout->addWidget(limitAxis);
+
+	#ifdef PHYSICS_ENGINE
+	{
+		auto W = new CustomWidget(QBoxLayout::LeftToRight);
+		body->AddWidget(W);
+
+		{
+			auto button = new QPushButton("Use Physics");
+			QObject::connect(button, &QPushButton::clicked, this, [this]() {
+				contextUpdate++;
+				EmitEvent("Game", "UsePhysics", context);
+			});
+			W->AddWidget(button);
+			addPhysicsBtn = button;
+		}
+
+		{
+			auto button = new QPushButton("Remove Physics");
+			QObject::connect(button, &QPushButton::clicked, this, [this]() {
+				contextUpdate++;
+				EmitEvent("Game", "RemovePhysics", context);
+			});
+			W->AddWidget(button);
+			removePhysicsBtn = button;
+		}
+
+		auto W2 = new CustomWidget(QBoxLayout::LeftToRight);
+		body->AddWidget(W2);
+
+		{
+			auto checkbox = new SimpleCheckBox("Dynamic");
+			checkbox->OnUserEdit([this](bool value) {
+				hasGravity->setEnabled(value);
+				EmitEvent("Game", value ? "SetIsDynamicTrue" : "SetIsDynamicFalse", context);
+			});
+			isDyanmic = checkbox;
+			W2->AddWidget(checkbox);
+		}
+
+		{
+			auto checkbox = new SimpleCheckBox("Gravity");
+			checkbox->OnUserEdit([this](bool value) {
+				EmitEvent("Game", value ? "SetGravityTrue" : "SetGravityFalse", context);
+			});
+			hasGravity = checkbox;
+			W2->AddWidget(checkbox);
+		}
+
+		auto W3 = new CustomWidget(QBoxLayout::LeftToRight);
+		body->AddWidget(W3);
+
+		{
+			auto checkbox = new SimpleCheckBox("Kinematic");
+			checkbox->OnUserEdit([this](bool value) {
+				EmitEvent("Game", value ? "SetIsKinematicTrue" : "SetIsKinematicFalse", context);
+			});
+			isKinematic = checkbox;
+			W3->AddWidget(checkbox);
+		}
+
+		{
+			auto checkbox = new SimpleCheckBox("Trigger");
+			checkbox->OnUserEdit([this](bool value) {
+				EmitEvent("Game", value ? "SetIsTriggerTrue" : "SetIsTriggerFalse", context);
+			});
+			isTrigger = checkbox;
+			W3->AddWidget(checkbox);
+		}
+
+		{
+			auto floatInput = new SimpleFloatInput("Mass", "Kg", 3);
+			floatInput->AcceptNegativeValues(false);
+			floatInput->OnUserEdit([this](float value) {
+				appChannel->context = context;
+				appChannel->physicsMass = value;
+				EmitEvent("Game", "SetPhysicsMass", appChannel);
+			});
+			objectMass = floatInput;
+			body->AddWidget(floatInput);
+		}
+	}
+	#endif // PHYSICS_ENGINE
+
 }
 
-void ObjectPropertiesWindow::Update()
+void ObjectPropertiesWindow::UpdateUI()
 {
-	bool selectedMotion = context->transform->GetMotionState();
-	auto cameraTransform = Manager::GetScene()->GetActiveCamera()->transform;
-	bool cameraMotion = cameraTransform->GetMotionState();
+	if (contextUpdate > 0) {
+		contextUpdate--;
+		auto T = dynamic_cast<LimitedTransform*>(context->transform);
+		T ? limitAxis->Show() : limitAxis->Hide();
 
-	if (forceUpdate || selectedMotion) {
-		objectName->SetValue(context->GetName());
+		#ifdef PHYSICS_ENGINE
+		{
+			auto activePhysics = false;
+			auto hasPhysics = context->physics != nullptr;
+			if (hasPhysics) {
+				activePhysics = context->physics->IsActive();
+
+				isDyanmic->SetValue(context->physics->IsDynamic(), false);
+				isTrigger->SetValue(context->physics->IsTrigger(), false);
+				isKinematic->SetValue(context->physics->IsKinematic(), false);
+			}
+			isDyanmic->setEnabled(activePhysics);
+			hasGravity->setEnabled(activePhysics);
+			isTrigger->setEnabled(activePhysics);
+			isKinematic->setEnabled(activePhysics);
+			removePhysicsBtn->setEnabled(activePhysics);
+		}
+		#endif
+	}
+
+	if (forceUpdate || shouldUpdate) {
+		objectName->SetValue(context->GetName(), false);
 		context->transform->GetWorldPosition();
 		worldPosition->SetValue(context->transform->GetWorldPosition());
-		worldQuat->SetValue(context->transform->GetWorldRotation());
+		localPosition->SetValue(context->transform->GetLocalPosition());
+
 		worldScale->SetValue(context->transform->GetScale());
+
+		worldQuat->SetValue(context->transform->GetWorldRotation());
+		localQuat->SetValue(context->transform->GetRelativeRotation());
+
 		worldEuler->SetValue(context->transform->GetRotationEuler360());
+		localEuler->SetValue(TO_DEGREES * glm::eulerAngles(context->transform->GetRelativeRotation()));
 	}
 
 	if (forceUpdate) {
+		forceUpdate = false;
 		auto value = qVariantFromValue((void*)(context->GetMesh()));
-		meshType->SetValue(value);
+		meshType->SetValue(value, false);
 	}
+
+	shouldUpdate = false;
 }
 
-void ObjectPropertiesWindow::ForceUpdate()
+void ObjectPropertiesWindow::UpdateView(GameObject *ctx)
 {
-	if (forceUpdate == false)
-	{
-		forceUpdate = true;
-		Update();
-		forceUpdate = false;
-	}
+	contextUpdate++;
+	context = ctx ? ctx : defaultObject;
+	forceUpdate = true;
 }
 
 void ObjectPropertiesWindow::OnEvent(EventType Event, void * data)
 {
 	if (EventType::EDITOR_OBJECT_SELECTED == Event) {
-		context = dynamic_cast<GameObject*>((GameObject*)data);
-		if (!context)
-			context = defaultObject;
-		ForceUpdate();
+		auto ctx = dynamic_cast<GameObject*>((GameObject*)data);
+		UpdateView(ctx);
 	}
 	if (EventType::EDITOR_NO_SELECTION == Event) {
-		context = defaultObject;
-		ForceUpdate();
+		UpdateView(nullptr);
 	}
 	if (EventType::FRAME_END == Event) {
-		Update();
+		shouldUpdate = context->transform->GetMotionState();
 	}
 }

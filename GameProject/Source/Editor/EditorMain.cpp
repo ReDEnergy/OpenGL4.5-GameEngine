@@ -4,10 +4,12 @@
 #include <functional> 
 #include <stdlib.h>
 
+#include <GUI/GUI.h>
 #include <Editor/include/Editor.h>
 
 // QT objects
 #include <QMenuBar>
+#include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
 #include <QComboBox>
@@ -15,14 +17,22 @@
 #include <QStatusBar>
 #include <QFileDialog>
 #include <QApplication>
+#include <QDesktopWidget>
 
 // GameWorld
 #include <Game/Game.h>
 
+#include <Modules/RegisteredModuleUI.h>
 
-EditorMain::EditorMain(QWidget *parent)
-	: QMainWindow(parent)
+using namespace std;
+
+EditorMain::EditorMain(QApplication &app)
+	: QMainWindow(nullptr), app(app)
 {
+	cout << "[Qt Version]: " << QT_VERSION_MAJOR << "." << QT_VERSION_MINOR << "." << QT_VERSION_PATCH << endl;
+
+	GUI::GUIControl::Init();
+
 	SetupUI(this);
 
 	for (auto &window : dockWindows) {
@@ -33,24 +43,32 @@ EditorMain::EditorMain(QWidget *parent)
 		window.second->Init();
 	}
 
-	show();
+	updateUI = false;
 }
 
 EditorMain::~EditorMain()
 {
 }
 
-void EditorMain::Run(QApplication *app)
+void EditorMain::Run()
 {
-	this->app = app;
-
-	// TODO - this prevents the Main thread to close
-	// should find an alternative to update the FrontEnd using a 24/30 FPS QTimer 
-	// right now the Engine is in sync with the FrontEnd, UI updates can be blocked
+	int appWidth = 1400;
+	int appHeight = 800;
+	resize(appWidth, appHeight);
 
 	Manager::GetEvent()->EmitSync(EventType::FRONT_END_INITIALIZED);
 
-	Engine::Run();
+	show();
+	CenterWindow();
+
+	uiUpdateTimer = new QTimer();
+	uiUpdateTimer->setInterval(16);
+	connect(uiUpdateTimer, &QTimer::timeout, this, [this]() {
+		Update();
+	});
+	uiUpdateTimer->start();
+
+	app.exec();
 }
 
 void EditorMain::close()
@@ -70,7 +88,6 @@ void EditorMain::SetupUI(QMainWindow *MainWindow) {
 
 	auto appName = QtConfig::GetAppName() + " " + QtConfig::GetAppVersion();
 	MainWindow->setWindowTitle(appName.c_str());
-	MainWindow->resize(1280, 720);
 	MainWindow->setDockOptions(QMainWindow::AnimatedDocks |
 								QMainWindow::AllowNestedDocks |
 								QMainWindow::AllowTabbedDocks);
@@ -87,14 +104,13 @@ void EditorMain::SetupUI(QMainWindow *MainWindow) {
 
 	auto *picker = new FilePicker();
 	picker->setNameFilter("*.xml");
-	GUI::Set(QT_INSTACE::FILE_PICKER, (void*) picker);
 
 	// ************************************************************************
 	// Menu Bar
 
 	QMenuBar *menuBar = new QMenuBar(MainWindow);
 	menuBar->setObjectName(QStringLiteral("menuBar"));
-	menuBar->setGeometry(QRect(0, 0, 1051, 21));
+	//menuBar->setGeometry(QRect(0, 0, 1051, 21));
 	MainWindow->setMenuBar(menuBar);
 
 	// Menu Entry
@@ -120,7 +136,7 @@ void EditorMain::SetupUI(QMainWindow *MainWindow) {
 		menu->setTitle("Tools");
 		menuBar->addAction(menu->menuAction());
 
-		// Submenu buttons
+		// Sub-menu buttons
 		{
 			QAction *action = new QAction(MainWindow);
 			action->setText("Reload StyleSheets");
@@ -128,6 +144,26 @@ void EditorMain::SetupUI(QMainWindow *MainWindow) {
 			menu->addAction(action);
 			QObject::connect(action, &QAction::triggered, this, &EditorMain::ReloadStyleSheets);
 		}
+
+		{
+			QAction *action = new QAction(MainWindow);
+			action->setText("Center to screen");
+			action->setIcon(*QtConfig::GetIcon("focus.png"));
+			menu->addAction(action);
+			QObject::connect(action, &QAction::triggered, this, &EditorMain::CenterWindow);
+		}
+
+		{
+			QAction *action = new QAction(MainWindow);
+			action->setText("Toggle Scrolling");
+			action->setIcon(*QtConfig::GetIcon("focus.png"));
+			menu->addAction(action);
+			QObject::connect(action, &QAction::triggered, this, [this]() {
+				auto value = dockWindows["ProfilingWindow"]->IsScrollable();
+				dockWindows["ProfilingWindow"]->SetScrollable(!value);
+			});
+		}
+
 	}
 
 	// Menu Entry
@@ -158,6 +194,45 @@ void EditorMain::SetupUI(QMainWindow *MainWindow) {
 	// Attach toobar to the main window
 	MainWindow->addToolBar(toolbar);
 
+	// Game Window
+	{
+		QToolButton *button = new QToolButton();
+		button->setText("GameWindow");
+		button->setMaximumWidth(100);
+		button->setIcon(*QtConfig::GetIcon("gamecontroller.png"));
+		button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+		QObject::connect(button, &QToolButton::clicked, this, []() {
+			Manager::GetEvent()->EmitAsync("Game", "ToggleGameWindow", nullptr);
+		});
+		toolbar->addWidget(button);
+	}
+
+	// Render to Oculus Rift
+	{
+		QToolButton *button = new QToolButton();
+		button->setText("OculusVR");
+		button->setMaximumWidth(80);
+		button->setIcon(*QtConfig::GetIcon("lens.png"));
+		button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+		QObject::connect(button, &QToolButton::clicked, this, []() {
+			Manager::GetEvent()->EmitAsync("Game", "OculusRift-ToggleRendering", nullptr);
+		});
+		toolbar->addWidget(button);
+	}
+
+	// Toggle V-Sync
+	{
+		QToolButton *button = new QToolButton();
+		button->setText("V-Sync");
+		button->setMaximumWidth(80);
+		button->setIcon(*QtConfig::GetIcon("frames.png"));
+		button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+		QObject::connect(button, &QToolButton::clicked, this, []() {
+			Manager::GetEvent()->EmitAsync("Game", "V-Sync-Toggle", nullptr);
+		});
+		toolbar->addWidget(button);
+	}
+
 	// ************************************************************************
 	// Status Bar
 
@@ -173,52 +248,97 @@ void EditorMain::SetupUI(QMainWindow *MainWindow) {
 	QWidget *centeralWidget = new QWidget();
 	centeralWidget->setFixedWidth(0);
 	MainWindow->setCentralWidget(centeralWidget);
+	//MainWindow->centralWidget()->hide();
 
 	// ************************************************************************
 	// Attach windows
 
+	SetupModuleUIs();
+
 	// WARNING GameWindow will trigger OpenGL Context Switch
-	dockWindows["CameraProp"] = new CameraPropertyEditor();
+	// Create this also through the *DockWindow* template
 	dockWindows["GameWindow"] = new GameWindow();
-	dockWindows["GeneralWindow"] = new GeneralWindow();
-	dockWindows["ObjectProperties"] = new ObjectPropertiesWindow();
-	dockWindows["ProfilingWindow"] = new ProfilingWindow();
-	
 
-	MainWindow->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dockWindows["ObjectProperties"], Qt::Orientation::Horizontal);
-	MainWindow->tabifyDockWidget(dockWindows["ObjectProperties"], dockWindows["CameraProp"]);
+	// Left Dock Area
+	MainWindow->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dockWindows["SceneHierarchy"], Qt::Orientation::Horizontal);
 
-	MainWindow->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dockWindows["ProfilingWindow"], Qt::Orientation::Vertical);
-	MainWindow->tabifyDockWidget(dockWindows["ProfilingWindow"], dockWindows["GeneralWindow"]);
+	// Center Area
+	MainWindow->addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dockWindows["GameWindow"], Qt::Orientation::Horizontal);
 
-	MainWindow->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dockWindows["GameWindow"], Qt::Orientation::Horizontal);
+	// Right Dock Area
+	MainWindow->splitDockWidget(dockWindows["GameWindow"], dockWindows["ObjectProperties"], Qt::Orientation::Horizontal);
+	MainWindow->splitDockWidget(dockWindows["ObjectProperties"], dockWindows["ProfilingWindow"], Qt::Orientation::Vertical);
 
-	// Left Dock
+	MainWindow->tabifyDockWidget(dockWindows["ObjectProperties"], dockWindows["GeneralWindow"]);
+#ifdef KINECT_SENSOR
+	MainWindow->tabifyDockWidget(dockWindows["ObjectProperties"], dockWindows["KinectSensor"]);
+#endif
+	MainWindow->tabifyDockWidget(dockWindows["ObjectProperties"], dockWindows["LeapSensor"]);
+	MainWindow->tabifyDockWidget(dockWindows["ObjectProperties"], dockWindows["MotionSystem"]);
+	MainWindow->tabifyDockWidget(dockWindows["ObjectProperties"], dockWindows["LeapControl"]);
+
+	MainWindow->tabifyDockWidget(dockWindows["ProfilingWindow"], dockWindows["CameraProperties"]);
+
 	dockWindows["GameWindow"]->setFloating(true);
 	dockWindows["GameWindow"]->setFloating(false);
 
+	dockWindows["SceneHierarchy"]->raise();
 	dockWindows["ObjectProperties"]->raise();
-	dockWindows["ProfilingWindow"]->raise();
+}
+
+void EditorMain::SetupModuleUIs()
+{
+	for (auto &module : registeredUIModules)
+	{
+		auto M = static_cast<DockWindow*>(module->Allocate());
+		M->InitUI();
+
+		auto name = M->windowTitle().toStdString();
+		dockWindows[name] = M;
+		moduleWindows.push_back(M);
+
+		// UI zones are not defined at this point
+		// tabifyDockWidget(dockWindows["ObjectProperties"], M);
+	}
+}
+
+void EditorMain::CenterWindow()
+{
+	// Center the application on the main screen at startup
+	auto desktopInfo = app.desktop()->screenGeometry();
+	int posX = desktopInfo.width() - this->width();
+	int posY = desktopInfo.height() - this->height();
+	this->setGeometry(posX / 2, posY / 2, this->width(), this->height());
 }
 
 void EditorMain::Update()
 {
-	//app->processEvents();
-	auto SceneWindow = GUI::Get<GameWindow>(QT_INSTACE::_3D_SCENE_WINDOW);
-	if (SceneWindow) {
-		SceneWindow->Update();
-		SceneWindow->Render();
+	//app.processEvents();
+
+	dockWindows["GameWindow"]->Update();
+
+	// Update UI only at half frequency
+	if (updateUI) {
+		for (auto &window : moduleWindows) {
+			window->Update();
+		}
 	}
-	dockWindows["ObjectProperty"]->Update();
+	updateUI = !updateUI;
 }
 
 void EditorMain::ReloadStyleSheets()
 {
+	QtConfig::SetWidgetStyleSheet(this, "app.css");
+
 	for (auto &window : dockWindows) {
 		window.second->ReloadStyleSheet();
 	}
 
 	for (auto &window : appWindows) {
 		window.second->ReloadStyleSheet();
+	}
+
+	for (auto &window : moduleWindows) {
+		window->ReloadStyleSheet();
 	}
 }

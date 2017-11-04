@@ -6,6 +6,8 @@
 #define Noise1	u_texture_3
 #define Noise2	u_texture_4
 
+layout(location = 0) in vec2 tex_coord;
+
 uniform sampler2D u_texture_0;	// View positions
 uniform sampler2D u_texture_1;	// View normals
 uniform sampler2D u_texture_2;	// Random Texture 1
@@ -38,16 +40,15 @@ void main() {
 	// -------------------------------------------------------------------------
 	// Fragment properties
 	
-	vec2 text_coord = gl_FragCoord.xy / resolution;
-	vec3 vPos	 = texture(V_Pos, text_coord).xyz;
-	vec3 vNormal = texture(V_Norm, text_coord).xyz;
-	float vDepth = linearDepth(DepthT, text_coord);
+	vec3 vPos	 = texture(V_Pos, tex_coord).xyz;
+	vec3 vNormal = texture(V_Norm, tex_coord).xyz;
+	float vDepth = linearDepth(DepthT, tex_coord);
 	
 	// -------------------------------------------------------------------------
 	// Random Noise vector
 	
 	vec2 noise_scale = resolution / 2.0;
-	vec3 fres = normalize(texture(Noise2, text_coord * noise_scale).xyz);
+	vec3 fres = normalize(texture(Noise2, tex_coord * noise_scale).xyz);
 
 	/////////////////////
 	

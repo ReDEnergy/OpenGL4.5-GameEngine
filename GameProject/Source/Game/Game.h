@@ -2,12 +2,11 @@
 #include <pch.h>
 #include <vector>
 
-using namespace std;
+#include <Runtime/Modules/RuntimeGLModule.h>
 
-class Game : 
-	public World,
-	public EventListener,
-	public ObjectInput
+class Game :
+	public RuntimeGLModule,
+	public EventListener
 {
 	public:
 		Game();
@@ -16,15 +15,27 @@ class Game :
 		void InitUIHooks();
 
 		void FrameStart();
-		void Update(float deltaTime);
+		void Update(double deltaTime);
 		void FrameEnd();
 
 		void BarrelPhysicsTest(bool pointLights);
 
 	private:
+		void Render();
+		void RenderScene(Camera *camera) const;
+		void FinishComposition(FrameBuffer *outFBO, Camera *camera) const;
+
+		// Input options
+		void OnInputUpdate(float deltaTime, int mods);
+		void OnKeyPress(int key, int mods);
+		void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY);
+
+		// Events
 		void OnEvent(EventType Event, void *data);
-		void OnEvent(const string& eventID, void *data);
+		void OnEvent(const std::string& eventID, void *data);
 		void InitSceneCameras();
+
+		void ToggleRenderingToOculusRift();
 
 	private:
 		Camera				*freeCamera;
@@ -39,14 +50,17 @@ class Game :
 		FrameBuffer			*FBO_Out;
 		FrameBuffer			*FBO_Light;
 
-		GameObject			*ScreenQuad;
-		GameObject			*DebugPanel;
+		#ifdef OCULUS_RIFT_HMD
+		FrameBuffer			*FBO_OutUI;
+		#endif
+
+		GameObject			*screenQuad;
 
 		SSAO				*ssao;
 		Texture				*ShadowMap;
 
-		vector<Camera*>		sceneCameras;
-		unsigned int		activeSceneCamera;
+		std::vector<Camera*>	sceneCameras;
+		unsigned int			activeSceneCamera;
 
 		ProfileTimer		*cpuTime;
 };

@@ -1,6 +1,9 @@
 #version 410
 
 #define Diffuse	u_texture_0
+
+layout(location = 0) in vec2 tex_coord;
+
 uniform sampler2D u_texture_0;
 
 uniform ivec2 resolution;
@@ -9,10 +12,10 @@ layout(location = 0) out vec3 color;
 
 vec4 getBlur(sampler2D u_texture, vec2 text_coords);
 
-void main() {
-	vec2 text_coord = gl_FragCoord.xy / resolution;
-	color = texture(u_texture_0, text_coord).xyz;
-	color = getBlur(Diffuse, text_coord).xyz;
+void main()
+{
+	color = texture(u_texture_0, tex_coord).xyz;
+	color = getBlur(Diffuse, tex_coord).xyz;
 }
 
 const float uBlurSize = 4;

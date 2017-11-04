@@ -3,11 +3,13 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <thread>
 
 #ifndef OPENGL_ES
 #include <Editor/EditorMain.h>
 #endif
-#include <Game/Game.h>
+
+#include <Controller/Controller.h>
 
 #undef DLLExport
 
@@ -20,17 +22,28 @@ int main(int argc, char **argv)
 	Engine::Init();
 	Manager::Init();
 
-	Game *game = new Game();
-	game->Init();
-
-	Engine::SetWorldInstance(game);
+	GameEngine *app = nullptr;
 
 	auto defaultWindowProps = Manager::GetConfig()->windowProperties;
-	if (defaultWindowProps->visible) {
-		Engine::Run();
+	if (!defaultWindowProps->visible && !defaultWindowProps->fullScreen) {
+		app = new GameEngine(argc, argv);
+	}
+
+	Controller::Init();
+
+	auto game = Controller::GetModule("Game");
+	game->Resume();
+
+	if (app) {
+		app->Start();
 	}
 	else {
-		GameEngine app(argc, argv);
+		auto window = WindowManager::GetDefaultWindow();
+		window->SetSize(1280, 720);
+		window->CenterWindow();
+		while (1) { 
+			window->PollEvents();
+		}
 	}
 
 	return 0;

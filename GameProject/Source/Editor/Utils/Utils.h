@@ -1,7 +1,5 @@
 #pragma once
-#include <Editor/include/QTForward.h>
-
-using namespace std;
+#include <Editor/include/QtForward.h>
 
 class QtTextValidator
 {

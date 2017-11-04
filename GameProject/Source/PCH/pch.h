@@ -20,6 +20,12 @@
 #include <tchar.h>
 #include <iostream>
 
+#include <functional>
+
+// Threading 
+#include <atomic>
+#include <mutex>
+
 // TODO: reference additional headers your program requires here
 
 #include <Engine.h>

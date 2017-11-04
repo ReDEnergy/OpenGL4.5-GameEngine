@@ -35,3 +35,8 @@ void SimpleObjectControl::Update(float deltaTime, int mods)
 void SimpleObjectControl::OnKeyPress(int key, int mods)
 {
 }
+
+void SimpleObjectControl::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
+{
+	//std::cout << mouseX << " " << mouseY << "\t" << deltaX << " " << deltaY << std::endl;
+}

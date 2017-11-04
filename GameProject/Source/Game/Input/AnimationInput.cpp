@@ -3,6 +3,8 @@
 
 #include <include/gl.h>
 
+using namespace std;
+
 AnimationInput::AnimationInput(GameObject *obj)
 	: GO(obj)
 {
@@ -19,7 +21,7 @@ AnimationInput::~AnimationInput()
 	
 }
 
-void AnimationInput::Update(float deltaTime, int mods)
+void AnimationInput::OnInputUpdate(float deltaTime, int mods)
 {
 	if (mods != GLFW_MOD_SHIFT)
 		return;
@@ -79,11 +81,6 @@ void AnimationInput::OnKeyRelease(int key, int mods)
 void AnimationInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 {
 //	cout << mouseY << "-" << mouseX << endl;
-}
-
-void AnimationInput::OnMouseBtnEvent(int mouseX, int mouseY, int button, int action, int mods)
-{
-	//printf("pos: %d %d \n button: %d \n action: %d \n mods: %d \n", mouseX, mouseY, button, action, mods);
 }
 
 void AnimationInput::OnEvent(EventType Event, void *data)

@@ -12,6 +12,7 @@
 /**/*.opensdf
 /**/*.opendb
 /**/ipch
+*.db
 
 # CodeBlocks
 **/*.layout

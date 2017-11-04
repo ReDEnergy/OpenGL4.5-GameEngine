@@ -17,16 +17,16 @@ using namespace std;
 GSkeletalJoint::GSkeletalJoint(const char * name)
 	: GameObject(name)
 {
-	SetName(name);
+	//SetName(name);
 	SetMesh(Manager::GetResource()->GetMesh("box"));
 
 	//SAFE_FREE(transform);
 	//transform = new JointTransform();
 	transform->SetScale(glm::vec3(0.01f));
 
-	boneOrientation = new Transform();
-	constrained = new GameObject("constraint");
-	constrained->SetMesh(Manager::GetResource()->GetMesh("box"));
+	//boneOrientation = new Transform();
+	//constrained = new GameObject("constraint");
+	//constrained->SetMesh(Manager::GetResource()->GetMesh("box"));
 
 	//Manager::GetScene()->AddObject(constrained);
 }
@@ -43,15 +43,7 @@ void GSkeletalJoint::Render(const Shader *shader) const
 	//transform->SetScale(glm::vec3(0.01f));
 	GameObject::Render(shader);
 	//transform->SetScale(glm::vec3(1));
-
-	auto DirectGL = Manager::GetDirectGL();
-	DirectGL->Use();
-	DirectGL->SetLineWidth(3);
-	DirectGL->SetDrawColor(200, 240, 50);
-
-	RenderBones(shader);
-
-	shader->Use();
+	//shader->Use();
 }
 
 void GSkeletalJoint::RenderForPicking(const Shader * shader) const
@@ -61,17 +53,29 @@ void GSkeletalJoint::RenderForPicking(const Shader * shader) const
 	//transform->SetScale(glm::vec3(1));
 }
 
-void GSkeletalJoint::RenderBones(const Shader * shader) const
+void GSkeletalJoint::RenderSkeleton(Camera &camera) const
+{
+	auto DirectGL = Manager::GetDirectGL();
+	auto shader = DirectGL->GetActiveShader();
+	DirectGL->UseDefaultShader();
+	DirectGL->SetLineWidth(3);
+	DirectGL->SetDrawColor(200, 240, 50);
+	camera.BindViewProj(shader);
+	this->RenderBones();
+}
+
+void GSkeletalJoint::RenderBones() const
 {
 	auto DirectGL = Manager::GetDirectGL();
 	auto wpos = transform->GetWorldPosition();
 	for (auto child : _children) {
 		DirectGL->DrawLine(wpos, child->transform->GetWorldPosition());
-		((GSkeletalJoint*)child)->RenderBones(shader);
+		((GSkeletalJoint*)child)->RenderBones();
 	}
 }
 
-void GSkeletalJoint::ReadSensorPositionState(SkeletalTracking * tracking, bool ignoreNonTracked)
+#ifdef KINECT_SENSOR
+void GSkeletalJoint::ReadSensorPositionState(KinectSkeletalTracking * tracking, bool ignoreNonTracked)
 {
 	auto trackingState = tracking->joints[sensorJointID].TrackingState;
 	if (!ignoreNonTracked || trackingState == TrackingState::TrackingState_Tracked)
@@ -85,6 +89,7 @@ void GSkeletalJoint::ReadSensorPositionState(SkeletalTracking * tracking, bool i
 		((GSkeletalJoint*)child)->ReadSensorPositionState(tracking);
 	}
 }
+#endif
 
 void GSkeletalJoint::SetJointID(uint jointID)
 {
@@ -94,6 +99,8 @@ void GSkeletalJoint::SetJointID(uint jointID)
 void GSkeletalJoint::Update()
 {
 	GameObject::Update();
+
+	return;
 
 	auto joint = dynamic_cast<GSkeletalJoint*>(this);
 	if (!joint) return;
@@ -161,7 +168,8 @@ void GSkeletalJoint::LogDebugInfo()
 	cout << "Awesome" << endl;
 }
 
-void GSkeletalJoint::ReadSensorRotationState(SkeletalTracking * tracking, bool ignoreNonTracked)
+#ifdef KINECT_SENSOR
+void GSkeletalJoint::ReadSensorRotationState(KinectSkeletalTracking * tracking, bool ignoreNonTracked)
 {
 	auto trackingState = tracking->joints[sensorJointID].TrackingState;
 	if (!ignoreNonTracked || trackingState == TrackingState::TrackingState_Tracked)
@@ -176,7 +184,8 @@ void GSkeletalJoint::ReadSensorRotationState(SkeletalTracking * tracking, bool i
 			joint->ReadSensorRotationState(tracking);
 		}
 	}
-} 
+}
+#endif
 
 void GSkeletalJoint::RenderBone(GSkeletalJoint *child) const
 {

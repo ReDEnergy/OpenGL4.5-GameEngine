@@ -6,6 +6,8 @@
 #include <QWidget>
 #include <QFile>
 
+using namespace std;
+
 namespace RESOURCE {
 	const string ICONS = "Resources/Icons/";
 	const string STYLESHEETS = "Config/StyleSheets/";

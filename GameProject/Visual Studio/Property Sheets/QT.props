@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <QtVersion>Qt5.6</QtVersion>
+    <QtVersion>Qt5.7</QtVersion>
   </PropertyGroup>
   <PropertyGroup>
     <IncludePath>..\..\libs\$(QtVersion)\include;..\..\libs\$(QtVersion)\include\QtCore;..\..\libs\$(QtVersion)\include\QtWidgets;..\..\libs\$(QtVersion)\include\QtGui;..\..\libs\$(QtVersion)\include\QtOpenGL;..\..\libs\$(QtVersion)\include\QtPlatformHeaders;$(IncludePath)</IncludePath>
@@ -11,8 +11,9 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalDependencies>Qt5Core.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5PlatformSupport.lib;qtmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Qt5Core$(LibPrefix).lib;Qt5Widgets$(LibPrefix).lib;Qt5Gui$(LibPrefix).lib;Qt5PlatformSupport$(LibPrefix).lib;qtmain$(LibPrefix).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile />
     <ClCompile />
   </ItemDefinitionGroup>
   <ItemGroup>

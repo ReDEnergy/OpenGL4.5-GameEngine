@@ -1,13 +1,12 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 #include <unordered_map>
 
-#include <Editor/include/QTForward.h>
+#include <Editor/include/QtForward.h>
 #include <QMainWindow>
 #include <QApplication>
-
-using namespace std;
 
 class DockWindow;
 class CustomWidget;
@@ -16,32 +15,35 @@ class GameWindow;
 class EditorMain : public QMainWindow
 {
 	public:
-		EditorMain(QWidget *parent = 0);
+		EditorMain(QApplication &app);
 		~EditorMain();
 
-		void Run(QApplication * app);
+		void Run();
 		void Update();
 
 	private:
-		void close();
-		void closeEvent(QCloseEvent *event);
-		void Config();
-
 		void SetupUI(QMainWindow * MainWindow);
-		void TestEvent();
+		void SetupModuleUIs();
+		void CenterWindow();
 
 		// Toolbar actions
 		void ReloadStyleSheets();
 
+		// Qt Events
+		void close();
+		void closeEvent(QCloseEvent *event);
+
 	private:
-		bool shouldQuit = false;
+		bool updateUI;
 		QTime *qtTime;
-		QTimer *qtTimer;
-		QApplication *app;
+		QTimer *uiUpdateTimer;
+		QApplication &app;
 		QComboBox *dropdown;
 
-		unordered_map<string, DockWindow*> dockWindows;
-		unordered_map<string, CustomWidget*> appWindows;
+		std::unordered_map<std::string, DockWindow*> dockWindows;
+		std::unordered_map<std::string, CustomWidget*> appWindows;
+		std::vector<DockWindow*> moduleWindows;
+
 };
 
 class GameEngine : public QApplication
@@ -50,12 +52,13 @@ class GameEngine : public QApplication
 		GameEngine(int argc, char *argv[])
 			: QApplication(argc, argv)
 		{
-			auto window = new EditorMain();
-			window->Run(this);
+			window = new EditorMain(*this);
+		}
+
+		void Start() {
+			window->Run();
 		}
 
 	private:
-		void lastWindowClosed() {
-			cout << "LAST WINDOW CLOSED" << endl;
-		}
+		EditorMain *window;
 };

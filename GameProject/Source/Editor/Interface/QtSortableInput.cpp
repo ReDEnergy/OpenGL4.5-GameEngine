@@ -14,14 +14,14 @@
 #include <include/glm.h>
 #include <include/math.h>
 
+using namespace std;
+
 QtSortableInput::QtSortableInput(const char * label, unsigned int precision)
 {
 	qtLayout->setDirection(QBoxLayout::LeftToRight);
 	qtLayout->setSpacing(0);
 
-	unsigned int prec = 4;
-
-	precision = min(precision, prec);
+	precision = MIN(precision, 4);
 
 	format = new char[20];
 	sprintf(format, "%%.%df", precision);

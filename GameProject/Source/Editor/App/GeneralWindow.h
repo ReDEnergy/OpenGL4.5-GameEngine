@@ -1,8 +1,9 @@
 #pragma once
-#include <Editor/Windows/Interface/DockWindow.h>
+#include <Editor/Windows/Module/ModuleWindow.h>
 
-class GeneralWindow
-	: public DockWindow
+class SimpleCheckBox;
+
+class GeneralWindow : public ModuleWindow<int>
 {
 	public:
 		GeneralWindow();
@@ -11,4 +12,7 @@ class GeneralWindow
 	private:
 		void InitUI();
 		void ToggleMaskChannel(int index);
+
+	private:
+		SimpleCheckBox *logUnsafeEvents;
 };

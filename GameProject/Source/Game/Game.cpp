@@ -1,9 +1,13 @@
 ﻿#include <pch.h>
 #include "Game.h"
 
+#include <include/gl.h>
+
+#include <GUI/Channels/ObjectPropertiesUIChannel.h>
+
 #include <Game/Input/AnimationInput.h>
 #include <Game/Input/SimpleObjectControl.h>
-#include <Game/Input/GameInput.h>
+#include <Prototyping/RotationConstraints/RotationConstraints.h>
 
 #include <templates/Singleton.h>
 
@@ -14,35 +18,78 @@
 // DEBUG BUILD
 #endif
 
-#define KINECT_MODULE
-#ifdef KINECT_MODULE
+#include <SkeletalSystem/AnimationSystem.h>
+AnimationSystem *animationSystem = nullptr;
+
+#undef KINECT_SENSOR
+#ifdef KINECT_SENSOR
 #include <Kinect/KinectSensor.h>
-#include <Kinect/SkeletalTracking.h>
+#include <Kinect/KinectSkeletalTracking.h>
 #include <Kinect/Depth/KinectPointCloud.h>
 #include <Kinect/KinectStreaming.h>
-#include <SkeletalSystem/SkeletalSystem.h>
-#include <Prototyping/TestConeConstraint.h>
 
-KinectSensor *kinectSensor;
-SkeletalTracking *skeletalTracking;
-SkeletalSystem *skeletalSystem;
-TestConeConstraint *testCone;
-KinectStreaming *kinectStreaming;
-KinectPointCloud *kinectPointCloud;
+KinectSensor *kinectSensor = nullptr;
+KinectStreaming *kinectStreaming = nullptr;
+KinectPointCloud *kinectPointCloud = nullptr;
+KinectSkeletalTracking *kinectSkeletalTracking = nullptr;
+#endif
+
+//#undef LEAP_SENSOR
+#ifdef LEAP_SENSOR
+#include <LeapMotion/LeapSensor.h>
+#include <LeapMotion/ControlPanel/LeapControlpanel.h>
+LeapSensor *leapSensor = nullptr;
+LeapControlPanel *leapControlPanel = nullptr;
+#endif
+
+//#undef OCULUS_RIFT_HMD
+#ifdef OCULUS_RIFT_HMD
+#include <OculusRift/OculusRiftHMD.h>
+OculusRiftHMD *oculusHMD = nullptr;
+#endif
+
+#define GAME_MODULES
+#ifdef GAME_MODULES
+#include <MotionSystem/MotionSystem.h>
+MotionSystem *motionSystem = nullptr;
 #endif
 
 // Add support for PhysX Engine
 #ifdef PHYSX_ENGINE
-#include <Physics/PhysX.h>
-
-PhysXManager *physXManager;
-PhysXRagdoll *ragdoll;
 #endif
+
+//#define SOV_CAMERA_BOUNDING_BOX
+#ifdef SOV_CAMERA_BOUNDING_BOX
+	bool updateBoundingBox = true;
+#endif
+
+using namespace std;
 
 Game::Game()
 {
+	Configure("Game");
+	SetUIUpdateFrequency(0);
+
 	window = WindowManager::GetDefaultWindow();
+	window->props.hideOnClose = true;
 	window->SetVSync(true);
+	AttachTo(window);
+
+	SubscribeTo("ToggleGameWindow", [this](void *data) {
+		window->props.visible ? window->Hide() : window->Show();
+		if (window->props.visible) {
+			window->SetSize(1280, 720);
+			window->CenterWindow();
+		}
+	});
+
+	SubscribeTo("V-Sync-Toggle", [this](void *data) {
+		window->ToggleVSync();
+	});
+
+	SubscribeTo("OculusRift-ToggleRendering", [this](void *data) {
+		ToggleRenderingToOculusRift();
+	});
 }
 
 Game::~Game() {
@@ -50,25 +97,28 @@ Game::~Game() {
 
 void Game::Init()
 {
+	window->MakeCurrentContext();
+
 	cpuTime = new ProfileTimer();
 	cpuTime->SetMessage("CPU time");
 
 	// Game resolution
-	glm::ivec2 resolution = Engine::Window->GetResolution();
+	glm::ivec2 resolution = window->GetResolution();
 	float aspectRation = float(resolution.x) / resolution.y;
 
 	// Cameras
 	gameCamera = new Camera();
 	gameCamera->SetName("Game Camera");
-	gameCamera->SetPerspective(50, aspectRation, 0.001f, 300);
-	gameCamera->SetPosition(glm::vec3(0, 5, 5));
-	gameCamera->transform->SetMoveSpeed(5);
+	gameCamera->SetPerspective(60, aspectRation, 0.001f, 300);
+	gameCamera->SetPosition(glm::vec3(0, 3, 3));
+	gameCamera->transform->SetMoveSpeed(2);
 	Manager::GetScene()->AddObject(gameCamera);
 
 	freeCamera = new Camera();
 	freeCamera->SetName("Free Camera");
 	freeCamera->SetPerspective(40, aspectRation, 0.001f, 300);
 	freeCamera->SetPosition(glm::vec3(0.0f, 10.0f, 10.0f));
+	freeCamera->transform->SetWorldRotation(glm::vec3(-35, 0, 0));
 	freeCamera->Update();
 	Manager::GetScene()->AddObject(freeCamera);
 
@@ -84,7 +134,6 @@ void Game::Init()
 	Sun->Update();
 	Manager::GetScene()->AddObject(Sun);
 
-
 	Spot = new SpotLight();
 	Spot->SetPosition(glm::vec3(5.25, 3, 9));
 	Spot->SetPerspective(90, 1, 0.1f, 50);
@@ -93,7 +142,7 @@ void Game::Init()
 	Manager::GetScene()->AddObject(Spot);
 
 	ShadowMap = new Texture();
-	ShadowMap->Create2DTextureFloat(NULL, resolution.x, resolution.y, 4, 32);
+	ShadowMap->Create2DTexture(resolution.x, resolution.y, 4, 32, GL_FLOAT);
 
 	// --- Create FBO for rendering to texture --- //
 	FBO = new FrameBuffer();
@@ -106,12 +155,15 @@ void Game::Init()
 	FBO_Out->Generate(resolution.x, resolution.y, 1, false);
 	FrameBuffer::SetOffScreenBuffer(FBO_Out);
 
+	FBO_OutUI = new FrameBuffer();
+	FBO_OutUI->Generate(resolution.x, resolution.y, 1, false);
+
 	// Rendering 
 	ssao = new SSAO();
 	ssao->Init(resolution.x, resolution.y);
 
-	ScreenQuad = Manager::GetResource()->GetGameObject("render-quad");
-	ScreenQuad->Update();
+	screenQuad = Manager::GetResource()->GetGameObject("render-quad");
+	screenQuad->Update();
 
 	// --- Debugging --- //
 	auto *TDBG = Manager::GetTextureDebugger();
@@ -126,110 +178,151 @@ void Game::Init()
 	cameraDebugInput = new CameraDebugInput(gameCamera);
 	ObjectInput *DI = new DebugInput();
 	ObjectInput *EI = new EditorInput();
-	ObjectInput *GI = new GameInput(this);
 	cameraInput->AttachTo(window);
 	cameraDebugInput->AttachTo(window);
 	DI->AttachTo(window);
 	EI->AttachTo(window);
-	GI->AttachTo(window);
-
 
 	// GameObjects
-	//for (uint i = 0; i < 300; i++) {
+	auto ground = Manager::GetScene()->FindGameObject("ground");
+	ground->SetSelectable(false);
+
+	//for (uint i = 0; i < 70; i++) {
 	//	GameObject *tree = Manager::GetResource()->GetGameObject("bamboo");
+	//	tree->SetName(string(tree->GetName()) + "_" + to_string(i));
+	//	ground->AddChild(tree);
 	//	tree->transform->SetWorldPosition(glm::vec3(rand() % 100 - 50, 0, rand() % 100 - 50));
-	//	Manager::GetScene()->AddObject(tree);
-	//}
-
-
-	// GameObjects
-	//for (int i = -5; i < 5; i++) {
-	//	for (int j = -5; j < 5; j++) {
-	//		GameObject *ground = Manager::GetResource()->GetGameObject("ground");
-	//		ground->transform->SetWorldPosition(glm::vec3(i * 10 + 5, -0.1f, j * 10 + 5));
-	//		Manager::GetScene()->AddObject(ground);
-	//	}
+	//	tree->transform->SetScale(glm::vec3(0.1f));
 	//}
 
 	InitSceneCameras();
 
-	#ifdef PHYSICS_ENGINE
-	Manager::GetHavok()->StepSimulation(0.016f);
-	#endif
-
 	Manager::GetScene()->Update();
 
-	auto character = Manager::GetScene()->GetGameObject("Archer2", 1);
-	if (character) {
-		AnimationInput *aInput = new AnimationInput(character);
-		character->input = aInput;
-		aInput->AttachTo(window);
-	}
-
 	// Kinect Modules
-	#ifdef KINECT_MODULE
+	#ifdef KINECT_SENSOR
 
-	kinectSensor = Singleton<KinectSensor>::Instance();
-	skeletalSystem = Singleton<SkeletalSystem>::Instance();
-	skeletalTracking = new SkeletalTracking();
-	skeletalTracking->Init(kinectSensor);
-	
-	//kinectStreaming = Singleton<KinectStreaming>::Instance();
+	kinectSensor = SINGLETON(KinectSensor);
+	kinectSkeletalTracking = SINGLETON(KinectSkeletalTracking);
+	kinectSkeletalTracking->Init(kinectSensor);
+
+	//kinectStreaming = SINGLETON(KinectStreaming);
 	//kinectStreaming->Init(kinectSensor);
 	//kinectPointCloud = new KinectPointCloud();
-
-	// testCone = new TestConeConstraint();
-
 	#endif
 
-	#ifdef PHYSX_ENGINE
-	physXManager = Singleton<PhysXManager>::Instance();
-	physXManager->Init();
+	#ifdef OCULUS_RIFT_HMD
+	oculusHMD = SINGLETON(OculusRiftHMD);
+	auto success = oculusHMD->Connect();
+	if (success) {
+		oculusHMD->SetRenderToHMD(false);
+		auto device = oculusHMD->GetGameObjectDevice();
 
-	//ragdoll = new PhysXRagdoll(physXManager);
-	//ragdoll->Load("Resources//Physx//Archer.xml");
+		auto box = Manager::GetResource()->GetGameObject("box");
+		box->SetName("OculusRift Origin");
+		box->transform->SetScale(glm::vec3(0.1f));
+		box->transform->SetWorldPosition(glm::vec3(0, 0.5f, -3));
+		box->AddChild(device);
+		Manager::GetScene()->AddObject(box);
+
+		sceneCameras.push_back(oculusHMD->GetEyeCamera(0));
+		sceneCameras.push_back(oculusHMD->GetEyeCamera(1));
+	}
+
+	SubscribeToEvent("OculusRift-ToggleRendering");
 	#endif
 
-	// Combine Rotation Test
+	#ifdef LEAP_SENSOR
+	leapSensor = SINGLETON(LeapSensor);
+	leapSensor->Connect();
+	leapControlPanel = new LeapControlPanel();
+	#endif
 
-	GameObject *box0 = Manager::GetResource()->GetGameObject("box");
-	GameObject *box1 = Manager::GetResource()->GetGameObject("box");
-	GameObject *box2 = Manager::GetResource()->GetGameObject("box");
+	// SkeletalSystem
+	animationSystem = SINGLETON(AnimationSystem);
 
-	box0->transform = new LimitedTransform();
-	box1->transform = new LimitedTransform();
-	box2->transform = new LimitedTransform();
 
-	new SimpleObjectControl(box0);
-	box0->transform->SetWorldPosition(glm::vec3(5, 1, 5));
-	box1->AddChild(box2);
-	box0->AddChild(box1);
+	#ifdef GAME_MODULES
+	motionSystem = SINGLETON(MotionSystem);
+	#endif
 
-	box1->transform->SetLocalPosition(glm::vec3(3, 3, 3));
-	box2->transform->SetLocalPosition(glm::vec3(3, -1, -2));
-
-	Manager::GetScene()->AddObject(box0);
-
-	// Joint Test
-	//GameObject *box3 = Manager::GetResource()->GetGameObject("box");
-	//GameObject *box4 = Manager::GetResource()->GetGameObject("box");
-	//box3->transform = new LimitedTransform();
-	//box4->transform = new LimitedTransform();
-	//box3->transform->SetWorldPosition(glm::vec3(10, 10, 0));
-	//box3->AddChild(box4;)
-	//box4->transform->SetLocalPosition(glm::vec3(7.5, 0, 0));
-	//Manager::GetScene()->AddObject(box3);
-
-	// Trigger Sphere Test
-	GameObject *box = Manager::GetResource()->GetGameObject("box");
-	box->transform->SetWorldPosition(glm::vec3(0, 1, 4));
-	box->transform->SetScale(glm::vec3(0.1f));
+	auto rotationConstraintsTest = new RotationConstraints();
 
 	// Listens to Events and Input
-	SubscribeToEvent("barrels");
-	SubscribeToEvent("barrels-light");
 	SubscribeToEvent(EventType::SWITCH_CAMERA);
 	SubscribeToEvent(EventType::FRONT_END_INITIALIZED);
+
+	#ifdef PHYSICS_ENGINE
+
+		SubscribeTo("UsePhysics", [this](void *data) {
+			auto obj = static_cast<GameObject*>(data);
+			if (obj->physics == nullptr) obj->physics = new Physics(obj);
+			obj->physics->SetRigidBody();
+		});
+
+		// Bind UI callbacks for Dynamic target
+		auto setGravity = [this](void *data, bool state) {
+			auto obj = static_cast<GameObject*>(data);
+			if (obj->physics) {
+				obj->physics->SetGravity(state);
+			}
+		};
+		auto setGravityTrue = std::bind(setGravity, std::placeholders::_1, true);
+		auto setGravityFalse = std::bind(setGravity, std::placeholders::_1, false);
+
+		SubscribeTo("SetGravityTrue", setGravityTrue);
+		SubscribeTo("SetGravityFalse", setGravityFalse);
+
+		// Bind UI callbacks for Dynamic target
+		auto makeDynamic = [this](void *data, bool state) {
+			auto obj = static_cast<GameObject*>(data);
+			if (obj->physics) {
+				obj->physics->SetIsDynamic(state);
+			}
+		};
+		auto setDynamicTrue = std::bind(makeDynamic, std::placeholders::_1, true);
+		auto setDynamicFalse = std::bind(makeDynamic, std::placeholders::_1, false);
+
+		SubscribeTo("SetIsDynamicTrue", setDynamicTrue);
+		SubscribeTo("SetIsDynamicFalse", setDynamicFalse);
+
+		// Bind UI callbacks  for Kinematic target
+		auto makeKinematic = [this](void *data, bool state) {
+			auto obj = static_cast<GameObject*>(data);
+			if (obj->physics) {
+				obj->physics->SetIsKinematic(state);
+			}
+		};
+		auto kinematicTrue = std::bind(makeKinematic, std::placeholders::_1, true);
+		auto kinematicFalse = std::bind(makeKinematic, std::placeholders::_1, false);
+
+		SubscribeTo("SetIsKinematicTrue", kinematicTrue);
+		SubscribeTo("SetIsKinematicFalse", kinematicFalse);
+
+		// Bind UI callbacks for Trigger target
+		auto makeTriggerZone = [this](void *data, bool state) {
+			auto obj = static_cast<GameObject*>(data);
+			if (obj->physics) {
+				obj->physics->SetIsTrigger(state);
+			}
+		};
+		auto setTriggerZoneTrue = std::bind(makeTriggerZone, std::placeholders::_1, true);
+		auto setTriggerZoneFalse = std::bind(makeTriggerZone, std::placeholders::_1, false);
+
+		SubscribeTo("SetIsTriggerTrue", setTriggerZoneTrue);
+		SubscribeTo("SetIsTriggerFalse", setTriggerZoneFalse);
+
+		// Bind UI callback for setting physics mass
+		auto setPhysicsMass = [this](void *data) {
+			auto chn = static_cast<ObjectPropertiesUIChannel*>(data);
+			auto obj = chn->context;
+			if (obj->physics) {
+				obj->physics->SetMass(chn->physicsMass);
+			}
+		};
+		SubscribeTo("SetPhysicsMass", setPhysicsMass);
+
+	#endif
 }
 
 void Game::InitUIHooks()
@@ -239,14 +332,15 @@ void Game::InitUIHooks()
 
 void Game::FrameStart()
 {
-//	Engine::Window->SetContext();
 	window->MakeCurrentContext();
 	Manager::GetEvent()->EmitSync(EventType::FRAME_START);
 }
 
-void Game::Update(float deltaTime)
+void Game::Update(double deltaTime)
 {
-	if (Engine::GetElapsedTime() - cpuTime->GetStartTime() > 1) {
+	FrameStart();
+
+	if (Engine::GetElapsedTime() - cpuTime->GetStartTime() > 0.5) {
 		cpuTime->Reset();
 		cpuTime->Start();
 	}
@@ -257,57 +351,139 @@ void Game::Update(float deltaTime)
 	// --- Sensors Update --- //
 	// -----------------------//
 
-	#ifdef KINECT_MODULE
+	#ifdef KINECT_SENSOR
 	kinectSensor->Update();
-	skeletalTracking->Update();
-	skeletalSystem->Update(skeletalTracking);
+	kinectSkeletalTracking->Update();
 	//kinectStreaming->Update();
 	//kinectPointCloud->Update();
+	cpuTime->Lap("Kinect");
 	#endif
 
-	cpuTime->Lap("Kinect");
+	#ifdef OCULUS_RIFT_HMD
+	oculusHMD->GetLoopInfo();
+	cpuTime->Lap("OculusRift");
+	#endif
 
-	// ---------------------------//
-	// --- Physics Simulation --- //
-	// ---------------------------//
+	#ifdef LEAP_SENSOR
+	leapSensor->Update();
+	leapControlPanel->Update();
+	cpuTime->Lap("LeapMotion");
+	#endif
 
-	#ifdef PHYSICS_ENGINE
-	Manager::GetHavok()->StepSimulation(deltaTime);
-	physXManager->StepPhysics(deltaTime);
-	//ragdoll->Update(deltaTime, activeCamera);
-	cpuTime->Lap("Physics");
+	animationSystem->Update();
+	cpuTime->Lap("AnimationSystem");
+
+	#ifdef GAME_MODULES
+	motionSystem->Update();
 	#endif
 
 	///////////////////////////////////////////////////////////////////////////
 	// Update Scene
 
-	WindowManager::GetDefaultWindow()->UpdateObserver();
-
 	Manager::GetAudio()->Update(activeCamera);
+	cpuTime->Lap("Scene audio");
+
 	Manager::GetEvent()->Update();
+	cpuTime->Lap("Scene events");
+
 	Manager::GetScene()->Update();
-	Manager::GetScene()->LightSpaceCulling(gameCamera, Sun);
-	Manager::GetPicker()->Update(activeCamera);
+	cpuTime->Lap("Scene update");
+
+	Manager::GetScene()->PrepareSceneForRendering(activeCamera);
+	cpuTime->Lap("Scene culling");
+
+	#ifdef SOV_CAMERA_BOUNDING_BOX
+	if (updateBoundingBox) {
+		Manager::GetScene()->LightSpaceCulling(gameCamera, gameCamera);
+	}
+	#else
+	//Manager::GetScene()->LightSpaceCulling(gameCamera, Sun);
+	//Sun->transform->ClearMotionState();
+	#endif
+
 	//Manager::GetPicker()->DrawSceneForPicking();
-	Manager::GetDebug()->Update(activeCamera);
 	Manager::GetEvent()->EmitSync(EventType::FRAME_UPDATE);
 
 	cpuTime->Lap("Scene Update");
 
 	///////////////////////////////////////////////////////////////////////////
-	// Scene Rendering
+	// Start Physics Simulation with scene rendering
 
-	if (Manager::GetRenderSys()->Is(RenderState::FORWARD)) {
-		FrameBuffer::Unbind(Engine::Window);
-		FrameBuffer::Clear();
+	#ifdef PHYSICS_ENGINE
+	bool asyncPhysics = true;
+	Manager::GetPhysics()->GetPhysX()->StepPhysics(static_cast<float>(deltaTime));
+	if (!asyncPhysics) {
+		Manager::GetPhysics()->GetPhysX()->FetchResults();
+	}
+	cpuTime->Lap("Physics");
+	#endif
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// Scene Rendering
+	Render();
+
+	///////////////////////////////////////////////////////////////////////////
+	// Finish Physics Simulation
+	#ifdef PHYSICS_ENGINE
+	if (asyncPhysics) {
+		Manager::GetPhysics()->GetPhysX()->FetchResults();
+	}
+	#endif
+
+	FrameEnd();
+}
+
+void Game::Render()
+{
+	auto activeCamera = Manager::GetScene()->GetActiveCamera();
+
+	#ifdef OCULUS_RIFT_HMD
+	// ---   Output to HMD if available   --- //
+	if (oculusHMD->IsRenderingToHMD())
+	{
+		auto eyeCamera = oculusHMD->GetEyeCamera(0);
+		if (eyeCamera) {
+			Manager::GetScene()->SetActiveCamera(eyeCamera);
+			RenderScene(eyeCamera);
+			oculusHMD->SumbitEyeFrame(0, FBO_Out->GetTexture(0));
+			cpuTime->Lap("OculusVR - Left Eye");
+		}
+
+		eyeCamera = oculusHMD->GetEyeCamera(1);
+		if (eyeCamera) {
+			Manager::GetScene()->SetActiveCamera(eyeCamera);
+			RenderScene(eyeCamera);
+			oculusHMD->SumbitEyeFrame(1, FBO_Out->GetTexture(0));
+			cpuTime->Lap("OculusVR - Right Eye");
+		}
+
+		Manager::GetScene()->SetActiveCamera(activeCamera);
 	}
 	else {
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		FBO->Bind(true);
-	}
+	#endif
 
-	Manager::GetScene()->Render(activeCamera);
-	skeletalTracking->Render();
+		RenderScene(activeCamera);
+		Manager::GetDebug()->Render(activeCamera);
+
+	#ifdef OCULUS_RIFT_HMD
+	}
+	#endif
+}
+
+void Game::RenderScene(Camera *camera) const
+{
+	OPENGL_RAII_LOCK();
+	Manager::GetDebug()->Render(camera);
+	Manager::GetPicker()->Update(camera);
+
+	FBO->Bind(true);
+
+	Manager::GetScene()->Render(camera);
+
+	#ifdef KINECT_SENSOR
+	kinectSkeletalTracking->Render();
+	#endif
 
 	cpuTime->Lap("Scene Rendering");
 
@@ -329,105 +505,91 @@ void Game::Update(float deltaTime)
 	if (!Manager::GetRenderSys()->Is(RenderState::FORWARD)) {
 
 		// --- Deferred Lighting --- //
-		{
-			FBO_Light->Bind();
-			glDepthMask(GL_FALSE);
-			glEnable(GL_BLEND);
-			glBlendEquation(GL_FUNC_ADD);
-			glBlendFunc(GL_ONE, GL_ONE);
-			Shader *DF = Manager::GetShader()->GetShader("deferred");
-			DF->Use();
-
-			FBO_Light->SendResolution(DF);
-			activeCamera->BindPosition(DF->loc_eye_pos);
-			activeCamera->BindViewMatrix(DF->loc_view_matrix);
-			activeCamera->BindProjectionMatrix(DF->loc_projection_matrix);
-
-			FBO->BindTexture(1, GL_TEXTURE0);
-			FBO->BindTexture(2, GL_TEXTURE1);
-
-			for (auto *light: Manager::GetScene()->GetPointLights()) {
-				auto FACE = activeCamera->DistTo(light) < light->effectRadius ? OpenGL::CULL::FRONT : OpenGL::CULL::BACK;
-				light->renderer->SetCulling(FACE);
-				light->RenderDeferred(DF);
-			}
-
-			glDepthMask(GL_TRUE);
-			glDisable(GL_BLEND);
-		}
-
+		FBO_Light->Bind();
+		Manager::GetScene()->RenderDeferredLights(camera, FBO->GetTexture(1), FBO->GetTexture(2));
 		cpuTime->Lap("Deferred Lighing");
 
 		// --- Screen Space Ambient Occlusion (SSAO) --- //
 		if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
-			ssao->Update(FBO, activeCamera);
+			ssao->Update(FBO, camera);
 			cpuTime->Lap("SSAO");
 		}
-
-		// ---   Composition step   --- //
-		// TODO - use compute shader if available... might be faster?!
-		bool outputToScreen = Engine::Window->props.visible;
-		if (outputToScreen)
-		{
-			FrameBuffer::Unbind(Engine::Window);
-			FrameBuffer::Clear();
-
-			glDepthMask(GL_FALSE);
-			glDisable(GL_DEPTH_TEST);
-		}
-		else {
-			FBO_Out->Bind();
-		}
-
-		{
-			Shader *Composition = Manager::GetShader()->GetShader("composition");
-			Composition->Use();
-			glUniform2f(Composition->loc_resolution, (float)Engine::Window->GetResolution().x, (float)Engine::Window->GetResolution().y);
-			glUniform1i(Composition->loc_debug_view, Manager::GetDebug()->GetActiveState());
-			glUniform1i(Composition->active_ssao, Manager::GetRenderSys()->Is(RenderState::SS_AO));
-			glUniform1i(Composition->active_selection, Manager::GetPicker()->HasActiveSelection());
-			activeCamera->BindProjectionDistances(Composition);
-		
-			FBO->BindTexture(0, GL_TEXTURE0);
-			FBO_Light->BindTexture(0, GL_TEXTURE1);
-			ShadowMap->BindToTextureUnit(GL_TEXTURE2);
-			ssao->BindTexture(GL_TEXTURE3);
-			FBO->BindDepthTexture(GL_TEXTURE4);
-			Manager::GetDebug()->FBO->BindTexture(0, GL_TEXTURE5);
-			Manager::GetDebug()->FBO->BindDepthTexture(GL_TEXTURE6);
-			Manager::GetPicker()->FBO_Gizmo->BindTexture(0, GL_TEXTURE7);
-
-			ScreenQuad->Render(Composition);
-			glEnable(GL_DEPTH_TEST);
-			glDepthMask(GL_TRUE);
-		}
-		cpuTime->Lap("Composition");
 	}
 
-	Manager::GetEvent()->EmitSync(EventType::FRAME_AFTER_RENDERING);
+	FinishComposition(FBO_Out, camera);
+}
 
+void Game::FinishComposition(FrameBuffer *outFBO, Camera *camera) const
+{
+	glDepthMask(GL_FALSE);
+	glDisable(GL_DEPTH_TEST);
+
+	// ---   Composition step   --- //
+	{
+		outFBO->Bind();
+		auto rez = outFBO->GetResolution();
+
+		Shader *Composition = Manager::GetShader()->GetShader("composition");
+		Composition->Use();
+		glUniform1i(Composition->loc_debug_view, Manager::GetDebug()->GetActiveState());
+		glUniform1i(Composition->active_ssao, Manager::GetRenderSys()->Is(RenderState::SS_AO));
+		glUniform1i(Composition->active_selection, Manager::GetPicker()->HasActiveSelection());
+		camera->BindProjectionDistances(Composition);
+
+		FBO->BindTexture(0, GL_TEXTURE0);
+		FBO_Light->BindTexture(0, GL_TEXTURE1);
+		ShadowMap->BindToTextureUnit(GL_TEXTURE2);
+		ssao->BindTexture(GL_TEXTURE3);
+		FBO->BindDepthTexture(GL_TEXTURE4);
+		Manager::GetDebug()->FBO->BindTexture(0, GL_TEXTURE5);
+		Manager::GetDebug()->FBO->BindDepthTexture(GL_TEXTURE6);
+		Manager::GetPicker()->FBO_Gizmo->BindTexture(0, GL_TEXTURE7);
+
+		screenQuad->Render(Composition);
+	}
+
+	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
+
+	cpuTime->Lap("Composition");
 }
 
 void Game::FrameEnd()
 {
-	Manager::GetDebugText()->Update();
+	// ---   Final output step   --- //
+	if (window->props.visible)
+	{
+		FrameBuffer::Unbind(window->GetResolution(), true);
+		Shader *screen = Manager::GetShader()->GetShader("screen");
+		screen->Use();
+		FBO_Out->BindTexture(0, GL_TEXTURE0);
+		screenQuad->Render(screen);
+	}
+	else {
+		FBO_Out->Bind(false);
+	}
+
+	Manager::GetDebugText()->Render();
 	Manager::GetTextureDebugger()->Render();
-	cpuTime->Lap("Debug Layer");
 	Manager::GetMenu()->RenderMenu();
-	cpuTime->Lap("Game Menu");
+	cpuTime->Lap("Overlays");
 
 	Manager::GetEvent()->EmitSync(EventType::FRAME_END);
 	Manager::GetScene()->FrameEnded();
-	//Manager::GetEvent()->EmitSync(EventType::FRAME_SYNC);
 
 	cpuTime->Stop();
+
+	#ifdef OCULUS_RIFT_HMD
+	if (oculusHMD->IsRenderingToHMD())
+		oculusHMD->FinishFrame();
+	#endif
 }
 
 void Game::BarrelPhysicsTest(bool pointLights)
 {
-#ifdef PHYSICS_ENGINE
+	#ifdef PHYSICS_ENGINE
 	glm::vec3 pos = gameCamera->transform->GetWorldPosition();
-	GameObject *barrel = Manager::GetResource()->GetGameObject("oildrum");
+	GameObject *barrel = Manager::GetResource()->GetGameObject("box");
 	for (int i=0; i<100; i++) {
 		if (pointLights) {
 			PointLight *obj = new PointLight(*barrel);
@@ -441,7 +603,88 @@ void Game::BarrelPhysicsTest(bool pointLights)
 			Manager::GetScene()->AddObject(obj);
 		}
 	}
+	#endif
+}
+
+void Game::OnInputUpdate(float deltaTime, int mods) {
+
+	Camera *activeCamera = Manager::GetScene()->GetActiveCamera();
+
+	if (window->KeyHold(GLFW_KEY_RIGHT))
+		activeCamera->MoveRight(deltaTime);
+	if (window->KeyHold(GLFW_KEY_UP))
+		activeCamera->MoveForward(deltaTime);
+	if (window->KeyHold(GLFW_KEY_LEFT))
+		activeCamera->MoveRight(-deltaTime);
+	if (window->KeyHold(GLFW_KEY_DOWN))
+		activeCamera->MoveBackward(deltaTime);
+
+	activeCamera->Update();
+}
+
+void Game::OnKeyPress(int key, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE) {
+		Manager::GetEvent()->EmitSync(EventType::OPEN_GAME_MENU, nullptr);
+		return;
+	}
+
+	if (key == GLFW_KEY_F8) {
+		Manager::GetAudio()->PlaySoundFX("bell");
+		return;
+	}
+
+	#ifdef OCULUS_RIFT_HMD
+	if (mods == 0) {
+		if (key == GLFW_KEY_O) {
+			ToggleRenderingToOculusRift();
+		}
+
+		if (key == GLFW_KEY_L) {
+			static int switchEye = true;
+			FrameBuffer::SetOffScreenBuffer(switchEye ? FBO_OutUI : FBO_Out);
+			switchEye = !switchEye;
+			return;
+		}
+
+		if (key == GLFW_KEY_P) {
+			oculusHMD->RecenterHMD();
+			return;
+		}
+	}
+	#endif
+
+#ifdef SOV_CAMERA_BOUNDING_BOX
+	if (key == GLFW_KEY_F3) {
+		updateBoundingBox = !updateBoundingBox;
+		return;
+	}
+
+	if (key == GLFW_KEY_F4) {
+		auto state = Manager::GetDebug()->GetBoundingBoxMode();
+		if (state == DebugInfo::BBOX_MODE::OBJECT_SAPCE)
+			Manager::GetDebug()->SetBoundingBoxMode(DebugInfo::BBOX_MODE::CAMERA_SPACE);
+		else 
+			Manager::GetDebug()->SetBoundingBoxMode(DebugInfo::BBOX_MODE::OBJECT_SAPCE);
+		return;
+	}
 #endif
+
+	if (mods == (GLFW_MOD_SHIFT + GLFW_MOD_CONTROL))
+	{
+		if (key == GLFW_KEY_B) {
+			Manager::GetEvent()->EmitSync("barrels-light", nullptr);
+		}
+
+		if (key == GLFW_KEY_N) {
+			Manager::GetEvent()->EmitSync("barrels", nullptr);
+		}
+	}
+}
+
+void Game::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
+{
+	//	cout << mouseY << "-" << mouseX << endl;
 }
 
 void Game::OnEvent(EventType Event, void *data)
@@ -455,7 +698,9 @@ void Game::OnEvent(EventType Event, void *data)
 	}
 	case EventType::SWITCH_CAMERA:
 	{
-		Manager::GetScene()->GetActiveCamera()->SetDebugView(true);
+		auto activeCamera = Manager::GetScene()->GetActiveCamera();
+		activeCamera->SetDebugView(true);
+		activeCamera->renderer->SetIsRendered(true);
 
 		activeSceneCamera++;
 		if (activeSceneCamera == sceneCameras.size()) {
@@ -463,7 +708,6 @@ void Game::OnEvent(EventType Event, void *data)
 		}
 
 		Manager::GetScene()->SetActiveCamera(sceneCameras[activeSceneCamera]);
-		Manager::GetScene()->GetActiveCamera()->SetDebugView(false);
 		cameraInput->camera = Manager::GetScene()->GetActiveCamera();
 		break;
 	}
@@ -474,13 +718,6 @@ void Game::OnEvent(EventType Event, void *data)
 
 void Game::OnEvent(const string& eventID, void *data)
 {
-	if (eventID.compare("barrels-light") == 0) {
-		BarrelPhysicsTest(true);
-	}
-
-	if (eventID.compare("barrels") == 0) {
-		BarrelPhysicsTest(false);
-	}
 }
 
 void Game::InitSceneCameras()
@@ -492,4 +729,17 @@ void Game::InitSceneCameras()
 	sceneCameras.push_back(Sun);
 
 	Manager::GetScene()->GetActiveCamera()->SetDebugView(false);
+}
+
+void Game::ToggleRenderingToOculusRift()
+{
+#ifdef OCULUS_RIFT_HMD
+	oculusHMD->SetRenderToHMD(!oculusHMD->IsRenderingToHMD());
+	if (oculusHMD->IsRenderingToHMD()) {
+		window->SetVSync(false); 
+	}
+	else {
+		window->SetVSync(true);
+	}
+#endif
 }

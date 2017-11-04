@@ -11,22 +11,26 @@
 #include <SkeletalSystem/GSkeletalJoint.h>
 #include <SkeletalSystem/Transform/JointTransform.h>
 
+#include <SkeletalSystem/AnimationSystem.h>
+
+#include <include/gl.h>
+
 using namespace std;
 
 SkeletalSystem::SkeletalSystem()
 {
-	AttachTo(WindowManager::GetDefaultWindow());
+	auto W = WindowManager::GetDefaultWindow();
+	AttachTo(W);
 
-	FBO = new FrameBuffer();
-	FBO->Generate(Engine::Window->props.resolution.x, Engine::Window->props.resolution.y, 1);
-
-	jointShader = Manager::GetShader()->GetShader("simple");
-
+#ifdef KINECT_SENSOR
 	kinectJointMapping.resize(JointType_Count);
+#endif
+
 	recordKinectState = false;
 	readKinectRot = false;
 	readKinectPos = false;
 	skeletonControl = Manager::GetResource()->GetGameObject("box");
+	skeletonControl->SetName("SkeletonControl");
 	skeletonControl->transform->SetScale(glm::vec3(0.1f));
 	skeletonControl->transform->SetWorldPosition(glm::vec3(1, 1.5, 2));
 
@@ -41,17 +45,25 @@ SkeletalSystem::~SkeletalSystem() {
 
 void SkeletalSystem::Init()
 {
-	//Clear();
+	Clear();
 
-	//const pugi::xml_document *doc = pugi::LoadXML("Config/SkeletalSystem.xml");
+	const pugi::xml_document *doc = pugi::LoadXML("Config/SkeletalSystem.xml");
 
-	//GetJoints(doc->child("skelet").child("joints"));
+	GetJoints(doc->child("skelet").child("joints"));
 
-	//ROOT->transform->SetWorldPosition(glm::vec3(0, 0, 0));
+	ROOT->transform->SetWorldPosition(glm::vec3(0, 0, 0));
 
-	//SAFE_FREE(doc);
+	SAFE_FREE(doc);
 
-	avatar = new KinectAvatar("");
+	skeletonControl->RemoveChildren();
+	skeletonControl->AddChild(ROOT);
+	Manager::GetScene()->AddObject((GameObject*)skeletonControl);
+
+	//avatar = new KinectAvatar("");
+
+	Manager::GetScene()->OnPostRender([this](Camera &camera) {
+		this->ROOT->RenderSkeleton(camera);
+	});
 }
 
 void SkeletalSystem::Clear()
@@ -59,9 +71,14 @@ void SkeletalSystem::Clear()
 	joints.clear();
 }
 
-const unordered_map<string, GSkeletalJoint*>& SkeletalSystem::GetJoints() const
+const unordered_map<string, GSkeletalJoint*>& SkeletalSystem::GetSkeletalJoints() const
 {
 	return joints;
+}
+
+const std::vector<GSkeletalJoint*>& SkeletalSystem::GetKinectJointMapping() const
+{
+	return kinectJointMapping;
 }
 
 void SkeletalSystem::GetJoints(pugi::xml_node &node)
@@ -115,15 +132,14 @@ void SkeletalSystem::GetJoints(pugi::xml_node &node)
 			static_cast<JointTransform*>(SKJ->transform)->SetConstraint(dir, angle);
 		}
 	}
-
-	skeletonControl->RemoveChildren();
-	skeletonControl->AddChild(ROOT);
-	Manager::GetScene()->AddObject((GameObject*)skeletonControl);
-
 }
 
-void SkeletalSystem::Update(SkeletalTracking * tracking)
+void SkeletalSystem::Update()
 {
+#ifdef KINECT_SENSOR
+
+	auto tracking = SINGLETON(KinectSkeletalTracking);
+
 	if (!ROOT)
 		return;
 
@@ -150,6 +166,12 @@ void SkeletalSystem::Update(SkeletalTracking * tracking)
 		CameraSpacePoint &hipsPos = tracking->joints[JointType_SpineBase].Position;
 		ROOT->transform->SetLocalPosition(glm::vec3(hipsPos.X, hipsPos.Y, hipsPos.Z));
 	}
+
+	if (state) {
+		CameraSpacePoint &hipsPos = tracking->joints[JointType_SpineBase].Position;
+		ROOT->transform->SetLocalPosition(glm::vec3(hipsPos.X, hipsPos.Y, hipsPos.Z));
+	}
+#endif
 }
 
 void SkeletalSystem::OnKeyPress(int key, int mods)
@@ -157,9 +179,9 @@ void SkeletalSystem::OnKeyPress(int key, int mods)
 	if (mods != (GLFW_MOD_CONTROL | GLFW_MOD_SHIFT))
 		return;
 
-	if (key == GLFW_KEY_L) {
-		Manager::GetEvent()->EmitSync("reload-config", nullptr);
-	}
+	//if (key == GLFW_KEY_L) {
+	//	Manager::GetEvent()->EmitSync("reload-config", nullptr);
+	//}
 
 	if (key == GLFW_KEY_P) {
 		readKinectPos = true;
@@ -182,7 +204,8 @@ void SkeletalSystem::OnKeyPress(int key, int mods)
 
 }
 
-void SkeletalSystem::RecordSkeletalPhysicState(SkeletalTracking * tracking)
+#ifdef KINECT_SENSOR
+void SkeletalSystem::RecordSkeletalPhysicState(KinectSkeletalTracking * tracking)
 {
 	uint trackingID = 0;
 	glm::vec3 pos = ROOT->transform->GetWorldPosition();
@@ -197,16 +220,11 @@ void SkeletalSystem::RecordSkeletalPhysicState(SkeletalTracking * tracking)
 
 	recordKinectState = false;
 }
+#endif
 
 void SkeletalSystem::OnEvent(const string& eventID, void * data)
 {
 	if (eventID.compare("reload-config") == 0) {
 		Init();
 	}
-}
-
-void SkeletalSystem::BindForComposition(GLenum DEPTH_TEXTURE_UNIT, GLenum CONTENT_TEXTURE_UNIT)
-{
-	FBO->BindTexture(0, CONTENT_TEXTURE_UNIT);
-	FBO->BindDepthTexture(DEPTH_TEXTURE_UNIT);
 }

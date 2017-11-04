@@ -2,7 +2,7 @@
 <config>
 	<window>
 		<name>Engine</name>
-		<resolution>1280 720</resolution>
+		<resolution>2560 1464</resolution>
 		<fullscreen>false</fullscreen>
 		<position>50 50</position>
 		<centered>true</centered>

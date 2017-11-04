@@ -45,6 +45,7 @@ class QStyledItemDelegate;
 class QTextEdit;
 class QWidget;
 class QTableWidget;
+class QScrollArea;
 
 // QtGui
 

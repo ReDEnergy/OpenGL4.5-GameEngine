@@ -29,9 +29,9 @@ KinectAvatar::KinectAvatar(const char* meshName)
 	animation->SetAnimation((uint)0);
 	Manager::GetScene()->AddObject(this);
 
-	ReadBVH();
+	//ReadBVH();
 
-	//auto SkeletSys = Singleton<SkeletalSystem>::Instance();
+	//auto SkeletSys = SINGLETON(SkeletalSystem);
 	//joints = SkeletSys->GetBVJoints();
 	//motionFrames = SkeletSys->GetMotionData();
 
@@ -92,14 +92,14 @@ void KinectAvatar::ReadBVH()
 		motionFrames = new vector<glm::vec3>[totalFrames];
 
 		glm::vec3 rotation, offset;
-		unsigned int nrJoints = joints.size();
+		auto nrJoints = joints.size();
 
 		for (uint frameID = 0; frameID < totalFrames; frameID++) {
 			F >> offset.z >> offset.y >> offset.x;
 
 			motionFrames[frameID].push_back(offset * motionScale);
 
-			for (uint i = 0; i < nrJoints; i++) {
+			for (size_t i = 0; i < nrJoints; i++) {
 				F >> rotation.z >> rotation.y >> rotation.x;
 				motionFrames[frameID].push_back(rotation);
 			}
@@ -161,10 +161,10 @@ void KinectAvatar::Update()
 	{
 		// TODO - perform interpolation without timeout
 
-		if (glfwGetTime() - lastMotionUpdate < frameTime)
+		if (Engine::GetElapsedTime() - lastMotionUpdate < frameTime)
 			return;
 
-		lastMotionUpdate = (float)glfwGetTime();
+		lastMotionUpdate = Engine::GetElapsedTime();
 
 		frameID++;
 		frameID = frameID % totalFrames;
@@ -173,7 +173,7 @@ void KinectAvatar::Update()
 
 	auto rootJoint = animation->rootJoint;
 	float atime = 0;
-	float ttime = (totalFrames - 1) * frameTime;
+	auto ttime = (totalFrames - 1) * frameTime;
 
 	glm::vec3 offset(0, 0, -1);
 	joints[0]->transform->SetLocalPosition(motionFrames[frameID][0] + offset);
@@ -185,36 +185,24 @@ void KinectAvatar::Update()
 
 	for (uint i = 0; i < joints.size(); i++) {
 		if (playMotion)
-			joints[i]->transform->SetLocalRotation(glm::quat(motionFrames[frameID][i + 1] * TO_RADIANS));
+			joints[i]->transform->SetRelativeRotation(glm::quat(motionFrames[frameID][i + 1] * TO_RADIANS));
 
 		auto it = animation->skeletalJoints.find(joints[i]->GetName());
 		if (it != animation->skeletalJoints.end())
 		{
-			auto boneOffset = it->second->boneOffset;
-			auto model = joints[i]->transform->GetModel();
-			//model[0] *= 10;
-			//model[1] *= 10;
-			//model[2] *= 10;
-			//x[3][0] = boneOffset[3][0];
-			//x[3][1] = boneOffset[3][1];
-			//x[3][2] = boneOffset[3][2];
-			//model[3][3] = 1;
-			auto relativePos = joints[i]->transform->GetLocalPosition();
-			auto relativeRot = joints[i]->transform->GetRelativeRotation();
+			//auto boneOffset = it->second->boneOffset;
+			//auto model = joints[i]->transform->GetModel();
 
-			// Interpolate transformation between 2 keyframes
-			glm::vec3 position = assimp::CalcInterpolatedPosition(it->second->pAnimationNode, atime, ttime);
-			glm::quat rotation = assimp::CalcInterpolatedRotation(it->second->pAnimationNode, atime, ttime);
-			glm::vec3 scale = assimp::CalcInterpolatedScaling(it->second->pAnimationNode, atime, ttime);
+			//auto relativePos = joints[i]->transform->GetLocalPosition();
+			//auto relativeRot = joints[i]->transform->GetRelativeRotation();
 
-			//glm::mat4 value;
-			//model * value = it->second->finalTransformation;
-			//value = it->second->finalTransformation * glm::inverse(model);
+			//// Interpolate transformation between 2 keyframes
+			//glm::vec3 position = assimp::CalcInterpolatedPosition(it->second->pAnimationNode, atime, ttime);
+			//glm::quat rotation = assimp::CalcInterpolatedRotation(it->second->pAnimationNode, atime, ttime);
+			//glm::vec3 scale = assimp::CalcInterpolatedScaling(it->second->pAnimationNode, atime, ttime);
 
 			auto id = joints[i]->GetJointID();
-			//boneTransform[id] = model * boneOffset;
-			//boneTransform[id] = it->second->finalTransformation;
-			boneTransform[id] = model * boneOffset;
+			boneTransform[id] = it->second->GetBoneTransform();
 
 		}
 	}
@@ -222,11 +210,11 @@ void KinectAvatar::Update()
 
 void KinectAvatar::Render(const Shader * shader) const
 {
-	glUniformMatrix4fv(shader->loc_bones, joints.size(), GL_FALSE, glm::value_ptr(boneTransform[0]));
+	glUniformMatrix4fv(shader->loc_bones, static_cast<unsigned int>(joints.size()), GL_FALSE, glm::value_ptr(boneTransform[0]));
 	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
 	if (meshRenderer) {
 		renderer->Use();
-		meshRenderer->Render(shader);
+		meshRenderer->Render();
 	}
 }
 
@@ -247,14 +235,14 @@ void KinectAvatar::OnKeyPress(int key, int mods)
 
 	if (key == GLFW_KEY_9) {
 		for (uint i = 0; i < joints.size(); i++) {
-			joints[i]->transform->SetLocalRotation(glm::quat());
+			joints[i]->transform->SetRelativeRotation(glm::quat());
 		}
 	}
 
 	if (key == GLFW_KEY_0) {
 		frameID = 0;
 		for (uint i = 0; i < joints.size(); i++) {
-			joints[i]->transform->SetLocalRotation(glm::quat(motionFrames[frameID][i + 1] * TO_RADIANS));
+			joints[i]->transform->SetRelativeRotation(glm::quat(motionFrames[frameID][i + 1] * TO_RADIANS));
 		}
 	}
 
@@ -262,7 +250,7 @@ void KinectAvatar::OnKeyPress(int key, int mods)
 		frameID++;
 		frameID = frameID % totalFrames;
 		for (uint i = 0; i < joints.size(); i++) {
-			joints[i]->transform->SetLocalRotation(glm::quat(motionFrames[frameID][i + 1] * TO_RADIANS));
+			joints[i]->transform->SetRelativeRotation(glm::quat(motionFrames[frameID][i + 1] * TO_RADIANS));
 		}
 		animation->SetAnimationTime(frameID * frameTime);
 	}
@@ -270,7 +258,7 @@ void KinectAvatar::OnKeyPress(int key, int mods)
 		frameID--;
 		frameID = frameID % totalFrames;
 		for (uint i = 0; i < joints.size(); i++) {
-			joints[i]->transform->SetLocalRotation(glm::quat(motionFrames[frameID][i + 1] * TO_RADIANS));
+			joints[i]->transform->SetRelativeRotation(glm::quat(motionFrames[frameID][i + 1] * TO_RADIANS));
 		}
 		animation->SetAnimationTime(frameID * frameTime);
 	}

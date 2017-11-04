@@ -29,6 +29,11 @@ void CustomWidget::Init()
 {
 }
 
+void CustomWidget::Show()
+{
+	show();
+}
+
 void CustomWidget::Hide()
 {
 	hide();
@@ -36,16 +41,21 @@ void CustomWidget::Hide()
 
 void CustomWidget::Toggle()
 {
-	if (isVisible())
-		Hide();
-	else
-		show();
+	isVisible() ? hide() : show();
 }
 
 void CustomWidget::AddWidget(QWidget * widget)
 {
 	if (widget)
 		qtLayout->addWidget(widget);
+}
+
+void CustomWidget::RemoveWidget(QWidget * widget)
+{
+	if (widget) {
+		qtLayout->removeWidget(widget);
+		widget->setParent(nullptr);
+	}
 }
 
 void CustomWidget::DetachFromParent()

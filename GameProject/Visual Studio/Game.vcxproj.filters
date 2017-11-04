@@ -74,16 +74,73 @@
     <Filter Include="Source\Editor\OpenGL">
       <UniqueIdentifier>{c4729bf5-bbbb-4c92-85e3-43e1c4a6f55d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\libs">
+    <Filter Include="Source\LeapMotion">
+      <UniqueIdentifier>{52d71eb1-c4a5-4cad-ba70-5ab2e5d1b9f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs">
       <UniqueIdentifier>{75cfd2d3-e733-46b5-a8c3-04affd4f257d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\pugixml">
+      <UniqueIdentifier>{8346052b-9918-404e-aa2c-682dc55328ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OculusRift">
+      <UniqueIdentifier>{3f119035-9134-41ef-8e29-a031f87eac75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Editor\Windows\Module">
+      <UniqueIdentifier>{89bd288b-55a5-42a2-a74e-a2aa1a46e1d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Modules">
+      <UniqueIdentifier>{efafa6ea-aa04-492c-828b-0a1f008db33b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Controller">
+      <UniqueIdentifier>{fdaa21e0-0c8f-4a2f-adfe-c3e84f9c9fe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Runtime">
+      <UniqueIdentifier>{f2eed822-b1bb-44d4-95b8-a066d7f9c3d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Runtime\Modules">
+      <UniqueIdentifier>{7be98f6b-b284-4ff5-92cb-f3d7080afbb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Runtime\Threading">
+      <UniqueIdentifier>{a869ba9b-b59e-45e2-a839-dcbc85cf0836}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Prototyping">
+      <UniqueIdentifier>{07d8c5d7-da60-45a8-9e8d-7ab0e540e024}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Prototyping\RotationConstraints">
+      <UniqueIdentifier>{8c297ee0-5a39-4500-b19d-a9e239d27886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\LeapMotion\ControlPanel">
+      <UniqueIdentifier>{7d3f0168-e531-41f6-9547-f97711565e17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Kinect\GUI">
+      <UniqueIdentifier>{2631e9dc-eb08-43d9-a15c-6defa1a571ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\LeapMotion\GUI">
+      <UniqueIdentifier>{4e5091ac-5ef7-4732-afd5-1f6eef18141d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\MotionSystem">
+      <UniqueIdentifier>{9cac9eff-15ca-4c61-b691-b4f7ab5d3fd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\MotionSystem\GUI">
+      <UniqueIdentifier>{6b76ce54-f03c-4757-973d-d69804c58a4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\LeapMotion\ControlPanel\Scripting">
+      <UniqueIdentifier>{8864348a-b0d9-4b11-8d9b-61fa65f09b88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\LeapMotion\ControlPanel\GUI">
+      <UniqueIdentifier>{c6987adc-9e0f-4c83-86ac-5226b4c91f9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI">
+      <UniqueIdentifier>{828f184b-dd9b-4378-a61b-7f791f728eda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Channels">
+      <UniqueIdentifier>{44ddd877-6675-4d29-b3e7-38c37aa4bb7f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Game\Game.cpp">
       <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Game\Input\GameInput.cpp">
-      <Filter>Source\Game\Input</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Game\Input\AnimationInput.cpp">
       <Filter>Source\Game\Input</Filter>
@@ -91,17 +148,8 @@
     <ClCompile Include="..\Source\Kinect\KinectSensor.cpp">
       <Filter>Source\Kinect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Kinect\SkeletalTracking.cpp">
-      <Filter>Source\Kinect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\SkeletalSystem\SkeletalSystem.cpp">
       <Filter>Source\SkeletalSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Physics\PhysXManager.cpp">
-      <Filter>Source\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Physics\PhysXRagdoll.cpp">
-      <Filter>Source\Physics</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Game\Input\SimpleObjectControl.cpp">
       <Filter>Source\Game\Input</Filter>
@@ -154,9 +202,6 @@
     <ClCompile Include="..\Source\Editor\Config\QtConfig.cpp">
       <Filter>Source\Editor\Config</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Editor\UI\GUI.cpp">
-      <Filter>Source\Editor\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Editor\UI\GUIEntity.cpp">
       <Filter>Source\Editor\UI</Filter>
     </ClCompile>
@@ -172,9 +217,6 @@
     <ClCompile Include="..\Source\Main.cpp" />
     <ClCompile Include="..\Source\Editor\App\ObjectPropertiesWindow.cpp">
       <Filter>Source\Editor\App</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Editor\Interface\SimpleTextBox.cpp">
-      <Filter>Source\Editor\Interface</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Editor\App\GeneralWindow.cpp">
       <Filter>Source\Editor\App</Filter>
@@ -194,22 +236,103 @@
     <ClCompile Include="..\Source\Editor\OpenGL\QtGLFW.cpp">
       <Filter>Source\Editor\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Editor\Interface\QtInput.cpp">
+    <ClCompile Include="..\Source\SkeletalSystem\AnimationSystem.cpp">
+      <Filter>Source\SkeletalSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\Interface\QtSimpleWidgets.cpp">
       <Filter>Source\Editor\Interface</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Editor\Interface\QtSortableInput.cpp">
       <Filter>Source\Editor\Interface</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\LeapSensor.cpp">
+      <Filter>Source\LeapMotion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\SkeletalSystem\AnimationSerializer.cpp">
+      <Filter>Source\SkeletalSystem</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\libs\pugixml\pugixml.cpp">
-      <Filter>Source\libs</Filter>
+      <Filter>libs\pugixml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\OculusRift\OculusRiftHMD.cpp">
+      <Filter>Source\OculusRift</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Controller\Controller.cpp">
+      <Filter>Source\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Runtime\Modules\RuntimeGLModule.cpp">
+      <Filter>Source\Runtime\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Runtime\Modules\RuntimeModule.cpp">
+      <Filter>Source\Runtime\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Runtime\Threading\TaskRunner.cpp">
+      <Filter>Source\Runtime\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\KinectSkeletalTracking.cpp">
+      <Filter>Source\Kinect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\LeapTracking.cpp">
+      <Filter>Source\LeapMotion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Prototyping\RotationConstraints\RotationConstraints.cpp">
+      <Filter>Source\Prototyping\RotationConstraints</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\ControlPanel\LeapControlPanel.cpp">
+      <Filter>Source\LeapMotion\ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\ControlPanel\ControlPanelButton.cpp">
+      <Filter>Source\LeapMotion\ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\ControlPanel\DistanceTrigger.cpp">
+      <Filter>Source\LeapMotion\ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\GUI\KinectSensorWindow.cpp">
+      <Filter>Source\Kinect\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Kinect\KinectSensorConfig.cpp">
+      <Filter>Source\Kinect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\GUI\LeapSensorWindow.cpp">
+      <Filter>Source\LeapMotion\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\App\SceneHierarchyWindow.cpp">
+      <Filter>Source\Editor\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\MotionSystem\MotionSystem.cpp">
+      <Filter>Source\MotionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\MotionSystem\MotionSystemConfig.cpp">
+      <Filter>Source\MotionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\MotionSystem\GUI\MotionSystemWindow.cpp">
+      <Filter>Source\MotionSystem\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\ControlPanel\Scripting\LeapTriggerTracking.cpp">
+      <Filter>Source\LeapMotion\ControlPanel\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\ControlPanel\GUI\LeapControlWindow.cpp">
+      <Filter>Source\LeapMotion\ControlPanel\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\LeapSensorConfig.cpp">
+      <Filter>Source\LeapMotion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LeapMotion\ControlPanel\LeapControlConfig.cpp">
+      <Filter>Source\LeapMotion\ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GUI\GUI.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Editor\UI\DockWindowManager.cpp">
+      <Filter>Source\Editor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GUI\Channels\ObjectPropertiesUIChannel.cpp">
+      <Filter>Source\GUI\Channels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Game\Game.h">
       <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Game\Input\GameInput.h">
-      <Filter>Source\Game\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Game\Input\AnimationInput.h">
       <Filter>Source\Game\Input</Filter>
@@ -217,20 +340,8 @@
     <ClInclude Include="..\Source\Kinect\KinectSensor.h">
       <Filter>Source\Kinect</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Kinect\SkeletalTracking.h">
-      <Filter>Source\Kinect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\SkeletalSystem\SkeletalSystem.h">
       <Filter>Source\SkeletalSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Physics\PhysXManager.h">
-      <Filter>Source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Physics\PhysXRagdoll.h">
-      <Filter>Source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Physics\PhysX.h">
-      <Filter>Source\Physics</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Kinect\KinectAPI.h">
       <Filter>Source\Kinect</Filter>
@@ -298,9 +409,6 @@
     <ClInclude Include="..\Source\Editor\include\QTForward.h">
       <Filter>Source\Editor\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Editor\UI\GUI.h">
-      <Filter>Source\Editor\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Editor\UI\GUIEntity.h">
       <Filter>Source\Editor\UI</Filter>
     </ClInclude>
@@ -315,9 +423,6 @@
     </ClInclude>
     <ClInclude Include="..\Source\Editor\App\ObjectPropertiesWindow.h">
       <Filter>Source\Editor\App</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Editor\Interface\SimpleTextBox.h">
-      <Filter>Source\Editor\Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Editor\App\GeneralWindow.h">
       <Filter>Source\Editor\App</Filter>
@@ -337,20 +442,128 @@
     <ClInclude Include="..\Source\Editor\OpenGL\QtGLFW.h">
       <Filter>Source\Editor\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Editor\Interface\QtSortableInput.h">
-      <Filter>Source\Editor\Interface</Filter>
+    <ClInclude Include="..\Source\SkeletalSystem\AnimationSystem.h">
+      <Filter>Source\SkeletalSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Editor\Interface\QtInput.h">
       <Filter>Source\Editor\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Editor\Interface\QtListTemplates.h">
+    <ClInclude Include="..\Source\Editor\Interface\QtSimpleWidgets.h">
       <Filter>Source\Editor\Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Editor\Interface\QtSortableInput.h">
+      <Filter>Source\Editor\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\LeapSensor.h">
+      <Filter>Source\LeapMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\SkeletalSystem\AnimationSerializer.h">
+      <Filter>Source\SkeletalSystem</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\libs\pugixml\pugiconfig.hpp">
-      <Filter>Source\libs</Filter>
+      <Filter>libs\pugixml</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libs\pugixml\pugixml.hpp">
-      <Filter>Source\libs</Filter>
+      <Filter>libs\pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\OculusRift\OculusRiftHMD.h">
+      <Filter>Source\OculusRift</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\Windows\Module\ModuleWindow.h">
+      <Filter>Source\Editor\Windows\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Modules\RegisteredModules.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Modules\RegisteredModuleUI.h">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Controller\ModuleWrapper.h">
+      <Filter>Source\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Controller\Controller.h">
+      <Filter>Source\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Runtime\Modules\RuntimeGLModule.h">
+      <Filter>Source\Runtime\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Runtime\Modules\RuntimeModule.h">
+      <Filter>Source\Runtime\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Runtime\Modules\RuntimeModuleTypes.h">
+      <Filter>Source\Runtime\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Runtime\Threading\TaskRunner.h">
+      <Filter>Source\Runtime\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Runtime\Threading\utils.h">
+      <Filter>Source\Runtime\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Kinect\KinectSkeletalTracking.h">
+      <Filter>Source\Kinect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\LeapTracking.h">
+      <Filter>Source\LeapMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\LeapJointType.h">
+      <Filter>Source\LeapMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Prototyping\RotationConstraints\RotationConstraints.h">
+      <Filter>Source\Prototyping\RotationConstraints</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\ControlPanel\LeapControlPanel.h">
+      <Filter>Source\LeapMotion\ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\ControlPanel\ControlPanelButton.h">
+      <Filter>Source\LeapMotion\ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\LeapMotionForward.h">
+      <Filter>Source\LeapMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\ControlPanel\DistanceTrigger.h">
+      <Filter>Source\LeapMotion\ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Kinect\GUI\KinectSensorWindow.h">
+      <Filter>Source\Kinect\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Kinect\KinectSensorConfig.h">
+      <Filter>Source\Kinect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\GUI\LeapSensorWindow.h">
+      <Filter>Source\LeapMotion\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\App\SceneHierarchyWindow.h">
+      <Filter>Source\Editor\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\MotionSystem\MotionSystem.h">
+      <Filter>Source\MotionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\MotionSystem\MotionSystemConfig.h">
+      <Filter>Source\MotionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\MotionSystem\GUI\MotionSystemWindow.h">
+      <Filter>Source\MotionSystem\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\ControlPanel\Scripting\LeapTriggerTracking.h">
+      <Filter>Source\LeapMotion\ControlPanel\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\ControlPanel\GUI\LeapControlWindow.h">
+      <Filter>Source\LeapMotion\ControlPanel\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\ControlPanel\LeapControlConfig.h">
+      <Filter>Source\LeapMotion\ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LeapMotion\LeapSensorConfig.h">
+      <Filter>Source\LeapMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GUI\GUI.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Editor\UI\DockWindowManager.h">
+      <Filter>Source\Editor\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GUI\Channels\ObjectPropertiesUIChannel.h">
+      <Filter>Source\GUI\Channels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

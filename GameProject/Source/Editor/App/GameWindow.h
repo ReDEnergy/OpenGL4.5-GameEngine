@@ -1,13 +1,10 @@
 #pragma once
 #include <Editor/Windows/Interface/DockWindow.h>
-
-#include <include/gl.h>
-
 #include <Event/EventListener.h>
 
 class Texture;
-class GPUBuffers;
 class OpenGLWindow;
+class GameObject;
 
 class GameWindow
 	: public DockWindow,
@@ -18,12 +15,17 @@ class GameWindow
 		virtual ~GameWindow() {};
 
 		void Init();
-		void Render();
-		void RenderQuad();
+		void UpdateUI();
 
 	private:
 		void InitUI();
+		void InitUIState();
+		void Render();
+
 		void OnEvent(EventType Event, void *data);
+
+		// Qt events
+		void resizeEvent(QResizeEvent * e);
 
 	protected:
 		void DockedEvent(bool state);
@@ -31,5 +33,5 @@ class GameWindow
 	private:
 		bool useContext;
 		OpenGLWindow *qtOpenGLWindow;
-		GPUBuffers *buffer;
+		GameObject *renderQuad;
 };

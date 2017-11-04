@@ -20,7 +20,7 @@ void TriggerSphere::AddTriggerColider(GameObject * obj)
 void TriggerSphere::Update()
 {
 	for (auto collider : colliders) {
-		auto dist = DistTo(collider);
+		auto dist = DistTo(*collider);
 		if (dist < 0.1f) {
 			if (triggered == false) {
 				triggered = true;

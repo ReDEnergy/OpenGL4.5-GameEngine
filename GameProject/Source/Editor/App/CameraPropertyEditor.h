@@ -1,13 +1,14 @@
 #pragma once
-#include <Editor/Windows/Interface/DockWindow.h>
 #include <Editor/Interface/QtInput.h>
+#include <Editor/Windows/Module/ModuleWindow.h>
 
-#include <include/glm.h>
 #include <Event/EventListener.h>
 
-class CameraPropertyEditor
-	: public DockWindow
-	, public EventListener
+class Camera;
+class SimpleTextBox;
+class SimpleFloatInput;
+
+class CameraPropertyEditor : public ModuleWindow<>
 {
 	public:
 		CameraPropertyEditor();
@@ -15,7 +16,8 @@ class CameraPropertyEditor
 
 	private:
 		void InitUI();
-		void Update();
+		void InitUIState();
+		void UpdateUI();
 		void OnEvent(EventType Event, void *data);
 
 	private:
@@ -23,6 +25,9 @@ class CameraPropertyEditor
 		GLMVecComponent<glm::vec3> *cameraRotation;
 		SimpleFloatInput *camerFoV;
 		SimpleFloatInput *moveSpeed;
+		SimpleTextBox *cameraName;
+		Camera *activeCamera;
 
-		bool forceUpdate;
+		std::atomic<bool> shouldUpdate;
+		bool updateNewCamera;
 };

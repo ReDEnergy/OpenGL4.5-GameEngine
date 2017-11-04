@@ -64,6 +64,11 @@
 		<fragment>Screen.FS</fragment>
 	</shader>
 
+	<shader name="screen-model">
+		<vertex>Model.Texture.VS</vertex>
+		<fragment>Screen.FS</fragment>
+	</shader>
+
 	<shader name="shadow">
 		<vertex>MVP.Texture.VS</vertex>
 		<fragment>Depth.FS</fragment>

@@ -36,8 +36,8 @@ class KinectAvatar
 		bool scaleSkeleton;
 		unsigned int frameID;
 		unsigned int totalFrames;
-		float frameTime;
-		float lastMotionUpdate;
+		double frameTime;
+		double lastMotionUpdate;
 		std::vector<GSkeletalJoint*> joints;
 		std::vector<glm::vec3> *motionFrames;
 		std::vector<glm::mat4> boneTransform;

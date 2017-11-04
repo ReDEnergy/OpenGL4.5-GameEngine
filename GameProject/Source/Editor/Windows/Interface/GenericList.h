@@ -1,7 +1,7 @@
 #pragma once
 #include <Editor/Windows/Interface/DockWindow.h>
 #include <Editor/Windows/Interface/CustomWidget.h>
-#include <Editor/Interface/QtListTemplates.h>
+#include <Editor/Interface/QtInput.h>
 
 #include <QLayout>
 

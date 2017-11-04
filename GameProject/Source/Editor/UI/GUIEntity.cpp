@@ -2,8 +2,7 @@
 
 GUIEntity::GUIEntity(const char * name)
 {
-	if (name)
-		name = name;
+	this->name = name;
 }
 
 void GUIEntity::SetName(const char * name)

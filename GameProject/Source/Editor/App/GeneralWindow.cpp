@@ -3,8 +3,9 @@
 
 #include <functional>
 
-#include <Editor/UI/GUI.h>
+#include <Editor/UI/DockWindowManager.h>
 #include <Editor/Windows/Interface/CustomWidget.h>
+#include <Editor/Interface/QtSimpleWidgets.h>
 
 // QT
 #include <QLabel>
@@ -12,12 +13,11 @@
 #include <QKeyEvent>
 #include <QPushButton>
 
+using namespace std;
+
 GeneralWindow::GeneralWindow()
 {
-	setWindowTitle("General Properties");
-	LoadStyleSheet("general-properties.css");
-
-	InitUI();
+	Configure("GeneralWindow");
 }
 
 void GeneralWindow::InitUI()
@@ -29,7 +29,7 @@ void GeneralWindow::InitUI()
 		auto zone = new QLabel("General properties");
 		zone->setAlignment(Qt::AlignCenter);
 		zone->setProperty("title", 0);
-		qtLayout->addWidget(zone);
+		body->AddWidget(zone);
 	}
 
 	auto channelSelector = new CustomWidget(QBoxLayout::LeftToRight);
@@ -45,7 +45,17 @@ void GeneralWindow::InitUI()
 		QObject::connect(button, &QPushButton::clicked, this, toggleFunc);
 	}
 
-	qtLayout->addWidget(channelSelector);
+	body->AddWidget(channelSelector);
+
+	{
+		auto box = new SimpleCheckBox("Unsafe Events");
+		box->OnUserEdit([](bool value){
+			Manager::GetEvent()->LogUnsafeEvents(value);
+		});
+
+		logUnsafeEvents = box;
+		body->AddWidget(box);
+	}
 }
 
 void GeneralWindow::ToggleMaskChannel(int index)

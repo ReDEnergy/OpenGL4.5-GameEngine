@@ -3,18 +3,18 @@
 
 #include <functional>
 
-#include <Editor/UI/GUI.h>
+#include <Editor/UI/DockWindowManager.h>
+#include <Editor/Interface/QtSimpleWidgets.h>
 
 // QT
 #include <QLayout>
+#include <QLabel>
 #include <QKeyEvent>
 
 CameraPropertyEditor::CameraPropertyEditor()
 {
-	setWindowTitle("Camera Properties");
-	LoadStyleSheet("camera-properties.css");
-
-	InitUI();
+	Configure("CameraProperties");
+	shouldUpdate = false;
 	SubscribeToEvent(EventType::FRAME_END);
 }
 
@@ -31,19 +31,24 @@ void CameraPropertyEditor::InitUI()
 	}
 
 	{
-		cameraPosition = new GLMVecComponent<glm::vec3>("Position:", glm::vec3());
+		cameraName = new SimpleTextBox("Camera", "", true);
+		qtLayout->addWidget(cameraName);
+	}
+
+	{
+		cameraPosition = new GLMVecComponent<glm::vec3>("Position", glm::vec3());
 		cameraPosition->OnUserEdit([](glm::vec3 val) {
 			Manager::GetScene()->GetActiveCamera()->transform->SetWorldPosition(val);
 		});
 		qtLayout->addWidget(cameraPosition);
 
-		cameraRotation = new GLMVecComponent<glm::vec3>("Rotation:", glm::vec3());
+		cameraRotation = new GLMVecComponent<glm::vec3>("Rotation", glm::vec3());
 		cameraRotation->OnUserEdit([](glm::vec3 val) {
 			Manager::GetScene()->GetActiveCamera()->transform->SetWorldRotation(val);
 		});
 		qtLayout->addWidget(cameraRotation);
 
-		camerFoV = new SimpleFloatInput("Camera FoV", "degrees", 0);
+		camerFoV = new SimpleFloatInput("H-FoV", " degrees", 0);
 		camerFoV->AcceptNegativeValues(false);
 		camerFoV->OnUserEdit([this](float value) {
 			if (value < 10) {
@@ -54,41 +59,62 @@ void CameraPropertyEditor::InitUI()
 				camerFoV->SetValue(120);
 				return;
 			}
-			auto cam = Manager::GetScene()->GetActiveCamera();
-			auto PI = cam->GetProjectionInfo();
-			PI.FoV = max(10.0f, value) / PI.aspectRatio;
-			cam->SetProjection(PI);
+			if (activeCamera) {
+				auto PI = activeCamera->GetProjectionInfo();
+				PI.FoVy = value;
+				activeCamera->SetProjection(PI);
+			}
 		});
 
-		auto PI = Manager::GetScene()->GetActiveCamera()->GetProjectionInfo();
-		camerFoV->SetValue(PI.FoV * PI.aspectRatio);
 		qtLayout->addWidget(camerFoV);
 
-		moveSpeed = new SimpleFloatInput("Move spped", "meters/second", 2);
+		moveSpeed = new SimpleFloatInput("Move speed", " m/s", 2);
 		moveSpeed->AcceptNegativeValues(false);
 		moveSpeed->OnUserEdit([](float value) {
 			Manager::GetScene()->GetActiveCamera()->transform->SetMoveSpeed(value);
 		});
-		auto cam = Manager::GetScene()->GetActiveCamera();
-		moveSpeed->SetValue(cam->transform->GetMoveSpeed());
 		qtLayout->addWidget(moveSpeed);
 	}
 }
 
-void CameraPropertyEditor::Update()
+void CameraPropertyEditor::InitUIState()
 {
-	auto cameraTransform = Manager::GetScene()->GetActiveCamera()->transform;
-	bool cameraMotion = cameraTransform->GetMotionState();
+	auto cam = Manager::GetScene()->GetActiveCamera();
+	moveSpeed->SetValue(cam->transform->GetMoveSpeed());
+}
 
-	if (cameraMotion) {
-		cameraPosition->SetValue(cameraTransform->GetWorldPosition());
-		cameraRotation->SetValue(cameraTransform->GetRotationEuler360());
+void CameraPropertyEditor::UpdateUI()
+{
+	if (!shouldUpdate) return;
+	shouldUpdate = false;
+
+	auto cameraTransform = activeCamera->transform;
+
+	if (updateNewCamera)
+	{
+		updateNewCamera = false;
+		cameraName->SetValue(activeCamera->GetName());
 	}
+	
+	cameraPosition->SetValue(cameraTransform->GetWorldPosition());
+	cameraRotation->SetValue(cameraTransform->GetRotationEuler360());
+	camerFoV->SetValue(activeCamera->GetFieldOfViewY());
 }
 
 void CameraPropertyEditor::OnEvent(EventType Event, void * data)
 {
 	if (Event == EventType::FRAME_END) {
-		Update();
+		auto camera = Manager::GetScene()->GetActiveCamera();
+		if (shouldUpdate) {
+			return;
+		}
+		if (activeCamera != camera) {
+			activeCamera = camera;
+			shouldUpdate = true;
+			updateNewCamera = true;
+		} 
+		else {
+			shouldUpdate = camera->transform->GetMotionState();
+		}
 	}
 }

@@ -33,7 +33,6 @@
 			</constraints>
 			<pos>0 1.2 0</pos>
 			<parent>Pelvis</parent>
-			<kinectID>1</kinectID>
 		</joint>	
 		-->
 		<joint>
@@ -45,6 +44,7 @@
 			<pos>0 1.35 0</pos>
 			<parent>Pelvis</parent>
 			<kinectID>1</kinectID>
+			<AJointID>0</AJointID>
 		</joint>								
 		<joint>
 			<name>SpineShoulder</name>

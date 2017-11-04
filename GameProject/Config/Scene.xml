@@ -36,13 +36,7 @@
 		</transform>
 	</object>		
 -->
-<!--	<object>
-		<ref>Atienza</ref>
-		<transform>
-			<scale>0.01</scale>
-			<position>-6 0 0</position>
-		</transform>
-	</object>	
+<!--	
 	<object>
 		<ref>YBot</ref>
 		<transform>
@@ -56,11 +50,18 @@
 			<position>3 0 -3</position>
 		</transform>
 	</object>
+	<object>
+		<ref>AtienzaNo</ref>
+		<transform>
+			<position>2 1.5 1</position>
+			<scale>0.01</scale>
+		</transform>
+	</object>	
 -->	
 	<object>
 		<ref>Archer2</ref>
 		<transform>
-			<scale>0.01</scale>
+			<!-- <scale>0.01</scale> -->
 			<position>2 0 0</position>
 		</transform>
 	</object>
@@ -71,13 +72,6 @@
 		</transform>
 	</object>
 	<object>
-		<ref>AtienzaNo</ref>
-		<transform>
-			<position>2 1.5 1</position>
-			<scale>0.01</scale>
-		</transform>
-	</object>	
-	<object>
 		<ref>block10-10</ref>
 		<transform>
 			<position>3 0 -10</position>
@@ -87,7 +81,7 @@
 	<object>
 		<ref>oildrum</ref>
 		<transform>
-			<position>3 3 3</position>
+			<position>-3 1 0</position>
 		</transform>
 		<!-- <audio loop="true">relaxMono</audio> -->
 	</object>	

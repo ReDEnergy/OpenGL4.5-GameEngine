@@ -1,17 +1,14 @@
 #pragma once
-#include <Editor/Windows/Interface/DockWindow.h>
-#include <Editor/Interface/QtInput.h>
-
-#include <include/glm.h>
-#include <Event/EventListener.h>
+#include <mutex>
+#include <Editor/Windows/Module/ModuleWindow.h>
 
 class GameObject;
 class ProfileTimer;
 class SimpleTextBox;
+class SimpleFloatInput;
+class CustomWidget;
 
-class ProfilingWindow
-	: public DockWindow
-	, public EventListener
+class ProfilingWindow : public ModuleWindow<int>
 {
 	public:
 		ProfilingWindow();
@@ -19,12 +16,22 @@ class ProfilingWindow
 
 	private:
 		void InitUI();
+		void UpdateList();
 		void UpdateUI();
-		void Update();
 		void OnEvent(EventType Event, void *data);
-		void OnEvent(const string& eventID, void *data);
+		void OnEvent(const std::string& eventID, void *data);
 
 	private:
+		char textBoxBuffer[100];
+		ProfileTimer *appPerfInfo;
 		ProfileTimer *profileInfo;
-		vector<SimpleFloatInput*> channels;
+		SimpleTextBox *frameInfo;
+		SimpleFloatInput *frameRate;
+		SimpleFloatInput *frameTime;
+		CustomWidget *profilingArea;
+		CustomWidget *frameInfoArea;
+		std::atomic<bool> newPerfInfo;
+		std::vector<SimpleFloatInput*> channels;
+		std::list<SimpleFloatInput*> idleNodes;
+		std::mutex copyPerfInfo;
 };
