@@ -65,7 +65,7 @@ class DLLExport SkinnedMesh : public Mesh
 
 	private:
 		#ifdef ENGINE_DLL_EXPORTS
-		bool InitFromScene(const aiScene* pScene);
+		bool InitFromScene(const aiScene* pScene) override;
 		void InitMesh(const aiMesh* paiMesh, uint index);
 		#endif
 

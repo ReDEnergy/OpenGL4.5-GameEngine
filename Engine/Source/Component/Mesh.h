@@ -6,6 +6,7 @@
 #endif
 #include <include/dll_export.h>
 #include <include/glm.h>
+#include <include/gl_defines.h>
 
 class Shader;
 class Texture;
@@ -14,14 +15,14 @@ class GPUBuffers;
 
 static const unsigned int INVALID_MATERIAL = 0xFFFFFFFF;
 
-enum class MESH_TYPE
+enum class MeshType
 {
 	STATIC,
 	MORPHING,
 	SKINNED
 };
 
-enum class MESH_STATUS
+enum class MeshStatus
 {
 	ERROR_MAX_INFLUENCE,
 	SUCCESS
@@ -36,9 +37,9 @@ struct MeshEntry
 		baseIndex = 0;
 		materialIndex = INVALID_MATERIAL;
 	}
-	unsigned short nrIndices;
-	unsigned short baseVertex;
-	unsigned short baseIndex;
+	unsigned int nrIndices;
+	unsigned int baseVertex;
+	unsigned int baseIndex;
 	unsigned int materialIndex;
 };
 
@@ -55,14 +56,12 @@ class DLLExport Mesh
 		bool InitFromData(std::vector<glm::vec3>& positions,
 						std::vector<glm::vec3>& normals,
 						std::vector<glm::vec2>& texCoords,
-						std::vector<unsigned short>& indices);
+						std::vector<unsigned int>& indices);
 
 		virtual void Update() {};
 		virtual bool LoadMesh(const std::string& fileLocation, const std::string& fileName);
 		virtual void UseMaterials(bool);
 
-		void SetGLDrawMode(unsigned int drawMode);
-		void SetCulling(bool value = true);
 		const char* GetMeshID() const;
 
 		glm::vec3 GetCenterPoint() const;
@@ -70,10 +69,11 @@ class DLLExport Mesh
 
 	protected:
 		void ComputeBoundingBox();
+		virtual bool UploadToGPU();
 
 		#ifdef ENGINE_DLL_EXPORTS
+		bool InitMaterials(const aiScene* pScene);
 		virtual void InitMesh(const aiMesh* paiMesh);
-		virtual bool InitMaterials(const aiScene* pScene);
 		virtual bool InitFromScene(const aiScene* pScene);
 		#endif
 
@@ -83,18 +83,18 @@ class DLLExport Mesh
 		glm::vec3 meshCenter;
 
 	public:
-		MESH_TYPE meshType;
+		MeshType meshType;
 		std::vector<glm::vec3> positions;
 		std::vector<glm::vec3> normals;
 		std::vector<glm::vec2> texCoords;
-		std::vector<unsigned short> indices;
+		std::vector<unsigned int> indices;
 
 	protected:
-		MESH_STATUS loadState;
+		MeshStatus loadState;
 		std::string fileLocation;
 
 		bool useMaterial;
-		unsigned int glDrawMode;
+		GLenum glDrawMode;
 		GPUBuffers *buffers;
 
 		std::vector<MeshEntry> meshEntries;

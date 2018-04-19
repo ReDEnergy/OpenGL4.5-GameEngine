@@ -2,6 +2,7 @@
 #include <vector>
 
 #include <include/dll_export.h>
+#include <include/gl_defines.h>
 
 class Shader;
 class Mesh;
@@ -18,7 +19,7 @@ class DLLExport MeshRenderer
 		virtual void UseMaterials(bool);
 
 		void InitForNewContext();
-		void SetGLDrawMode(unsigned int drawMode);
+		void SetGLDrawMode(GLenum drawMode);
 
 	public:
 		Mesh *mesh;

@@ -21,7 +21,7 @@ MeshRenderer::MeshRenderer(Mesh& mesh)
 {
 	this->mesh = &mesh;
 	useMaterial = mesh.useMaterial;
-	glDrawMode = mesh.glDrawMode;
+	glDrawMode = GL_TRIANGLES;
 	glVAO = mesh.buffers->VAO;
 }
 
@@ -69,13 +69,13 @@ void MeshRenderer::Render() const
 		}
 
 		#ifdef OPENGL_ES
-		glDrawElements(glDrawMode, mesh->meshEntries[i]->nrIndices, GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * mesh->meshEntries[i]->baseIndex));
+		glDrawElements(glDrawMode, mesh->meshEntries[i]->nrIndices, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->meshEntries[i]->baseIndex));
 		if (mesh->meshEntries[i]->baseVertex) {
 			printf("[ERROR]\t Base Vertex different than 0... some part of the mesh might not be visible\n");
 		}
 		#else
 		glDrawElementsBaseVertex(glDrawMode, mesh->meshEntries[i].nrIndices,
-								GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * mesh->meshEntries[i].baseIndex),
+								GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->meshEntries[i].baseIndex),
 								mesh->meshEntries[i].baseVertex);
 		#endif
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -102,13 +102,13 @@ void MeshRenderer::RenderInstanced(unsigned int instances) const
 		}
 
 		#ifdef OPENGL_ES
-		glDrawElementsInstanced(glPrimitive, mesh->meshEntries[i]->nrIndices, GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * mesh->meshEntries[i]->baseIndex),	instances);
+		glDrawElementsInstanced(glPrimitive, mesh->meshEntries[i]->nrIndices, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->meshEntries[i]->baseIndex),	instances);
 		if (mesh->meshEntries[i]->baseVertex) {
 			printf("[ERROR]\t Base Vertex different than 0... some part of the mesh might not be visible\n");
 		}
 		#else
-		glDrawElementsInstancedBaseVertex(glDrawMode, mesh->meshEntries[i].nrIndices, GL_UNSIGNED_SHORT,
-			(void*)(sizeof(unsigned short) * mesh->meshEntries[i].baseIndex),
+		glDrawElementsInstancedBaseVertex(glDrawMode, mesh->meshEntries[i].nrIndices, GL_UNSIGNED_INT,
+			(void*)(sizeof(unsigned int) * mesh->meshEntries[i].baseIndex),
 			instances, mesh->meshEntries[i].baseVertex);
 		#endif
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);

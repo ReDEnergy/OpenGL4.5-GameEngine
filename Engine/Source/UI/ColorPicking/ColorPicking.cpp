@@ -546,7 +546,7 @@ void ColorPicking::DrawSceneForPicking() const
 	auto renderingList = Manager::GetScene()->GetFrustrumObjects();
 
 	for (auto *obj : renderingList) {
-		if (obj->meshRenderer->mesh->meshType == MESH_TYPE::STATIC)
+		if (obj->meshRenderer->mesh->meshType == MeshType::STATIC)
 		{
 			obj->RenderForPicking(cpShader);
 		}
@@ -557,7 +557,7 @@ void ColorPicking::DrawSceneForPicking() const
 	activeCamera->BindViewProj(cpShaderSk);
 
 	for (auto *obj : renderingList) {
-		if (obj->meshRenderer->mesh->meshType == MESH_TYPE::SKINNED) {
+		if (obj->meshRenderer->mesh->meshType == MeshType::SKINNED) {
 			obj->RenderForPicking(cpShaderSk);
 		}
 	}

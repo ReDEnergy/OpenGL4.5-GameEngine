@@ -113,7 +113,7 @@ void GameObject::Init()
 	instanceID = Manager::Resource->GetGameObjectUID(referenceName);
 	colorID = Manager::Color->GetColorUID(this);
 
-	if (meshRenderer && meshRenderer->mesh->meshType == MESH_TYPE::SKINNED)
+	if (meshRenderer && meshRenderer->mesh->meshType == MeshType::SKINNED)
 	{
 		animation = new AnimationController();
 		animation->Setup((SkinnedMesh*)meshRenderer->mesh);

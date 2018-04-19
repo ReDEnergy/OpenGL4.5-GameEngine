@@ -8,7 +8,7 @@ using namespace std;
 
 namespace Utils3D
 {
-	void PushQuadTriangle(vector<unsigned short> &indices,
+	void PushQuadTriangle(vector<unsigned int> &indices,
 							UINT32 v0, UINT32 v1, UINT32 v2, UINT32 v3)
 	{
 		// first triangle
@@ -21,7 +21,7 @@ namespace Utils3D
 		indices.push_back(v3);
 	}
 
-	DLLExport void PushQuad(vector<unsigned short> &indices,
+	DLLExport void PushQuad(vector<unsigned int> &indices,
 							UINT32 v0, UINT32 v1, UINT32 v2, UINT32 v3)
 	{
 			indices.push_back(v0);

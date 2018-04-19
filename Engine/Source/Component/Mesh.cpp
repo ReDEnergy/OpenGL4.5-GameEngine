@@ -20,9 +20,8 @@ Mesh::Mesh(const char* meshID)
 {
 	if (meshID)
 		this->meshID.assign(meshID);
-	meshType = MESH_TYPE::STATIC;
+	meshType = MeshType::STATIC;
 	useMaterial = true;
-	glDrawMode = GL_TRIANGLES;
 	buffers = new GPUBuffers();
 }
 
@@ -35,7 +34,7 @@ Mesh::~Mesh() {
 
 void Mesh::ClearData()
 {
-	loadState = MESH_STATUS::SUCCESS;
+	loadState = MeshStatus::SUCCESS;
 	for (unsigned int i = 0 ; i < materials.size() ; i++) {
 		SAFE_FREE(materials[i]);
 	}
@@ -54,13 +53,13 @@ bool Mesh::LoadMesh(const string& fileLocation, const string& fileName)
 
 	Assimp::Importer Importer;
 
-	unsigned int flags = aiProcess_GenSmoothNormals | aiProcess_FlipUVs;
-	if (glDrawMode == GL_TRIANGLES) flags |= aiProcess_Triangulate;
-
+	unsigned int flags = aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_Triangulate;
 	const aiScene* pScene = Importer.ReadFile(file, flags);
 
 	if (pScene) {
-		return InitFromScene(pScene);
+		if (InitFromScene(pScene)) {
+			return UploadToGPU();
+		}
 	}
 
 	// pScene is freed when returning because of Importer
@@ -69,31 +68,38 @@ bool Mesh::LoadMesh(const string& fileLocation, const string& fileName)
 	return false;
 }
 
+bool Mesh::UploadToGPU()
+{
+	buffers->ReleaseMemory();
+
+	if (texCoords.size())
+	{
+		*buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
+	}
+	else
+	{
+		*buffers = UtilsGPU::UploadData(positions, normals, indices);
+	}
+
+	return buffers->VAO != 0;
+}
+
 bool Mesh::InitFromData()
 {
 	meshEntries.clear();
 
 	MeshEntry M;
-	M.nrIndices = static_cast<unsigned short>(indices.size());
+	M.nrIndices = static_cast<unsigned int>(indices.size());
 	meshEntries.push_back(M);
 
-	buffers->ReleaseMemory();
-	if (texCoords.size()) {
-		*buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
-	}
-	else {
-		*buffers = UtilsGPU::UploadData(positions, normals, indices);
-	}
-
 	ComputeBoundingBox();
-
-	return buffers->VAO != 0;
+	return UploadToGPU();
 }
 
 bool Mesh::InitFromData(vector<glm::vec3>& positions,
 						vector<glm::vec3>& normals,
 						vector<glm::vec2>& texCoords,
-						vector<unsigned short>& indices)
+						vector<unsigned int>& indices)
 {
 	this->positions = positions;
 	this->normals = normals;
@@ -105,7 +111,6 @@ bool Mesh::InitFromData(vector<glm::vec3>& positions,
 
 bool Mesh::InitFromScene(const aiScene* pScene)
 {
-
 	meshEntries.resize(pScene->mNumMeshes);
 	materials.resize(pScene->mNumMaterials);
 
@@ -113,9 +118,9 @@ bool Mesh::InitFromScene(const aiScene* pScene)
 	unsigned int nrIndices = 0;
 
 	// Count the number of vertices and indices
-	for (unsigned int i = 0 ; i < pScene->mNumMeshes ; i++) {
+	for (unsigned int i = 0; i < pScene->mNumMeshes; i++) {
 		meshEntries[i].materialIndex = pScene->mMeshes[i]->mMaterialIndex;
-		meshEntries[i].nrIndices = pScene->mMeshes[i]->mNumFaces * (glDrawMode == GL_TRIANGLES ? 3 : 4);
+		meshEntries[i].nrIndices = pScene->mMeshes[i]->mNumFaces * 3;
 		meshEntries[i].baseVertex = nrVertices;
 		meshEntries[i].baseIndex = nrIndices;
 
@@ -138,9 +143,7 @@ bool Mesh::InitFromScene(const aiScene* pScene)
 	if (useMaterial && !InitMaterials(pScene))
 		return false;
 
-	buffers->ReleaseMemory();
-	*buffers = UtilsGPU::UploadData(positions, normals, texCoords, indices);
-	return buffers->VAO != 0;
+	return true;
 }
 
 void Mesh::InitMesh(const aiMesh* paiMesh)
@@ -208,14 +211,15 @@ bool Mesh::InitMaterials(const aiScene* pScene)
 	return ret;
 }
 
-void Mesh::UseMaterials(bool value) {
+void Mesh::UseMaterials(bool value)
+{
 	useMaterial = value;
 }
 
-void Mesh::SetGLDrawMode(GLenum drawMode)
-{
-	glDrawMode = drawMode;
-}
+//void Mesh::SetGLDrawMode(GLenum drawMode)
+//{
+//	glDrawMode = drawMode;
+//}
 
 const char * Mesh::GetMeshID() const
 {

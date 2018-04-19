@@ -121,7 +121,7 @@ void FrustumSplit::SplitFrustrum()
 	{
 		vector<glm::vec2> text_coord;
 		vector<glm::vec3> normals;
-		vector<unsigned short> indices;
+		vector<unsigned int> indices;
 
 		for (int k = 0; k < 8; k++)
 			normals.push_back(glm::vec3(0, 1, 0));

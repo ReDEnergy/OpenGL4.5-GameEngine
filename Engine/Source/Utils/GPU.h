@@ -47,30 +47,30 @@ class DLLExport GPUBuffers
 		GLuint VBO[6];
 
 	private:
-		unsigned short size;
+		unsigned int size;
 };
 
 namespace UtilsGPU {
 
 	DLLExport GPUBuffers UploadData(const std::vector<glm::vec3> &positions,
 							const std::vector<glm::vec3> &normals,
-							const std::vector<unsigned short>& indices);
+							const std::vector<unsigned int>& indices);
 
 	DLLExport GPUBuffers UploadData(const std::vector<glm::vec3> &positions,
 							const std::vector<glm::vec2> &text_coords,
-							const std::vector<unsigned short> &indices);
+							const std::vector<unsigned int> &indices);
 
 	DLLExport GPUBuffers UploadData(const std::vector<glm::vec3> &positions,
 							const std::vector<glm::vec3> &normals,
 							const std::vector<glm::vec2> &text_coords,
-							const std::vector<unsigned short> &indices);
+							const std::vector<unsigned int> &indices);
 
 	template<class T>
 	GPUBuffers UploadData(const std::vector<glm::vec3> &positions,
 							const std::vector<glm::vec3> &normals,
 							const std::vector<glm::vec2> &text_coords,
 							const std::vector<T> &bones,
-							const std::vector<unsigned short> &indices)
+							const std::vector<unsigned int> &indices)
 	{
 		// Create the VAO
 		GPUBuffers buffers;

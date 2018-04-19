@@ -6,7 +6,7 @@ namespace UtilsGPU {
 
 	GPUBuffers UploadData(const vector<glm::vec3> &positions,
 					const vector<glm::vec3> &normals, 
-					const vector<unsigned short>& indices)
+					const vector<unsigned int>& indices)
 	{
 		GPUBuffers buffers;
 		buffers.Generate(3);
@@ -36,7 +36,7 @@ namespace UtilsGPU {
 
 	GPUBuffers UploadData(const vector<glm::vec3> &positions,
 					const vector<glm::vec2> &text_coords, 
-					const vector<unsigned short>& indices)
+					const vector<unsigned int>& indices)
 	{
 		// Create the VAO
 		GPUBuffers buffers;
@@ -69,7 +69,7 @@ namespace UtilsGPU {
 	GPUBuffers UploadData(const vector<glm::vec3> &positions,
 					const vector<glm::vec3> &normals,
 					const vector<glm::vec2> &text_coords,
-					const vector<unsigned short> &indices)
+					const vector<unsigned int> &indices)
 	{
 		// Create the VAO
 		GPUBuffers buffers;

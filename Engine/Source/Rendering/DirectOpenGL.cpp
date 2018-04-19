@@ -42,9 +42,9 @@ void DirectOpenGL::Init()
 	lineMesh->indices.push_back(0);
 	lineMesh->indices.push_back(1);
 
-	lineMesh->SetGLDrawMode(GL_LINES);
 	lineMesh->InitFromData();
 	line->SetMesh(lineMesh);
+	line->meshRenderer->SetGLDrawMode(GL_LINES);
 }
 
 void DirectOpenGL::UseShader(Shader * shader)

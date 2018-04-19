@@ -365,7 +365,7 @@ void SceneManager::PrepareObjectForRendering(GameObject * object)
 	{
 		frustumObjects.push_back(object);
 		auto type = object->meshRenderer->mesh->meshType;
-		if (type == MESH_TYPE::STATIC) {
+		if (type == MeshType::STATIC) {
 			if (object->renderer->IsTransparent()) {
 				alphaRender.push_back(object);
 			}
@@ -373,7 +373,7 @@ void SceneManager::PrepareObjectForRendering(GameObject * object)
 				normalRender.push_back(object);
 			}
 		}
-		else if (type == MESH_TYPE::SKINNED)
+		else if (type == MeshType::SKINNED)
 		{
 			skinnedRender.push_back(object);
 		}

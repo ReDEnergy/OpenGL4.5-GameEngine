@@ -29,7 +29,7 @@ using namespace std;
 SkinnedMesh::SkinnedMesh(const char* meshID)
 	: Mesh(meshID)
 {
-	meshType = MESH_TYPE::SKINNED;
+	meshType = MeshType::SKINNED;
 	animationState = nullptr;
 	rootJoint = nullptr;
 	nrBones = 0;
@@ -81,29 +81,8 @@ bool SkinnedMesh::LoadMesh(const std::string& fileLocation, const std::string& f
 
 bool SkinnedMesh::InitFromScene(const aiScene* pScene)
 {
-	meshEntries.resize(pScene->mNumMeshes);
-	materials.resize(pScene->mNumMaterials);
-
-	uint nrVertices = 0;
-	uint nrIndices = 0;
-
-	// Count the number of vertices and indices
-	for (unsigned int i = 0; i < pScene->mNumMeshes; i++) {
-		meshEntries[i].materialIndex = pScene->mMeshes[i]->mMaterialIndex;
-		meshEntries[i].nrIndices = pScene->mMeshes[i]->mNumFaces * (glDrawMode == GL_TRIANGLES ? 3 : 4);
-		meshEntries[i].baseVertex = nrVertices;
-		meshEntries[i].baseIndex = nrIndices;
-
-		nrVertices += pScene->mMeshes[i]->mNumVertices;
-		nrIndices += meshEntries[i].nrIndices;
-	}
-
-	// Reserve space in the vectors for the vertex attributes and indices
-	positions.reserve(nrVertices);
-	normals.reserve(nrVertices);
-	texCoords.reserve(nrVertices);
-	indices.reserve(nrIndices);
-	boneData.resize(nrVertices);
+	Mesh::InitFromScene(pScene);
+	boneData.resize(positions.size());
 
 	// Initialize the meshes in the scene one by one
 	for (unsigned int i = 0; i < meshEntries.size(); i++) {
@@ -111,6 +90,10 @@ bool SkinnedMesh::InitFromScene(const aiScene* pScene)
 		InitMesh(paiMesh, i);
 	}
 
+	if (useMaterial && !InitMaterials(pScene))
+		return false;
+
+	// Skinned mesh information
 	boneTransform.resize(nrBones);
 
 	// Read animation data
@@ -121,10 +104,7 @@ bool SkinnedMesh::InitFromScene(const aiScene* pScene)
 		}
 	}
 
-	if (useMaterial && !InitMaterials(pScene))
-		return false;
-
-	if (loadState == MESH_STATUS::ERROR_MAX_INFLUENCE) {
+	if (loadState == MeshStatus::ERROR_MAX_INFLUENCE) {
 		cout << "[ERROR]: MAX_INFLUENCE" << endl;
 		//return false;
 	}
@@ -168,7 +148,7 @@ void SkinnedMesh::InitMesh(const aiMesh* paiMesh, uint index)
 
 			int index = bonesPerVertex[VertexID];
 			if (index == NUM_BONES_PER_VEREX) {
-				loadState = MESH_STATUS::ERROR_MAX_INFLUENCE;
+				loadState = MeshStatus::ERROR_MAX_INFLUENCE;
 			}
 			else {
 				boneData[VertexID].SetBoneData(index, boneIndex, weight);
