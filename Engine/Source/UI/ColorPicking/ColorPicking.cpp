@@ -59,11 +59,11 @@ struct _Gizmo
 	glm::vec3 axis, color;
 } gizmo[3];
 
-GizmoMode events[3] = { GizmoMode::MOVE, GizmoMode::ROTATE, GizmoMode::SCALE };
+GizmoMode events[3] = { GizmoMode::Move, GizmoMode::Rotate, GizmoMode::Scale };
 
 ColorPicking::ColorPicking()
 {
-	controlMode = ControlMode::WORLD;
+	controlMode = ControlMode::World;
 }
 
 ColorPicking::~ColorPicking() {
@@ -87,7 +87,7 @@ void ColorPicking::Init()
 
 	holdTransform = new Transform();
 
-	gizmo_MODE = GizmoMode::MOVE;
+	gizmo_MODE = GizmoMode::Move;
 
 	glm::ivec2 resolution = window->props.resolution;
 
@@ -126,9 +126,9 @@ void ColorPicking::Init()
 
 	//gizmo objects
 	for (int i = 0; i <= 2; i++) {
-		gizmo[i].gizmo_object[GIZMO_MODE_ID(GizmoMode::MOVE)] = Manager::Resource->GetGameObject("gizmo_move");
-		gizmo[i].gizmo_object[GIZMO_MODE_ID(GizmoMode::ROTATE)] = Manager::Resource->GetGameObject("gizmo_rotate");
-		gizmo[i].gizmo_object[GIZMO_MODE_ID(GizmoMode::SCALE)] = Manager::Resource->GetGameObject("gizmo_scale");
+		gizmo[i].gizmo_object[GIZMO_MODE_ID(GizmoMode::Move)] = Manager::Resource->GetGameObject("gizmo_move");
+		gizmo[i].gizmo_object[GIZMO_MODE_ID(GizmoMode::Rotate)] = Manager::Resource->GetGameObject("gizmo_rotate");
+		gizmo[i].gizmo_object[GIZMO_MODE_ID(GizmoMode::Scale)] = Manager::Resource->GetGameObject("gizmo_scale");
 	}
 
 	ResetGizmoRotation();
@@ -174,18 +174,32 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 	if (!selectedObject)
 		return;
 
+	if (window->MouseHold(GLFW_MOUSE_BUTTON_RIGHT))
+	{
+		bool rotateTPS = window->KeyHold(GLFW_KEY_LEFT_ALT);
+		if (rotateTPS && selectedObject)
+		{
+			auto dist = activeCamera->DistTo(*selectedObject);
+			activeCamera->RotateOY(-(float)deltaX);
+			activeCamera->RotateOX(-(float)deltaY);
+			auto dir = activeCamera->transform->GetLocalOZVector();
+			activeCamera->transform->SetWorldPosition(selectedObject->transform->GetWorldPosition() + dir * dist);
+			activeCamera->Update();
+		}
+	}
+
 	if (gizmoEvent)
 	{
 		switch (gizmo_MODE)
 		{
-		case GizmoMode::MOVE:
+		case GizmoMode::Move:
 		{
 			float dist = activeCamera->DistTo(*selectedObject);
 			glm::vec3 delta((deltaX - deltaY) * dist / 500);
 
 			auto axis = currentAxis;
 
-			if (controlMode == ControlMode::LOCAL) {
+			if (controlMode == ControlMode::Local) {
 				axis = selectedObject->transform->GetWorldRotation() * currentAxis;
 			}
 
@@ -203,12 +217,12 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 			break;
 		}
 
-		case GizmoMode::ROTATE:
+		case GizmoMode::Rotate:
 		{
 			glm::vec3 rotation_vector = currentAxis * glm::vec3(static_cast<float>(deltaX - deltaY));
 			auto speed = selectedObject->transform->GetRotationSpeed();
 			selectedObject->transform->SetRotationSpeed(0.3f);
-			if (controlMode == ControlMode::WORLD)
+			if (controlMode == ControlMode::World)
 			{
 				if (rotation_vector.x) selectedObject->transform->RotateWorldOX(rotation_vector.x);
 				if (rotation_vector.y) selectedObject->transform->RotateWorldOY(rotation_vector.y);
@@ -223,7 +237,7 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 			break;
 		}
 
-		case GizmoMode::SCALE:
+		case GizmoMode::Scale:
 		{
 			selectedObject->transform->SetScale(selectedObject->transform->GetScale() + currentAxis *
 				glm::vec3(static_cast<float>(deltaX - deltaY)) / glm::vec3(200.0f));
@@ -242,7 +256,7 @@ void ColorPicking::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 
 		// Update Gizmo
 		UpdateGizmoPosition();
-		if (controlMode == ControlMode::LOCAL && gizmo_MODE == GizmoMode::ROTATE) {
+		if (controlMode == ControlMode::Local && gizmo_MODE == GizmoMode::Rotate) {
 			UpdateGizmoRotation();
 		}
 	}
@@ -280,21 +294,21 @@ void ColorPicking::OnKeyPress(int key, int mod)
 			break;
 		}
 		case GLFW_KEY_V: {
-			if (gizmo_MODE == GizmoMode::MOVE)
+			if (gizmo_MODE == GizmoMode::Move)
 				selectedObject->transform->SetWorldPosition(holdTransform->GetWorldPosition());
-			if (gizmo_MODE == GizmoMode::ROTATE)
+			if (gizmo_MODE == GizmoMode::Rotate)
 				selectedObject->transform->SetWorldRotation(holdTransform->GetWorldRotation());
 			break;
 		}
 		case GLFW_KEY_W: {
-			gizmo_MODE = GizmoMode::MOVE;
+			gizmo_MODE = GizmoMode::Move;
 			cout << "[world pos]: " << selectedObject->transform->GetWorldPosition() << endl;
 			cout << "[local pos]: " << selectedObject->transform->GetLocalPosition() << endl;
 			cout << endl;
 			break;
 		}
 		case GLFW_KEY_E: {
-			gizmo_MODE = GizmoMode::ROTATE;
+			gizmo_MODE = GizmoMode::Rotate;
 			cout << "[world euler]: " << selectedObject->transform->GetRotationEulerRad() * TO_DEGREES << endl;
 			cout << "[local quat]: " << selectedObject->transform->GetRelativeRotation() << endl;
 			cout << "[world quat]: " << selectedObject->transform->GetWorldRotation() << endl;
@@ -302,7 +316,7 @@ void ColorPicking::OnKeyPress(int key, int mod)
 			break;
 		}
 		case GLFW_KEY_R: {
-			gizmo_MODE = GizmoMode::SCALE;
+			gizmo_MODE = GizmoMode::Scale;
 			cout << "[scale]: " << selectedObject->transform->GetScale() << endl << endl;
 			break;
 		}
@@ -311,7 +325,7 @@ void ColorPicking::OnKeyPress(int key, int mod)
 			break;
 		}
 		case GLFW_KEY_L: {
-			SetControlMode(controlMode == ControlMode::LOCAL ? ControlMode::WORLD : ControlMode::LOCAL);
+			SetControlMode(controlMode == ControlMode::Local ? ControlMode::World : ControlMode::Local);
 			break;
 		}
 		case GLFW_KEY_F: {
@@ -414,7 +428,7 @@ void ColorPicking::PickObject()
 	mousePosition = (mousePosition * rez) / window->props.resolution;
 	glReadPixels(mousePosition.x, rez.y - mousePosition.y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pickedColor);
 
-	FrameBuffer::Unbind();
+	FrameBuffer::BindDefault();
 
 	glm::ivec3 color(pickedColor[0], pickedColor[1], pickedColor[2]);
 	GetPickedObject(color);
@@ -446,7 +460,7 @@ void ColorPicking::GetPickedObject(const glm::ivec3 &colorID)
 
 void ColorPicking::ToggleControlMode()
 {
-	SetControlMode(controlMode == ControlMode::WORLD ? ControlMode::LOCAL : ControlMode::WORLD);
+	SetControlMode(controlMode == ControlMode::World ? ControlMode::Local : ControlMode::World);
 }
 
 void ColorPicking::SetControlMode(ControlMode mode)
@@ -454,11 +468,11 @@ void ColorPicking::SetControlMode(ControlMode mode)
 	if (controlMode == mode) return;
 	controlMode = mode;
 
-	if (controlMode == ControlMode::WORLD) {
-		cout << "Rotate: [WORLD]" << endl << endl;
+	if (controlMode == ControlMode::World) {
+		cout << "Rotate: [World]" << endl << endl;
 	}
 	else {
-		cout << "Rotate: [LOCAL]" << endl << endl;
+		cout << "Rotate: [Local]" << endl << endl;
 	}
 	if (selectedObject)
 		UpdateGizmo();
@@ -490,7 +504,7 @@ void ColorPicking::UpdateGizmo(bool picking)
 
 	float dist = activeCamera->DistTo(*selectedObject);
 	glm::vec3 scale(dist);
-	if (gizmo_MODE == GizmoMode::ROTATE) {
+	if (gizmo_MODE == GizmoMode::Rotate) {
 		scale.y = picking ? 2 * dist : dist / 4;
 	}
 	for (int i = 0; i < 3; i++) {
@@ -515,7 +529,7 @@ void ColorPicking::UpdateGizmoPosition()
 void ColorPicking::UpdateGizmoRotation()
 {
 	auto offsetRotation = glm::quat();
-	if (controlMode == ControlMode::LOCAL || gizmo_MODE == GizmoMode::SCALE) {
+	if (controlMode == ControlMode::Local || gizmo_MODE == GizmoMode::Scale) {
 		offsetRotation = selectedObject->transform->GetWorldRotation();
 	}
 
@@ -600,7 +614,7 @@ void ColorPicking::RenderGizmo(const Shader* shader) const
 
 	RenderAxisHelpers(shader);
 
-	if (gizmo_MODE == GizmoMode::ROTATE)
+	if (gizmo_MODE == GizmoMode::Rotate)
 	{
 		Manager::RenderSys->SetGlobalCulling(OpenGL::CULL::FRONT);
 		GL_Utils::SetColorUnit(shader->loc_debug_color, 0.2f, 0.2f, 0.2f);

@@ -136,7 +136,7 @@ void Manager::LoadConfig()
 	Audio->Init();
 	Font->Init();
 
-	Shader->Load(Config->GetResourceFileLoc("shaders").c_str());
+	Shader->SetConfigFiles(Config->GetResourceFiles("shaders"));
 	Resource->Load(Config->GetResourceFileLoc("resource").c_str());
 	Menu->Load(Config->GetResourceFileLoc("menu").c_str());
 	Scene->LoadScene(Config->GetResourceFileLoc("scene").c_str());

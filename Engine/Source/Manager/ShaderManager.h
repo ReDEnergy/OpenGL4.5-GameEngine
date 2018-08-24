@@ -17,21 +17,27 @@ class DLLExport ShaderManager
 		ShaderManager();
 		~ShaderManager();
 
+		struct ShadersGroup
+		{
+			std::string shaderNamespace;
+			std::string basePath;
+			std::unordered_map<std::string, Shader*> shaders;
+		};
+
 	public:
-		void Load(const char *file);
+		void SetConfigFiles(std::vector<std::string> configFiles);
 		void Reload();
-		const Shader* PopState();
-		Shader* GetShader(const char* name);
+		void Reload(std::string shaderNamespace);
+
+		Shader* GetShader(std::string name, std::string shaderNameSpace = "Engine");
 
 	private:
-		void ReadShader(pugi::xml_node &shaderXML);
-		void ReloadFromFile();
+		void LoadConfigFile(const char *file);
+		void ReadShader(pugi::xml_node &shaderXML, ShadersGroup &group);
 
 	private:
-		std::string BasePath;
+		std::vector<std::string> shaderDataFiles;
 		std::unordered_map<std::string, uint> shaderType;
-		std::unordered_map<std::string, Shader*> shaders;
-		std::stack <const Shader*> programs;
-		std::string shaderDataFile;
 
+		std::unordered_map<std::string, ShadersGroup> shaderGroups;
 };

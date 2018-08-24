@@ -81,7 +81,7 @@ void SSAO::Update(const FrameBuffer *FBO, const Camera *camera) const
 	// Finish TASK
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
-	FrameBuffer::Unbind();
+	FrameBuffer::BindDefault();
 
 	// -- COMPUTE SHADER
 	Shader *S = Manager::Shader->GetShader("ssaoBlur");

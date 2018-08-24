@@ -6,16 +6,19 @@
 
 using namespace std;
 
-Shader::Shader(const char & name)
+Shader::Shader(const char & name) : shaderName(&name)
 {
 	program = 0;
-	shaderName = string(&name);
-	shaderFiles.reserve(5);
 }
 
 Shader::~Shader()
 {
 	glDeleteProgram(program);
+}
+
+const std::string& Shader::GetName() const
+{
+	return shaderName;
 }
 
 void Shader::BindTexturesUnits()
@@ -140,7 +143,7 @@ unsigned int Shader::CreateAndLink()
 
 	// Compile shaders
 	for (auto S : shaderFiles) {
-		auto shaderID = Shader::CreateShader(S.file, S.type);
+		auto shaderID = CreateShader(S.file, S.type);
 		if (shaderID) {
 			shaders.push_back(shaderID);
 		}
@@ -148,7 +151,7 @@ unsigned int Shader::CreateAndLink()
 
 	// Create Program and Link
 	if (shaders.size()) {
-		program = Shader::CreateProgram(shaders);
+		program = CreateProgram(shaders);
 
 		if (program)
 		{
@@ -231,12 +234,12 @@ unsigned int Shader::CreateShader(const string &shaderFile, GLenum shaderType)
 		if(shaderType == GL_COMPUTE_SHADER)				str_shader_type="COMPUTE";
 
 		glGetShaderiv(glShaderObject, GL_INFO_LOG_LENGTH, &infoLogLength);
-		vector<char> shader_log(infoLogLength);
-		glGetShaderInfoLog(glShaderObject, infoLogLength, NULL, &shader_log[0]);
+		vector<char> shaderLog(infoLogLength);
+		glGetShaderInfoLog(glShaderObject, infoLogLength, NULL, &shaderLog[0]);
 
 		cout << "\n-----------------------------------------------------\n";
-		cout << "\n[ERROR]: [" << str_shader_type << " SHADER]\n\n";
-		cout << &shader_log[0] << "\n";
+		cout << "\n[ERROR]: [" << str_shader_type << " SHADER]" << shaderFile << "\n\n";
+		cout << &shaderLog[0] << "\n";
 		cout << "-----------------------------------------------------" << endl;
 
 		return 0;
@@ -265,11 +268,11 @@ unsigned int Shader::CreateProgram(const vector<unsigned int> &shaderObjects)
 	if(linkResult == GL_FALSE) {
 
 		glGetProgramiv(glProgramObject, GL_INFO_LOG_LENGTH, &infoLogLength);
-		vector<char> program_log(infoLogLength);
-		glGetProgramInfoLog(glProgramObject, infoLogLength, NULL, &program_log[0]);
+		vector<char> programLog(infoLogLength);
+		glGetProgramInfoLog(glProgramObject, infoLogLength, NULL, &programLog[0]);
 
 		cout << "Shader Loader : LINK ERROR" << endl;
-		cout << &program_log[0] << endl;
+		cout << &programLog[0] << endl;
 
 		return 0;
 	}

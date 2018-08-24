@@ -23,4 +23,6 @@ typedef struct GLFWwindow GLFWwindow;
 #define GL_REPEAT			0x2901
 #define GL_LINEAR			0x2601
 
+#define GL_RGBA				0x1908
+#define GL_RGBA8			0x8058
 #define GL_UNSIGNED_BYTE	0x1401

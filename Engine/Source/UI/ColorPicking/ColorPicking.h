@@ -16,15 +16,15 @@ class Transform;
 namespace WorldControl
 {
 	enum class ControlMode {
-		LOCAL,
-		WORLD
+		Local,
+		World
 	};
 
 	enum class GizmoMode
 	{
-		MOVE,
-		ROTATE,
-		SCALE
+		Move,
+		Rotate,
+		Scale
 	};
 
 	#define GIZMO_MODE_ID(x) (static_cast<unsigned int>(x))

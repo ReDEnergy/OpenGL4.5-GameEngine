@@ -6,8 +6,8 @@
 
 enum class GIZMO_MODE {
 	TRANSLATE,
-	ROTATE,
-	SCALE
+	Rotate,
+	Scale
 };
 
 class DLLExport Gizmo : virtual public GameObject

@@ -131,7 +131,7 @@ void TextureDebugger::Render()
 		for (size_t i = 0; i < size; i++)
 		{
 			if (channels[activeChannel][i])
-				channels[activeChannel][i]->BindToTextureUnit(GL_TEXTURE0 + i);
+				channels[activeChannel][i]->BindToTextureUnit(GL_TEXTURE0 + static_cast<unsigned int>(i));
 		}
 
 		renderingQuad->Render(shader);

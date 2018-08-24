@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <chrono>
 
 #include <include/gl.h>
 #include <include/glm.h>
@@ -16,22 +17,6 @@
 #include <Manager/ShaderManager.h>
 #include <Manager/TextureManager.h>
 
-class GenericParticle
-{
-public:
-	GenericParticle() { };
-	GenericParticle(const glm::vec4 &pos, const glm::vec4 &spd)
-		: position(pos)
-		, speed(spd)
-	{}
-
-	virtual ~GenericParticle() {}
-
-public:
-	glm::vec4 position;
-	glm::vec4 speed;
-};
-
 template <class T>
 class ParticleEffect
 {
@@ -39,9 +24,9 @@ class ParticleEffect
 		ParticleEffect();
 		virtual ~ParticleEffect();
 
-		virtual void Generate(unsigned int particleCount, const T &initValue);
-		virtual void Render(Camera *camera, Shader *shader);
-		virtual void Render(Camera *camera, Shader *shader, unsigned int nrParticles);
+		virtual void Generate(unsigned int particleCount);
+		virtual void FillRandomData(std::function<T(void)> generator);
+		virtual void Render(Camera *camera, Shader *shader, unsigned int nrParticles = -1);
 
 		virtual SSBO<T>* GetParticleBuffer() const
 		{
@@ -54,14 +39,13 @@ class ParticleEffect
 		}
 
 	public:
-		Transform *source;
+		Transform * source;
 
 	protected:
 		unsigned int particleCount;
 		GLuint VAO;
 		GLuint VBO;
 		SSBO<T> *particles;
-		Texture *billboard;
 };
 
 
@@ -69,7 +53,6 @@ template <class T>
 ParticleEffect<T>::ParticleEffect()
 {
 	source = new Transform();
-	billboard = Manager::GetTexture()->GetTexture("explosion.bmp");
 	particles = nullptr;
 }
 
@@ -81,26 +64,6 @@ ParticleEffect<T>::~ParticleEffect()
 }
 
 template <class T>
-void ParticleEffect<T>::Render(Camera *camera, Shader *shader)
-{
-	// Bind MVP
-	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(source->GetModel()));
-	camera->BindViewMatrix(shader->loc_view_matrix);
-	camera->BindProjectionMatrix(shader->loc_projection_matrix);
-	camera->BindPosition(shader->loc_eye_pos);
-
-	// Bind Billboard Texture
-	billboard->BindToTextureUnit(GL_TEXTURE0);
-
-	// Bind Particle Storage
-	particles->BindBuffer(0);
-
-	// Render Particles
-	glBindVertexArray(VAO);
-	glDrawElements(GL_POINTS, particleCount, GL_UNSIGNED_INT, 0);
-}
-
-template <class T>
 void ParticleEffect<T>::Render(Camera *camera, Shader *shader, unsigned int nrParticles)
 {
 	// Bind MVP
@@ -109,49 +72,51 @@ void ParticleEffect<T>::Render(Camera *camera, Shader *shader, unsigned int nrPa
 	camera->BindProjectionMatrix(shader->loc_projection_matrix);
 	camera->BindPosition(shader->loc_eye_pos);
 
-	// Bind Billboard Texture
-	billboard->BindToTextureUnit(GL_TEXTURE0);
-
 	// Bind Particle Storage
 	particles->BindBuffer(0);
 
 	// Render Particles
 	glBindVertexArray(VAO);
-	glDrawElements(GL_POINTS, nrParticles, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_POINTS, MIN(particleCount, nrParticles), GL_UNSIGNED_INT, 0);
 }
 
 template <class T>
-void ParticleEffect<T>::Generate(unsigned int particleCount, const T &initValue)
+void ParticleEffect<T>::Generate(unsigned int particleCount)
 {
 	this->particleCount = particleCount;
 
 	SAFE_FREE(particles);
 	particles = new SSBO<T>(particleCount);
 
-	std::vector<unsigned int> indices;
+	unsigned int *indices = new unsigned int[particleCount];
+	unsigned int *p = indices;
 	for (unsigned int i = 0; i < particleCount; i++)
-		indices.push_back(i);
+	{
+		*p = i;
+		p++;
+	}
 
 	GLuint IBO;
 
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	//glGenBuffers(1, &VBO);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, particles.size() * sizeof(T), &particles[0], GL_STATIC_DRAW);
-
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-	//// position info
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(T), (void*)0);
-
-	//// speed info
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(T), (void*)(sizeof(float) * 4));
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, particleCount * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
+
+	delete[] indices;
+}
+
+template <class T>
+void ParticleEffect<T>::FillRandomData(std::function<T(void)> generator)
+{
+	particles->ReadBuffer();
+	auto data = const_cast<T*>(particles->GetBuffer());
+	for (unsigned int i = 0; i < particleCount; i++) {
+		data[i] = generator();
+	}
+	particles->SetBufferData(data);
 }

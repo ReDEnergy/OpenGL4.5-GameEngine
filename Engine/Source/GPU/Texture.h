@@ -26,7 +26,8 @@ class DLLExport Texture
 			- GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_FLOAT, etc
 			- full list: https://www.opengl.org/sdk/docs/man/html/glTexImage2D.xhtml
 		*/
-		void Create2DTexture(uint width, uint height, uint chn, uint bpp = 8, GLenum dataType = GL_UNSIGNED_BYTE);
+		void Create2DTexture(uint width, uint height, uint chn, uint bpp = 8, GLenum pixelDataType = GL_UNSIGNED_BYTE);
+		void Create2D(uint width, uint height, uint chn, GLint internalFormat = GL_RGBA8, GLenum format = GL_RGBA, GLenum pixelDataType = GL_UNSIGNED_BYTE);
 
 		void Create2DTextureFromNative(GLuint textureID, uint width, uint height, uint chn);
 		void CreateCubeTexture(const float* data, uint width, uint height, uint chn);
@@ -57,12 +58,13 @@ class DLLExport Texture
 		uint height;
 		uint channels;
 		uint bitsPerPixel;
-		uchar *buffer;
 
 		GLuint textureID;
 
 		// GL_TEXTURE_2D
 		GLuint targetType;
+		GLenum pixelDataFormat;
+
 		// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_FLOAT
 		GLenum pixelDataType;
 		GLenum wrappingMode;

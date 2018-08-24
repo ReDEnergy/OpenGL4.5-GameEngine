@@ -17,6 +17,7 @@ class DLLExport FrameBuffer
 		~FrameBuffer();
 		void Clean();
 		void Generate(int width, int height, int nrTextures, bool hasDepthTexture = true, int precision = 32);
+		void Resize(int width, int height, int precision = 32);
 
 		void Bind(bool clearBuffer = true) const;
 		void BindTexture(int textureID, unsigned int TextureUnit) const;
@@ -31,17 +32,15 @@ class DLLExport FrameBuffer
 		glm::ivec2 GetResolution() const;
 
 		void SendResolution(Shader *shader) const;
-
 		void SetClearColor(glm::vec4 clearColor);
+
 		static void Clear();
-		static void Unbind();
-		static void Unbind(const glm::ivec2 &viewportSize, bool clearBuffer = false);
-		static void SetOffScreenBuffer(FrameBuffer *buffer);
-		static FrameBuffer* GetOffScreenBuffer();
+		static void BindDefault();
+		static void BindDefault(const glm::ivec2 &viewportSize, bool clearBuffer = false);
+		static void SetViewport(const glm::ivec2 &viewportSize, const glm::ivec2 offset = glm::ivec2(0, 0));
+		static void SetDefaultClearColor(glm::vec4 clearColor);
 
 	private:
-		static FrameBuffer *OffScreenBuffer;
-
 		Texture *textures;
 		Texture *depthTexture;
 
@@ -53,4 +52,5 @@ class DLLExport FrameBuffer
 		int height;
 		unsigned int nrTextures;
 		glm::vec4 clearColor;
+		static glm::vec4 defaultClearColor;
 };

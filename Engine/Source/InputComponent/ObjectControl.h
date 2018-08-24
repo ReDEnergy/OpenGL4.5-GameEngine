@@ -5,8 +5,8 @@
 class Transform;
 
 enum class ControlMode {
-	SCALE,
-	ROTATE,
+	Scale,
+	Rotate,
 	TRANSLATE
 };
 

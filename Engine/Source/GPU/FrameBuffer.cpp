@@ -12,7 +12,7 @@
 
 using namespace std;
 
-FrameBuffer* FrameBuffer::OffScreenBuffer = nullptr;
+glm::vec4 FrameBuffer::defaultClearColor = glm::vec4(0);
 
 FrameBuffer::FrameBuffer()
 {
@@ -63,14 +63,13 @@ void FrameBuffer::Generate(int width, int height, int nrTextures, bool hasDepthT
 
 		// Create attached textures
 		textures = new Texture[nrTextures];
-		for (int i=0; i<nrTextures; i++)
+		for (int i = 0; i < nrTextures; i++)
+		{
 			textures[i].CreateFrameBufferTexture(width, height, i, precision);
+		}
 
 		glDrawBuffers(nrTextures, DrawBuffers);
 
-	} else {
-		//glDrawBuffer(GL_NONE);	// Disable writes from the color buffer
-		//glReadBuffer(GL_NONE);	// Disable reads from the color buffer
 	}
 
 	// Create depth texture
@@ -84,6 +83,24 @@ void FrameBuffer::Generate(int width, int height, int nrTextures, bool hasDepthT
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	CheckOpenGLError();
+}
+
+void FrameBuffer::Resize(int width, int height, int precision)
+{
+	this->width = width;
+	this->height = height;
+	precision = (precision / 8) * 8;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+	for (unsigned int i = 0; i < nrTextures; i++)
+	{
+		textures[i].CreateFrameBufferTexture(width, height, i, precision);
+	}
+
+	if (depthTexture) {
+		depthTexture->CreateDepthBufferTexture(width, height);
+	}
 }
 
 void FrameBuffer::Bind(bool clearBuffer) const
@@ -147,31 +164,33 @@ void FrameBuffer::BindAllTextures() const
 	}
 }
 
-void FrameBuffer::Unbind()
+void FrameBuffer::BindDefault()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void FrameBuffer::Unbind(const glm::ivec2 &viewportSize, bool clearBuffer)
+void FrameBuffer::BindDefault(const glm::ivec2 &viewportSize, bool clearBuffer)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, viewportSize.x, viewportSize.y);
-	if (clearBuffer)
+	if (clearBuffer) {
+		glClearColor(defaultClearColor.r, defaultClearColor.g, defaultClearColor.b, defaultClearColor.a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
 	CheckOpenGLError();
+}
+
+void FrameBuffer::SetViewport(const glm::ivec2 & viewportSize, const glm::ivec2 offset)
+{
+	glViewport(offset.x, offset.y, viewportSize.x, viewportSize.y);
+}
+
+void FrameBuffer::SetDefaultClearColor(glm::vec4 clearColor)
+{
+	defaultClearColor = clearColor;
 }
 
 void FrameBuffer::Clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void FrameBuffer::SetOffScreenBuffer(FrameBuffer *buffer)
-{
-	OffScreenBuffer = buffer;
-}
-
-FrameBuffer * FrameBuffer::GetOffScreenBuffer()
-{
-	return OffScreenBuffer;
 }

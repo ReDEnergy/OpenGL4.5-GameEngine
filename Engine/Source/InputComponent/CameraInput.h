@@ -15,8 +15,9 @@ class DLLExport CameraInput : public ObjectInput
 		void OnMouseBtnPress(int mouseX, int mouseY, int button, int mods);
 		void OnMouseBtnRelease(int mouseX, int mouseY, int button, int mods);
 
-	public:
+	private:
 		Camera *camera;
-		bool rotateTPS;
+		float sensitivityX;
+		float sensitivityY;
 };
 

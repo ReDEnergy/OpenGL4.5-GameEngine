@@ -17,6 +17,8 @@ class DLLExport Shader
 		Shader(const char &name);
 		~Shader();
 
+		const std::string& GetName() const;
+
 		unsigned int Reload();
 		void ClearShaders();
 		void AddShader(const std::string &shaderFile, GLenum shaderType);

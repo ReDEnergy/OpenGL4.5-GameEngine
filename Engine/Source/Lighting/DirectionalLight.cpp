@@ -100,7 +100,7 @@ void DirectionalLight::CastShadows()
 	}
 
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	FrameBuffer::Unbind();
+	FrameBuffer::BindDefault();
 }
 
 void DirectionalLight::Render(const Shader * shader) const

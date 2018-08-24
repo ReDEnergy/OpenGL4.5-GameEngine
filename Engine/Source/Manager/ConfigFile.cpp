@@ -60,3 +60,16 @@ string ConfigFile::GetResourceFileLoc(const char *resourceID)
 
 	return RESOURCE_PATH::CONFIG + fileName;
 };
+
+std::vector<string> ConfigFile::GetResourceFiles(const char *resourceID)
+{
+	vector<string> configFiles;
+	auto files = config->child(resourceID);
+
+	for (auto configFile : files.children())
+	{
+		configFiles.push_back(RESOURCE_PATH::CONFIG + configFile.child_value());
+	}
+
+	return configFiles;
+};

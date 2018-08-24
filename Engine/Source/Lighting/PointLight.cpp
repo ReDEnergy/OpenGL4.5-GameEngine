@@ -87,7 +87,7 @@ void PointLight::CastShadows()
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	FrameBuffer::Unbind();
+	FrameBuffer::BindDefault();
 }
 
 void PointLight::InitCaster()

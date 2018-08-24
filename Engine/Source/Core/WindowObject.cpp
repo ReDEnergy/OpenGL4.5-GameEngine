@@ -46,6 +46,7 @@ WindowObject::WindowObject(WindowProperties properties)
 
 	// Init OpenGL Window
 	props.fullScreen ? FullScreen() : WindowMode();
+	//SetVSync(props.vSync);
 
 	CheckOpenGLError();
 
@@ -84,7 +85,7 @@ void WindowObject::SetVSync(bool state)
 {
 	props.vSync = state;
 	#if defined(_WIN32) && !defined(OPENGL_ES)
-	wglSwapIntervalEXT(state);
+	wglSwapIntervalEXT(state ? 1 : 0);
 	#else
 	glfwSwapInterval(state);
 	#endif
@@ -261,9 +262,13 @@ void WindowObject::Subscribe(ObjectInput *IC)
 void WindowObject::KeyCallback(int key, int scanCode, int action, int mods)
 {
 	keyMods = mods;
-	keyStates[key] = action ? true : false;
-	keyEvents[registeredKeyEvents] = key;
-	registeredKeyEvents++;
+	bool keyState = action ? true : false;
+	if (keyStates[key] != keyState)
+	{
+		keyStates[key] = keyState;
+		keyEvents[registeredKeyEvents] = key;
+		registeredKeyEvents++;
+	}
 }
 
 void WindowObject::MouseButtonCallback(int button, int action, int mods)

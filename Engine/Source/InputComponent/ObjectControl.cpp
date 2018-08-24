@@ -28,12 +28,12 @@ void ObjectControl::OnKeyPress(int key, int mods)
 	switch (key)
 	{
 		case GLFW_KEY_R:
-			controlMode = ControlMode::SCALE;
-			cout << "ControlMode: SCALE" << endl;
+			controlMode = ControlMode::Scale;
+			cout << "ControlMode: Scale" << endl;
 			return;
 		case GLFW_KEY_E:
-			controlMode = ControlMode::ROTATE;
-			cout << "ControlMode: ROTATE" << endl;
+			controlMode = ControlMode::Rotate;
+			cout << "ControlMode: Rotate" << endl;
 			return;
 		case GLFW_KEY_W:
 			controlMode = ControlMode::TRANSLATE;
@@ -74,7 +74,7 @@ void ObjectControl::OnInputUpdate(float deltaTime, int mods)
 	}
 
 	// Rotate
-	if (controlMode == ControlMode::ROTATE) {
+	if (controlMode == ControlMode::Rotate) {
 		if (window->KeyHold(GLFW_KEY_KP_7)) {
 			transform->RotateLocalOZ(deltaTime);
 		}
@@ -96,7 +96,7 @@ void ObjectControl::OnInputUpdate(float deltaTime, int mods)
 	}
 
 	// Scale
-	if (controlMode == ControlMode::SCALE) {
+	if (controlMode == ControlMode::Scale) {
 		if (window->KeyHold(GLFW_KEY_KP_ADD)) {
 			transform->Scale(deltaTime);
 		}

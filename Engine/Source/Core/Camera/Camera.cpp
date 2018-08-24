@@ -205,7 +205,10 @@ void Camera::Log() const
 void Camera::BindViewProj(const Shader * shader) const
 {
 	if (shader->loc_eye_pos)
+	{
 		BindPosition(shader->loc_eye_pos);
+	}
+		
 	BindViewMatrix(shader->loc_view_matrix);
 	BindProjectionMatrix(shader->loc_projection_matrix);
 }

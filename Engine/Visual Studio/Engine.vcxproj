@@ -31,32 +31,32 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Engine</RootNamespace>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'" Label="Configuration">
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|Win32'" Label="Configuration">
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -93,7 +93,6 @@
     <Import Project="Property Sheets\glfw.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
-    <Import Project="Property Sheets\PhysX.debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug ARM|x64'" Label="PropertySheets">
     <Import Project="Property Sheets\include.props" />
@@ -124,7 +123,6 @@
     <Import Project="Property Sheets\glfw.props" />
     <Import Project="Property Sheets\sfml.props" />
     <Import Project="Property Sheets\freetype.props" />
-    <Import Project="Property Sheets\PhysX.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -259,7 +257,7 @@
     <ClCompile Include="..\Source\Core\WindowManager.cpp" />
     <ClCompile Include="..\Source\Core\WindowObject.cpp" />
     <ClCompile Include="..\Source\Core\World.cpp" />
-    <ClCompile Include="..\Source\Debugging\ProfileTimer.cpp" />
+    <ClCompile Include="..\Source\Debugging\ProfilingTimer.cpp" />
     <ClCompile Include="..\Source\Debugging\TextureDebugger.cpp" />
     <ClCompile Include="..\Source\DLL\dllmain.cpp" />
     <ClCompile Include="..\Source\Editor\Gizmo.cpp" />
@@ -345,10 +343,11 @@
     <ClInclude Include="..\Source\Core\WindowManager.h" />
     <ClInclude Include="..\Source\Core\WindowObject.h" />
     <ClInclude Include="..\Source\Core\World.h" />
-    <ClInclude Include="..\Source\Debugging\ProfileTimer.h" />
+    <ClInclude Include="..\Source\Debugging\ProfilingTimer.h" />
     <ClInclude Include="..\Source\Debugging\TextureDebugger.h" />
     <ClInclude Include="..\Source\Editor\Gizmo.h" />
     <ClInclude Include="..\Source\Engine.h" />
+    <ClInclude Include="..\Source\EngineForward.h" />
     <ClInclude Include="..\Source\Event\EventChannel.h" />
     <ClInclude Include="..\Source\Event\EventListener.h" />
     <ClInclude Include="..\Source\Event\EventType.h" />

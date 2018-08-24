@@ -16,8 +16,8 @@ class SSBO
 	public:
 		SSBO(unsigned int size)
 		{
+			data = nullptr;
 			this->size = size;
-			data = new StorageEntry[size];
 			memorySize = size * sizeof(StorageEntry);
 
 			#ifdef GLEW_ARB_shader_storage_buffer_object
@@ -57,6 +57,11 @@ class SSBO
 
 		void ReadBuffer()
 		{
+			if (data == nullptr)
+			{
+				data = new StorageEntry[size];
+			}
+
 			Bind();
 			GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_READ_ONLY);
 			memcpy(data, p, memorySize);

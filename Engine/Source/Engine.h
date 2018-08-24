@@ -9,6 +9,10 @@
 #include <include/gl.h>
 #endif
 
+#ifndef GL_DISABLE_GLEW
+#include <include/gl_utils.h>
+#endif
+
 #include <include/glm.h>
 #include <include/glm_utils.h>
 #include <include/math.h>
@@ -86,7 +90,7 @@
 
 // Debugging
 #include <Debugging/TextureDebugger.h>
-#include <Debugging/ProfileTimer.h>
+#include <Debugging/ProfilingTimer.h>
 
 #ifdef PHYSICS_ENGINE
 #include <Physics/PhysXCore.h>

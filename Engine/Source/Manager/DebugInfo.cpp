@@ -140,5 +140,5 @@ void DebugInfo::Render(const Camera *camera) const
 		obj->RenderDebug(S);
 	}
 
-	FrameBuffer::Unbind();
+	FrameBuffer::BindDefault();
 }

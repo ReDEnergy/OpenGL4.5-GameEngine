@@ -23,7 +23,7 @@ template <class T>
 class ParticleEffect;
 
 // Debugging
-class ProfileTimer;
+class ProfilingTimer;
 
 // Audio
 class AudioStream;
@@ -44,7 +44,6 @@ class ShaderManager;
 class TextureManager;
 
 #ifdef PHYSICS_ENGINE
-class HavokCore;
 class PhysicsManager;
 #endif
 

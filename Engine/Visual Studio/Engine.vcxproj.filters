@@ -89,9 +89,6 @@
     <Filter Include="Engine\Prototyping">
       <UniqueIdentifier>{5c3f7b62-9b16-43f6-972f-34fc141ac341}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GPU">
-      <UniqueIdentifier>{9fbcfe3b-4b84-4d7c-8648-d77b2675da87}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Core\GLES">
       <UniqueIdentifier>{85c7604f-322d-4cf6-9db0-2976da646cf3}</UniqueIdentifier>
     </Filter>
@@ -106,6 +103,9 @@
     </Filter>
     <Filter Include="Engine\Threading">
       <UniqueIdentifier>{b506bc5b-d9e5-4dee-a36a-1e87044ca4ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GPU">
+      <UniqueIdentifier>{9fbcfe3b-4b84-4d7c-8648-d77b2675da87}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -304,9 +304,6 @@
     <ClCompile Include="..\Source\Component\Transform\FreezeTransform.cpp">
       <Filter>Engine\Components\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Debugging\ProfileTimer.cpp">
-      <Filter>Engine\Debugging</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\include\gl.cpp">
       <Filter>Engine\include</Filter>
     </ClCompile>
@@ -351,6 +348,9 @@
     </ClCompile>
     <ClCompile Include="..\Source\Event\EventChannel.cpp">
       <Filter>Engine\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Debugging\ProfilingTimer.cpp">
+      <Filter>Engine\Debugging</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -600,9 +600,6 @@
     <ClInclude Include="..\Source\Component\Transform\FreezeTransform.h">
       <Filter>Engine\Components\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Debugging\ProfileTimer.h">
-      <Filter>Engine\Debugging</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Lighting\FrustumSplit.h">
       <Filter>Engine\Lighting</Filter>
     </ClInclude>
@@ -661,5 +658,9 @@
     <ClInclude Include="..\Source\templates\instance.h">
       <Filter>Engine\templates</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Debugging\ProfilingTimer.h">
+      <Filter>Engine\Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\EngineForward.h" />
   </ItemGroup>
 </Project>
