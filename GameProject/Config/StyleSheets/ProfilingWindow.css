@@ -1,0 +1,42 @@
+QDockWidget {
+	color: #FFF;
+	font-weight: bold;
+	min-height: 200px;
+	min-width: 250px;
+}
+
+QDockWidget::title {
+	background: #E03838;
+	text-align: center;
+	padding-left: 35px;
+}
+
+QWidget#Body {
+}
+
+QScrollArea {
+	min-height: 200px;
+}
+
+QLabel#SimpleFloatInputLabel,
+QLabel#SimpleTextBoxLabel {
+	border: 1px solid #777;
+	border-left: none;
+	border-right: none;
+	min-width: 120px;
+}
+
+QWidget#Title {
+	font-weight: bold;
+	max-height: 3em;
+}
+
+QWidget#FrameTime {
+	max-height: 2em;
+	background: #F23A3A;
+}
+
+QWidget#FrameTime QLabel {
+	font-weight: bold;
+	color: #FFF;
+}

@@ -9,6 +9,8 @@ using namespace std;
 #include <Editor/UI/DockWindowManager.h>
 #include <Utils/GPU.h>
 
+#include <Game/Game.h>
+
 #include <QOpenGLContext>
 #include <QWGLNativeContext>
 #include <QLayout>
@@ -34,7 +36,7 @@ void GameWindow::InitUI()
 
 void GameWindow::InitUIState()
 {
-	auto FBO = FrameBuffer::GetOffScreenBuffer();
+	auto FBO = Game::GetOffScreenBuffer();
 	auto resolution = FBO->GetResolution();
 	auto aspectRatio = static_cast<float>(resolution.x) / resolution.y;
 
@@ -75,7 +77,7 @@ void GameWindow::UpdateUI()
 
 void GameWindow::Render()
 {
-	auto FBO = FrameBuffer::GetOffScreenBuffer();
+	auto FBO = Game::GetOffScreenBuffer();
 	if (!FBO) return;
 
 	// Compute the correct viewport based on original texture aspect ratio

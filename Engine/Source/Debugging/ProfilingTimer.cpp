@@ -54,14 +54,6 @@ void ProfilingTimer::Reset()
 	laps.clear();
 }
 
-void ProfilingTimer::Lap(unsigned int label)
-{
-	if (isActive)
-	{
-		laps.push_back(LapInfo(label));
-	}
-}
-
 void ProfilingTimer::Pause()
 {
 	laps.push_back(LapInfo(LapInfo::IntervalType::Idle));

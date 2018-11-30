@@ -25,7 +25,7 @@ ProfilingWindow::ProfilingWindow()
 	Configure("ProfilingWindow");
 
 	newPerfInfo = false;
-	profileInfo = new ProfileTimer();
+	profileInfo = new ProfilingTimer();
 
 	SubscribeToEvent("Set-Profile-Timer");
 	SubscribeToEvent(EventType::FRAME_END);
@@ -111,8 +111,8 @@ void ProfilingWindow::UpdateList()
 
 	// Init the current nodes
 	for (uint i = 0; i < newSize; i++) {
-		channels[i]->SetLabel(times[i + 1].label.c_str());
-		channels[i]->SetValue(1000 * (times[i + 1].time - times[i].time));
+		channels[i]->SetLabel(std::to_string(times[i + 1].label).c_str());
+		channels[i]->SetValue(times[i + 1].GetDeltaTime<std::milli>(times[i]));
 	}
 }
 
@@ -129,7 +129,7 @@ void ProfilingWindow::UpdateUI()
 	}
 	else {
 		for (uint i = 0; i < size; i++) {
-			channels[i]->SetValue(1000 * (times[i + 1].time - times[i].time));
+			channels[i]->SetValue(times[i + 1].GetDeltaTime<std::milli>(times[i]));
 		}
 	}
 
@@ -152,6 +152,6 @@ void ProfilingWindow::OnEvent(EventType Event, void * data)
 void ProfilingWindow::OnEvent(const string & eventID, void * data)
 {
 	if (eventID.compare("Set-Profile-Timer") == 0) {
-		appPerfInfo = (ProfileTimer*)data;
+		appPerfInfo = (ProfilingTimer*)data;
 	}
 }

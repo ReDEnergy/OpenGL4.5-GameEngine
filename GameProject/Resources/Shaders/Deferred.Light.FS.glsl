@@ -17,7 +17,8 @@ layout(location = 0) out vec3 out_color;
 vec4 PhongLight(vec3 w_pos, vec3 w_N);
 vec4 CalcSpotLight(vec3 w_pos, vec3 w_N);
 
-void main() {
+void main()
+{
 	vec2 text_coord = gl_FragCoord.xy / resolution;
 	vec3 wPos = texture(WorldPos, text_coord).xyz;
 	vec3 wNorm = texture(WorldNorm, text_coord).xyz;

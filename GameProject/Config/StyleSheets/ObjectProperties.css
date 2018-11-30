@@ -1,0 +1,24 @@
+QDockWidget
+{
+	min-width: 320px;
+	max-width: 400px;
+}
+
+QWidget#Body QWidget {
+	/*border: 1px solid #DDD;*/
+	font-family: Arial;
+}
+
+QWidget[GLMVecComponent] QLineEdit {
+	border: 1px solid #DDD;
+}
+
+QLabel[title] {
+	min-height: 2em;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+QPushButton {
+	min-height: 1.6em;
+}

@@ -6,8 +6,8 @@
 #include <string>
 
 namespace UIOverlay {
-	class Command : public Object {
-		Command() {};
+	class CommandBufferEntry : public Object {
+		CommandBufferEntry() {};
 		std::string ID;
 	};
 }

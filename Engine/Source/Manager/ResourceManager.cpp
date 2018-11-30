@@ -28,19 +28,20 @@
 
 using namespace std;
 
-ResourceManager::ResourceManager() {
+ResourceManager::ResourceManager()
+{
 }
 
-ResourceManager::~ResourceManager() {
+ResourceManager::~ResourceManager()
+{
 	for (auto &obj : _objects)
 		SAFE_FREE(obj.second);
 	for (auto &obj : _meshes)
 		SAFE_FREE(obj.second);
 }
 
-void ResourceManager::Load(const char* file) {
-	Manager::Debug->InitManager("Resources");
-
+void ResourceManager::Load(const char* file)
+{
 	// Load document
 	const pugi::xml_document &doc = *(pugi::LoadXML(file));
 

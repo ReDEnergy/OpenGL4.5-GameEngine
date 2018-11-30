@@ -15,6 +15,7 @@ class DLLExport RenderingSystem
 
 		void SetGlobalCulling(OpenGL::CULL faces);
 		void DisableGlobalCulling();
+
 		void CullFace(OpenGL::CULL faces);
 		void RevertPreviousCulling();
 

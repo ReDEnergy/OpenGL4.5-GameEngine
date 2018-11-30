@@ -104,6 +104,7 @@ class DLLExport WindowObject
 		void KeyCallback(int key, int scanCode, int action, int mods);
 		void MouseButtonCallback(int button, int action, int mods);
 		void MouseMove(int posX, int posY);
+		void MouseScroll(double offsetX, double offsetY);
 
 	private:
 		void SetWindowCallbacks();
@@ -140,6 +141,10 @@ class DLLExport WindowObject
 		bool mouseMoved;
 		int mouseDeltaX;
 		int mouseDeltaY;
+
+		bool scrollEvent;
+		double scrollOffsetX;
+		double scrollOffsetY;
 
 		// States for keyboard buttons - PRESSED(true) / RELEASED(false)
 		int registeredKeyEvents;

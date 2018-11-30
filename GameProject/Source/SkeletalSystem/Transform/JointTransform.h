@@ -1,9 +1,10 @@
 #pragma once
 #include <Component/Transform/Transform.h>
 
-class JointTransform
-	: public Transform
+class JointTransform : public Transform
 {
+	friend class Transform;
+
 	public:
 		JointTransform();
 		virtual ~JointTransform();

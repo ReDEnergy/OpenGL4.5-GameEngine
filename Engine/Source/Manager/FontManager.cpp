@@ -30,7 +30,6 @@ FontManager::~FontManager() {
 }
 
 void FontManager::Init() {
-	Manager::Debug->InitManager("Font");
 
 	 /* Text to be printed */
 	const char *cache = " !\"#$%&'()*+,-./0123456789:;<=>?"

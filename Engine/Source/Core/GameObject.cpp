@@ -128,7 +128,7 @@ void GameObject::SetMesh(Mesh * mesh)
 	SetupAABB();
 }
 
-Mesh* GameObject::GetMesh() const
+const Mesh* GameObject::GetMesh() const
 {
 	return meshRenderer ? meshRenderer->mesh : nullptr;
 }
@@ -176,7 +176,7 @@ bool GameObject::ColidesWith(const GameObject &object) const
 
 void GameObject::Render(const Shader *shader) const
 {
-	if (renderer->IsRendered() && meshRenderer) {
+	if (renderer->IsRendered() && meshRenderer && meshRenderer->IsValid()) {
 		glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
 		glUniform1ui(shader->loc_object_class, 0);
 
@@ -191,7 +191,7 @@ void GameObject::Render(const Shader *shader) const
 
 void GameObject::RenderTransparent(const Shader * shader) const
 {
-	if (renderer->IsRendered() && meshRenderer) {
+	if (renderer->IsRendered() && meshRenderer && meshRenderer->IsValid()) {
 		glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(transform->GetModel()));
 
 		auto opacity = renderer->GetOpacity();

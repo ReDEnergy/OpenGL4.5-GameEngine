@@ -20,11 +20,11 @@ class DLLExport WindowManager
 		static void OnGLFWResize(GLFWwindow *W, int width, int height);
 		static void OnGLFWError(int error, const char* description);
 		static void RegisterWindow(WindowObject * W);
-		static WindowObject* Create(WindowProperties &properties);
 		static WindowObject* GetDefaultWindow();
 		static WindowObject* GetWindowObjectByName(const char *name = nullptr);
 		static WindowObject* GetShaderdWindowContext();
 		static WindowObject* GetWindowObject(GLFWwindow *W);
+		static WindowObject* DetachCurrentContext();
 
 	private:
 		static std::vector<WindowObject*> windowList;

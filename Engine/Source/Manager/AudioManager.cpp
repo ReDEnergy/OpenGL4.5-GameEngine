@@ -24,7 +24,6 @@ AudioManager::~AudioManager() {
 }
 
 void AudioManager::Init() {
-	Manager::Debug->InitManager("Audio");
 }
 
 void AudioManager::LoadAudio(const string &fileLocation, const string &UID, AUDIO_TYPE TYPE)

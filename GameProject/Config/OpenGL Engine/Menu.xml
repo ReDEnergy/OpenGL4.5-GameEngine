@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+TODO:
+	- add support for 2 state entries (Yes / No)
+	- add support for predefined entries (multiple options)
+	- add support for text input entries
+	- add support for slider entries
+	- add support for multi-option select entries
+	- event entries - send an event
+	- menu-page entries
+-->
+<pages>
+	<page>
+		<id>in_game_menu</id>
+		<name>Menu</name>
+		<entries>
+			<entry type="action">
+				<action>resume</action>
+				<name>Resume</name>
+			</entry>
+			<entry type="page">
+				<action>graphics</action>
+				<name>Graphics</name>
+			</entry>
+			<entry type="page">
+				<action>audio-music</action>
+				<name>Music Settings</name>
+			</entry>
+			<entry type="page">
+				<action>debug</action>
+				<name>Debug</name>
+			</entry>
+			<entry type="action">
+				<action>exit</action>
+				<name>Exit</name>
+			</entry>
+		</entries>
+	</page>
+	<page>
+		<id>graphics</id>
+		<name>Graphics</name>
+		<entries>
+			<entry type="toggle">
+				<action>ssao</action>
+				<name>Screen Space Ambient Occlusion</name>
+				<value>true</value>
+			</entry>
+			<entry type="toggle">
+				<name>Forward Rendering</name>
+				<action>forward-rendering</action>
+				<value>false</value>
+			</entry>
+			<entry type="toggle">
+				<name>Vertical Sync</name>
+				<action>vsync-rendering</action>
+				<value>true</value>
+			</entry>
+		</entries>
+	</page>
+	<page>
+		<id>debug</id>
+		<name>Debug</name>
+	</page>
+	<page>
+		<id>audio-music</id>
+		<name>Music Options</name>
+		<entries>
+			<entry type="action">
+				<action>volume-up</action>
+				<name>Volume Up</name>
+			</entry>
+			<entry type="action">
+				<action>volume-down</action>
+				<name>Volume Down</name>
+			</entry>
+		</entries>
+	</page>	
+</pages>

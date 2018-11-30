@@ -17,7 +17,6 @@ using namespace std;
 EventSystem::EventSystem()
 {
 	logUnsafeEvents = false;
-	Manager::Debug->InitManager("Event");
 	dynamicTimers = new TimerManager<string>();
 	standardTimers = new TimerManager<EventType>();
 }

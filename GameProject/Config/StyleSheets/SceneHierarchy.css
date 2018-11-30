@@ -1,0 +1,44 @@
+QDockWidget {
+	color: #FFF;
+	font-weight: bold;
+	min-height: 200px;
+	min-width: 250px;
+	max-width: 250px;
+}
+
+QDockWidget::title {
+	background: #E03838;
+	text-align: center;
+	padding-left: 35px;
+}
+
+QDockWidget::close-button, QDockWidget::float-button {
+}
+
+QDockWidget::close-button:hover, QDockWidget::float-button:hover {
+}
+
+QDockWidget::close-button {
+    subcontrol-position: top right;
+    subcontrol-origin: margin;
+    position: absolute;
+    top: 0px; right: 0px; bottom: 0px;
+    width: 24px;
+}
+
+QDockWidget::float-button {
+    subcontrol-position: top right;
+    subcontrol-origin: margin;
+    position: absolute;
+    top: 0px; right: 24px; bottom: 0px;
+    width: 24px;
+}
+
+
+QWidget#Body QWidget {
+}
+
+QTreeWidget
+{
+	border: 0px solid #FFF;
+}

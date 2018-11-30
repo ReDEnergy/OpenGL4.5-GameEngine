@@ -79,8 +79,10 @@ bool SkinnedMesh::LoadMesh(const std::string& fileLocation, const std::string& f
 	return false;
 }
 
-bool SkinnedMesh::InitFromScene(const aiScene* pScene)
+bool SkinnedMesh::InitFromScene(const void* Scene)
 {
+	auto pScene = static_cast<const aiScene*>(Scene);
+
 	Mesh::InitFromScene(pScene);
 	boneData.resize(positions.size());
 

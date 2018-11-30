@@ -17,12 +17,9 @@
 
 using namespace std;
 
-MeshRenderer::MeshRenderer(Mesh& mesh)
+MeshRenderer::MeshRenderer(const Mesh& mesh)
 {
-	this->mesh = &mesh;
-	useMaterial = mesh.useMaterial;
-	glDrawMode = GL_TRIANGLES;
-	glVAO = mesh.buffers->VAO;
+	InitFromMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(MeshRenderer & meshRenderer)
@@ -31,6 +28,14 @@ MeshRenderer::MeshRenderer(MeshRenderer & meshRenderer)
 	useMaterial = meshRenderer.useMaterial;
 	glDrawMode = meshRenderer.glDrawMode;
 	glVAO = meshRenderer.glVAO;
+}
+
+void MeshRenderer::InitFromMesh(const Mesh& mesh)
+{
+	this->mesh = &mesh;
+	useMaterial = mesh.useMaterial;
+	glDrawMode = GL_TRIANGLES;
+	glVAO = mesh.buffers->VAO;
 }
 
 MeshRenderer::~MeshRenderer()
@@ -51,6 +56,11 @@ void MeshRenderer::SetGLDrawMode(GLenum drawMode)
 	glDrawMode = drawMode;
 }
 
+bool MeshRenderer::IsValid() const
+{
+	return glVAO != -1;
+}
+
 void MeshRenderer::Render() const
 {
 	glBindVertexArray(glVAO);
@@ -60,7 +70,6 @@ void MeshRenderer::Render() const
 			const unsigned int materialIndex = mesh->meshEntries[i].materialIndex;
 			if (materialIndex != INVALID_MATERIAL && mesh->materials[materialIndex]->texture) {
 				(mesh->materials[materialIndex]->texture)->BindToTextureUnit(GL_TEXTURE0);
-				// TODO: RenderDoc will crash here
 				//glBindBufferBase(GL_UNIFORM_BUFFER, 0, materials[materialIndex]->material_ubo);
 			}
 			else {

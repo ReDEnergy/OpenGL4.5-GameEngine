@@ -27,7 +27,7 @@ class DLLExport Texture
 			- full list: https://www.opengl.org/sdk/docs/man/html/glTexImage2D.xhtml
 		*/
 		void Create2DTexture(uint width, uint height, uint chn, uint bpp = 8, GLenum pixelDataType = GL_UNSIGNED_BYTE);
-		void Create2D(uint width, uint height, uint chn, GLint internalFormat = GL_RGBA8, GLenum format = GL_RGBA, GLenum pixelDataType = GL_UNSIGNED_BYTE);
+		void Create2D(uint width, uint height, uint chn, uint bpp = 8, GLint internalFormat = GL_RGBA8, GLenum format = GL_RGBA, GLenum pixelDataType = GL_UNSIGNED_BYTE);
 
 		void Create2DTextureFromNative(GLuint textureID, uint width, uint height, uint chn);
 		void CreateCubeTexture(const float* data, uint width, uint height, uint chn);
@@ -35,6 +35,7 @@ class DLLExport Texture
 		void CreateDepthBufferTexture(uint width, uint height);
 
 		void UploadImage(const void *img);
+		void FreeGPUMemory();
 
 		bool Load2D(const char* fileName, GLenum wrappingMode = GL_REPEAT);
 		void SaveToFile(const char* fileName) const;

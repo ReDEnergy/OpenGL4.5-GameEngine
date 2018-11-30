@@ -22,15 +22,9 @@ class DLLExport InputSystem
 		// Mouse
 		static void CursorMove(GLFWwindow *W, double posX, double posY);
 		static void MouseClick(GLFWwindow *W, int button, int action, int mods);
-		static void MouseMove(int posX, int posY, int deltaX, int deltaY);
-
-		// InputRule
-		static void RuleUpdate();
-		static void EndFrame();
+		static void MouseScroll(GLFWwindow *W, double offsetX, double offsetY);
 
 	private:
-		static void NotifyObservers(int key, int action, int mods);
-		static void NotifyObservers(int mouseX, int mouseY, int deltaX, int deltaY);
 		static void Load(const char* file);
 		static void MapKeys();
 		static void MapMouse();

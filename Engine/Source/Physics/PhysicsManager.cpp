@@ -18,7 +18,6 @@ using namespace std;
 
 PhysicsManager::PhysicsManager()
 {
-	Manager::Debug->InitManager("Physics");
 	phsyXCore = SINGLETON(PhysXCore);
 }
 

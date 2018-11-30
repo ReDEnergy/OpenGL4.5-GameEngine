@@ -76,6 +76,8 @@ class DLLExport Camera: virtual public GameObject {
 		float GetFieldOfViewY() const;
 		float GetFieldOfViewX() const;
 
+		glm::vec3 ScreenToWorldRay(int mouseX, int mouseY, glm::ivec2 screenResolution, glm::vec3 &rayOrigin) const;
+
 		bool ColidesWith(GameObject *object);
 
 	private:
@@ -107,10 +109,5 @@ class DLLExport Camera: virtual public GameObject {
 		float limitDown;
 
 		// Perspective properties
-		float zNear;
-		float zFar;
-		float FoVy;
-		float aspectRatio;
-		bool isPerspective;
-		float ortographicWidth;
+		ProjectionInfo projection;
 };

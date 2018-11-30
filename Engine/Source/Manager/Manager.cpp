@@ -25,6 +25,8 @@
 #include <Manager/ShaderManager.h>
 #include <Manager/TextureManager.h>
 
+#include <Component/Mesh.h>
+
 #include <Debugging/TextureDebugger.h>
 
 #include <Rendering/DirectOpenGL.h>
@@ -66,27 +68,26 @@ void Manager::Init()
 	InputSystem::Init();
 	WindowManager::Init();
 
-	// Init Managers
-	Config		= SINGLETON(ConfigFile);
-	RenderSys	= SINGLETON(RenderingSystem);
-	RenderSys->Init();
-
 	// Load configuration
+	Config = SINGLETON(ConfigFile);
 	Config->Load("config.xml");
 
 	// Create the default window
 	auto window = new WindowObject(*(Config->windowProperties));
 
 	// Init OpenGL
-	#ifndef OPENGL_ES
-		glewExperimental = true;
-	#endif // !OPENGL_ES
+#ifndef OPENGL_ES
+	glewExperimental = true;
+#endif
+
 	GLenum err = glewInit();
 	if (GLEW_OK != err) 	// Serious problem
 	{
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		exit(0);
 	}
+
+	CheckOpenGLError();
 
 	// Init Managers
 	Debug		= SINGLETON(DebugInfo);
@@ -100,11 +101,18 @@ void Manager::Init()
 	TextureDBG	= SINGLETON(TextureDebugger);
 	DirectGL	= SINGLETON(DirectOpenGL);
 	Texture		= SINGLETON(TextureManager);
+	RenderSys	= SINGLETON(RenderingSystem);
+
+	RenderSys->Init();
+
+	CheckOpenGLError();
 
 	#ifdef PHYSICS_ENGINE
 	PhysicsCore = SINGLETON(PhysXCore);
 	PhysicsSystem = SINGLETON(PhysicsManager);
 	#endif
+
+	CheckOpenGLError();
 
 	Resource	= SINGLETON(ResourceManager);
 	Shader		= SINGLETON(ShaderManager);

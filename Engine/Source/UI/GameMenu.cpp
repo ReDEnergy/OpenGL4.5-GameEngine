@@ -43,11 +43,12 @@ GameMenu::GameMenu()
 	HUDCamera->transform->SetWorldRotation(glm::vec3(0, 0, 0));
 	HUDCamera->Update();
 
-
-
 	for (auto &page : (Manager::GetMenu()->pages))
 	{
-		SetPageLayout(page.second);
+		if (page.second != nullptr)
+		{
+			SetPageLayout(page.second);
+		}
 	}
 
 	AttachTo(WindowManager::GetDefaultWindow());

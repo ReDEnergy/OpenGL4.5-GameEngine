@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Scene -->
+<objects>
+	<!-- Animated -->
+	<!--
+	<object>
+		<ref>soldier</ref>
+		<transform>
+			<position>20 0 4</position>
+		</transform>
+	</object>
+	<object>
+		<ref>guard</ref>
+		<transform>
+			<position>20 0 2</position>
+		</transform>
+	</object>
+	<object>
+		<ref>oildrum_center</ref>
+		<transform>
+			<position>3 0 0</position>
+			<scale>100 100 100</scale>
+		</transform>
+	</object>	
+
+	<object>
+		<ref>Vanguard</ref>
+		<transform>
+			<position>-2 0 0</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>Archer</ref>
+		<transform>
+			<position>-2 0 0</position>
+		</transform>
+	</object>		
+-->
+<!--	
+	<object>
+		<ref>YBot</ref>
+		<transform>
+			<scale>0.01</scale>
+			<position>-4 0 0</position>
+		</transform>
+	</object>		
+	<object>
+		<ref>box</ref>
+		<transform>
+			<position>3 0 -3</position>
+		</transform>
+	</object>
+	<object>
+		<ref>AtienzaNo</ref>
+		<transform>
+			<position>2 1.5 1</position>
+			<scale>0.01</scale>
+		</transform>
+	</object>	
+-->	
+	<object>
+		<ref>Archer2</ref>
+		<transform>
+			<!-- <scale>0.01</scale> -->
+			<position>2 0 0</position>
+		</transform>
+	</object>
+	<object>
+		<ref>ground</ref>
+		<transform>
+			<scale>10 1 10</scale>
+		</transform>
+	</object>
+	<object>
+		<ref>block10-10</ref>
+		<transform>
+			<position>3 0 -10</position>
+			<rotation>30 0 0</rotation>
+		</transform>
+	</object>
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>-3 1 0</position>
+		</transform>
+		<!-- <audio loop="true">relaxMono</audio> -->
+	</object>	
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>45 0 0</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>48 0 0</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>51 0 0</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>20 0 12</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>17 0 -15</position>
+		</transform>
+	</object>	
+	<object>
+		<ref>oildrum</ref>
+		<transform>
+			<position>8 0 7</position>
+		</transform>
+	</object>	
+</objects>
+
+<lights>
+	<light>
+		<transform>
+			<position>7 3 1.2</position>
+		</transform>
+		<area>8</area>
+	</light>
+	<light>
+		<transform>
+			<position>8 2 4</position>
+		</transform>
+		<area>10</area>
+	</light>
+	<light>
+		<transform>
+			<position>7.5 3.1 8</position>
+		</transform>
+		<area>10</area>
+	</light>
+	<light>
+		<transform>
+			<position>5.0 2.5 -2.5</position>
+		</transform>
+		<area>9</area>
+	</light>
+	<light>
+		<transform>
+			<position>-3.5 2.2 -5.5</position>
+		</transform>
+		<area>9</area>
+	</light>
+	<light>
+		<transform>
+			<position>7.5 2.6 -1.2</position>
+		</transform>
+		<area>7</area>
+	</light>
+	<light>
+		<transform>
+			<position>5.5 3.6 -3.2</position>
+		</transform>
+		<area>9</area>
+	</light>
+	<light>
+		<transform>
+			<position>8.5 3.6 1.2</position>
+		</transform>
+		<area>8</area>
+	</light>	
+	<light>
+		<transform>
+			<position>14.5 2.6 -1.2</position>
+		</transform>
+	<area>9</area>
+	</light>
+	<light>
+		<transform>
+			<position>24.0 4.3 -2.2</position>
+		</transform>
+		<area>9</area>
+	</light>
+	<light>
+		<transform>
+			<position>26.0 4.5 0.2</position>
+		</transform>
+		<area>9</area>
+	</light>
+	<light>
+		<transform>
+			<position>28.0 2.1 -2.3</position>
+		</transform>
+		<area>9</area>
+	</light>
+	<light>
+		<transform>
+			<position>30.0 3.5 2.6</position>
+		</transform>
+		<area>9</area>
+	</light>
+</lights>

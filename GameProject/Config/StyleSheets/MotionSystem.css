@@ -1,0 +1,22 @@
+QDockWidget {
+	color: #FFF;
+	font-weight: bold;
+	min-height: 200px;
+	min-width: 250px;
+}
+
+QDockWidget::title {
+	background: #E03838;
+	text-align: center;
+	padding-left: 35px;
+}
+
+QWidget#Body {
+	/*border: 2px solid #E03838;*/
+}
+
+QWidget[SimpleCheckBox] QLabel {
+	min-width: 100px;
+	max-width: 100px;
+	padding-left: 10px;
+}

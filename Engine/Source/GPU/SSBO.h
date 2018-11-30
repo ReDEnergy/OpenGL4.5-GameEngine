@@ -3,9 +3,9 @@
 #define CLEAR_USING_COMPUTE_SHADER
 
 #include <include/gl.h>
-#include <string>
 
 #ifdef CLEAR_USING_COMPUTE_SHADER
+	#include <Utils/OpenGL.h>
 	#include <Manager/Manager.h>
 	#include <Manager/ShaderManager.h>
 #endif
@@ -81,17 +81,20 @@ class SSBO
 			return size;
 		}
 
+		unsigned int GetBufferSize() const
+		{
+			return size * sizeof(StorageEntry);
+		}
+
 		void ClearBuffer() const
 		{
 			// Clear Buffer Object using a compute shader
-			// Reason: Intel HD4000 OpenGL glClearBufferdata (Surface PRO) will crash the program
-			// Observation: It might be faster using a compute shader (tested on: AMD R9 280x and Intel HD 4000)
 			#ifdef CLEAR_USING_COMPUTE_SHADER
 			{
 				Shader *S = Manager::GetShader()->GetShader("ClearBuffer");
 				S->Use();
 				BindBuffer(0);
-				glDispatchCompute(GLuint(UPPER_BOUND(memorySize, 32)), 1, 1);
+				OpenGL::DispatchCompute(memorySize, 1, 1, 32);
 				glMemoryBarrier(GL_ALL_BARRIER_BITS);
 			}
 			#else

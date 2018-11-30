@@ -18,8 +18,6 @@ void RenderingSystem::Init()
 
 	// glLineWidth
 	lineWidth = 1;
-
-	//glEnable(GL_LINE_SMOOTH);
 }
 
 bool RenderingSystem::Is(RenderState STATE)

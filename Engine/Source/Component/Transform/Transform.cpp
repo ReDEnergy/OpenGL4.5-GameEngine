@@ -121,7 +121,7 @@ void Transform::ForceUpdate()
 	ComputeWorldModel();
 }
 
-void Transform::Move(const glm::vec3 &offset)
+void Transform::Translate(const glm::vec3 &offset)
 {
 	_worldPosition += offset;
 	SetWorldPosition(_worldPosition);
@@ -204,6 +204,11 @@ float Transform::GetScaleSpeed() const
 float Transform::GetRotationSpeed() const
 {
 	return _rotateSpeed;
+}
+
+void Transform::Rotate(glm::quat offset)
+{
+	SetWorldRotation(_worldRotation * offset);
 }
 
 void Transform::RotateWorldOX(float deltaTime) {

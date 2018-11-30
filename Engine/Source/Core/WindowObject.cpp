@@ -1,6 +1,8 @@
 #include "WindowObject.h"
 
 #include <iostream>
+#include <functional>
+
 #include <include/gl.h>
 #include <include/glm_utils.h>
 #include <include/utils.h>
@@ -14,6 +16,7 @@
 #include <include/gl_native.h>
 
 using namespace std;
+using namespace std::placeholders;
 
 WindowProperties::WindowProperties(bool shareContext)
 	: sharedContext(shareContext)
@@ -51,6 +54,9 @@ WindowObject::WindowObject(WindowProperties properties)
 	CheckOpenGLError();
 
 	// Set default state
+	mouseMoved = false;
+	scrollEvent = false;
+
 	mouseButtonAction = 0;
 	mouseButtonStates = 0;
 	registeredKeyEvents = 0;
@@ -136,13 +142,15 @@ void WindowObject::SetWindowPosition(glm::ivec2 position)
 
 void WindowObject::CenterWindow()
 {
-	props.centered = true;
-
 	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode *videoDisplay = glfwGetVideoMode(monitor);
-	auto screenSize = glm::ivec2(videoDisplay->width, videoDisplay->height);
+	if (monitor != nullptr)
+	{
+		const GLFWvidmode *videoDisplay = glfwGetVideoMode(monitor);
+		glm::ivec2 screenSize = glm::ivec2(videoDisplay->width, videoDisplay->height);
 
-	SetWindowPosition((screenSize - props.resolution) / 2);
+		props.centered = true;
+		SetWindowPosition((screenSize - props.resolution) / 2);
+	}
 }
 
 void WindowObject::CenterPointer()
@@ -215,13 +223,11 @@ void WindowObject::WindowMode()
 		nativeRenderingContext = glfwGetWGLContext(window);
 	#endif
 
-	if (props.centered) {
+	if (props.centered)
+	{
 		CenterWindow();
-		GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-		const GLFWvidmode *videoDisplay = glfwGetVideoMode(monitor);
-		auto screenSize = glm::ivec2(videoDisplay->width, videoDisplay->height);
-		props.position = (screenSize - props.resolution) / 2;
 	}
+
 	SetSize(props.resolution.x, props.resolution.y);
 }
 
@@ -232,6 +238,7 @@ void WindowObject::SetWindowCallbacks()
 	glfwSetKeyCallback(window, InputSystem::KeyCallback);
 	glfwSetMouseButtonCallback(window, InputSystem::MouseClick);
 	glfwSetCursorPosCallback(window, InputSystem::CursorMove);
+	glfwSetScrollCallback(window, InputSystem::MouseScroll);
 }
 
 GLFWwindow * WindowObject::GetGLFWWindow() const
@@ -283,16 +290,25 @@ void WindowObject::MouseButtonCallback(int button, int action, int mods)
 void WindowObject::MouseMove(int posX, int posY)
 {
 	// Save information for processing later on the Update thread
-	if (mouseMoved) {
+	if (mouseMoved)
+	{
 		mouseDeltaX += posX - props.cursorPos.x;
 		mouseDeltaY += posY - props.cursorPos.y;
 	}
-	else {
+	else
+	{
 		mouseMoved = true;
 		mouseDeltaX = posX - props.cursorPos.x;
 		mouseDeltaY = posY - props.cursorPos.y;
 	}
 	props.cursorPos = glm::ivec2(posX, posY);
+}
+
+void WindowObject::MouseScroll(double offsetX, double offsetY)
+{
+	scrollEvent = true;
+	scrollOffsetX = offsetX;
+	scrollOffsetY = offsetY;
 }
 
 void WindowObject::UpdateObservers()
@@ -304,6 +320,15 @@ void WindowObject::UpdateObservers()
 		mouseMoved = false;
 		for (auto obs : observers) {
 			obs->OnMouseMove(props.cursorPos.x, props.cursorPos.y, mouseDeltaX, mouseDeltaY);
+		}
+	}
+
+	// Mouse scroll event
+	if (scrollEvent)
+	{
+		scrollEvent = false;
+		for (auto obs : observers) {
+			obs->OnMouseScroll(props.cursorPos.x, props.cursorPos.y, scrollOffsetX, scrollOffsetY);
 		}
 	}
 

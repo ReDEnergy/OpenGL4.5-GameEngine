@@ -14,7 +14,6 @@ using namespace std;
 
 TextureManager::TextureManager()
 {
-	Manager::Debug->InitManager("Shader");
 }
 
 void TextureManager::Init()

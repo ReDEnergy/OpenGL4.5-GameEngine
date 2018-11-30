@@ -8,7 +8,6 @@
 
 class Shader;
 class Texture;
-class WindowObject;
 
 class DLLExport FrameBuffer
 {

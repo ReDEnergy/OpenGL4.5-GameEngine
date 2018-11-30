@@ -1,13 +1,14 @@
 #pragma once
 #include <vector>
 
-#ifdef ENGINE_DLL_EXPORTS
-#include <include/assimp.h>
-#endif
 #include <include/glm.h>
 #include <include/utils.h>
 
 #include <Component/Mesh.h>
+
+#ifdef ENGINE_DLL_EXPORTS
+#include <include/assimp.h>
+#endif
 
 #include <unordered_map>
 
@@ -63,9 +64,10 @@ class DLLExport SkinnedMesh : public Mesh
 		glm::mat4 GetRootTransform() const;
 		glm::mat4 GetGlobalInverse() const;
 
-	private:
+	protected:
+		bool InitFromScene(const void* pScene) override;
+		
 		#ifdef ENGINE_DLL_EXPORTS
-		bool InitFromScene(const aiScene* pScene) override;
 		void InitMesh(const aiMesh* paiMesh, uint index);
 		#endif
 

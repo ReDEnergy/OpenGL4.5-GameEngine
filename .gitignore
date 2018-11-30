@@ -34,6 +34,7 @@
 /GameProject/x64
 
 
-/libs/Qt
+/libs/Qt5.7
+/libs/OpenGL Engine
 /libs/PhysX
 /GameProject/*.lnk

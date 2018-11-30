@@ -10,6 +10,7 @@
 
 #include <Component/AABB.h>
 #include <Component/Mesh.h>
+#include <Component/MeshRenderer.h>
 #include <Component/Renderer.h>
 #include <Component/ObjectInput.h>
 #include <Component/Transform/Transform.h>
@@ -41,10 +42,10 @@ void Camera::Init()
 	type = CameraType::FirstPerson;
 
 	// Default perspective
-	zNear = 0.01f;
-	zFar = 50;
-	FoVy = 40;
-	aspectRatio = 1.6f;
+	projection.zNear = 0.01f;
+	projection.zFar = 50;
+	projection.FoVy = 40;
+	projection.aspectRatio = 1.6f;
 
 	// not used for now
 	limitUp = float(RADIANS(-95));
@@ -194,7 +195,7 @@ void Camera::MoveInDirection(glm::vec3 dir, float deltaTime)
 void Camera::Log() const
 {
 	cout.precision(2);
-	cout << "Camera =>" << endl;
+	cout << "[Camera]" << endl;
 	cout << "Rotation: " << transform->GetRotationEulerRad() << endl;
 	cout << "Position: " << transform->GetWorldPosition() << endl;
 	cout << "Forward : " << -transform->GetLocalOZVector() << endl;
@@ -234,21 +235,22 @@ void Camera::BindProjectionMatrix(int location) const
 
 void Camera::SetPerspective(float FoVy, float aspectRatio, float zNear, float zFar)
 {
-	isPerspective = true;
-	this->zFar = zFar;
-	this->zNear = zNear;
-	this->aspectRatio = aspectRatio;
-	this->FoVy = FoVy;
+	projection.isPerspective = true;
+	projection.zFar = zFar;
+	projection.zNear = zNear;
+	projection.aspectRatio = aspectRatio;
+	projection.FoVy = FoVy;
 	Projection = glm::perspective(RADIANS(FoVy), aspectRatio, zNear, zFar);
 }
 
 void Camera::SetOrthgraphic(float width, float height, float zNear, float zFar)
 {
-	isPerspective = false;
-	this->zFar = zFar;
-	this->zNear = zNear;
-	this->aspectRatio = width / height;
-	this->ortographicWidth = width;
+	projection.isPerspective = false;
+	projection.zFar = zFar;
+	projection.zNear = zNear;
+	projection.aspectRatio = width / height;
+	projection.width = width;
+	projection.height = height;
 	Projection = glm::ortho(-width/2, width/2, -height/2, height/2, zNear, zFar);
 }
 
@@ -264,25 +266,51 @@ void Camera::SetProjection(const ProjectionInfo & PI)
 
 ProjectionInfo Camera::GetProjectionInfo() const
 {
-	ProjectionInfo P;
-	P.FoVy = FoVy;
-	P.aspectRatio = aspectRatio;
-	P.zFar = zFar;
-	P.zNear = zNear;
-	P.isPerspective = isPerspective;
-	P.width = ortographicWidth;
-	P.height = ortographicWidth / aspectRatio;
-	return P;
+	return projection;
 }
 
 float Camera::GetFieldOfViewY() const
 {
-	return FoVy;
+	return projection.FoVy;
 }
 
 float Camera::GetFieldOfViewX() const
 {
-	return FoVy * aspectRatio;
+	return projection.FoVy * projection.aspectRatio;
+}
+
+glm::vec3 Camera::ScreenToWorldRay(int mouseX, int mouseY, glm::ivec2 screenResolution, glm::vec3 &rayOrigin) const
+{
+	float px = (2.0f * mouseX / screenResolution.x - 1);
+	float py = (1 - 2.0f * mouseY / screenResolution.y);
+
+	if (projection.isPerspective)
+	{
+		rayOrigin = transform->GetWorldPosition();
+
+		float tanY = tan(RADIANS(projection.FoVy / 2));
+		float tanX = tanY * projection.aspectRatio;
+
+		float posX = tanX * px;
+		float posY = tanY * py;
+
+		// Ray in View Space
+		glm::vec3 ray(posX, posY, -1);
+
+		// Ray in View Space
+		glm::mat3 invView = glm::inverse(View);
+		return invView * ray;
+	}
+	else
+	{
+		rayOrigin = transform->GetWorldPosition();
+
+		float offsetX = projection.width / 2 * px;
+		float offsetY = projection.height / 2 * py;
+		rayOrigin += offsetX * transform->GetLocalOXVector() + offsetY * transform->GetLocalOYVector();
+
+		return -transform->GetLocalOZVector();
+	}
 }
 
 bool Camera::ColidesWith(GameObject * object)
@@ -292,12 +320,15 @@ bool Camera::ColidesWith(GameObject * object)
 
 void Camera::ComputeFrustum()
 {
-	if (frustum == nullptr) {
+	Mesh *fmesh = nullptr;
+
+	if (frustum == nullptr)
+	{
 		frustum = new GameObject();
 		frustum->transform = transform;
-		auto fmesh = new Mesh();
+		fmesh = new Mesh();
 
-		for (int i = 0; i<8; i++) {
+		for (int i = 0; i < 8; i++) {
 			fmesh->normals.push_back(glm::vec3(0, 1, 0));
 		}
 
@@ -309,25 +340,19 @@ void Camera::ComputeFrustum()
 		Utils3D::PushQuadTriangle(fmesh->indices, 6, 7, 3, 2);
 		Utils3D::PushQuadTriangle(fmesh->indices, 4, 0, 3, 7);
 		Utils3D::PushQuadTriangle(fmesh->indices, 5, 6, 2, 1);
+	}
+	else
+	{
+		fmesh = const_cast<Mesh*>(frustum->GetMesh());
+	}
 
-		fmesh->positions = Utils3D::GetPerspectiveSection(zNear, FoVy, aspectRatio);
-		auto points = Utils3D::GetPerspectiveSection(zFar, FoVy, aspectRatio);
-		for (auto point : points) {
-			fmesh->positions.push_back(point);
-		}
-		fmesh->InitFromData();
-		frustum->SetMesh(fmesh);
+	fmesh->positions = Utils3D::GetPerspectiveSection(projection.zNear, projection.FoVy, projection.aspectRatio);
+	auto points = Utils3D::GetPerspectiveSection(projection.zFar, projection.FoVy, projection.aspectRatio);
+	for (auto point : points) {
+		fmesh->positions.push_back(point);
 	}
-	else {
-		auto fmesh = frustum->GetMesh();
-		fmesh->positions = Utils3D::GetPerspectiveSection(zNear, FoVy, aspectRatio);
-		auto points = Utils3D::GetPerspectiveSection(zFar, FoVy, aspectRatio);
-		for (auto point : points) {
-			fmesh->positions.push_back(point);
-		}
-		fmesh->InitFromData();
-		frustum->SetMesh(fmesh);
-	}
+	fmesh->InitFromData();
+	frustum->SetMesh(fmesh);
 }
 
 void Camera::RenderDebug(const Shader *shader) const
@@ -343,6 +368,6 @@ void Camera::RenderDebug(const Shader *shader) const
 
 void Camera::BindProjectionDistances(const Shader *shader) const
 {
-	glUniform1f(shader->loc_z_far, zFar);
-	glUniform1f(shader->loc_z_near, zNear);
+	glUniform1f(shader->loc_z_far, projection.zFar);
+	glUniform1f(shader->loc_z_near, projection.zNear);
 }

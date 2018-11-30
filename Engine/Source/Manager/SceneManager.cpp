@@ -59,7 +59,6 @@ void SceneManager::Init()
 
 void SceneManager::LoadScene(const char *fileName)
 {
-	Manager::Debug->InitManager("Scene");
 	sceneFile = fileName;
 
 	frustumObjects.clear();
@@ -396,10 +395,10 @@ void SceneManager::PrepareSceneForRendering(Camera * camera)
 void SceneManager::FrustumCulling(Camera *gameCamera)
 {
 	PrepareSceneForRendering(gameCamera);
-	//frustumObjects.clear();
-	//for (auto obj: sceneOrigin->GetChildren()) {
-	//		frustumObjects.push_back(obj);
-	//}
+	frustumObjects.clear();
+	for (auto obj: sceneOrigin->GetChildren()) {
+			frustumObjects.push_back(obj);
+	}
 }
 
 void SceneManager::LightSpaceCulling(Camera * gameCamera, Camera * light)

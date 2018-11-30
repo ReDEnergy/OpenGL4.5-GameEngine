@@ -42,6 +42,13 @@ class DLLExport ObjectInput : virtual public Object
 		// Method will be called each frame before the Update() method
 		// @param mouseX - X coordinate of the mouse position relative to the top-left corner ([0, 0])
 		// @param mouseY - Y coordinate of the mouse position relative to the top-left corner
+		// @param offsetX
+		// @param offsetY
+		virtual void OnMouseScroll(int mouseX, int mouseY, double offsetX, double offsetY) {};
+
+		// Method will be called each frame before the Update() method
+		// @param mouseX - X coordinate of the mouse position relative to the top-left corner ([0, 0])
+		// @param mouseY - Y coordinate of the mouse position relative to the top-left corner
 		// @param button - bit-mask with the buttons currently pressed. Use the preprocessor helpers for testing:
 		//				    
 		//						IS_BIT_SET(button, GLFW_MOUSE_BUTTON_LEFT)

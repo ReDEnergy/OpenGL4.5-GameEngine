@@ -19,14 +19,16 @@ MenuSystem::MenuSystem() {
 MenuSystem::~MenuSystem() {
 }
 
-void MenuSystem::Load(const char* file) {
-	Manager::Debug->InitManager("Menu");
-
+void MenuSystem::Load(const char* file)
+{
 	pugi::xml_document *doc = pugi::LoadXML(file);
-	pugi::xml_node pagesXML = doc->child("pages");
-	for (pugi::xml_node pageXML: pagesXML.children()) {
-		MenuPage *page = new MenuPage(pageXML);
-		pages[page->UID] = page;
+	if (doc != nullptr)
+	{
+		pugi::xml_node pagesXML = doc->child("pages");
+		for (pugi::xml_node pageXML : pagesXML.children()) {
+			MenuPage *page = new MenuPage(pageXML);
+			pages[page->UID] = page;
+		}
 	}
 
 	Menu = new GameMenu();

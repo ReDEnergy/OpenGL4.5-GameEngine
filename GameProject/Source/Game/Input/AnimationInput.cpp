@@ -57,7 +57,7 @@ void AnimationInput::OnKeyPress(int key, int mods)
 		}
 		case GLFW_KEY_8: {
 			auto SGO = Manager::GetPicker()->GetSelectedObject();
-			if (SGO && dynamic_cast<SkinnedMesh*>(SGO->GetMesh())) {
+			if (SGO && dynamic_cast<SkinnedMesh*>(const_cast<Mesh*>(SGO->GetMesh()))) {
 				GO = SGO;
 				cout << "[SUCCESS] - New Object attached to controller" << endl;
 			}

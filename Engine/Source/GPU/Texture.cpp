@@ -52,11 +52,7 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-	if (textureID)
-	{
-		glDeleteTextures(1, &textureID);
-		textureID = 0;
-	}
+	FreeGPUMemory();
 }
 
 GLuint Texture::GetTextureID() const
@@ -126,8 +122,9 @@ void Texture::Create2DTexture(uint width, uint height, uint chn, uint bpp, GLenu
 	UnBind();
 }
 
-void Texture::Create2D(uint width, uint height, uint chn, GLint internalFormat, GLenum format, GLenum pixelDataType)
+void Texture::Create2D(uint width, uint height, uint chn, uint bpp, GLint internalFormat, GLenum format, GLenum pixelDataType)
 {
+	bitsPerPixel = bpp;
 	this->pixelDataFormat = format;
 	this->pixelDataType = pixelDataType;
 
@@ -152,6 +149,15 @@ void Texture::UploadImage(const void * img)
 	Bind();
 	glTexSubImage2D(targetType, 0, 0, 0, width, height, pixelDataFormat, pixelDataType, img);
 	UnBind();
+}
+
+void Texture::FreeGPUMemory()
+{
+	if (textureID)
+	{
+		glDeleteTextures(1, &textureID);
+		textureID = 0;
+	}
 }
 
 void Texture::CreateCubeTexture(const float* data, uint width, uint height, uint chn)
@@ -187,9 +193,9 @@ void Texture::CreateFrameBufferTexture(uint width, uint height, uint targetID, u
 {
 	bitsPerPixel = precision;
 	pixelDataFormat = pixelFormat[4];
-	int prec = precision == 32 / 8 - 1;
+	int prec = precision / 8 - 1;
 	Init2DTexture(width, height, 4);
-	glTexImage2D(targetType, 0, internalFormat[prec][4], width, height, 0, pixelDataFormat, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(targetType, 0, internalFormat[prec][4], width, height, 0, pixelDataFormat, GL_FLOAT, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + targetID, GL_TEXTURE_2D, textureID, 0);
 	UnBind();
 }
@@ -197,7 +203,7 @@ void Texture::CreateFrameBufferTexture(uint width, uint height, uint targetID, u
 void Texture::CreateDepthBufferTexture(uint width, uint height)
 {
 	Init2DTexture(width, height, 1);
-	glTexImage2D(targetType, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(targetType, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, textureID, 0);
 	UnBind();
 }

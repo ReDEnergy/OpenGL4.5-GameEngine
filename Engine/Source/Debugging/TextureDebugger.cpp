@@ -59,7 +59,6 @@ void TextureDebugger::Init()
 	renderingQuad = Manager::Resource->GetGameObject("render-quad");
 	renderingQuad->transform->SetScale(glm::vec3(0.5));
 	renderingQuad->transform->SetWorldPosition(glm::vec3(0.5, 0.5, 0));
-	//renderingQuad->UseShader(shader);
 
 	for (unsigned i = 0; i < TEXTURE_DEBUGGER_CHANNELS; i++) {
 		channels[i].reserve(MAX_NR_TEXTURES);

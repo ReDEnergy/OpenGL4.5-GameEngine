@@ -2,7 +2,7 @@
 <config>
 	<window>
 		<name>Engine</name>
-		<resolution>2560 1464</resolution>
+		<resolution>1920 1080</resolution>
 		<fullscreen>false</fullscreen>
 		<position>50 50</position>
 		<centered>true</centered>
@@ -12,8 +12,10 @@
 	<vsync>false</vsync>
 	<ssao>false</ssao>
 
-	<resource>Resources.xml</resource>
-	<shaders>Shaders.xml</shaders>
-	<scene>Scene.xml</scene>
-	<menu>Menu.xml</menu>
+	<resource>OpenGL Engine/Resources.xml</resource>
+	<shaders>
+		<file>OpenGL Engine/Shaders.xml</file>
+	</shaders>
+	<scene>OpenGL Engine/Scene.xml</scene>
+	<menu>OpenGL Engine/Menu.xml</menu>
 </config>

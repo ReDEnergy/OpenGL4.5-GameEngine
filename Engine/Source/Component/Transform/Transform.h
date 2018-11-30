@@ -8,10 +8,6 @@
 
 class DLLExport Transform: virtual public Object 
 {
-	friend class LimitedTransform;
-	friend class SkinningJointTransform;
-	friend class JointTransform;
-
 	public:
 		Transform();
 		Transform(const Transform &trasform);
@@ -48,11 +44,12 @@ class DLLExport Transform: virtual public Object
 		// ****************************
 		// Continuous transform methods
 
-		virtual void Move(const glm::vec3 &offset);
+		virtual void Translate(const glm::vec3 &offset);
 		virtual void Move(const glm::vec3 &dir, float deltaTime);
 		virtual void Scale(float deltaTime);
 
 		// Rotations
+		virtual void Rotate(glm::quat offset);
 		virtual void RotateWorldOX(float deltaTime);
 		virtual void RotateWorldOY(float deltaTime);
 		virtual void RotateWorldOZ(float deltaTime);

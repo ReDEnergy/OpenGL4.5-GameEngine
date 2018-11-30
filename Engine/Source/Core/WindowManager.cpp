@@ -8,6 +8,8 @@
 #include <Manager/DebugInfo.h>
 #include <Manager/Manager.h>
 
+#include <include/gl.h>
+
 using namespace std;
 
 vector<WindowObject*> WindowManager::windowList;
@@ -15,9 +17,12 @@ unordered_map<string, WindowObject*> WindowManager::windows;
 
 WindowObject* WindowManager::sharedContextWindow = nullptr;
 
+WindowManager::~WindowManager()
+{
+}
+
 void WindowManager::Init()
 {
-	Manager::Debug->InitManager("WindowManager");
 	WindowManager::windows.clear();
 	sharedContextWindow = nullptr;
 }
@@ -82,4 +87,21 @@ WindowObject* WindowManager::GetWindowObject(GLFWwindow* W)
 	}
 
 	return windowList[0];
+}
+
+WindowObject* WindowManager::DetachCurrentContext()
+{
+	auto glfwWindow = glfwGetCurrentContext();
+	if (glfwWindow != nullptr)
+	{
+		glfwMakeContextCurrent(NULL);
+		for (auto window : windowList)
+		{
+			if (window->window == glfwWindow)
+			{
+				return window;
+			}
+		}
+	}
+	return nullptr;
 }

@@ -19,6 +19,7 @@ class Game :
 		void FrameEnd();
 
 		void BarrelPhysicsTest(bool pointLights);
+		static FrameBuffer * GetOffScreenBuffer();
 
 	private:
 		void Render();
@@ -50,6 +51,8 @@ class Game :
 		FrameBuffer			*FBO_Out;
 		FrameBuffer			*FBO_Light;
 
+		static FrameBuffer	*FBO_offscreen;
+
 		#ifdef OCULUS_RIFT_HMD
 		FrameBuffer			*FBO_OutUI;
 		#endif
@@ -62,5 +65,5 @@ class Game :
 		std::vector<Camera*>	sceneCameras;
 		unsigned int			activeSceneCamera;
 
-		ProfileTimer		*cpuTime;
+		ProfilingTimer		*cpuTime;
 };

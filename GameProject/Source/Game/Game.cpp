@@ -58,12 +58,9 @@ MotionSystem *motionSystem = nullptr;
 #ifdef PHYSX_ENGINE
 #endif
 
-//#define SOV_CAMERA_BOUNDING_BOX
-#ifdef SOV_CAMERA_BOUNDING_BOX
-	bool updateBoundingBox = true;
-#endif
-
 using namespace std;
+
+FrameBuffer* Game::FBO_offscreen = nullptr;
 
 Game::Game()
 {
@@ -99,8 +96,7 @@ void Game::Init()
 {
 	window->MakeCurrentContext();
 
-	cpuTime = new ProfileTimer();
-	cpuTime->SetMessage("CPU time");
+	cpuTime = new ProfilingTimer();
 
 	// Game resolution
 	glm::ivec2 resolution = window->GetResolution();
@@ -153,7 +149,7 @@ void Game::Init()
 
 	FBO_Out = new FrameBuffer();
 	FBO_Out->Generate(resolution.x, resolution.y, 1, false);
-	FrameBuffer::SetOffScreenBuffer(FBO_Out);
+	FBO_offscreen = FBO_Out;
 
 	FBO_OutUI = new FrameBuffer();
 	FBO_OutUI->Generate(resolution.x, resolution.y, 1, false);
@@ -340,10 +336,10 @@ void Game::Update(double deltaTime)
 {
 	FrameStart();
 
-	if (Engine::GetElapsedTime() - cpuTime->GetStartTime() > 0.5) {
+	//if (Engine::GetElapsedTime() - cpuTime->GetStartTime() > 0.5) {
 		cpuTime->Reset();
 		cpuTime->Start();
-	}
+	//}
 
 	Camera *activeCamera = Manager::GetScene()->GetActiveCamera();
 
@@ -356,22 +352,22 @@ void Game::Update(double deltaTime)
 	kinectSkeletalTracking->Update();
 	//kinectStreaming->Update();
 	//kinectPointCloud->Update();
-	cpuTime->Lap("Kinect");
-	#endif
+	cpuTime->Lap(); //("Kinect");
+#endif
 
-	#ifdef OCULUS_RIFT_HMD
+#ifdef OCULUS_RIFT_HMD
 	oculusHMD->GetLoopInfo();
-	cpuTime->Lap("OculusRift");
-	#endif
+	cpuTime->Lap(); //("OculusRift");
+#endif
 
-	#ifdef LEAP_SENSOR
+#ifdef LEAP_SENSOR
 	leapSensor->Update();
 	leapControlPanel->Update();
-	cpuTime->Lap("LeapMotion");
-	#endif
+	cpuTime->Lap(); //("LeapMotion");
+#endif
 
 	animationSystem->Update();
-	cpuTime->Lap("AnimationSystem");
+	cpuTime->Lap(); //("AnimationSystem");
 
 	#ifdef GAME_MODULES
 	motionSystem->Update();
@@ -381,30 +377,24 @@ void Game::Update(double deltaTime)
 	// Update Scene
 
 	Manager::GetAudio()->Update(activeCamera);
-	cpuTime->Lap("Scene audio");
+	cpuTime->Lap(); //("Scene audio");
 
 	Manager::GetEvent()->Update();
-	cpuTime->Lap("Scene events");
+	cpuTime->Lap(); //("Scene events");
 
 	Manager::GetScene()->Update();
-	cpuTime->Lap("Scene update");
+	cpuTime->Lap(); //("Scene update");
 
 	Manager::GetScene()->PrepareSceneForRendering(activeCamera);
-	cpuTime->Lap("Scene culling");
+	cpuTime->Lap(); //("Scene culling");
 
-	#ifdef SOV_CAMERA_BOUNDING_BOX
-	if (updateBoundingBox) {
-		Manager::GetScene()->LightSpaceCulling(gameCamera, gameCamera);
-	}
-	#else
-	//Manager::GetScene()->LightSpaceCulling(gameCamera, Sun);
-	//Sun->transform->ClearMotionState();
-	#endif
+	Manager::GetScene()->LightSpaceCulling(gameCamera, Sun);
+	Sun->transform->ClearMotionState();
 
 	//Manager::GetPicker()->DrawSceneForPicking();
 	Manager::GetEvent()->EmitSync(EventType::FRAME_UPDATE);
 
-	cpuTime->Lap("Scene Update");
+	cpuTime->Lap(); //("Scene Update");
 
 	///////////////////////////////////////////////////////////////////////////
 	// Start Physics Simulation with scene rendering
@@ -415,7 +405,7 @@ void Game::Update(double deltaTime)
 	if (!asyncPhysics) {
 		Manager::GetPhysics()->GetPhysX()->FetchResults();
 	}
-	cpuTime->Lap("Physics");
+	cpuTime->Lap(); //("Physics");
 	#endif
 
 
@@ -447,7 +437,7 @@ void Game::Render()
 			Manager::GetScene()->SetActiveCamera(eyeCamera);
 			RenderScene(eyeCamera);
 			oculusHMD->SumbitEyeFrame(0, FBO_Out->GetTexture(0));
-			cpuTime->Lap("OculusVR - Left Eye");
+			cpuTime->Lap(); // ("OculusVR - Left Eye");
 		}
 
 		eyeCamera = oculusHMD->GetEyeCamera(1);
@@ -455,7 +445,7 @@ void Game::Render()
 			Manager::GetScene()->SetActiveCamera(eyeCamera);
 			RenderScene(eyeCamera);
 			oculusHMD->SumbitEyeFrame(1, FBO_Out->GetTexture(0));
-			cpuTime->Lap("OculusVR - Right Eye");
+			cpuTime->Lap(); //("OculusVR - Right Eye");
 		}
 
 		Manager::GetScene()->SetActiveCamera(activeCamera);
@@ -485,17 +475,17 @@ void Game::RenderScene(Camera *camera) const
 	kinectSkeletalTracking->Render();
 	#endif
 
-	cpuTime->Lap("Scene Rendering");
+	cpuTime->Lap(0); // "Scene Rendering";
 
 	///////////////////////////////////////////////////////////////////////////
 	// Shadows Casting
 	{
-		//Sun->CastShadows();
+		Sun->CastShadows();
 		//Spot->CastShadows();
-		//cpuTime->Lap("Shadow Casting");
-		//Sun->BakeShadows(FBO);
+		cpuTime->Lap(); //("Shadow Casting");
+		Sun->BakeShadows(FBO);
 		//Spot->BakeShadows(FBO);
-		//cpuTime->Lap("Shadow Backing");
+		cpuTime->Lap(); //("Shadow Backing");
 	}
 
 	// ---------------------------//
@@ -507,12 +497,12 @@ void Game::RenderScene(Camera *camera) const
 		// --- Deferred Lighting --- //
 		FBO_Light->Bind();
 		Manager::GetScene()->RenderDeferredLights(camera, FBO->GetTexture(1), FBO->GetTexture(2));
-		cpuTime->Lap("Deferred Lighing");
+		cpuTime->Lap(); //("Deferred Lighing");
 
 		// --- Screen Space Ambient Occlusion (SSAO) --- //
 		if (Manager::GetRenderSys()->Is(RenderState::SS_AO)) {
 			ssao->Update(FBO, camera);
-			cpuTime->Lap("SSAO");
+			cpuTime->Lap(); //("SSAO");
 		}
 	}
 
@@ -551,7 +541,7 @@ void Game::FinishComposition(FrameBuffer *outFBO, Camera *camera) const
 	glDepthMask(GL_TRUE);
 	glEnable(GL_DEPTH_TEST);
 
-	cpuTime->Lap("Composition");
+	cpuTime->Lap(); //("Composition");
 }
 
 void Game::FrameEnd()
@@ -559,7 +549,7 @@ void Game::FrameEnd()
 	// ---   Final output step   --- //
 	if (window->props.visible)
 	{
-		FrameBuffer::Unbind(window->GetResolution(), true);
+		FrameBuffer::BindDefault(window->GetResolution(), true);
 		Shader *screen = Manager::GetShader()->GetShader("screen");
 		screen->Use();
 		FBO_Out->BindTexture(0, GL_TEXTURE0);
@@ -572,7 +562,7 @@ void Game::FrameEnd()
 	Manager::GetDebugText()->Render();
 	Manager::GetTextureDebugger()->Render();
 	Manager::GetMenu()->RenderMenu();
-	cpuTime->Lap("Overlays");
+	cpuTime->Lap(); //("Overlays");
 
 	Manager::GetEvent()->EmitSync(EventType::FRAME_END);
 	Manager::GetScene()->FrameEnded();
@@ -642,7 +632,7 @@ void Game::OnKeyPress(int key, int mods)
 
 		if (key == GLFW_KEY_L) {
 			static int switchEye = true;
-			FrameBuffer::SetOffScreenBuffer(switchEye ? FBO_OutUI : FBO_Out);
+			FBO_offscreen = switchEye ? FBO_OutUI : FBO_Out;
 			switchEye = !switchEye;
 			return;
 		}
@@ -653,22 +643,6 @@ void Game::OnKeyPress(int key, int mods)
 		}
 	}
 	#endif
-
-#ifdef SOV_CAMERA_BOUNDING_BOX
-	if (key == GLFW_KEY_F3) {
-		updateBoundingBox = !updateBoundingBox;
-		return;
-	}
-
-	if (key == GLFW_KEY_F4) {
-		auto state = Manager::GetDebug()->GetBoundingBoxMode();
-		if (state == DebugInfo::BBOX_MODE::OBJECT_SAPCE)
-			Manager::GetDebug()->SetBoundingBoxMode(DebugInfo::BBOX_MODE::CAMERA_SPACE);
-		else 
-			Manager::GetDebug()->SetBoundingBoxMode(DebugInfo::BBOX_MODE::OBJECT_SAPCE);
-		return;
-	}
-#endif
 
 	if (mods == (GLFW_MOD_SHIFT + GLFW_MOD_CONTROL))
 	{
@@ -708,7 +682,7 @@ void Game::OnEvent(EventType Event, void *data)
 		}
 
 		Manager::GetScene()->SetActiveCamera(sceneCameras[activeSceneCamera]);
-		cameraInput->camera = Manager::GetScene()->GetActiveCamera();
+		// cameraInput->camera = Manager::GetScene()->GetActiveCamera();
 		break;
 	}
 	default:
@@ -742,4 +716,9 @@ void Game::ToggleRenderingToOculusRift()
 		window->SetVSync(true);
 	}
 #endif
+}
+
+FrameBuffer * Game::GetOffScreenBuffer()
+{
+	return FBO_offscreen;
 }

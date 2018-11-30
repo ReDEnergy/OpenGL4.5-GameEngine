@@ -4,6 +4,7 @@
 #ifdef ENGINE_DLL_EXPORTS
 #include <include/assimp.h>
 #endif
+
 #include <include/dll_export.h>
 #include <include/glm.h>
 #include <include/gl_defines.h>
@@ -60,6 +61,7 @@ class DLLExport Mesh
 
 		virtual void Update() {};
 		virtual bool LoadMesh(const std::string& fileLocation, const std::string& fileName);
+		virtual bool ConvertMesh(const std::string& fileLocation, const std::string& fileName);
 		virtual void UseMaterials(bool);
 
 		const char* GetMeshID() const;
@@ -71,11 +73,9 @@ class DLLExport Mesh
 		void ComputeBoundingBox();
 		virtual bool UploadToGPU();
 
-		#ifdef ENGINE_DLL_EXPORTS
-		bool InitMaterials(const aiScene* pScene);
-		virtual void InitMesh(const aiMesh* paiMesh);
-		virtual bool InitFromScene(const aiScene* pScene);
-		#endif
+		bool InitMaterials(const void* pScene);
+		virtual void InitMesh(const void* paiMesh);
+		virtual bool InitFromScene(const void* pScene);
 
 	private:
 		std::string meshID;

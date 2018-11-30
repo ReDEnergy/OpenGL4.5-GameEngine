@@ -32,9 +32,6 @@ class DLLExport GameObject: virtual public Object
 		GameObject(const GameObject &obj);
 		virtual ~GameObject();
 
-		void Init();
-		void Clear();
-
 		virtual void Render(const Shader *shader) const;
 		virtual void RenderTransparent(const Shader *shader) const;
 		virtual void RenderInstanced(const Shader *shader, unsigned int instances) const;
@@ -42,7 +39,7 @@ class DLLExport GameObject: virtual public Object
 		virtual void RenderForPicking(const Shader *shader) const;
 
 		void SetMesh(Mesh *mesh);
-		Mesh* GetMesh() const;
+		const Mesh* GetMesh() const;
 		virtual void SetDebugView(bool value);
 		virtual void SetAudioSource(AudioSource *source);
 
@@ -75,6 +72,10 @@ class DLLExport GameObject: virtual public Object
 
 		void TriggerEnter(GameObject *object);
 		void TriggerExit(GameObject *object);
+
+	private:
+		void Init();
+		void Clear();
 
 	protected:
 		void SetupAABB();

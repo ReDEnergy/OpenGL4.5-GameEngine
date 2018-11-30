@@ -26,105 +26,32 @@ unordered_map<string, bool> InputSystem::eventState;
 string InputSystem::keyInputEvents[16][MAX_KEYS][3];
 string InputSystem::mouseInputEvents[16][8][3];
 
-bool InputSystem::ruleChanged = false;
-
 void InputSystem::Init()
 {
-	//MapKeys();
-	//MapMouse();
-	//Load("Config/Input.xml");
 }
 
 void InputSystem::KeyCallback(GLFWwindow *W, int key, int scanCode, int action, int mods)
 {
 	auto windowObj = WindowManager::GetWindowObject(W);
 	windowObj->KeyCallback(key, scanCode, action, mods);
-
-	//keyStates[key] = action ? true : false;
-
-	//InputSystem::scanCode = scanCode;
-	//InputSystem::mods = mods;
-
-	//NotifyObservers(key, action, mods);
-	//if (action == GLFW_PRESS)
-	//{
-	//	int currentInputRule = InputRules::GetActiveRule();
-	//	string eventToEmit = keyInputEvents[currentInputRule][key][mods];
-	//	if ( !eventToEmit.empty() ) {
-	//		eventState[eventToEmit] = true;
-	//	}
-	//}
-	//else if (action == GLFW_RELEASE)
-	//{
-	//	int currentInputRule = InputRules::GetActiveRule();
-	//	if (key == GLFW_KEY_LEFT_SHIFT) mods += 1;
-	//	if (key == GLFW_KEY_LEFT_CONTROL) mods += 2;
-	//	if (key == GLFW_KEY_LEFT_ALT) mods += 4;
-	//	string eventToEmit = keyInputEvents[currentInputRule][key][mods];
-	//	if ( !eventToEmit.empty() ) {
-	//		eventState[eventToEmit] = false;
-	//	}
-	//}
 }
 
 void InputSystem::CursorMove(GLFWwindow *W, double posX, double posY)
 {
 	WindowObject *Wobj = WindowManager::GetWindowObject(W);
 	Wobj->MouseMove((int)posX, (int)posY);
-
-	//glm::ivec2 mousePos = glm::ivec2(posX, posY);
-	//glm::ivec2 delta = mousePos - Wobj->pointerPos;
-
-	//NotifyObservers((int)posX, (int)posY, delta.x, delta.y);
-	//Wobj->SetPointerPosition((int)posX, (int)posY);
 }
 
 void InputSystem::MouseClick(GLFWwindow *W, int button, int action, int mods)
 {
 	WindowObject *Wobj = WindowManager::GetWindowObject(W);
 	Wobj->MouseButtonCallback(button, action, mods);
-
-	//double posX, posY;
-	//glfwGetCursorPos(W, &posX, &posY);
-	//
-	//MouseClick(button, action, (int)posX, (int)posY, mods);
-
-	//// Event Based Methods
-	//if (action == GLFW_PRESS)
-	//{
-	//	int currentInputRule = InputRules::GetActiveRule();
-	//	string eventToEmit = mouseInputEvents[currentInputRule][button][mods];
-	//	if (!eventToEmit.empty()) {
-	//		eventState[eventToEmit] = true;
-	//	}
-	//}
-	//else {
-	//	int currentInputRule = InputRules::GetActiveRule();
-	//	if (button == GLFW_KEY_LEFT_SHIFT) mods += 1;
-	//	if (button == GLFW_KEY_LEFT_CONTROL) mods += 2;
-	//	if (button == GLFW_KEY_LEFT_ALT) mods += 4;
-	//	string eventToEmit = mouseInputEvents[currentInputRule][button][mods];
-	//	if (!eventToEmit.empty()) {
-	//		eventState[eventToEmit] = false;
-	//	}
-	//}
 }
 
-void InputSystem::RuleUpdate()
+void InputSystem::MouseScroll(GLFWwindow * W, double offsetX, double offsetY)
 {
-	ruleChanged = true;
-}
-
-void InputSystem::EndFrame()
-{
-	//if (ruleChanged) {
-	//	activeObserver.clear();
-	//	for (auto obs:observers) {
-	//		if (obs->IsActive())
-	//			activeObserver.push_back(obs);
-	//	}
-	//	ruleChanged = false;
-	//}
+	WindowObject *Wobj = WindowManager::GetWindowObject(W);
+	Wobj->MouseScroll(offsetX, offsetY);
 }
 
 void InputSystem::MapKeys()

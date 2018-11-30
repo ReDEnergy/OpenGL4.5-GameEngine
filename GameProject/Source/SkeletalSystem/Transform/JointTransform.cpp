@@ -48,7 +48,7 @@ void JointTransform::SetChildrenRotation(glm::quat rotationQ)
 
 void JointTransform::SetWorldRotation(glm::quat rotationQ)
 {
-	auto parentRot = _parentNode ? _parentNode->_worldRotation : glm::quat();
+	auto parentRot = _parentNode ? _parentNode->GetWorldRotation() : glm::quat();
 	auto relativeRot = glm::inverse(parentRot) * rotationQ;
 	_relativeRotation = ClosestQuatX(relativeRot);
 	_worldRotation = parentRot * _relativeRotation;
@@ -66,9 +66,10 @@ void JointTransform::RotateChildren(glm::quat rotationQ)
 	// Revert rotation and compute the new local rotation for child-nodes
 	_worldRotation = save;
 
-	for (auto child : _childNodes) {
-		child->UpdateLocalPosition();
-	}
+	UpdateChildsPosition();
+	//for (auto child : _childNodes) {
+	//	child->UpdateLocalPosition();
+	//}
 
 	_motionState = true;
 }

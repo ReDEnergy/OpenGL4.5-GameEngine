@@ -4,6 +4,7 @@
 #include <vector>
 #include <chrono>
 #include <iostream>
+#include <unordered_map>
 
 #include <include/dll_export.h>
 #include <include/utils.h>
@@ -50,13 +51,21 @@ class DLLExport ProfilingTimer
 	using high_resolution_clock = std::chrono::high_resolution_clock;
 	using time_point = high_resolution_clock::time_point;
 
+	private:
+		std::unordered_map<unsigned long long, std::string> timingValues
+		{
+			{1, " sec"},
+			{1000, " ms"},
+			{1'000'000, " us"},
+			{1'000'000'000, " ns"}
+		};
+
 	public:
 		ProfilingTimer();
 		~ProfilingTimer();
 
 		void Start();
 		void Stop();
-		void Lap(unsigned int labelID = 0);
 		void Pause();
 		void Resume();
 		void Reset();
@@ -64,13 +73,30 @@ class DLLExport ProfilingTimer
 		bool IsActive() const;
 
 		template <typename T = std::ratio<1, 1>>
-		double GetDeltaTime() const
+		double Lap(unsigned int labelID = 0)
 		{
-			return laps.back().GetDeltaTime<T>(laps.front());
+			if (isActive)
+			{
+				LapInfo lapInfo(labelID);
+				auto diff = lapInfo.GetDeltaTime<T>(laps.back());
+				laps.emplace_back(lapInfo);
+				return diff;
+			}
+			return 0;
 		}
 
 		template <typename T = std::ratio<1, 1>>
-		void Print(const char* unit = " sec")
+		double GetDeltaTime() const
+		{
+			if (laps.size() > 0)
+			{
+				return laps.back().GetDeltaTime<T>(laps.front());
+			}
+			return 0;
+		}
+
+		template <typename T = std::ratio<1, 1>>
+		void Print()
 		{
 			size_t size = laps.size();
 			double total = 0;
@@ -79,7 +105,7 @@ class DLLExport ProfilingTimer
 			{
 				double interval = laps[i].GetDeltaTime<T>(laps[i - 1]);
 				total += interval;
-				std::cout << i << " [" << laps[i].label << "]\tD: " << interval << unit << "\tT: " << total << unit << endl;
+				std::cout << i << " [" << laps[i].label << "]\tD: " << interval << timingValues[T::den] << "\tT: " << total << timingValues[T::den] << endl;
 			}
 		}
 

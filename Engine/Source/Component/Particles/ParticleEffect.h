@@ -4,7 +4,6 @@
 
 #include <include/gl.h>
 #include <include/glm.h>
-#include <include/dll_export.h>
 
 #include <Core/Camera/Camera.h>
 #include <Component/Transform/Transform.h>
@@ -12,10 +11,6 @@
 #include <GPU/Shader.h>
 #include <GPU/Texture.h>
 #include <GPU/SSBO.h>
-
-#include <Manager/Manager.h>
-#include <Manager/ShaderManager.h>
-#include <Manager/TextureManager.h>
 
 template <class T>
 class ParticleEffect

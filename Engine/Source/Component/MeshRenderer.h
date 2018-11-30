@@ -10,8 +10,9 @@ class Mesh;
 class DLLExport MeshRenderer
 {
 	public:
-		MeshRenderer(Mesh& mesh);
+		MeshRenderer(const Mesh& mesh);
 		MeshRenderer(MeshRenderer& meshRenderer);
+		void InitFromMesh(const Mesh& mesh);
 		virtual ~MeshRenderer();
 
 		virtual void Render() const;
@@ -20,9 +21,10 @@ class DLLExport MeshRenderer
 
 		void InitForNewContext();
 		void SetGLDrawMode(GLenum drawMode);
+		bool IsValid() const;
 
 	public:
-		Mesh *mesh;
+		const Mesh *mesh;
 
 	protected:
 		bool useMaterial;

@@ -34,10 +34,6 @@ void ConfigFile::Load(const char *fileName)
 	windowProperties->position		= glm::ExtractVector<glm::ivec2>(window.child_value("position"));
 	windowProperties->centered		= window.child("centered").text().as_bool();
 	windowProperties->visible		= window.child("visible").text().as_bool();
-
-	// Read Grapchis settings
-	ReadGraphicState("vsync", RenderState::VSYNC);
-	ReadGraphicState("ssao", RenderState::SS_AO);
 }
 
 void ConfigFile::ReadGraphicState(const char* propertyName, RenderState STATE)

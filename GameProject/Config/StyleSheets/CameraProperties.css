@@ -1,0 +1,10 @@
+QWidget#Body QWidget {
+	border: 1px solid #DDD;
+	font-family: Arial;
+}
+
+QLabel[title] {
+	min-height: 2em;
+	font-weight: bold;
+	font-size: 12px;
+}

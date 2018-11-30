@@ -34,7 +34,7 @@ void LimitedTransform::SetWorldRotation(glm::quat rotationQ)
 {
 	if (applyLimits)
 	{
-		auto parentRot = _parentNode ? _parentNode->_worldRotation : glm::quat();
+		auto parentRot = _parentNode ? _parentNode->GetWorldRotation() : glm::quat();
 		auto relativeRot = glm::inverse(parentRot) * rotationQ;
 		_relativeRotation = RotLimitFunc(relativeRot);
 		_worldRotation = parentRot * _relativeRotation;
