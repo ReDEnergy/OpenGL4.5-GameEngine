@@ -2,6 +2,7 @@
 
 #include <include/gl.h>
 
+#ifdef TEXT_RENDERING
 #include <freetype-gl/freetype-gl.h>
 #include <freetype-gl/text-buffer.h>
 #include <freetype-gl/texture-font.h>
@@ -11,6 +12,7 @@
 
 #include <FreeType/ft2build.h>
 #include FT_FREETYPE_H
+#endif
 
 #include <Component/Transform/Transform.h>
 #include <Component/ObjectInput.h>
@@ -101,6 +103,7 @@ void Text::Render(const Shader *shader) const
 
 void Text::InitText()
 {
+#ifdef TEXT_RENDERING
 	texture_font_t* font = (texture_font_t*)Manager::Font->GetTextureFont();
 
 	size_t i;
@@ -159,4 +162,5 @@ void Text::InitText()
 
 	mesh->InitFromData();
 	SetupAABB();
+#endif
 }

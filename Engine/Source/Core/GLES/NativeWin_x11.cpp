@@ -1,3 +1,5 @@
+#ifdef OPENGL_ES
+
 #include "nativewin.h"
 #include <X11/Xutil.h>
 #include <stdio.h>
@@ -153,3 +155,4 @@ bool UpdateNativeWin(EGLNativeDisplayType nativedisp, EGLNativeWindowType native
     return result;
 }
 
+#endif

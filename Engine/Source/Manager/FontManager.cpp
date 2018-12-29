@@ -9,6 +9,7 @@
 #include <include/gl.h>
 #include <Config/ResourcePath.h>
 
+#ifdef TEXT_RENDERING
 #include <freetype-gl/freetype-gl.h>
 #include <freetype-gl/text-buffer.h>
 #include <freetype-gl/vec234.h>
@@ -18,6 +19,7 @@
 
 #include <FreeType/ft2build.h>
 #include FT_FREETYPE_H
+#endif
 
 using namespace std;
 
@@ -31,7 +33,8 @@ FontManager::~FontManager() {
 
 void FontManager::Init() {
 
-	 /* Text to be printed */
+#ifdef TEXT_RENDERING
+	/* Text to be printed */
 	const char *cache = " !\"#$%&'()*+,-./0123456789:;<=>?"
                            "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
                            "`abcdefghijklmnopqrstuvwxyz{|}~";
@@ -54,6 +57,7 @@ void FontManager::Init() {
 
 	texture_atlas_upload(fatlas);
 	fontAtlasID = fatlas->id;
+#endif
 }
 
 unsigned int FontManager::GetFontAtlasID() const
@@ -68,6 +72,7 @@ void* FontManager::GetTextureFont() const
 
 unsigned char * FontManager::MakeDistanceMap( unsigned char *img, unsigned int width, unsigned int height )
 {
+#ifdef TEXT_RENDERING
 	short * xdist = (short *)  malloc( width * height * sizeof(short) );
 	short * ydist = (short *)  malloc( width * height * sizeof(short) );
 	double * gx   = (double *) calloc( width * height, sizeof(double) );
@@ -130,4 +135,7 @@ unsigned char * FontManager::MakeDistanceMap( unsigned char *img, unsigned int w
 	free( outside );
 	free( inside );
 	return out;
+#else
+	return nullptr;
+#endif
 }

@@ -5,6 +5,7 @@
 #include <chrono>
 #include <iostream>
 #include <unordered_map>
+#include <stdio.h>
 
 #include <include/dll_export.h>
 #include <include/utils.h>
@@ -69,7 +70,7 @@ class DLLExport ProfilingTimer
 		void Pause();
 		void Resume();
 		void Reset();
-		
+
 		bool IsActive() const;
 
 		template <typename T = std::ratio<1, 1>>
@@ -105,7 +106,7 @@ class DLLExport ProfilingTimer
 			{
 				double interval = laps[i].GetDeltaTime<T>(laps[i - 1]);
 				total += interval;
-				std::cout << i << " [" << laps[i].label << "]\tD: " << interval << timingValues[T::den] << "\tT: " << total << timingValues[T::den] << endl;
+				std::cout << i << " [" << laps[i].label << "]\tD: " << interval << timingValues[T::den] << "\tT: " << total << timingValues[T::den] << std::endl;
 			}
 		}
 

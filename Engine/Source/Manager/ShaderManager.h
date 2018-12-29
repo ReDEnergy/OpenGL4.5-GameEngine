@@ -25,6 +25,7 @@ class DLLExport ShaderManager
 		};
 
 	public:
+		void AddConfigFile(std::string configFile);
 		void SetConfigFiles(std::vector<std::string> configFiles);
 		void Reload();
 		void Reload(std::string shaderNamespace);

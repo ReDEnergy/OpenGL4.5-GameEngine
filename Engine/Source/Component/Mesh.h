@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 
 #ifdef ENGINE_DLL_EXPORTS
 #include <include/assimp.h>

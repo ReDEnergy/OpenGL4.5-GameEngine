@@ -144,7 +144,10 @@ void Manager::LoadConfig()
 	Audio->Init();
 	Font->Init();
 
-	Shader->SetConfigFiles(Config->GetResourceFiles("shaders"));
+	for (auto &shaderCfg : Config->GetResourceFiles("shaders"))
+	{
+		Shader->AddConfigFile(shaderCfg);
+	}
 	Resource->Load(Config->GetResourceFileLoc("resource").c_str());
 	Menu->Load(Config->GetResourceFileLoc("menu").c_str());
 	Scene->LoadScene(Config->GetResourceFileLoc("scene").c_str());

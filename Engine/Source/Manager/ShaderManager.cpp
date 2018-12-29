@@ -57,6 +57,17 @@ void ShaderManager::LoadConfigFile(const char *file)
 	}
 }
 
+void ShaderManager::AddConfigFile(std::string configFile)
+{
+	for (auto &file : shaderDataFiles) {
+		if (file.compare(configFile) == 0) {
+			return;
+		}
+	}
+	shaderDataFiles.push_back(configFile);
+	LoadConfigFile(configFile.c_str());
+}
+
 void ShaderManager::SetConfigFiles(std::vector<std::string> configFiles)
 {
 	shaderDataFiles = configFiles;

@@ -1,3 +1,5 @@
+#ifdef OPENGL_ES
+
 #include "nativewin.h"
 
 #ifdef _WIN32
@@ -154,5 +156,7 @@ bool UpdateNativeWin(EGLNativeDisplayType nativedisp, EGLNativeWindowType native
     }
     return result;
 }
+
+#endif
 
 #endif

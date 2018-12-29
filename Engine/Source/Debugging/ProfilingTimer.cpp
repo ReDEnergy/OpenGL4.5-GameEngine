@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <chrono>
+#include <stdio.h>
+#include <string.h>
 
 using namespace std;
 using namespace std::chrono;
