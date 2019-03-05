@@ -37,8 +37,11 @@ extern "C" {
 */
 
 #include <GLES3/gl3platform.h>
+#ifndef GL_APIENTRYP
+#define GL_APIENTRYP GL_APIENTRY*
+#endif
 
-/* Generated on date 20150122 */
+/* Generated on date 20150121 */
 
 /* Generated C header for:
  * API: gles2
