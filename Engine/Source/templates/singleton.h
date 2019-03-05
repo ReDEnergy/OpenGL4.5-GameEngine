@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdlib>
+
 template<class T>
 class Singleton: public T {
 	public: 

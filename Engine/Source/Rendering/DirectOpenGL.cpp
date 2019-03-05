@@ -44,6 +44,7 @@ void DirectOpenGL::Init()
 
 	lineMesh->InitFromData();
 	line->SetMesh(lineMesh);
+	line->meshRenderer->UseMaterials(false);
 	line->meshRenderer->SetGLDrawMode(GL_LINES);
 }
 

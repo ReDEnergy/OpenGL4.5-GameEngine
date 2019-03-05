@@ -9,10 +9,10 @@ cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
 # =============================================================================
 
 set(SOURCE_ROOT "Source")
-set(APP_NAME "Engine")
+set(LIB_NAME "Engine")
 set(APP_VERSION "0.2.0")
 
-project(${APP_NAME})
+project(${LIB_NAME})
 
 # =============================================================================
 # App configuration
@@ -24,14 +24,20 @@ project(${APP_NAME})
 # =============================================================================
 
 if(WIN32)
-	set(TARGET_PLATFORM Win)
-	message(STATUS "Target platform: Windows")
+	set(TARGET_PLATFORM "Win")
 elseif(UNIX)
-	set(TARGET_PLATFORM Linux)
-	message(STATUS "Target platform: Linux")
+	set(TARGET_PLATFORM "Linux")
+
+	# test if arm arhitecture
+	set(IS_ARM FALSE CACHE BOOL "Build ARM")
+	if(IS_ARM)
+		set(TARGET_PLATFORM "ARM")
+	endif()
 else()
 	message(FATAL_ERROR "Requested platform not supported")
 endif()
+
+message(STATUS "Target platform: ${TARGET_PLATFORM}")
 
 # =============================================================================
 # Architecture
@@ -127,7 +133,7 @@ set(LIB_DIRS "")
 set(LIBS_RELEASE "")
 set(LIBS_DEBUG "")
 
-set(LIBS_DIR "${CMAKE_SOURCE_DIR}/libs" CACHE PATH "Libraries directory")
+set(LIBS_DIR "${CMAKE_SOURCE_DIR}/../libs" CACHE PATH "Libraries directory")
 
 set(INCLUDE_DIRS "")
 add_includes(${LIBS_DIR})
@@ -144,6 +150,26 @@ endif()
 # Libraries Configuration
 # =============================================================================
 
+add_compile_definitions(NATIVE_CONTEXT)
+
+set(OPENGL_ES FALSE CACHE BOOL "OPENGL_ES")
+if(OPENGL_ES)
+
+	add_compile_definitions(OPENGL_ES)
+
+	if(WIN32)
+		add_libs("${LIBS_DIR}/OpenGL ES/Mali/${TARGET_ARCH}/libEGL.lib")
+		add_libs("${LIBS_DIR}/OpenGL ES/Mali/${TARGET_ARCH}/libGLESv2.lib")
+	elseif(UNIX)
+		add_libs("libEGL.so")
+		add_libs("libGLESv2.so")
+	endif()
+else()
+	if(WIN32)
+		add_libs("opengl32.lib")
+	endif()
+endif()
+
 # -----------------------------------------------------------------------------
 # Pugixml
 # -----------------------------------------------------------------------------
@@ -154,27 +180,30 @@ add_sources(${LIBS_DIR}/pugixml/pugixml.cpp)
 # GLEW library
 # -----------------------------------------------------------------------------
 
-set(LIB_GLEW "${LIBS_DIR}/GLEW/${TARGET_ARCH}")
-add_includes(${LIBS_DIR}/GLEW/include)
-if(WIN32)
-	add_libs(${LIB_GLEW}/Win/glew32.lib)
-	copy_dlls(${LIB_GLEW}/Win/glew32.dll)
-	add_libs("opengl32.lib")
-elseif(UNIX)
-	add_libs(${LIB_GLEW}/Linux/libGLEW.so)
+if(NOT OPENGL_ES)
+	set(LIB_GLEW ${LIBS_DIR}/GLEW/${TARGET_ARCH}/${TARGET_PLATFORM})
+	add_includes(${LIBS_DIR}/GLEW/include)
+	# add_sources(${LIBS_DIR}/GLEW/src/glew.c)
+	# add_compile_definitions(GLEW_STATIC)
+	if(WIN32)
+		add_libs(${LIB_GLEW}/glew32.lib)
+		copy_dlls(${LIB_GLEW}/glew32.dll)
+	elseif(UNIX)
+		add_libs(${LIB_GLEW}/libGLEW.so.2.1)
+	endif()
 endif()
 
 # -----------------------------------------------------------------------------
 # GLFW library
 # -----------------------------------------------------------------------------
 
-set(LIB_GLFW "${LIBS_DIR}/GLFW/${TARGET_ARCH}")
+set(LIB_GLFW ${LIBS_DIR}/GLFW/${TARGET_ARCH}/${TARGET_PLATFORM})
 
 if(WIN32)
-	add_libs(${LIB_GLFW}/Win/glfw3dll.lib)
-	copy_dlls(${LIB_GLFW}/Win/glfw3.dll)
+	add_libs(${LIB_GLFW}/glfw3dll.lib)
+	copy_dlls(${LIB_GLFW}/glfw3.dll)
 elseif(UNIX)
-	add_libs(${LIB_GLFW}/Linux/libglfw.so)
+	add_libs(${LIB_GLFW}/libglfw.so.3)
 endif()
 
 # -----------------------------------------------------------------------------
@@ -194,10 +223,10 @@ if (Module_Text)
 		add_libs(${LIB_FreeType}/${TARGET_ARCH}/Release/freetype_static.lib)
 		add_libs(${LIB_FreeTypeGL}/${TARGET_ARCH}/Release/freetype-gl.lib)
 	elseif(UNIX)
-		# add_libs(${LIB_FreeType}/${TARGET_ARCH}/Linux/libfreetype.so)
-		add_libs(${LIB_FreeType}/${TARGET_ARCH}/Linux/libfreetype.a)
+		# add_libs(${LIB_FreeType}/${TARGET_ARCH}/${TARGET_PLATFORM}/libfreetype.so)
+		add_libs(${LIB_FreeType}/${TARGET_ARCH}/${TARGET_PLATFORM}/libfreetype.a)
 		# add_libs(libfreetype.a)
-		add_libs(${LIB_FreeTypeGL}/${TARGET_ARCH}/Linux/libfreetype-gl.a)
+		add_libs(${LIB_FreeTypeGL}/${TARGET_ARCH}/${TARGET_PLATFORM}/libfreetype-gl.a)
 	endif()
 endif()
 
@@ -212,7 +241,7 @@ if(WIN32)
 	add_libs(${LIB_Assimp}/${TARGET_ARCH}/Release/assimp.lib)
 	copy_dlls(${LIB_Assimp}/${TARGET_ARCH}/Release/assimp.dll)
 elseif(UNIX)
-	add_libs(${LIB_Assimp}/${TARGET_ARCH}/Linux/libassimp.so)
+	add_libs(${LIB_Assimp}/${TARGET_ARCH}/${TARGET_PLATFORM}/libassimp.so.3)
 endif()
 
 # =============================================================================
@@ -226,7 +255,7 @@ if(WIN32)
 endif()
 
 # =============================================================================
-# Executable
+# Generate Library Project
 # =============================================================================
 
 message ("=====================================================================")
@@ -234,10 +263,10 @@ message ("====================================================================="
 add_compile_definitions(ENGINE_DLL_EXPORTS)
 
 include_directories(${INCLUDE_DIRS})
-add_library(${APP_NAME} SHARED ${SOURCE_FILES})
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
-set_target_properties(${APP_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-set_target_properties(${APP_NAME} PROPERTIES VERSION ${APP_VERSION})
+add_library(${LIB_NAME} SHARED ${SOURCE_FILES})
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${LIB_NAME})
+set_target_properties(${LIB_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${LIB_NAME} PROPERTIES VERSION ${APP_VERSION})
 
 set(_LIBS_RELEASE "")
 foreach(LIB ${LIBS_RELEASE})
@@ -249,13 +278,13 @@ foreach(LIB ${LIBS_DEBUG})
 	set(_LIBS_DEBUG ${_LIBS_DEBUG} debug ${LIB})
 endforeach()
 
-target_link_libraries(${APP_NAME} ${LIBS_COMMON} ${_LIBS_RELEASE} ${_LIBS_DEBUG})
+target_link_libraries(${LIB_NAME} ${LIBS_COMMON} ${_LIBS_RELEASE} ${_LIBS_DEBUG})
 
 # =============================================================================
 # Compiler Flags
 # =============================================================================
 
-# set_target_properties(${APP_NAME} PROPERTIES CXX_STANDARD 17)
+# set_target_properties(${LIB_NAME} PROPERTIES CXX_STANDARD 17)
 
 if(MSVC)
 	set (COMMON_FLAGS "-D_CRT_SECURE_NO_WARNINGS \
@@ -291,8 +320,8 @@ endif()
 
 if(MSVC)
 	# cl flags
-	SET_PROPERTY(TARGET ${APP_NAME} APPEND PROPERTY LINK_FLAGS_DEBUG "")
-	SET_PROPERTY(TARGET ${APP_NAME} APPEND PROPERTY LINK_FLAGS_RELEASE "/MACHINE:X86 /DEBUG /OPT:REF /OPT:ICF /LTCG:incremental")
+	SET_PROPERTY(TARGET ${LIB_NAME} APPEND PROPERTY LINK_FLAGS_DEBUG "")
+	SET_PROPERTY(TARGET ${LIB_NAME} APPEND PROPERTY LINK_FLAGS_RELEASE "/MACHINE:X86 /DEBUG /OPT:REF /OPT:ICF /LTCG:incremental")
 endif()
 
 # =============================================================================
@@ -306,3 +335,15 @@ foreach(_source IN ITEMS ${SOURCE_FILES})
 	string(REPLACE "/" "\\" _group_path "${_source_path_rel}")
 	source_group("${_group_path}" FILES "${_source}")
 endforeach()
+
+message ("Configuration Done")
+message ("=====================================================================")
+
+# =============================================================================
+# Demo project
+# =============================================================================
+
+# message ("")
+# message ("Demo configuration")
+
+add_subdirectory(Demo)

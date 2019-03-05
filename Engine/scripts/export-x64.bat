@@ -1,0 +1,1 @@
+call export-lib.bat x64 Release

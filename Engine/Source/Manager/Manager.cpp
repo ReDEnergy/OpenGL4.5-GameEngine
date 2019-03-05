@@ -78,7 +78,6 @@ void Manager::Init()
 	// Init OpenGL
 #ifndef OPENGL_ES
 	glewExperimental = true;
-#endif
 
 	GLenum err = glewInit();
 	if (GLEW_OK != err) 	// Serious problem
@@ -86,6 +85,7 @@ void Manager::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		exit(0);
 	}
+#endif
 
 	CheckOpenGLError();
 

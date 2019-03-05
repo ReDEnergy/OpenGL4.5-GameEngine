@@ -15,6 +15,13 @@ class ObjectInput;
 class DLLExport WindowProperties
 {
 	public:
+		struct GLContext
+		{
+			int major = 3;
+			int minor = 3;
+		};
+
+	public:
 		WindowProperties(bool shareContext = true);
 		bool IsSharedContext() const;
 
@@ -30,6 +37,7 @@ class DLLExport WindowProperties
 		bool centered;
 		bool hideOnClose;
 		bool vSync;
+		GLContext glContext;
 
 	private:
 		const bool sharedContext;
@@ -75,7 +83,6 @@ class DLLExport WindowObject
 		glm::ivec2 GetResolution() const;
 
 		// OpenGL State
-		bool IsCoreContext() const;
 		GLFWwindow* GetGLFWWindow() const;
 	
 		// Window Event
@@ -94,6 +101,7 @@ class DLLExport WindowObject
 		void ComputeFrameTime();
 		
 		// Window Creation
+		void InitWindow();
 		void FullScreen();
 		void WindowMode();
 

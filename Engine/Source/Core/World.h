@@ -1,8 +1,11 @@
 #pragma once
 
+#include <include/dll_export.h>
+
 class WindowObject;
 
-class World {
+class DLLExport World
+{
 	public:
 		World();
 		virtual ~World() {};
@@ -21,7 +24,7 @@ class World {
 		void LoopUpdate();
 		void ComputeFrameDeltaTime();
 
-	public:
+	protected:
 		WindowObject *window;
 
 	private:
@@ -29,7 +32,4 @@ class World {
 		double elapsedTime;
 		double deltaTime;
 		bool paused;
-		bool shouldClose;
-		World *world;
-
 };

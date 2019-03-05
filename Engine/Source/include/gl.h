@@ -4,12 +4,20 @@
 
 #ifdef OPENGL_ES
 	#define GLFW_INCLUDE_ES31
+	#define GLFW_EXPOSE_NATIVE_EGL
+	//#include <GL/glew.h>
+
 	#include <EGL/egl.h>
 	#include <EGL/eglext.h>
 	#include <EGL/eglplatform.h>
 #else
 	#ifndef GL_DISABLE_GLEW
 		#define GLEW_ENABLED
+
+		#ifdef _WIN32
+			#define GLFW_EXPOSE_NATIVE_WGL
+		#endif
+
 		#include <GL/glew.h>
 
 		#ifdef _WIN32
@@ -23,6 +31,7 @@
 #endif
 
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
 #include <include/dll_export.h>
 

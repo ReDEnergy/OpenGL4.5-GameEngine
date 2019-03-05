@@ -10,7 +10,6 @@
 #include <Core/Engine.h>
 #include <Core/InputSystem.h>
 #include <Core/WindowManager.h>
-#include <Core/GLES/GLESContext.h>
 #include <Component/ObjectInput.h>
 
 #include <include/gl_native.h>
@@ -48,7 +47,7 @@ WindowObject::WindowObject(WindowProperties properties)
 	props.aspectRatio = float(props.resolution.x) / props.resolution.y;
 
 	// Init OpenGL Window
-	props.fullScreen ? FullScreen() : WindowMode();
+	InitWindow();
 	//SetVSync(props.vSync);
 
 	CheckOpenGLError();
@@ -110,9 +109,6 @@ void WindowObject::Close()
 
 int WindowObject::ShouldClose() const
 {
-	#ifdef OPENGL_ES
-	if (eglContext) return 0;
-	#endif
 	return glfwWindowShouldClose(window);
 }
 
@@ -180,45 +176,59 @@ void WindowObject::ComputeFrameTime()
 	elapsedTime = currentTime;
 }
 
+void WindowObject::InitWindow()
+{
+	window = nullptr;
+
+	glfwWindowHint(GLFW_VISIBLE, props.visible);
+
+	#ifdef OPENGL_ES
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, props.glContext.major);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, props.glContext.minor);
+	#else
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, props.glContext.major);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, props.glContext.minor);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	#endif
+
+	props.fullScreen ? FullScreen() : WindowMode();
+}
+
 void WindowObject::FullScreen()
 {
 	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode *videoDisplay = glfwGetVideoMode(monitor);
+
 	window = glfwCreateWindow(videoDisplay->width, videoDisplay->height, props.name.c_str(), monitor, NULL);
+	assert(window != nullptr);
+
 	glfwMakeContextCurrent(window);
+	CheckOpenGLError();
+
 	SetSize(videoDisplay->width, videoDisplay->height);
 }
 
 void WindowObject::WindowMode()
 {
-	glfwWindowHint(GLFW_VISIBLE, props.visible);
-
-	#ifdef OPENGL_ES
-		eglContext = new GLESContext();
-		eglContext->Init();
-		if (eglContext->GetContext()) return;
-
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-	#else
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	#endif
-
 	GLFWwindow *shaderCtxWindow = NULL;
 	if (props.IsSharedContext()) {
 		auto W = WindowManager::GetShaderdWindowContext();
 		if (W) shaderCtxWindow = W->GetGLFWWindow();
 	}
 
-	window = nullptr;
 	window = glfwCreateWindow(props.resolution.x, props.resolution.y, props.name.c_str(), NULL, shaderCtxWindow);
 	assert(window != nullptr);
-	glfwMakeContextCurrent(window);
 
-	#ifdef _WIN32
+	glfwMakeContextCurrent(window);
+	CheckOpenGLError();
+
+	#if defined(OPENGL_ES)
+		EGLContext context = glfwGetEGLContext(window);
+	#endif
+
+	#if defined(_WIN32) && !defined(OPENGL_ES)
 		openglHandle = wglGetCurrentDC();
 		nativeRenderingContext = glfwGetWGLContext(window);
 	#endif
@@ -374,18 +384,14 @@ void WindowObject::MakeCurrentContext() const
 	// GLFW current context ?! Maybe because of HDC!
 	glfwMakeContextCurrent(window);
 
-	#ifdef OPENGL_ES
-		eglContext->MakeCurrent();
-	#endif
-
 	if (useNativeHandles)
 	{
-		#if defined(_WIN32)
+		#if defined(_WIN32) && !defined(OPENGL_ES)
 			auto result = wglMakeCurrent(HDC(openglHandle), HGLRC(nativeRenderingContext));
 			assert(result == TRUE);
 		#endif
 	}
-
+	
 	CheckOpenGLError();
 }
 
@@ -409,10 +415,6 @@ void WindowObject::UseNativeHandles(bool value)
 
 void WindowObject::SwapBuffers() const
 {
-	#ifdef OPENGL_ES
-		eglContext->SwapBuffer();
-	#else
-		glfwSwapBuffers(window);
-	#endif
+	glfwSwapBuffers(window);
 	CheckOpenGLError();
 }

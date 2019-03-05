@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Meshes -->
+<meshes>
+	<mesh material="no">
+		<name>quad</name>
+		<path>Primitives</path>
+		<file>quad.obj</file>
+	</mesh>
+	<mesh material="no">
+		<name>circle</name>
+		<path>Primitives</path>
+		<file>circle.obj</file>
+	</mesh>
+	<mesh material="no">
+		<name>screen-quad</name>
+		<path>Primitives</path>
+		<file>screen_quad.obj</file>
+	</mesh>
+	<mesh>
+		<name>box</name>
+		<path>Primitives</path>
+		<file>box.obj</file>
+	</mesh>
+	<mesh material="no">
+		<name>sphere</name>
+		<path>Primitives</path>
+		<file>sphere.obj</file>
+	</mesh>
+	<!-- gizmo objects -->
+	<mesh material="no">
+		<name>gizmo_move</name>
+		<path>Gizmo</path>
+		<file>gizmo_move.obj</file>
+	</mesh>
+	<mesh material="no">
+		<name>gizmo_rotate</name>
+		<path>Gizmo</path>
+		<file>rotate.fbx</file>
+	</mesh>
+	<mesh material="no">
+		<name>gizmo_scale</name>
+		<path>Gizmo</path>
+		<file>gizmo_scale.obj</file>
+	</mesh>
+	<!-- end gizmo objects -->
+	<mesh material="no">
+		<name>grid</name>
+		<path>Primitives</path>
+		<file>grid.obj</file>
+	</mesh>
+</meshes>
+
+<!-- Audio -->
+<audio>
+</audio>
+
+<!-- GameObjects -->
+<objects>
+	<object prop="">
+		<name>render-quad</name>
+		<mesh>screen-quad</mesh>
+		<rendering>
+			<culling>none</culling>
+		</rendering>
+	</object>
+</objects>

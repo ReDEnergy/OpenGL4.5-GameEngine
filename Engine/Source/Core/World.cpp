@@ -10,7 +10,6 @@ World::World()
 	deltaTime = 0;
 	paused = false;
 	window = nullptr;
-	shouldClose = false;
 
 	Init();
 }
@@ -21,7 +20,7 @@ void World::Init()
 
 void World::Run()
 {
-	while (!shouldClose)
+	while (!window->ShouldClose())
 	{
 		LoopUpdate();
 	}
@@ -34,7 +33,7 @@ void World::Pause()
 
 void World::Exit()
 {
-	shouldClose = true;
+	window->Close();
 }
 
 double World::GetLastFrameTime()
@@ -57,12 +56,12 @@ void World::LoopUpdate()
 	ComputeFrameDeltaTime();
 	if (paused) return;
 
+	window->UpdateObservers();
+
 	/* Frame */
-	if (world) {
-		world->FrameStart();
-		world->Update(static_cast<float>(deltaTime));
-		world->FrameEnd();
-	}
+	FrameStart();
+	Update(static_cast<float>(deltaTime));
+	FrameEnd();
 
 	/* Swap front and back buffers */
 	if (!paused)

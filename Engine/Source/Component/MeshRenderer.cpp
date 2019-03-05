@@ -78,8 +78,8 @@ void MeshRenderer::Render() const
 		}
 
 		#ifdef OPENGL_ES
-		glDrawElements(glDrawMode, mesh->meshEntries[i]->nrIndices, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->meshEntries[i]->baseIndex));
-		if (mesh->meshEntries[i]->baseVertex) {
+		glDrawElements(glDrawMode, mesh->meshEntries[i].nrIndices, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->meshEntries[i].baseIndex));
+		if (mesh->meshEntries[i].baseVertex) {
 			printf("[ERROR]\t Base Vertex different than 0... some part of the mesh might not be visible\n");
 		}
 		#else
@@ -87,7 +87,7 @@ void MeshRenderer::Render() const
 								GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->meshEntries[i].baseIndex),
 								mesh->meshEntries[i].baseVertex);
 		#endif
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		//glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 	glBindVertexArray(0);
 	CheckOpenGLError();
@@ -111,8 +111,8 @@ void MeshRenderer::RenderInstanced(unsigned int instances) const
 		}
 
 		#ifdef OPENGL_ES
-		glDrawElementsInstanced(glPrimitive, mesh->meshEntries[i]->nrIndices, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->meshEntries[i]->baseIndex),	instances);
-		if (mesh->meshEntries[i]->baseVertex) {
+		glDrawElementsInstanced(glDrawMode, mesh->meshEntries[i].nrIndices, GL_UNSIGNED_INT, (void*)(sizeof(unsigned int) * mesh->meshEntries[i].baseIndex), instances);
+		if (mesh->meshEntries[i].baseVertex) {
 			printf("[ERROR]\t Base Vertex different than 0... some part of the mesh might not be visible\n");
 		}
 		#else
@@ -120,7 +120,7 @@ void MeshRenderer::RenderInstanced(unsigned int instances) const
 			(void*)(sizeof(unsigned int) * mesh->meshEntries[i].baseIndex),
 			instances, mesh->meshEntries[i].baseVertex);
 		#endif
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		//glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 	glBindVertexArray(0);
 	CheckOpenGLError();

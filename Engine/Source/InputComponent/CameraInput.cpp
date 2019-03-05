@@ -32,6 +32,8 @@ void CameraInput::OnInputUpdate(float deltaTime, int mods)
 
 	if (window->KeyHold(GLFW_KEY_KP_MULTIPLY))	camera->UpdateSpeed();
 	if (window->KeyHold(GLFW_KEY_KP_DIVIDE))	camera->UpdateSpeed(-0.2f);
+	if ((mods & GLFW_MOD_CONTROL) != 0) 		camera->UpdateSpeed(-deltaTime);
+	if ((mods & GLFW_MOD_SHIFT) != 0)			camera->UpdateSpeed(deltaTime);
 
 	if (window->KeyHold(GLFW_KEY_KP_4))		camera->RotateOY( sensitivityY * deltaTime);
 	if (window->KeyHold(GLFW_KEY_KP_6))		camera->RotateOY(-sensitivityY * deltaTime);
@@ -46,6 +48,15 @@ void CameraInput::OnKeyPress(int key, int mods)
 	if (mods) return;
 	if (key == GLFW_KEY_C)
 		camera->Log();
+
+	// ALT pressed
+	if (window->MouseHold(GLFW_MOUSE_BUTTON_RIGHT))
+	{
+		if ((mods & GLFW_MOD_ALT) != 0)
+		{
+			camera->transform->SetMoveSpeed(1);
+		}
+	}
 }
 
 void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)\
@@ -54,6 +65,20 @@ void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)\
 	{
 		camera->RotateOY(-(float)deltaX);
 		camera->RotateOX(-(float)deltaY);
+		camera->Update();
+	}
+
+	if (window->MouseHold(GLFW_MOUSE_BUTTON_MIDDLE))
+	{
+		float speed = 0.0025f;
+
+		auto PI = camera->GetProjectionInfo();
+		if (!PI.isPerspective) {
+			speed *= PI.width / 5;
+		}
+
+		camera->MoveRight(-deltaX * speed);
+		camera->MoveInDirection(camera->transform->GetLocalOYVector(), deltaY * speed);
 		camera->Update();
 	}
 }
@@ -71,5 +96,22 @@ void CameraInput::OnMouseBtnRelease(int mouseX, int mouseY, int button, int mods
 	if (IS_BIT_SET(button, GLFW_MOUSE_BUTTON_RIGHT))
 	{
 		window->ShowPointer();
+	}
+}
+
+void CameraInput::OnMouseScroll(int mouseX, int mouseY, double offsetX, double offsetY)
+{
+	float zoomSpeed = 0.05f * static_cast<float>(offsetY);
+	auto PI = camera->GetProjectionInfo();
+	if (PI.isPerspective)
+	{
+		camera->MoveInDirection(-camera->transform->GetLocalOZVector(), zoomSpeed);
+		camera->Update();
+	}
+	else
+	{
+		PI.width -= zoomSpeed * PI.aspectRatio;
+		PI.height -= zoomSpeed;
+		camera->SetProjection(PI);
 	}
 }

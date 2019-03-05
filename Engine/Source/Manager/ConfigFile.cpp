@@ -34,6 +34,11 @@ void ConfigFile::Load(const char *fileName)
 	windowProperties->position		= glm::ExtractVector<glm::ivec2>(window.child_value("position"));
 	windowProperties->centered		= window.child("centered").text().as_bool();
 	windowProperties->visible		= window.child("visible").text().as_bool();
+
+	// Get GL context creation info
+	auto node = window.child("glContext");
+	windowProperties->glContext.major = node.child("major").text().as_int();
+	windowProperties->glContext.minor = node.child("minor").text().as_int();
 }
 
 void ConfigFile::ReadGraphicState(const char* propertyName, RenderState STATE)
